@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>qml;cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>qrc;rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Form Files">
+      <UniqueIdentifier>{99349809-55BA-4b9d-BF79-8FDBB0286EB3}</UniqueIdentifier>
+      <Extensions>ui</Extensions>
+    </Filter>
+    <Filter Include="Translation Files">
+      <UniqueIdentifier>{639EADAA-A684-42e4-A9AD-28FC9BCB8F7C}</UniqueIdentifier>
+      <Extensions>ts</Extensions>
+    </Filter>
+    <Filter Include="Header Files\services">
+      <UniqueIdentifier>{934d4e33-ad0a-435a-b7e4-0caff5c7f4e4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\services">
+      <UniqueIdentifier>{4c249558-6993-4fb5-a590-5ca1edd2f385}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Form Files\Pages">
+      <UniqueIdentifier>{fb138ac2-0e93-4a27-8a59-eaa8400abcb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Pages">
+      <UniqueIdentifier>{f228994d-6b90-41b1-b611-bc012e0599cb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Pages">
+      <UniqueIdentifier>{152eaac1-bfe0-4bd7-b692-8d28afeed554}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <QtRcc Include="InventoryQtApp.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
+    <QtUic Include="InventoryQtApp.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtMoc Include="InventoryQtApp.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <ClCompile Include="InventoryQtApp.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ApiClient.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="AuthService.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="ProductService.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="UserService.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
+    <ClCompile Include="SidebarWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DashboardWindow.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="VerticalWidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DashboardPage.cpp">
+      <Filter>Source Files\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemsPage.cpp">
+      <Filter>Form Files\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemsPage.cpp">
+      <Filter>Source Files\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="AddProductDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ApiClient.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
+    <ClInclude Include="AuthService.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
+    <ClInclude Include="ProductService.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
+    <ClInclude Include="UserService.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <QtMoc Include="SidebarWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="DashboardWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="VerticalWidget.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="DashboardPage.h">
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="ItemsPage.h">
+      <Filter>Form Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="ItemsPage.h">
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="AddProductDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+  </ItemGroup>
+  <ItemGroup>
+    <QtUic Include="SidebarWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="DashboardWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="VerticalWidget.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="DashboardPage.ui">
+      <Filter>Form Files\Pages</Filter>
+    </QtUic>
+    <QtUic Include="ItemsPage.ui">
+      <Filter>Form Files\Pages</Filter>
+    </QtUic>
+    <QtUic Include="AddProductDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+  </ItemGroup>
+</Project>
