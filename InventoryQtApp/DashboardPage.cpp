@@ -1,54 +1,67 @@
+// DashboardPage.cpp - Implementation of the dashboard overview page
 #include "DashboardPage.h"
+#include <iostream>
+#include <algorithm>
 
-DashboardPage::DashboardPage(QWidget *parent)
-	: QWidget(parent)
+// Constructor initializes the dashboard page with sample inventory data
+DashboardPage::DashboardPage(ProductService& productService, QWidget *parent)
+	: QWidget(parent), productService(productService)   
 {
 	ui.setupUi(this);
     setupItemListTable();
+
+    connect(ui.viewAllItemsButton, &QPushButton::clicked, this, [this]() {
+        emit viewAllItemsRequested();
+        });
+
 }
 
+// Destructor
 DashboardPage::~DashboardPage()
 {}
 
+// Configures the table with columns, headers, and sample data
 void DashboardPage::setupItemListTable()
 {
-    ui.itemListTable->setColumnCount(4);
+    ui.itemListTable->setColumnCount(4); // ✅ important
+
     ui.itemListTable->setHorizontalHeaderLabels(
         QStringList() << "Name" << "Image" << "Store" << "Amount"
     );
 
-    ui.itemListTable->setRowCount(4);
+    json products = productService.getProducts();
 
-    ui.itemListTable->setItem(0, 0, new QTableWidgetItem("Gas Kitting"));
-    ui.itemListTable->setItem(0, 1, new QTableWidgetItem("Image"));
-    ui.itemListTable->setItem(0, 2, new QTableWidgetItem("22 House Store"));
-    ui.itemListTable->setItem(0, 3, new QTableWidgetItem("1 pcs"));
+    int productCount = static_cast<int>(products.size());
+    int rowCount = productCount < 4 ? productCount : 4;
+    ui.itemListTable->setRowCount(rowCount);
 
-    ui.itemListTable->setItem(1, 0, new QTableWidgetItem("Condet"));
-    ui.itemListTable->setItem(1, 1, new QTableWidgetItem("Image"));
-    ui.itemListTable->setItem(1, 2, new QTableWidgetItem("HQ Main Store"));
-    ui.itemListTable->setItem(1, 3, new QTableWidgetItem("3 pcs"));
+    for (int row = 0; row < rowCount; row++) {
+        auto product = products[row];
 
-    ui.itemListTable->setItem(2, 0, new QTableWidgetItem("Condet"));
-    ui.itemListTable->setItem(2, 1, new QTableWidgetItem("Image"));
-    ui.itemListTable->setItem(2, 2, new QTableWidgetItem("HQ Main Store"));
-    ui.itemListTable->setItem(2, 3, new QTableWidgetItem("5 pcs"));
+        std::string name = product.value("name", "");
 
-    ui.itemListTable->setItem(3, 0, new QTableWidgetItem("Condet"));
-    ui.itemListTable->setItem(3, 1, new QTableWidgetItem("Image"));
-    ui.itemListTable->setItem(3, 2, new QTableWidgetItem("HQ Main Store"));
-    ui.itemListTable->setItem(3, 3, new QTableWidgetItem("5 pcs"));
+        int quantity = 0;
+        if (product.contains("inventory") && !product["inventory"].is_null()) {
+            quantity = product["inventory"].value("quantity", 0);
+        }
+
+        ui.itemListTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(name)));
+        ui.itemListTable->setItem(row, 1, new QTableWidgetItem("Image"));
+        ui.itemListTable->setItem(row, 2, new QTableWidgetItem("Main Store"));
+        ui.itemListTable->setItem(row, 3, new QTableWidgetItem(QString::number(quantity) + " pcs"));
+    }
 
     ui.itemListTable->verticalHeader()->setVisible(false);
     ui.itemListTable->horizontalHeader()->setVisible(true);
     ui.itemListTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
-    ui.itemListTable->horizontalHeader()->setFixedHeight(48);
     ui.itemListTable->horizontalHeader()->setHighlightSections(false);
+    ui.itemListTable->horizontalHeader()->setFixedHeight(52);
 
     ui.itemListTable->setShowGrid(false);
     ui.itemListTable->setFrameShape(QFrame::NoFrame);
     ui.itemListTable->setFocusPolicy(Qt::NoFocus);
     ui.itemListTable->setSelectionMode(QAbstractItemView::NoSelection);
+    ui.itemListTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     ui.itemListTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     ui.itemListTable->setColumnWidth(0, 115);
@@ -57,6 +70,4 @@ void DashboardPage::setupItemListTable()
     ui.itemListTable->setColumnWidth(3, 80);
 
     ui.itemListTable->verticalHeader()->setDefaultSectionSize(52);
-    ui.itemListTable->horizontalHeader()->setFixedHeight(52);
 }
-

@@ -1,6 +1,8 @@
+// SidebarWidget.cpp - Implementation of the navigation sidebar
 #include "SidebarWidget.h"
 #include <algorithm>
 
+// Constructor initializes sidebar buttons and applies permission-based visibility
 SidebarWidget::SidebarWidget(
     const std::vector<std::string>& userPermissions,
     QWidget* parent
@@ -21,6 +23,7 @@ SidebarWidget::SidebarWidget(
     connect(ui.logoutButton, &QPushButton::clicked, this, &SidebarWidget::logoutClicked);
 }
 
+// Checks if the user has a specific permission
 bool SidebarWidget::hasPermission(const std::string& permission)
 {
     return std::find(
@@ -30,6 +33,7 @@ bool SidebarWidget::hasPermission(const std::string& permission)
     ) != permissions.end();
 }
 
+// Configures button visibility based on user permissions
 void SidebarWidget::applyPermissions()
 {
     ui.itemsButton->setVisible(hasPermission("ADD_PRODUCT"));

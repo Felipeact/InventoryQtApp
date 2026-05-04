@@ -1,3 +1,4 @@
+// ItemsPage.cpp - Implementation of the items management page
 #include "ItemsPage.h"
 
 #include <QTableWidgetItem>
@@ -9,19 +10,25 @@
 #include <QWidget>
 #include <QFrame>
 
-ItemsPage::ItemsPage(QWidget* parent)
-    : QWidget(parent)
+// Constructor initializes the items page with table setup and sample data
+ItemsPage::ItemsPage(ProductService& productService, QWidget* parent)
+	: QWidget(parent), productService(productService)
 {
     ui.setupUi(this);
 
     setupTable();
-    loadFakeData();
+	loadProducts();
+
+    connect(ui.addItemButton, &QPushButton::clicked,
+        this, &ItemsPage::onAddItemClicked);
 }
 
+// Destructor
 ItemsPage::~ItemsPage()
 {
 }
 
+// Configures the items table columns, headers, styling, and behavior
 void ItemsPage::setupTable()
 {
     ui.itemsTable->setColumnCount(9);
@@ -127,57 +134,51 @@ void ItemsPage::setupTable()
 
 }
 
-void ItemsPage::loadFakeData()
+// Populates the table with product data and action buttons
+void ItemsPage::loadProducts()
 {
-    const int rowCount = 30;
-    ui.itemsTable->setRowCount(rowCount);
+    json products = productService.getProducts();
 
-    for (int row = 0; row < rowCount; row++) {
-        ui.itemsTable->setItem(row, 0, new QTableWidgetItem(row == 0 ? "Gas Kitting" : "Condet"));
+    ui.itemsTable->setRowCount(static_cast<int>(products.size()));
+
+    for (int row = 0; row < products.size(); row++) {
+        auto product = products[row];
+
+        std::string name = product.value("name", "");
+        std::string barcode = product.value("barcode", "");
+
+        int quantity = 0;
+
+        if (product.contains("inventory") && !product["inventory"].is_null()) {
+            quantity = product["inventory"].value("quantity", 0);
+        }
+
+        ui.itemsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(name)));
         ui.itemsTable->setItem(row, 1, new QTableWidgetItem("Image"));
-        ui.itemsTable->setItem(row, 2, new QTableWidgetItem(row == 1 ? "Co-7898" : "G-7893"));
-        ui.itemsTable->setItem(row, 3, new QTableWidgetItem("IE Project Items"));
-        ui.itemsTable->setItem(row, 4, new QTableWidgetItem(row == 0 ? "22 House Store" : "HQ Main Store"));
-        ui.itemsTable->setItem(row, 5, new QTableWidgetItem(row == 0 ? "1 pcs" : "5 pcs"));
+        ui.itemsTable->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(barcode)));
+        ui.itemsTable->setItem(row, 3, new QTableWidgetItem("Product"));
+        ui.itemsTable->setItem(row, 4, new QTableWidgetItem("Main Store"));
+        ui.itemsTable->setItem(row, 5, new QTableWidgetItem(QString::number(quantity) + " pcs"));
         ui.itemsTable->setItem(row, 6, new QTableWidgetItem("HQ"));
-        ui.itemsTable->setItem(row, 7, new QTableWidgetItem(row % 3 == 0 ? "Need Invitation" : "Activated"));
+        ui.itemsTable->setItem(row, 7, new QTableWidgetItem("Activated"));
+    }
+}
 
-        QWidget* actionWidget = new QWidget();
-        actionWidget->setStyleSheet("background-color: transparent;");
+// Opens the add product dialog and adds new items to the table
+void ItemsPage::onAddItemClicked()
+{
+    AddProductDialog dialog(this);
 
-        QHBoxLayout* actionLayout = new QHBoxLayout(actionWidget);
-        actionLayout->setContentsMargins(0, 0, 0, 0);
-        actionLayout->setSpacing(6);
-
-        QPushButton* viewButton = new QPushButton("👁");
-        QPushButton* editButton = new QPushButton("✎");
-        QPushButton* deleteButton = new QPushButton("🗑");
-
-        viewButton->setObjectName("viewActionButton");
-        editButton->setObjectName("editActionButton");
-        deleteButton->setObjectName("deleteActionButton");
-
-        viewButton->setFixedSize(26, 26);
-        editButton->setFixedSize(26, 26);
-        deleteButton->setFixedSize(26, 26);
-
-        viewButton->setStyleSheet(
-            "QPushButton { background-color: #f59e0b; color: white; border: none; border-radius: 6px; }"
+    if (dialog.exec() == QDialog::Accepted) {
+        bool success = productService.createProduct(
+            dialog.getProductName().toStdString(),
+            dialog.getBarcode().toStdString(),
+            dialog.getQuantity()
         );
 
-        editButton->setStyleSheet(
-            "QPushButton { background-color: #0078d4; color: white; border: none; border-radius: 6px; }"
-        );
-
-        deleteButton->setStyleSheet(
-            "QPushButton { background-color: #dc2626; color: white; border: none; border-radius: 6px; }"
-        );
-
-        actionLayout->addWidget(viewButton);
-        actionLayout->addWidget(editButton);
-        actionLayout->addWidget(deleteButton);
-        actionLayout->addStretch();
-
-        ui.itemsTable->setCellWidget(row, 8, actionWidget);
+        if (success) {
+            productService.getProducts(true); // force refresh cache
+            loadProducts();
+        }
     }
 }

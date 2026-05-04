@@ -1,7 +1,8 @@
+// InventoryQtApp.cpp - Implementation of the login window
 #include "InventoryQtApp.h"
 #include <QMessageBox>
 
-
+// Constructor initializes the login window and sets up API client
 InventoryQtApp::InventoryQtApp(QWidget *parent)
     : 
 	QMainWindow(parent),
@@ -25,9 +26,11 @@ InventoryQtApp::InventoryQtApp(QWidget *parent)
 	);
 }
 
+// Destructor
 InventoryQtApp::~InventoryQtApp()
 {}
 
+// Processes login by validating credentials and opening the dashboard
 void InventoryQtApp::onLoginButtonClicked()
 {
 	QString email = ui.emailInput->text();
@@ -65,7 +68,7 @@ void InventoryQtApp::onLoginButtonClicked()
 	}
 
 	
-	dashboardWindow = new DashboardWindow(role, permissions);
+	dashboardWindow = new DashboardWindow(role, permissions, productService);
 	dashboardWindow->showMaximized();
 
 	this->hide();

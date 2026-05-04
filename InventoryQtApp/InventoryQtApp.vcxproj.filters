@@ -80,13 +80,13 @@
       <Filter>Source Files\Pages</Filter>
     </ClCompile>
     <ClCompile Include="ItemsPage.cpp">
-      <Filter>Form Files\Pages</Filter>
-    </ClCompile>
-    <ClCompile Include="ItemsPage.cpp">
       <Filter>Source Files\Pages</Filter>
     </ClCompile>
     <ClCompile Include="AddProductDialog.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemsPage.cpp">
+      <Filter>Source Files\Pages</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -117,13 +117,13 @@
       <Filter>Header Files\Pages</Filter>
     </QtMoc>
     <QtMoc Include="ItemsPage.h">
-      <Filter>Form Files\Pages</Filter>
-    </QtMoc>
-    <QtMoc Include="ItemsPage.h">
       <Filter>Header Files\Pages</Filter>
     </QtMoc>
     <QtMoc Include="AddProductDialog.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ItemsPage.h">
+      <Filter>Header Files\Pages</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

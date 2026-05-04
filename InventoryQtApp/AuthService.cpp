@@ -1,13 +1,16 @@
+// AuthService.cpp - Implementation of authentication service
 #include "AuthService.h"
 #include "ApiClient.h"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 
+// Constructor initializes the service with an API client reference
 AuthService::AuthService(ApiClient& apiClient) : api(apiClient)
 {
 }
 
+// Sends login credentials to the server and returns the authentication token
 std::string AuthService::login(const std::string& email, const std::string& password)
 {
 	json body = {
@@ -28,4 +31,4 @@ std::string AuthService::login(const std::string& email, const std::string& pass
 	if (!data.contains("token")) return "";
 
 	return data["token"];
-}
+} // Returns token extracted from response

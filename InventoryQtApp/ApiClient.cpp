@@ -1,18 +1,22 @@
+// ApiClient.cpp - Implementation of HTTP client for API communication
 #include "ApiClient.h"
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
 
+// Constructor initializes the base URL for all API requests
 ApiClient::ApiClient(const std::string& baseUrl) :
 	baseUrl(baseUrl)
 {
 }
 
+// Updates the authentication token for subsequent API requests
 void ApiClient::setToken(const std::string& newToken)
 {
 	token = newToken;
 }
 
+// Validates the token and retrieves user role and permissions from the server
 bool ApiClient::validateToken(std::string& role, std::vector<std::string>& permissions)
 {
 	auto res = cpr::Get(
@@ -40,6 +44,7 @@ bool ApiClient::validateToken(std::string& role, std::vector<std::string>& permi
 	return true;
 }
 
+// Sends a POST request with the given endpoint and JSON body
 cpr::Response ApiClient::post(const std::string& endpoint, const std::string& body)
 {
 	return cpr::Post(
@@ -52,6 +57,7 @@ cpr::Response ApiClient::post(const std::string& endpoint, const std::string& bo
 	);
 }
 
+// Sends a GET request to the specified endpoint
 cpr::Response ApiClient::get(const std::string& endpoint)
 {
 	return cpr::Get(

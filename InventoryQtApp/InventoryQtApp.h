@@ -1,3 +1,4 @@
+// InventoryQtApp.h - Login window for the inventory management system
 #pragma once
 #include <DashboardWindow.h>
 
@@ -6,26 +7,31 @@
 
 #include "ApiClient.h"
 #include "AuthService.h"
+#include "ProductService.h"
 
-
+// Main login window of the inventory management application
 class InventoryQtApp : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    InventoryQtApp(QWidget *parent = nullptr);
-    ~InventoryQtApp();
+	// Constructor
+	InventoryQtApp(QWidget *parent = nullptr);
+	// Destructor
+	~InventoryQtApp();
 
 private slots:
-    void onLoginButtonClicked();
+	// Handles login button click and authenticates user
+	void onLoginButtonClicked();
 
 private:
-    Ui::InventoryQtAppClass ui;
-    
-    ApiClient apiClient;
-    AuthService authService;
+	Ui::InventoryQtAppClass ui;      // UI components
 
-	DashboardWindow* dashboardWindow = nullptr;
+	ApiClient apiClient;             // API client for server communication
+	AuthService authService;         // Service for authentication
+	ProductService productService{ apiClient }; // Service for product operations
+
+	DashboardWindow* dashboardWindow = nullptr;  // Main dashboard window after login
 
 
  
