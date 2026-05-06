@@ -36,6 +36,10 @@ DashboardWindow::DashboardWindow(
 
     itemsPage = new ItemsPage(productService, this);
 	ui.mainStack->addWidget(itemsPage);
+
+    connect(itemsPage, &ItemsPage::productsChanged, this, [this]() {
+        dashboardPage->refreshProducts();
+        });
     
     setupSidebar();
 	setupVerticalbar();    

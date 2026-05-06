@@ -18,5 +18,9 @@ public:
 
     bool createProduct(const std::string& name, const std::string& barcode, int quantity);
     json getProducts(bool forceRefresh = false);
+
+	bool updateProduct(const std::string& productId, const std::string& name, const std::string& barcode, int quantity);
+
+	bool deleteProduct(const std::string& productId);
 };
 

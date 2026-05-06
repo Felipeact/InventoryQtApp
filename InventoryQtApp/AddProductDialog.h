@@ -20,6 +20,9 @@ public:
 	QString getBarcode() const;      // Returns trimmed barcode
 	int getQuantity() const;         // Returns product quantity
 
+	void setProductData( const QString& name, const QString& barcode, int quantity);
+	void setViewMode(const QString& name,const QString& barcode,int quantity);
+
 private slots:
 	// Slot handlers for button clicks
 	void onSaveButtonClicked();   // Validates input and accepts dialog
@@ -28,5 +31,7 @@ private slots:
 
 private:
 	Ui::AddProductDialogClass ui;
+
+	
 };
 

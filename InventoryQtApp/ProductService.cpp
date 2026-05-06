@@ -42,3 +42,36 @@ json ProductService::getProducts(bool forceRefresh)
     cachedProducts = json::parse(res.text);
     return cachedProducts;
 }
+
+bool ProductService::updateProduct(const std::string& productId, const std::string& name, const std::string& barcode, int quantity)
+{
+    json body = {
+         {"name", name},
+         {"barcode", barcode},
+         {"quantity", quantity}
+    };
+
+    auto res = api.put("/products/" + productId, body.dump());
+
+    if (res.status_code != 200) {
+        std::cout << res.text << std::endl;
+        return false;
+    }
+
+    cachedProducts = json::array();
+    return true;
+
+}
+
+bool ProductService::deleteProduct(const std::string& productId)
+{
+    auto res = api.del("/products/" + productId);
+
+    if (res.status_code != 200) {
+        std::cout << res.text << std::endl;
+        return false;
+    }
+
+    cachedProducts = json::array();
+    return true;
+}

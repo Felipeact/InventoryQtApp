@@ -26,5 +26,9 @@ public:
 
 	// Makes a GET request to the specified endpoint
 	cpr::Response get(const std::string& endpoint);
+
+	cpr::Response put(const std::string& endpoint, const std::string& body); // Makes a PUT request to the specified endpoint
+
+	cpr::Response del(const std::string& endpoint);  // Makes a DELETE request to the specified endpoint
 		
 };

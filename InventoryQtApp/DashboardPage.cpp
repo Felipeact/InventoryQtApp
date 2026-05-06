@@ -20,6 +20,11 @@ DashboardPage::DashboardPage(ProductService& productService, QWidget *parent)
 DashboardPage::~DashboardPage()
 {}
 
+void DashboardPage::refreshProducts()
+{
+	setupItemListTable();
+}
+
 // Configures the table with columns, headers, and sample data
 void DashboardPage::setupItemListTable()
 {
@@ -71,3 +76,4 @@ void DashboardPage::setupItemListTable()
 
     ui.itemListTable->verticalHeader()->setDefaultSectionSize(52);
 }
+

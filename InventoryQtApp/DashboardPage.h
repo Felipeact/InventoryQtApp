@@ -16,6 +16,8 @@ public:
 	// Destructor
 	~DashboardPage();
 
+	void refreshProducts();  // Refreshes the dashboard data and UI components
+
 signals:
 	void viewAllItemsRequested();
 
@@ -26,5 +28,7 @@ private:
 
 	// Initializes and configures the item list table
 	void setupItemListTable();
+
+
 };
 

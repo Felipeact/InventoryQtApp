@@ -77,3 +77,31 @@ void AddProductDialog::onCloseButtonClicked()
 {
 	reject();
 }
+
+void AddProductDialog::setProductData(const QString& name, const QString& barcode, int quantity)
+{
+	ui.productNameInput->setText(name);
+	ui.barcodeInput->setText(barcode);
+	ui.quantityInput->setValue(quantity);
+
+	setWindowTitle("Edit Product");
+	ui.titleLabel->setText("Edit Product");
+	ui.saveButton->setText("Save");
+}
+
+void AddProductDialog::setViewMode(const QString& name, const QString& barcode, int quantity)
+{
+	ui.productNameInput->setText(name);
+	ui.barcodeInput->setText(barcode);
+	ui.quantityInput->setValue(quantity);
+
+	ui.productNameInput->setReadOnly(true);
+	ui.barcodeInput->setReadOnly(true);
+	ui.quantityInput->setEnabled(false);
+
+	ui.titleLabel->setText("Product Details");
+	ui.saveButton->hide();
+	ui.cancelButton->setText("Close");
+
+	setWindowTitle("Product Details");
+}

@@ -67,3 +67,25 @@ cpr::Response ApiClient::get(const std::string& endpoint)
 		}
 	);
 }
+
+cpr::Response ApiClient::put(const std::string& endpoint, const std::string& body)
+{
+	return cpr::Put(
+		cpr::Url{ baseUrl + endpoint },
+		cpr::Header{
+			{"Content-Type", "application/json"},
+			{"Authorization", "Bearer " + token}
+		},
+		cpr::Body{ body }
+	);
+}
+
+cpr::Response ApiClient::del(const std::string& endpoint)
+{
+	return cpr::Delete(
+		cpr::Url{ baseUrl + endpoint },
+		cpr::Header{
+			{"Authorization", "Bearer " + token}
+		}
+	);
+}
