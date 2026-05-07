@@ -92,7 +92,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AddAssetDialog.cpp" />
     <ClCompile Include="AddProductDialog.cpp" />
+    <ClCompile Include="AssetService.cpp" />
+    <ClCompile Include="AssetsPage.cpp" />
     <ClCompile Include="DashboardPage.cpp" />
     <ClCompile Include="DashboardWindow.cpp" />
     <ClCompile Include="ItemsPage.cpp" />
@@ -101,7 +104,9 @@
     <ClCompile Include="UserService.cpp" />
     <ClCompile Include="VerticalWidget.cpp" />
     <QtRcc Include="InventoryQtApp.qrc" />
+    <QtUic Include="AddAssetDialog.ui" />
     <QtUic Include="AddProductDialog.ui" />
+    <QtUic Include="AssetsPage.ui" />
     <QtUic Include="DashboardPage.ui" />
     <QtUic Include="DashboardWindow.ui" />
     <QtUic Include="InventoryQtApp.ui" />
@@ -116,7 +121,10 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="AddProductDialog.h" />
+    <QtMoc Include="AddAssetDialog.h" />
     <ClInclude Include="ApiClient.h" />
+    <ClInclude Include="AssetService.h" />
+    <QtMoc Include="AssetsPage.h" />
     <ClInclude Include="AuthService.h" />
     <QtMoc Include="VerticalWidget.h" />
     <QtMoc Include="DashboardWindow.h" />

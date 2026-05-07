@@ -88,6 +88,15 @@
     <ClCompile Include="ItemsPage.cpp">
       <Filter>Source Files\Pages</Filter>
     </ClCompile>
+    <ClCompile Include="AddAssetDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssetsPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -101,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="UserService.h">
       <Filter>Header Files\services</Filter>
+    </ClInclude>
+    <ClInclude Include="AssetService.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -125,6 +137,12 @@
     <QtMoc Include="ItemsPage.h">
       <Filter>Header Files\Pages</Filter>
     </QtMoc>
+    <QtMoc Include="AddAssetDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AssetsPage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="SidebarWidget.ui">
@@ -143,6 +161,12 @@
       <Filter>Form Files\Pages</Filter>
     </QtUic>
     <QtUic Include="AddProductDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AddAssetDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AssetsPage.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

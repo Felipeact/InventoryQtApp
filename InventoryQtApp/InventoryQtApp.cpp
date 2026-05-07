@@ -67,8 +67,8 @@ void InventoryQtApp::onLoginButtonClicked()
 		return;
 	}
 
-	
-	dashboardWindow = new DashboardWindow(role, permissions, productService);
+		
+	dashboardWindow = new DashboardWindow(role, permissions, productService, assetService);
 	dashboardWindow->showMaximized();
 
 	this->hide();

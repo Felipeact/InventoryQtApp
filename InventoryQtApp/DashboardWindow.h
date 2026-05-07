@@ -3,6 +3,8 @@
 #include <DashboardPage.h>
 #include <ItemsPage.h>
 #include "ProductService.h"
+#include "AssetService.h"
+#include <AssetsPage.h>
 
 #include <QMainWindow>
 #include <vector>
@@ -23,6 +25,7 @@ public:
         const std::string& role,
         const std::vector<std::string>& permissions,
 		ProductService& productService,
+		AssetService& assetService,
         QWidget* parent = nullptr
     );
 
@@ -38,10 +41,14 @@ private:
 	SidebarWidget* sidebar = nullptr;           // Left navigation sidebar
 	VerticalWidget* verticalbar = nullptr;        // Top user info bar
 
+	ProductService* productService = nullptr; // Product service for API interactions
+	AssetService* assetService = nullptr;   // Assets service for API interactions
+
 	// Pages displayed in the main stack
 	DashboardPage* dashboardPage = nullptr;   // Dashboard overview page
 	ItemsPage* itemsPage = nullptr;           // Items management page
-	ProductService* productService = nullptr; // Product service for API interactions
+	AssetsPage* assetsPage = nullptr;         // Assets management page
+	
 
 	// Initialization methods
 	void setupSidebar();       // Configures the sidebar navigation

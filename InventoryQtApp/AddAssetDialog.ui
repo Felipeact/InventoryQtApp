@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AddAssetDialogClass</class>
+ <widget class="QDialog" name="AddAssetDialogClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>520</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>520</width>
+    <height>480</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>520</width>
+    <height>480</height>
+   </size>
+  </property>
+  <property name="windowTitle">
+   <string>AddAssetDialog</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">QDialog {
+    background-color: #111111;
+}
+
+QWidget {
+    background-color: #111111;
+    color: #ffffff;
+    font-family: Segoe UI;
+    font-size: 13px;
+}
+
+QLabel#titleLabel {
+    font-size: 18px;
+    font-weight: 700;
+    color: #ffffff;
+}
+
+QLabel#assetNameLabel,
+QLabel#assetTypeLabel,
+QLabel#serialCodeLabel,
+QLabel#statusLabel,
+QLabel#descriptionLabel {
+    color: #d4d4d4;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+QLineEdit,
+QComboBox,
+QPlainTextEdit {
+    background-color: #1c1c1c;
+    color: #ffffff;
+    border: 1px solid #2f2f2f;
+    border-radius: 8px;
+    padding: 9px 12px;
+    min-height: 32px;
+}
+
+QLineEdit:focus,
+QComboBox:focus,
+QPlainTextEdit:focus {
+    border: 1px solid #0078d4;
+}
+
+QLineEdit::placeholder {
+    color: #7a7a7a;
+}
+
+QComboBox::drop-down {
+    border: none;
+}
+
+QComboBox::down-arrow {
+    image: url(:/images/down-arrow.png);
+}
+
+QLabel#errorLabel {
+    color: #ef4444;
+    font-size: 12px;
+}
+
+QPushButton#closeButton {
+    background-color: transparent;
+    color: #ffffff;
+    border: none;
+    font-size: 16px;
+    padding: 4px;
+}
+
+QPushButton#closeButton:hover {
+    color: #ef4444;
+}
+
+QPushButton#cancelButton {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    padding: 9px 22px;
+}
+
+QPushButton#cancelButton:hover {
+    background-color: #2a2a2a;
+}
+
+QPushButton#saveButton {
+    background-color: #0078d4;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    padding: 9px 28px;
+    font-weight: 600;
+}
+
+QPushButton#saveButton:hover {
+    background-color: #0a84e8;
+}</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QWidget" name="headerContainer" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="titleLabel">
+        <property name="text">
+         <string>Add New Asset</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="closeButton">
+        <property name="text">
+         <string/>
+        </property>
+        <property name="icon">
+         <iconset theme="QIcon::ThemeIcon::ApplicationExit"/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget_2" native="true">
+     <layout class="QFormLayout" name="formLayout">
+      <item row="0" column="0">
+       <widget class="QLabel" name="assetNameLabel">
+        <property name="text">
+         <string>Asset Name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1">
+       <widget class="QLineEdit" name="assetNameInput">
+        <property name="placeholderText">
+         <string>Enter Asset Name</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QLabel" name="assetTypeLabel">
+        <property name="text">
+         <string>Asset Type</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLineEdit" name="assetTypeInput">
+        <property name="placeholderText">
+         <string>Enter Asset Type (e.g., Laptop, Monitor)</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QLabel" name="serialCodeLabel">
+        <property name="text">
+         <string>Serial Code</string>
+        </property>
+       </widget>
+      </item>
+      <item row="2" column="1">
+       <widget class="QLineEdit" name="serialCodeInput">
+        <property name="placeholderText">
+         <string>Enter Serial Code</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QLabel" name="statusLabel">
+        <property name="text">
+         <string>Status</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QComboBox" name="statusComboBox">
+        <item>
+         <property name="text">
+          <string>active</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>inactive</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>maintenance</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>retired</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="descriptionLabel">
+        <property name="text">
+         <string>Description</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QPlainTextEdit" name="descriptionInput">
+        <property name="placeholderText">
+         <string>Enter Asset Description (optional)</string>
+        </property>
+        <property name="maximumHeight">
+         <number>80</number>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="errorLabel">
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QWidget" name="widget_3" native="true">
+     <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <item>
+       <widget class="QPushButton" name="cancelButton">
+        <property name="text">
+         <string>Cancel</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="saveButton">
+        <property name="text">
+         <string>Save</string>
+        </property>
+       </widget>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections/>
+</ui>
+

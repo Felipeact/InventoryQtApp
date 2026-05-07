@@ -11,12 +11,14 @@ DashboardWindow::DashboardWindow(
     const std::string& userRole,
     const std::vector<std::string>& userPermissions,
     ProductService& productService,
+	AssetService& assetService,
     QWidget* parent
 )
     : QMainWindow(parent),
     role(userRole),
     permissions(userPermissions),
-    productService(&productService)
+    productService(&productService),
+	assetService(&assetService)
 {
     ui.setupUi(this);
 
@@ -36,6 +38,9 @@ DashboardWindow::DashboardWindow(
 
     itemsPage = new ItemsPage(productService, this);
 	ui.mainStack->addWidget(itemsPage);
+
+	assetsPage = new AssetsPage(assetService, this);
+	ui.mainStack->addWidget(assetsPage);
 
     connect(itemsPage, &ItemsPage::productsChanged, this, [this]() {
         dashboardPage->refreshProducts();
@@ -70,6 +75,12 @@ void DashboardWindow::setupSidebar()
     connect(sidebar, &SidebarWidget::itemsClicked, this, [this]() {
         ui.mainStack->setCurrentWidget(itemsPage);
         });
+
+    connect(sidebar, &SidebarWidget::assetsClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(assetsPage);
+		});
+
+
 
     connect(dashboardPage, &DashboardPage::viewAllItemsRequested, this, [this]() {
         ui.mainStack->setCurrentWidget(itemsPage);

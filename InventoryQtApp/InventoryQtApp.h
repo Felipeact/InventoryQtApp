@@ -30,6 +30,7 @@ private:
 	ApiClient apiClient;             // API client for server communication
 	AuthService authService;         // Service for authentication
 	ProductService productService{ apiClient }; // Service for product operations
+	AssetService assetService{ apiClient }; // Service for asset operations
 
 	DashboardWindow* dashboardWindow = nullptr;  // Main dashboard window after login
 
