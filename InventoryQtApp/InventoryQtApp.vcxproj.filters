@@ -36,6 +36,24 @@
     <Filter Include="Source Files\Pages">
       <UniqueIdentifier>{152eaac1-bfe0-4bd7-b692-8d28afeed554}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Form Files\Menu">
+      <UniqueIdentifier>{f35544b2-858a-4792-858b-12c3e9f700e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Form Files\Modals">
+      <UniqueIdentifier>{def66a73-8db9-43b7-9e2b-a79c960cef3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Modals">
+      <UniqueIdentifier>{9473225f-6c4d-4115-8631-f166d37bb095}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Menu">
+      <UniqueIdentifier>{ee9afeca-5b97-4c44-939c-b66dfeb6e91a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Menu">
+      <UniqueIdentifier>{4a8b2910-d2cc-4eff-9478-d87f3e5bed2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Modals">
+      <UniqueIdentifier>{d4351ec7-b176-469e-ad1d-706944b39b6a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtRcc Include="InventoryQtApp.qrc">
@@ -67,35 +85,35 @@
     <ClCompile Include="UserService.cpp">
       <Filter>Source Files\services</Filter>
     </ClCompile>
-    <ClCompile Include="SidebarWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="DashboardWindow.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="VerticalWidget.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="DashboardPage.cpp">
       <Filter>Source Files\Pages</Filter>
     </ClCompile>
     <ClCompile Include="ItemsPage.cpp">
       <Filter>Source Files\Pages</Filter>
     </ClCompile>
-    <ClCompile Include="AddProductDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ItemsPage.cpp">
       <Filter>Source Files\Pages</Filter>
     </ClCompile>
+    <ClCompile Include="AssetsPage.cpp">
+      <Filter>Source Files\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="AddProductDialog.cpp">
+      <Filter>Source Files\Modals</Filter>
+    </ClCompile>
     <ClCompile Include="AddAssetDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Modals</Filter>
+    </ClCompile>
+    <ClCompile Include="DashboardWindow.cpp">
+      <Filter>Source Files\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="SidebarWidget.cpp">
+      <Filter>Source Files\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="VerticalWidget.cpp">
+      <Filter>Source Files\Menu</Filter>
     </ClCompile>
     <ClCompile Include="AssetService.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AssetsPage.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\services</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -112,62 +130,62 @@
       <Filter>Header Files\services</Filter>
     </ClInclude>
     <ClInclude Include="AssetService.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\services</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <QtMoc Include="SidebarWidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="DashboardWindow.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="VerticalWidget.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="DashboardPage.h">
       <Filter>Header Files\Pages</Filter>
     </QtMoc>
     <QtMoc Include="ItemsPage.h">
       <Filter>Header Files\Pages</Filter>
     </QtMoc>
-    <QtMoc Include="AddProductDialog.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="ItemsPage.h">
       <Filter>Header Files\Pages</Filter>
     </QtMoc>
-    <QtMoc Include="AddAssetDialog.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="AssetsPage.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="AddAssetDialog.h">
+      <Filter>Header Files\Modals</Filter>
+    </QtMoc>
+    <QtMoc Include="AddProductDialog.h">
+      <Filter>Header Files\Modals</Filter>
+    </QtMoc>
+    <QtMoc Include="DashboardWindow.h">
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="SidebarWidget.h">
+      <Filter>Header Files\Menu</Filter>
+    </QtMoc>
+    <QtMoc Include="VerticalWidget.h">
+      <Filter>Header Files\Menu</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <QtUic Include="SidebarWidget.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="DashboardWindow.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="VerticalWidget.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtUic Include="DashboardPage.ui">
       <Filter>Form Files\Pages</Filter>
     </QtUic>
     <QtUic Include="ItemsPage.ui">
       <Filter>Form Files\Pages</Filter>
     </QtUic>
+    <QtUic Include="SidebarWidget.ui">
+      <Filter>Form Files\Menu</Filter>
+    </QtUic>
+    <QtUic Include="VerticalWidget.ui">
+      <Filter>Form Files\Menu</Filter>
+    </QtUic>
     <QtUic Include="AddProductDialog.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Modals</Filter>
     </QtUic>
     <QtUic Include="AddAssetDialog.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Modals</Filter>
     </QtUic>
     <QtUic Include="AssetsPage.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Pages</Filter>
+    </QtUic>
+    <QtUic Include="DashboardWindow.ui">
+      <Filter>Form Files\Pages</Filter>
     </QtUic>
   </ItemGroup>
 </Project>

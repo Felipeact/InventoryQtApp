@@ -87,6 +87,9 @@ void DashboardWindow::setupSidebar()
         });
 
     connect(sidebar, &SidebarWidget::logoutClicked, this, [this]() {
+           
+		emit logoutRequested();
+
         this->close();
 		});
 

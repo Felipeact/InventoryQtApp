@@ -48,31 +48,42 @@ void InventoryQtApp::onLoginButtonClicked()
 
 	ui.statusLabel->setText("Logging in...");
 
-	std::string token = authService.login(email.toStdString(), password.toStdString());	
+	LoginResult loginResult = authService.login(
+		email.toStdString(),
+		password.toStdString()
+	);
 
-	if (token.empty()) {
-		ui.statusLabel->setText("Login failed. Please check your credentials.");
-		QMessageBox::warning(this, "Login Failed", "Invalid email or password.");
+	if (!loginResult.success) {
+		ui.statusLabel->setText("Login failed.");
+		QMessageBox::warning(
+			this,
+			"Login Failed",
+			QString::fromStdString(loginResult.errorMessage)
+		);
 		return;
 	}
 
-	apiClient.setToken(token);
+	apiClient.setAccessToken(loginResult.accessToken);
+	apiClient.setRefreshToken(loginResult.refreshToken);
 
 	std::string role;
 	std::vector<std::string> permissions;
 
 	if (!apiClient.validateToken(role, permissions)) {
-		ui.statusLabel->setText("Could not validate session.");
-		QMessageBox::warning(this, "Session Error", "Token validation failed.");
+		ui.statusLabel->setText("Token validation failed.");
+		QMessageBox::warning(this, "Error", "Token validation failed.");
 		return;
 	}
 
 		
-	dashboardWindow = new DashboardWindow(role, permissions, productService, assetService);
+	dashboardWindow = new DashboardWindow(role,permissions,productService,assetService);
+
+	connect(dashboardWindow, &DashboardWindow::logoutRequested, this, [this]() {
+		authService.logout();
+		this->show();
+		});
+
 	dashboardWindow->showMaximized();
-
 	this->hide();
-
-	ui.statusLabel->setText("Login successful!");
 }
 

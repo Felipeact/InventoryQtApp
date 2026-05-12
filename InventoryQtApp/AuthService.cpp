@@ -11,24 +11,60 @@ AuthService::AuthService(ApiClient& apiClient) : api(apiClient)
 }
 
 // Sends login credentials to the server and returns the authentication token
-std::string AuthService::login(const std::string& email, const std::string& password)
+LoginResult AuthService::login( const std::string& email, const std::string& password )
 {
-	json body = {
-			{"email", email},
-			{"password", password}
-	};
+    LoginResult result;
 
+    json body = {
+        {"email", email},
+        {"password", password}
+    };
 
+    auto response = api.post("/auth/login", body.dump());
 
-	auto response = api.post("/auth/login", body.dump());
+    if (response.status_code != 200) {
+        result.success = false;
+        result.errorMessage = response.text;
+        return result;
+    }
 
-	if (response.status_code != 200) {
-		return "";
+    try {
+        auto data = json::parse(response.text);
+
+        if (!data.contains("accessToken") || !data.contains("refreshToken")) {
+            result.success = false;
+            result.errorMessage = "Login response missing tokens: " + response.text;
+            return result;
+        }
+
+        result.success = true;
+        result.accessToken = data["accessToken"].get<std::string>();
+        result.refreshToken = data["refreshToken"].get<std::string>();
+
+        return result;
+    }
+    catch (const std::exception& e) {
+        result.success = false;
+        result.errorMessage = std::string("JSON parse error: ") + e.what()
+            + "\nResponse: " + response.text;
+        return result;
+    }
+}
+
+bool AuthService::logout()
+{
+	if (api.getRefreshToken().empty()) {
+		api.clearTokens();
+		return true;
 	}
 
-	auto data = json::parse(response.text);
+	json body = {
+		{"refreshToken", api.getRefreshToken()}
+	};
 
-	if (!data.contains("token")) return "";
+	auto response = api.post("/auth/logout", body.dump());
 
-	return data["token"];
-} // Returns token extracted from response
+	api.clearTokens();
+
+	return response.status_code == 200;
+}

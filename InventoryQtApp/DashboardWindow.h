@@ -32,6 +32,9 @@ public:
     // Destructor
     ~DashboardWindow();
 
+signals:
+	void logoutRequested();
+
 private:
 	Ui::DashboardWindowClass ui;           // UI components
 
