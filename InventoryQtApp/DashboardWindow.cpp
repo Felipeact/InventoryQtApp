@@ -45,14 +45,6 @@ DashboardWindow::DashboardWindow(const std::string& role, const std::vector<std:
         itemsPage->refreshProducts();
         });
 
-    connect(sidebar, &SidebarWidget::scanInClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(scanInPage);
-        });
-
-    connect(sidebar, &SidebarWidget::scanOutClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(scanOutPage);
-        });
-
     setupSidebar();
     setupVerticalbar();
 	setupDashboardPage();
@@ -91,6 +83,14 @@ void DashboardWindow::setupSidebar()
 
     connect(dashboardPage, &DashboardPage::viewAllItemsRequested, this, [this]() {
         ui.mainStack->setCurrentWidget(itemsPage);
+        });
+
+    connect(sidebar, &SidebarWidget::scanInClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(scanInPage);
+        });
+
+    connect(sidebar, &SidebarWidget::scanOutClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(scanOutPage);
         });
 
     connect(sidebar, &SidebarWidget::logoutClicked, this, [this]() {
