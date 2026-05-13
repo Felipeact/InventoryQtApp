@@ -11,7 +11,7 @@ class ProductService
 {
 private:
     ApiClient& api;
-    json cachedProducts = json::array();
+    
 
 public:
     ProductService(ApiClient& apiClient);
@@ -22,5 +22,10 @@ public:
 	bool updateProduct(const std::string& productId, const std::string& name, const std::string& barcode, int quantity);
 
 	bool deleteProduct(const std::string& productId);
+
+    json searchProducts(const std::string& searchText);
+
+    bool scanIn(const std::string& barcode, int quantity);
+	bool scanOut(const std::string& barcode, int quantity);
 };
 

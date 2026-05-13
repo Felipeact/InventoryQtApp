@@ -17,4 +17,6 @@ public:
 	
 	json getInventorySummary();
 	json getAssetsSummary();
+
+
 };

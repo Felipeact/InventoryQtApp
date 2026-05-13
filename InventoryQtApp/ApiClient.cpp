@@ -35,7 +35,9 @@ std::string ApiClient::getRefreshToken() const
 
 cpr::Header ApiClient::authHeader() const
 {
-	return cpr::Header();
+	return cpr::Header{
+		{"Authorization", "Bearer " + accessToken}
+	};
 }
 
 
@@ -149,7 +151,7 @@ bool ApiClient::validateToken(std::string& role, std::vector<std::string>& permi
 
 		auto data = json::parse(res.text);
 
-		role = data["user"]["role"];
+		role = data["user"]["role"].get<std::string>();
 
 		permissions.clear();
 
@@ -163,7 +165,7 @@ bool ApiClient::validateToken(std::string& role, std::vector<std::string>& permi
 	}
 	catch (const std::exception&)
 	{
-
+		return false;
 	}
 	
 }

@@ -75,3 +75,60 @@ bool ProductService::deleteProduct(const std::string& productId)
     cachedProducts = json::array();
     return true;
 }
+
+json ProductService::searchProducts(const std::string& searchText)
+{
+    std::string endpoint = "/products?page=1&limit=100";
+
+    if (!searchText.empty()) {
+        endpoint += "&search=" + searchText;
+    }
+
+    auto res = api.get(endpoint);
+    if (res.status_code != 200) {
+        return json::array();
+    }
+
+    auto response = json::parse(res.text);
+
+    if (response.contains("data"))
+    {
+        return response["data"];
+    }
+
+    return json::array();
+}
+
+bool ProductService::scanIn(const std::string& barcode, int quantity)
+{
+    
+    json body = {
+        {"barcode", barcode},
+        {"quantity", quantity}
+	};
+
+    auto res = api.post("/products/scan-in", body.dump());
+
+    if (res.status_code != 200) {
+        return false;
+    }
+
+    return res.status_code == 200;
+}
+
+bool ProductService::scanOut(const std::string& barcode, int quantity)
+{
+    json body = {
+        {"barcode", barcode},
+        {"quantity", quantity}
+    };
+
+    auto res = api.post("/products/scan-out", body.dump());
+
+    if (res.status_code != 200) {
+        return false;
+    }
+
+   
+    return res.status_code == 200;
+}

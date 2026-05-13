@@ -18,8 +18,16 @@ DashboardWindow::DashboardWindow(const std::string& role, const std::vector<std:
     itemsPage = new ItemsPage(productService, this);
     ui.mainStack->addWidget(itemsPage);
 
+    connect(itemsPage, &ItemsPage::productsChanged, this, [this]() {
+        dashboardPage->refreshDashboard();
+        });
+
     assetsPage = new AssetsPage(assetService, this);
     ui.mainStack->addWidget(assetsPage);
+
+    connect(assetsPage, &AssetsPage::assetsChanged, this, [this]() {
+        dashboardPage->refreshDashboard();
+        });
 
     setupSidebar();
     setupVerticalbar();

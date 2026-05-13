@@ -80,3 +80,26 @@ bool AssetService::deleteAsset(const std::string& assetId)
     return true;
 }
 
+json AssetService::searchAssets(const std::string& searchText)
+{
+    std::string endpoint = "/assets?page=1&limit=100";
+
+    if (!searchText.empty()) {
+        endpoint += "&search=" + searchText;
+    }
+
+    auto res = api.get(endpoint);
+    if (res.status_code != 200) {
+        return json::array();
+    }
+
+    auto response = json::parse(res.text);
+
+    if (response.contains("data"))
+    {
+        return response["data"];
+    }
+
+    return json::array();
+}
+

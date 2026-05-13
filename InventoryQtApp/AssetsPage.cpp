@@ -286,40 +286,9 @@ void AssetsPage::deleteAsset(const std::string& assetId)
 
 void AssetsPage::filterAssets(const QString& searchText)
 {
-    QString search = searchText.trimmed().toLower();
+	currentAssets = assetService.searchAssets(searchText.toStdString());
 
-    if (search.isEmpty()) {
-        populateTable(currentAssets);
-        return;
-    }
-
-    json filtered = json::array();
-
-    for (const auto& asset : currentAssets) {
-        std::string name = asset.value("name", "");
-        std::string type = asset.value("type", "");
-        std::string serialCode = asset.value("serialCode", "");
-        std::string status = asset.value("status", "");
-        std::string description = asset.value("description", "");
-
-        QString nameQ = QString::fromStdString(name).toLower();
-        QString typeQ = QString::fromStdString(type).toLower();
-        QString serialCodeQ = QString::fromStdString(serialCode).toLower();
-        QString statusQ = QString::fromStdString(status).toLower();
-        QString descriptionQ = QString::fromStdString(description).toLower();
-
-        if (
-            nameQ.contains(search) ||
-            typeQ.contains(search) ||
-            serialCodeQ.contains(search) ||
-            statusQ.contains(search) ||
-            descriptionQ.contains(search)
-            ) {
-            filtered.push_back(asset);
-        }
-    }
-
-    populateTable(filtered);
+    populateTable(currentAssets);
 }
 
 // Opens the add asset dialog and adds new items to the table

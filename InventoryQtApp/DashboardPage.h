@@ -17,7 +17,7 @@ public:
 	// Destructor
 	~DashboardPage();
 
-	void refreshProducts();  // Refreshes the dashboard data and UI components
+	void refreshDashboard();  // Refreshes the dashboard data and UI components
 
 signals:
 	void viewAllItemsRequested();

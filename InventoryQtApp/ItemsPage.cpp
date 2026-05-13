@@ -288,39 +288,9 @@ void ItemsPage::deleteProduct(const std::string& productId)
 
 void ItemsPage::filterProducts(const QString& searchText)
 {
-    QString search = searchText.trimmed().toLower();
+	currentProducts = productService.searchProducts(searchText.toStdString());
 
-    if (search.isEmpty()) {
-        populateTable(currentProducts);
-        return;
-    }
-
-    json filtered = json::array();
-
-    for (const auto& product : currentProducts) {
-        std::string name = product.value("name", "");
-        std::string barcode = product.value("barcode", "");
-
-        int quantity = 0;
-
-        if (product.contains("inventory") && !product["inventory"].is_null()) {
-            quantity = product["inventory"].value("quantity", 0);
-        }
-
-        QString nameQ = QString::fromStdString(name).toLower();
-        QString barcodeQ = QString::fromStdString(barcode).toLower();
-        QString quantityQ = QString::number(quantity);
-
-        if (
-            nameQ.contains(search) ||
-            barcodeQ.contains(search) ||
-            quantityQ.contains(search)
-            ) {
-            filtered.push_back(product);
-        }
-    }
-
-    populateTable(filtered);
+    populateTable(currentProducts);
 }
 
 // Opens the add product dialog and adds new items to the table

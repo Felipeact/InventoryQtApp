@@ -22,5 +22,7 @@ public:
     bool updateAsset(const std::string& assetId, const std::string& name, const std::string& type, const std::string& serialCode, const std::string& status, const std::string& description = "");
 
     bool deleteAsset(const std::string& assetId);
+
+    json searchAssets(const std::string& searchText);
 };
 

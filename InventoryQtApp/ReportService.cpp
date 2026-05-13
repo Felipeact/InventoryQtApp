@@ -26,3 +26,5 @@ json ReportService::getAssetsSummary()
 
     return json::parse(res.text);
 }
+
+

@@ -522,7 +522,7 @@ QFrame#verticalLine {
                       </font>
                      </property>
                      <property name="text">
-                      <string>TextLabel</string>
+                      <string>Icon</string>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignmentFlag::AlignCenter</set>
@@ -588,7 +588,7 @@ QFrame#verticalLine {
                    <item>
                     <widget class="QLabel" name="rightIconItem">
                      <property name="text">
-                      <string>TextLabel</string>
+                      <string>Icon</string>
                      </property>
                      <property name="alignment">
                       <set>Qt::AlignmentFlag::AlignCenter</set>

@@ -9,8 +9,7 @@ DashboardPage::DashboardPage(ProductService& productService, ReportService& repo
 {
 	ui.setupUi(this);
       
-    setupItemListTable();
-	setupReportCards();
+	refreshDashboard();
        
 
     connect(ui.viewAllItemsButton, &QPushButton::clicked, this, [this]() {
@@ -23,7 +22,7 @@ DashboardPage::DashboardPage(ProductService& productService, ReportService& repo
 DashboardPage::~DashboardPage()
 {}
 
-void DashboardPage::refreshProducts()
+void DashboardPage::refreshDashboard()
 {
 	setupItemListTable();
     setupReportCards();
