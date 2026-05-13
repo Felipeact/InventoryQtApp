@@ -101,6 +101,7 @@
     <ClCompile Include="ItemsPage.cpp" />
     <ClCompile Include="ProductService.cpp" />
     <ClCompile Include="ReportService.cpp" />
+    <ClCompile Include="ScanPage.cpp" />
     <ClCompile Include="SidebarWidget.cpp" />
     <ClCompile Include="UserService.cpp" />
     <ClCompile Include="VerticalWidget.cpp" />
@@ -117,6 +118,7 @@
     <ClCompile Include="InventoryQtApp.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="ItemsPage.ui" />
+    <QtUic Include="ScanPage.ui" />
     <QtUic Include="SidebarWidget.ui" />
     <QtUic Include="VerticalWidget.ui" />
   </ItemGroup>
@@ -134,6 +136,7 @@
     <ClInclude Include="ProductService.h" />
     <QtMoc Include="SidebarWidget.h" />
     <ClInclude Include="ReportService.h" />
+    <QtMoc Include="ScanPage.h" />
     <ClInclude Include="UserService.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

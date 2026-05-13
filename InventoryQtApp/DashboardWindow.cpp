@@ -29,6 +29,30 @@ DashboardWindow::DashboardWindow(const std::string& role, const std::vector<std:
         dashboardPage->refreshDashboard();
         });
 
+    scanInPage = new ScanPage(productService, ScanMode::ScanIn, this);
+    ui.mainStack->addWidget(scanInPage);
+
+    connect(scanInPage, &ScanPage::stockChanged, this, [this]() {
+        dashboardPage->refreshDashboard();
+        itemsPage->refreshProducts();
+        });
+
+    scanOutPage = new ScanPage(productService, ScanMode::ScanOut, this);
+    ui.mainStack->addWidget(scanOutPage);
+
+    connect(scanOutPage, &ScanPage::stockChanged, this, [this]() {
+        dashboardPage->refreshDashboard();
+        itemsPage->refreshProducts();
+        });
+
+    connect(sidebar, &SidebarWidget::scanInClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(scanInPage);
+        });
+
+    connect(sidebar, &SidebarWidget::scanOutClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(scanOutPage);
+        });
+
     setupSidebar();
     setupVerticalbar();
 	setupDashboardPage();

@@ -32,6 +32,13 @@ ItemsPage::~ItemsPage()
 {
 }
 
+
+void ItemsPage::refreshProducts()
+{
+    currentProducts = productService.getProducts();
+    populateTable(currentProducts);
+}
+
 // Configures the items table columns, headers, styling, and behavior
 void ItemsPage::setupTable()
 {

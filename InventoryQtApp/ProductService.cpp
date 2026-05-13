@@ -22,7 +22,6 @@ bool ProductService::createProduct(const std::string& name, const std::string& b
         return false;
     }
 
-    cachedProducts = json::array(); // clear cache after change
     return true;
 }
 
@@ -58,7 +57,6 @@ bool ProductService::updateProduct(const std::string& productId, const std::stri
         return false;
     }
 
-    cachedProducts = json::array();
     return true;
 
 }
@@ -72,7 +70,6 @@ bool ProductService::deleteProduct(const std::string& productId)
         return false;
     }
 
-    cachedProducts = json::array();
     return true;
 }
 

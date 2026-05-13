@@ -17,6 +17,8 @@ public:
     // Destructor
     ~ItemsPage();
 
+    void refreshProducts();
+
 signals:
 	void productsChanged();  // Signal emitted when products are added/updated/deleted
     

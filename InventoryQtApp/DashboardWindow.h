@@ -6,6 +6,7 @@
 #include "AssetService.h"
 #include "ReportService.h"
 #include <AssetsPage.h>
+#include <ScanPage.h>
 
 #include <QMainWindow>
 #include <vector>
@@ -55,6 +56,8 @@ private:
 	DashboardPage* dashboardPage = nullptr;   // Dashboard overview page
 	ItemsPage* itemsPage = nullptr;           // Items management page
 	AssetsPage* assetsPage = nullptr;         // Assets management page
+	ScanPage* scanInPage = nullptr;
+	ScanPage* scanOutPage = nullptr;
 	
 
 	// Initialization methods

@@ -118,6 +118,9 @@
     <ClCompile Include="ReportService.cpp">
       <Filter>Source Files\services</Filter>
     </ClCompile>
+    <ClCompile Include="ScanPage.cpp">
+      <Filter>Source Files\Pages</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -167,6 +170,9 @@
     <QtMoc Include="VerticalWidget.h">
       <Filter>Header Files\Menu</Filter>
     </QtMoc>
+    <QtMoc Include="ScanPage.h">
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DashboardPage.ui">
@@ -191,6 +197,9 @@
       <Filter>Form Files\Pages</Filter>
     </QtUic>
     <QtUic Include="DashboardWindow.ui">
+      <Filter>Form Files\Pages</Filter>
+    </QtUic>
+    <QtUic Include="ScanPage.ui">
       <Filter>Form Files\Pages</Filter>
     </QtUic>
   </ItemGroup>
