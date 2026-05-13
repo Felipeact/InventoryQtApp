@@ -115,6 +115,9 @@
     <ClCompile Include="AssetService.cpp">
       <Filter>Source Files\services</Filter>
     </ClCompile>
+    <ClCompile Include="ReportService.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -130,6 +133,9 @@
       <Filter>Header Files\services</Filter>
     </ClInclude>
     <ClInclude Include="AssetService.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
+    <ClInclude Include="ReportService.h">
       <Filter>Header Files\services</Filter>
     </ClInclude>
   </ItemGroup>

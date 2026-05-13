@@ -100,6 +100,7 @@
     <ClCompile Include="DashboardWindow.cpp" />
     <ClCompile Include="ItemsPage.cpp" />
     <ClCompile Include="ProductService.cpp" />
+    <ClCompile Include="ReportService.cpp" />
     <ClCompile Include="SidebarWidget.cpp" />
     <ClCompile Include="UserService.cpp" />
     <ClCompile Include="VerticalWidget.cpp" />
@@ -132,6 +133,7 @@
     <QtMoc Include="ItemsPage.h" />
     <ClInclude Include="ProductService.h" />
     <QtMoc Include="SidebarWidget.h" />
+    <ClInclude Include="ReportService.h" />
     <ClInclude Include="UserService.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

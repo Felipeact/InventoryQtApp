@@ -28,19 +28,19 @@ bool ProductService::createProduct(const std::string& name, const std::string& b
 
 json ProductService::getProducts(bool forceRefresh)
 {
-    if (!forceRefresh && !cachedProducts.empty()) {
-        return cachedProducts;
-    }
-
-    auto res = api.get("/products");
+    auto res = api.get("/products?page=1&limit=100");
 
     if (res.status_code != 200) {
-        std::cout << res.text << std::endl;
         return json::array();
     }
 
-    cachedProducts = json::parse(res.text);
-    return cachedProducts;
+    auto response = json::parse(res.text);
+
+    if (response.contains("data")) {
+        return response["data"];
+    }
+
+    return json::array();
 }
 
 bool ProductService::updateProduct(const std::string& productId, const std::string& name, const std::string& barcode, int quantity)

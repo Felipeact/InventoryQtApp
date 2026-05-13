@@ -4,11 +4,14 @@
 #include <algorithm>
 
 // Constructor initializes the dashboard page with sample inventory data
-DashboardPage::DashboardPage(ProductService& productService, QWidget *parent)
-	: QWidget(parent), productService(productService)   
+DashboardPage::DashboardPage(ProductService& productService, ReportService& reportService, QWidget *parent)
+	: QWidget(parent), productService(productService), reportService(reportService)   
 {
 	ui.setupUi(this);
+      
     setupItemListTable();
+	setupReportCards();
+       
 
     connect(ui.viewAllItemsButton, &QPushButton::clicked, this, [this]() {
         emit viewAllItemsRequested();
@@ -23,6 +26,7 @@ DashboardPage::~DashboardPage()
 void DashboardPage::refreshProducts()
 {
 	setupItemListTable();
+    setupReportCards();
 }
 
 // Configures the table with columns, headers, and sample data
@@ -75,5 +79,28 @@ void DashboardPage::setupItemListTable()
     ui.itemListTable->setColumnWidth(3, 80);
 
     ui.itemListTable->verticalHeader()->setDefaultSectionSize(52);
+}
+
+void DashboardPage::setupReportCards()
+{
+    json inventory = reportService.getInventorySummary();
+
+    int quantityInHand = inventory.value("totalQuantity", 0);
+
+    // For now backend does not have purchase orders yet
+    // so we'll keep "to be received" as 0
+    int toBeReceived = inventory.value("toBeReceived", 0);
+
+    ui.leftTotalItem->setText(
+        QString::number(quantityInHand)
+    );
+
+    ui.rightTotalItem->setText(
+        QString::number(toBeReceived)
+    );
+
+    ui.leftDescriptionItem->setText("Quantity in Hand");
+
+    ui.rightDescriptionItem->setText("To be received");
 }
 

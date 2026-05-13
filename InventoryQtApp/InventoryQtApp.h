@@ -8,6 +8,8 @@
 #include "ApiClient.h"
 #include "AuthService.h"
 #include "ProductService.h"
+#include "AssetService.h"
+#include "ReportService.h"
 
 // Main login window of the inventory management application
 class InventoryQtApp : public QMainWindow
@@ -31,6 +33,7 @@ private:
 	AuthService authService;         // Service for authentication
 	ProductService productService{ apiClient }; // Service for product operations
 	AssetService assetService{ apiClient }; // Service for asset operations
+	ReportService reportService{ apiClient }; // Service for report operations	
 
 	DashboardWindow* dashboardWindow = nullptr;  // Main dashboard window after login
 

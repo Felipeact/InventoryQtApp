@@ -12,6 +12,8 @@ private:
 	std::string accessToken; // Authentication token for API requests
 	std::string refreshToken; // Refresh token for obtaining new access tokens
 
+	cpr::Header authHeader() const; // Helper function to construct the Authorization header
+
 public:
 	// Constructor with base URL
 	ApiClient(const std::string& baseUrl);

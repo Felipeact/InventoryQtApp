@@ -53,18 +53,18 @@ LoginResult AuthService::login( const std::string& email, const std::string& pas
 
 bool AuthService::logout()
 {
-	if (api.getRefreshToken().empty()) {
-		api.clearTokens();
-		return true;
-	}
+    if (api.getRefreshToken().empty()) {
+        api.clearTokens();
+        return true;
+    }
 
-	json body = {
-		{"refreshToken", api.getRefreshToken()}
-	};
+    json body = {
+        {"refreshToken", api.getRefreshToken()}
+    };
 
-	auto response = api.post("/auth/logout", body.dump());
+    auto response = api.post("/auth/logout", body.dump());
 
-	api.clearTokens();
+    api.clearTokens();
 
-	return response.status_code == 200;
+    return response.status_code == 200;
 }

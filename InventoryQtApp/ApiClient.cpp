@@ -4,11 +4,13 @@
 
 using json = nlohmann::json;
 
+
 // Constructor initializes the base URL for all API requests
 ApiClient::ApiClient(const std::string& baseUrl) :
 	baseUrl(baseUrl)
 {
 }
+
 
 // Updates the authentication token for subsequent API requests
 void ApiClient::setAccessToken(const std::string& token)
@@ -31,6 +33,12 @@ std::string ApiClient::getRefreshToken() const
 	return refreshToken;
 }
 
+cpr::Header ApiClient::authHeader() const
+{
+	return cpr::Header();
+}
+
+
 // Clears the stored access and refresh tokens, effectively logging out the user
 void ApiClient::clearTokens()
 {
@@ -42,18 +50,25 @@ void ApiClient::clearTokens()
 // Sends a GET request to the specified endpoint
 cpr::Response ApiClient::get(const std::string& endpoint)
 {
-	return cpr::Get(
+	auto res = cpr::Get(
 		cpr::Url{ baseUrl + endpoint },
-		cpr::Header{
-			{"Authorization", "Bearer " + accessToken}
-		}
+		authHeader()
 	);
+
+	if (res.status_code == 401 && refreshAccessToken()) {
+		res = cpr::Get(
+			cpr::Url{ baseUrl + endpoint },
+			authHeader()
+		);
+	}
+
+	return res;
 }
 
 // Sends a POST request with the given endpoint and JSON body
 cpr::Response ApiClient::post(const std::string& endpoint, const std::string& body)
 {
-	return cpr::Post(
+	auto res = cpr::Post(
 		cpr::Url{ baseUrl + endpoint },
 		cpr::Header{
 			{"Content-Type", "application/json"},
@@ -61,11 +76,24 @@ cpr::Response ApiClient::post(const std::string& endpoint, const std::string& bo
 		},
 		cpr::Body{ body }
 	);
+
+	if (res.status_code == 401 && refreshAccessToken()) {
+		res = cpr::Post(
+			cpr::Url{ baseUrl + endpoint },
+			cpr::Header{
+				{"Content-Type", "application/json"},
+				{"Authorization", "Bearer " + accessToken}
+			},
+			cpr::Body{ body }
+		);
+	}
+
+	return res;
 }
 
 cpr::Response ApiClient::put(const std::string& endpoint, const std::string& body)
 {
-	return cpr::Put(
+	auto res = cpr::Put(
 		cpr::Url{ baseUrl + endpoint },
 		cpr::Header{
 			{"Content-Type", "application/json"},
@@ -73,16 +101,36 @@ cpr::Response ApiClient::put(const std::string& endpoint, const std::string& bod
 		},
 		cpr::Body{ body }
 	);
+
+	if (res.status_code == 401 && refreshAccessToken()) {
+		res = cpr::Put(
+			cpr::Url{ baseUrl + endpoint },
+			cpr::Header{
+				{"Content-Type", "application/json"},
+				{"Authorization", "Bearer " + accessToken}
+			},
+			cpr::Body{ body }
+		);
+	}
+
+	return res;
 }
 
 cpr::Response ApiClient::del(const std::string& endpoint)
 {
-	return cpr::Delete(
+	auto res = cpr::Delete(
 		cpr::Url{ baseUrl + endpoint },
-		cpr::Header{
-			{"Authorization", "Bearer " + accessToken}
-		}
+		authHeader()
 	);
+
+	if (res.status_code == 401 && refreshAccessToken()) {
+		res = cpr::Delete(
+			cpr::Url{ baseUrl + endpoint },
+			authHeader()
+		);
+	}
+
+	return res;
 }
 
 

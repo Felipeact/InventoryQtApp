@@ -30,19 +30,19 @@ bool AssetService::createAsset(const std::string& name, const std::string& type,
 
 json AssetService::getAssets(bool forceRefresh)
 {
-    if (!forceRefresh && !cachedAssets.empty()) {
-        return cachedAssets;
-    }
-
-    auto res = api.get("/assets");
+    auto res = api.get("/assets?page=1&limit=100");
 
     if (res.status_code != 200) {
-        std::cout << res.text << std::endl;
         return json::array();
     }
 
-    cachedAssets = json::parse(res.text);
-    return cachedAssets;
+    auto response = json::parse(res.text);
+
+    if (response.contains("data")) {
+        return response["data"];
+    }
+
+    return json::array();
 }
 
 bool AssetService::updateAsset(const std::string& assetId, const std::string& name, const std::string& type, const std::string& serialCode, const std::string& status, const std::string& description)

@@ -7,50 +7,25 @@
 #include <QHeaderView>
 
 // Constructor initializes the main window with pages and navigation
-DashboardWindow::DashboardWindow(
-    const std::string& userRole,
-    const std::vector<std::string>& userPermissions,
-    ProductService& productService,
-	AssetService& assetService,
-    QWidget* parent
-)
-    : QMainWindow(parent),
-    role(userRole),
-    permissions(userPermissions),
-    productService(&productService),
-	assetService(&assetService)
+DashboardWindow::DashboardWindow(const std::string& role, const std::vector<std::string>& permissions, ProductService& productService, AssetService& assetService, ReportService& reportService, QWidget* parent) :
+    QMainWindow(parent), role(role), permissions(permissions), productService(&productService), assetService(&assetService), reportService(&reportService)   
 {
     ui.setupUi(this);
 
-    this->setWindowFlags(
-        Qt::Window |
-        Qt::WindowMinimizeButtonHint |
-        Qt::WindowMaximizeButtonHint |
-        Qt::WindowCloseButtonHint
-    );
-
-    this->resize(1920, 1080);
-    this->setMinimumSize(1000, 700);
-
-	// Add Pages to the main stack
-	dashboardPage = new DashboardPage(productService, this);
-	ui.mainStack->addWidget(dashboardPage);
+    dashboardPage = new DashboardPage(productService, reportService, this);
+    ui.mainStack->addWidget(dashboardPage);
 
     itemsPage = new ItemsPage(productService, this);
-	ui.mainStack->addWidget(itemsPage);
+    ui.mainStack->addWidget(itemsPage);
 
-	assetsPage = new AssetsPage(assetService, this);
-	ui.mainStack->addWidget(assetsPage);
+    assetsPage = new AssetsPage(assetService, this);
+    ui.mainStack->addWidget(assetsPage);
 
-    connect(itemsPage, &ItemsPage::productsChanged, this, [this]() {
-        dashboardPage->refreshProducts();
-        });
-    
     setupSidebar();
-	setupVerticalbar();    
-    setupDashboardPage();
+    setupVerticalbar();
+	setupDashboardPage();
 
-
+    ui.mainStack->setCurrentWidget(dashboardPage);
 }
 
 // Destructor

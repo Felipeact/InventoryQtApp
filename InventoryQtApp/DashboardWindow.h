@@ -4,6 +4,7 @@
 #include <ItemsPage.h>
 #include "ProductService.h"
 #include "AssetService.h"
+#include "ReportService.h"
 #include <AssetsPage.h>
 
 #include <QMainWindow>
@@ -26,6 +27,7 @@ public:
         const std::vector<std::string>& permissions,
 		ProductService& productService,
 		AssetService& assetService,
+		ReportService& reportService,
         QWidget* parent = nullptr
     );
 
@@ -46,6 +48,8 @@ private:
 
 	ProductService* productService = nullptr; // Product service for API interactions
 	AssetService* assetService = nullptr;   // Assets service for API interactions
+	ReportService* reportService = nullptr; // Report service for API interactions
+
 
 	// Pages displayed in the main stack
 	DashboardPage* dashboardPage = nullptr;   // Dashboard overview page

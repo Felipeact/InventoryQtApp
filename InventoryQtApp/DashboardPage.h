@@ -4,6 +4,7 @@
 #include <QWidget>
 #include "ui_DashboardPage.h"
 #include "ProductService.h"
+#include "ReportService.h"
 
 // Dashboard widget that displays a summary of inventory items
 class DashboardPage : public QWidget
@@ -12,7 +13,7 @@ class DashboardPage : public QWidget
 
 public:
 	// Constructor
-	DashboardPage(ProductService& productService, QWidget *parent = nullptr);
+	DashboardPage(ProductService& productService, ReportService& reportService, QWidget *parent = nullptr);
 	// Destructor
 	~DashboardPage();
 
@@ -25,9 +26,11 @@ signals:
 private:
 	Ui::DashboardPageClass ui;  // UI components
 	ProductService& productService;  // Reference to product service for API interactions
+	ReportService& reportService;  // Reference to report service for API interactions
 
 	// Initializes and configures the item list table
 	void setupItemListTable();
+	void setupReportCards();
 
 
 };
