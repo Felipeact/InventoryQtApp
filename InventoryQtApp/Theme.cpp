@@ -324,31 +324,153 @@ QFrame#line, QFrame#frame, QFrame#frame_2, QFrame#frame_3, QFrame#frame_4 { colo
 void Theme::applyDataPage(QWidget* page)
 {
     page->setStyleSheet(globalStyleSheet() + R"(
+
+/* =========================
+   TOOLBAR
+========================= */
+
 QWidget#toolbarContainer {
-    background: qlineargradient(x1:0,y1:0,x2:1,y2:0, stop:0 #0b1626, stop:1 #101827);
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:0,
+        stop:0 #0b1626,
+        stop:1 #101827);
     border: 1px solid #263a57;
     border-radius: 12px;
 }
+
 QWidget#searchContainer {
     background: #0f172a;
     border: 1px solid #263a57;
     border-radius: 8px;
 }
-QLineEdit#itemSearchInput, QLineEdit#assetSearchInput {
+
+QLineEdit#itemSearchInput,
+QLineEdit#assetSearchInput {
     border: none;
     background: transparent;
     min-height: 32px;
     padding-left: 12px;
     padding-right: 4px;
 }
-QPushButton#itemSearchButton, QPushButton#assetSearchButton {
+
+QPushButton#itemSearchButton,
+QPushButton#assetSearchButton {
     background: transparent;
     border: none;
     padding: 0 10px;
     min-width: 58px;
     color: white;
 }
-QPushButton#itemSearchButton:hover, QPushButton#assetSearchButton:hover { background: transparent; color: #93c5fd; }
+
+QPushButton#itemSearchButton:hover,
+QPushButton#assetSearchButton:hover {
+    background: transparent;
+    color: #93c5fd;
+}
+
+/* =========================
+   TABLE CARD
+========================= */
+
+QWidget#tableCard {
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:1,
+        stop:0 #0d1828,
+        stop:1 #091322);
+
+    border: 1px solid #263a57;
+    border-radius: 12px;
+}
+
+/* =========================
+   PAGINATION
+========================= */
+
+QPushButton#prevPageButton,
+QPushButton#page2Button,
+QPushButton#nextPageButton {
+    background-color: #111C2D;
+    border: 1px solid #22324A;
+    border-radius: 8px;
+    color: white;
+    min-width: 32px;
+    min-height: 32px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+QPushButton#prevPageButton:hover,
+QPushButton#page2Button:hover,
+QPushButton#nextPageButton:hover {
+    background-color: #1A2940;
+    border: 1px solid #2D4B73;
+}
+
+QPushButton#activePageButton {
+    background-color: #2563EB;
+    border: none;
+    border-radius: 8px;
+    color: white;
+    min-width: 32px;
+    min-height: 32px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QPushButton#activePageButton:hover {
+    background-color: #3B82F6;
+}
+
+QComboBox#pageSizeCombo {
+    background-color: #111C2D;
+    border: 1px solid #22324A;
+    border-radius: 8px;
+    color: white;
+    padding: 6px 10px;
+    min-height: 32px;
+}
+
+QComboBox#pageSizeCombo::drop-down {
+    border: none;
+}
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+QPushButton#viewButton,
+QPushButton#editButton,
+QPushButton#deleteButton {
+    min-width: 28px;
+    max-width: 28px;
+
+    min-height: 28px;
+    max-height: 28px;
+
+    border-radius: 7px;
+
+    background-color: #0E1A2B;
+    border: 1px solid #1E3A5F;
+
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 0;
+}
+
+QPushButton#viewButton:hover {
+    background-color: #1D4ED8;
+    border: 1px solid #2563EB;
+}
+
+QPushButton#editButton:hover {
+    background-color: #2563EB;
+    border: 1px solid #3B82F6;
+}
+
+QPushButton#deleteButton:hover {
+    background-color: #DC2626;
+    border: 1px solid #EF4444;
+}
+
 )");
 }
 

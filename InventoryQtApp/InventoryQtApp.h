@@ -37,6 +37,8 @@ private:
 
 	DashboardWindow* dashboardWindow = nullptr;  // Main dashboard window after login
 
+	
+
 
  
 };

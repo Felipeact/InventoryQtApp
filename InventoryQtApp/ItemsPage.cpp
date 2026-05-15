@@ -10,15 +10,16 @@
 #include <QWidget>
 #include <QFrame>
 #include <QMessageBox>
+#include <QLineEdit>
 
-// Constructor initializes the items page with table setup and sample data
+// Constructor initializes the items page with table setup and data
 ItemsPage::ItemsPage(ProductService& productService, QWidget* parent)
-	: QWidget(parent), productService(productService)
+    : QWidget(parent), productService(productService)
 {
     ui.setupUi(this);
 
     setupTable();
-	loadProducts();
+    loadProducts();
 
     connect(ui.addItemButton, &QPushButton::clicked,
         this, &ItemsPage::onAddItemClicked);
@@ -31,7 +32,6 @@ ItemsPage::ItemsPage(ProductService& productService, QWidget* parent)
 ItemsPage::~ItemsPage()
 {
 }
-
 
 void ItemsPage::refreshProducts()
 {
@@ -64,6 +64,8 @@ void ItemsPage::setupTable()
     ui.itemsTable->setShowGrid(false);
     ui.itemsTable->setFrameShape(QFrame::NoFrame);
     ui.itemsTable->setFocusPolicy(Qt::NoFocus);
+    ui.itemsTable->setAlternatingRowColors(false);
+    ui.itemsTable->viewport()->setAutoFillBackground(false);
 
     ui.itemsTable->horizontalHeader()->setHighlightSections(false);
     ui.itemsTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
@@ -78,89 +80,120 @@ void ItemsPage::setupTable()
     ui.itemsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui.itemsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 
+    ui.itemsTable->setStyleSheet(R"(
+        QTableWidget {
+            background-color: transparent;
+            border: none;
+            color: white;
+            gridline-color: transparent;
+            outline: none;
+        }
+
+        QTableWidget::item {
+            background-color: transparent;
+            border-bottom: 1px solid #132238;
+            padding-left: 12px;
+        }
+
+        QTableWidget::item:selected {
+            background-color: #132238;
+        }
+
+        QHeaderView::section {
+            background-color: #0C1728;
+            color: #94A3B8;
+            border: none;
+            border-bottom: 1px solid #1F2E45;
+            padding-left: 12px;
+            height: 42px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+    )");
+
     const QString premiumScrollBarStyle = R"(
-    QScrollBar:vertical {
-        background: transparent;
-        width: 6px;
-        margin: 4px 0 4px 0;
-    }
+        QScrollBar:vertical {
+            background: transparent;
+            width: 6px;
+            margin: 4px 0 4px 0;
+        }
 
-    QScrollBar::handle:vertical {
-        background: rgba(140, 140, 140, 0.35);
-        border-radius: 3px;
-        min-height: 30px;
-    }
+        QScrollBar::handle:vertical {
+            background: rgba(140, 140, 140, 0.35);
+            border-radius: 3px;
+            min-height: 30px;
+        }
 
-    QScrollBar::handle:vertical:hover {
-        background: rgba(180, 180, 180, 0.65);
-    }
+        QScrollBar::handle:vertical:hover {
+            background: rgba(180, 180, 180, 0.65);
+        }
 
-    QScrollBar::handle:vertical:pressed {
-        background: rgba(200, 200, 200, 0.9);
-    }
+        QScrollBar::handle:vertical:pressed {
+            background: rgba(200, 200, 200, 0.9);
+        }
 
-    QScrollBar::add-line:vertical,
-    QScrollBar::sub-line:vertical {
-        height: 0;
-    }
+        QScrollBar::add-line:vertical,
+        QScrollBar::sub-line:vertical {
+            height: 0;
+        }
 
-    QScrollBar::add-page:vertical,
-    QScrollBar::sub-page:vertical {
-        background: transparent;
-    }
+        QScrollBar::add-page:vertical,
+        QScrollBar::sub-page:vertical {
+            background: transparent;
+        }
 
-    QScrollBar:horizontal {
-        background: transparent;
-        height: 6px;
-        margin: 0 4px 0 4px;
-    }
+        QScrollBar:horizontal {
+            background: transparent;
+            height: 6px;
+            margin: 0 4px 0 4px;
+        }
 
-    QScrollBar::handle:horizontal {
-        background: rgba(140, 140, 140, 0.35);
-        border-radius: 3px;
-        min-width: 30px;
-    }
+        QScrollBar::handle:horizontal {
+            background: rgba(140, 140, 140, 0.35);
+            border-radius: 3px;
+            min-width: 30px;
+        }
 
-    QScrollBar::handle:horizontal:hover {
-        background: rgba(180, 180, 180, 0.65);
-    }
+        QScrollBar::handle:horizontal:hover {
+            background: rgba(180, 180, 180, 0.65);
+        }
 
-    QScrollBar::handle:horizontal:pressed {
-        background: rgba(200, 200, 200, 0.9);
-    }
+        QScrollBar::handle:horizontal:pressed {
+            background: rgba(200, 200, 200, 0.9);
+        }
 
-    QScrollBar::add-line:horizontal,
-    QScrollBar::sub-line:horizontal {
-        width: 0;
-    }
+        QScrollBar::add-line:horizontal,
+        QScrollBar::sub-line:horizontal {
+            width: 0;
+        }
 
-    QScrollBar::add-page:horizontal,
-    QScrollBar::sub-page:horizontal {
-        background: transparent;
-    }
+        QScrollBar::add-page:horizontal,
+        QScrollBar::sub-page:horizontal {
+            background: transparent;
+        }
     )";
 
     ui.itemsTable->verticalScrollBar()->setStyleSheet(premiumScrollBarStyle);
     ui.itemsTable->horizontalScrollBar()->setStyleSheet(premiumScrollBarStyle);
-
 }
 
-// Populates the table with product data and action buttons
+// Loads products from backend
 void ItemsPage::loadProducts()
 {
-
     currentProducts = productService.getProducts();
     populateTable(currentProducts);
 }
 
+// Populates the table with product data and action buttons
 void ItemsPage::populateTable(const json& products)
 {
+    ui.itemsTable->clearContents();
     ui.itemsTable->setRowCount(static_cast<int>(products.size()));
 
-    for (int row = 0; row < products.size(); row++) {
+    for (int row = 0; row < static_cast<int>(products.size()); row++) {
         auto product = products[row];
-        std::string productId = product.value("id", "");
 
+        std::string productId = product.value("id", "");
         std::string name = product.value("name", "");
         std::string barcode = product.value("barcode", "");
 
@@ -180,11 +213,26 @@ void ItemsPage::populateTable(const json& products)
         ui.itemsTable->setItem(row, 7, new QTableWidgetItem("Activated"));
 
         QWidget* actionWidget = new QWidget();
+        actionWidget->setObjectName("actionContainer");
+        actionWidget->setStyleSheet("background-color: transparent; border: none;");
+
         QHBoxLayout* actionLayout = new QHBoxLayout(actionWidget);
         actionLayout->setContentsMargins(0, 0, 0, 0);
         actionLayout->setSpacing(6);
+        actionLayout->setAlignment(Qt::AlignCenter);
 
         QPushButton* viewButton = new QPushButton("👁");
+        viewButton->setObjectName("viewButton");
+        
+
+        QPushButton* editButton = new QPushButton("✎");
+        editButton->setObjectName("editButton");
+        ;
+
+        QPushButton* deleteButton = new QPushButton("🗑");
+        deleteButton->setObjectName("deleteButton");
+        
+
         connect(viewButton, &QPushButton::clicked, this, [this, product]() {
             std::string name = product.value("name", "");
             std::string barcode = product.value("barcode", "");
@@ -204,8 +252,6 @@ void ItemsPage::populateTable(const json& products)
             dialog.exec();
             });
 
-
-        QPushButton* editButton = new QPushButton("✎");
         connect(editButton, &QPushButton::clicked, this, [this, productId, product]() {
             std::string name = product.value("name", "");
             std::string barcode = product.value("barcode", "");
@@ -239,8 +285,6 @@ void ItemsPage::populateTable(const json& products)
             }
             });
 
-
-        QPushButton* deleteButton = new QPushButton("🗑");
         connect(deleteButton, &QPushButton::clicked, this, [this, productId]() {
             QMessageBox::StandardButton reply = QMessageBox::question(
                 this,
@@ -275,14 +319,9 @@ void ItemsPage::populateTable(const json& products)
             }
             });
 
-        viewButton->setFixedSize(26, 26);
-        editButton->setFixedSize(26, 26);
-        deleteButton->setFixedSize(26, 26);
-
         actionLayout->addWidget(viewButton);
         actionLayout->addWidget(editButton);
         actionLayout->addWidget(deleteButton);
-        actionLayout->addStretch();
 
         ui.itemsTable->setCellWidget(row, 8, actionWidget);
     }
@@ -290,13 +329,12 @@ void ItemsPage::populateTable(const json& products)
 
 void ItemsPage::deleteProduct(const std::string& productId)
 {
-	auto res = productService.deleteProduct(productId);
+    productService.deleteProduct(productId);
 }
 
 void ItemsPage::filterProducts(const QString& searchText)
 {
-	currentProducts = productService.searchProducts(searchText.toStdString());
-
+    currentProducts = productService.searchProducts(searchText.toStdString());
     populateTable(currentProducts);
 }
 
@@ -314,9 +352,7 @@ void ItemsPage::onAddItemClicked()
 
         if (success) {
             currentProducts = productService.getProducts(true);
-
             filterProducts(ui.itemSearchInput->text());
-
             emit productsChanged();
         }
     }
