@@ -36,4 +36,7 @@ private:
     bool hasPermission(const std::string& permission);
     // Shows/hides buttons based on user permissions
     void applyPermissions();
+
+    void resetButtonStates();
+	void setActiveButton(QPushButton* activeButton);
 };
