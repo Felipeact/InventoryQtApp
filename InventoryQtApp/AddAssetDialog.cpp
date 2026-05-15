@@ -37,7 +37,7 @@ QString AddAssetDialog::getAssetName() const
 // Retrieves the asset type from the input field
 QString AddAssetDialog::getAssetType() const
 {
-    return ui.assetTypeInput->text().trimmed();
+    return ui.assetTypeInput->currentText().trimmed();
 }
 
 // Retrieves the serial code from the input field
@@ -55,7 +55,7 @@ QString AddAssetDialog::getStatus() const
 // Retrieves the description from the text edit
 QString AddAssetDialog::getDescription() const
 {
-    return ui.descriptionInput->toPlainText().trimmed();
+    return ui.descriptionInput->text().trimmed();
 }
 
 // Validates asset data and accepts the dialog if valid
@@ -94,10 +94,10 @@ void AddAssetDialog::onCloseButtonClicked()
 void AddAssetDialog::setAssetData(const QString& name, const QString& type, const QString& serialCode, const QString& status, const QString& description)
 {
     ui.assetNameInput->setText(name);
-    ui.assetTypeInput->setText(type);
+    ui.assetTypeInput->setCurrentText(type);
     ui.serialCodeInput->setText(serialCode);
     ui.statusComboBox->setCurrentText(status);
-    ui.descriptionInput->setPlainText(description);
+    ui.descriptionInput->setText(description);
 
     setWindowTitle("Edit Asset");
     ui.titleLabel->setText("Edit Asset");
@@ -107,13 +107,13 @@ void AddAssetDialog::setAssetData(const QString& name, const QString& type, cons
 void AddAssetDialog::setViewMode(const QString& name, const QString& type, const QString& serialCode, const QString& status, const QString& description)
 {
     ui.assetNameInput->setText(name);
-    ui.assetTypeInput->setText(type);
+    ui.assetTypeInput->setCurrentText(type);
     ui.serialCodeInput->setText(serialCode);
     ui.statusComboBox->setCurrentText(status);
-    ui.descriptionInput->setPlainText(description);
+    ui.descriptionInput->setText(description);
 
     ui.assetNameInput->setReadOnly(true);
-    ui.assetTypeInput->setReadOnly(true);
+    ui.assetTypeInput->setEnabled(true);
     ui.serialCodeInput->setReadOnly(true);
     ui.statusComboBox->setEnabled(false);
     ui.descriptionInput->setReadOnly(true);
