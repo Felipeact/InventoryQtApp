@@ -27,5 +27,7 @@ public:
 
     bool scanIn(const std::string& barcode, int quantity);
 	bool scanOut(const std::string& barcode, int quantity);
+
+    json getLowStockProducts();
 };
 

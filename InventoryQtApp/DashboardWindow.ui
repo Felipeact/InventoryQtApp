@@ -1,108 +1,189 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>DashboardWindowClass</class>
- <widget class="QMainWindow" name="DashboardWindowClass">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>844</width>
-    <height>589</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>DashboardWindow</string>
-  </property>
-  <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <widget class="QWidget" name="sidebarContainer" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>220</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>260</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">background-color: #181818;
-border-radius: 9px;</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QWidget" name="mainAreaContainer" native="true">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <layout class="QVBoxLayout" name="verticalLayout_3">
-         <item>
-          <widget class="QWidget" name="verticalContainer" native="true">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <property name="minimumSize">
-            <size>
-             <width>0</width>
-             <height>70</height>
-            </size>
-           </property>
-           <property name="maximumSize">
-            <size>
-             <width>16777215</width>
-             <height>90</height>
-            </size>
-           </property>
-           <property name="styleSheet">
-            <string notr="true">background-color: #181818;
-border-radius: 9px;
-</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QStackedWidget" name="mainStack">
-           <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-             <horstretch>0</horstretch>
-             <verstretch>0</verstretch>
-            </sizepolicy>
-           </property>
-           <widget class="QWidget" name="dashboardPage">
-            <layout class="QHBoxLayout" name="horizontalLayout_3"/>
-           </widget>
-           <widget class="QWidget" name="itemsPage"/>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
-    </item>
-   </layout>
-  </widget>
-  <widget class="QStatusBar" name="statusBar"/>
- </widget>
- <layoutdefault spacing="6" margin="11"/>
- <resources/>
- <connections/>
+	<class>DashboardWindowClass</class>
+	<widget class="QMainWindow" name="DashboardWindowClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>1440</width>
+				<height>900</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Inventory Dashboard</string>
+		</property>
+		<property name="styleSheet">
+			<string notr="true">
+				QMainWindow#DashboardWindowClass {
+				background-color: #050B14;
+				}
+
+				QWidget#centralWidget {
+				background-color: #050B14;
+				}
+
+				QWidget#sidebarContainer {
+				background-color: #07111F;
+				border: 1px solid #16263B;
+				border-radius: 12px;
+				}
+
+				QWidget#mainAreaContainer {
+				background-color: #050B14;
+				}
+
+				QWidget#verticalContainer {
+				background-color: transparent;
+				}
+
+				QStackedWidget#mainStack {
+				background-color: transparent;
+				border: none;
+				}
+
+				QStatusBar {
+				background-color: #050B14;
+				color: #94A3B8;
+				}
+			</string>
+		</property>
+
+		<widget class="QWidget" name="centralWidget">
+			<layout class="QHBoxLayout" name="rootLayout">
+				<property name="leftMargin">
+					<number>8</number>
+				</property>
+				<property name="topMargin">
+					<number>8</number>
+				</property>
+				<property name="rightMargin">
+					<number>8</number>
+				</property>
+				<property name="bottomMargin">
+					<number>8</number>
+				</property>
+				<property name="spacing">
+					<number>10</number>
+				</property>
+
+				<!-- SIDEBAR -->
+				<item>
+					<widget class="QWidget" name="sidebarContainer" native="true">
+						<property name="sizePolicy">
+							<sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+								<horstretch>0</horstretch>
+								<verstretch>0</verstretch>
+							</sizepolicy>
+						</property>
+						<property name="minimumSize">
+							<size>
+								<width>170</width>
+								<height>0</height>
+							</size>
+						</property>
+						<property name="maximumSize">
+							<size>
+								<width>170</width>
+								<height>16777215</height>
+							</size>
+						</property>
+					</widget>
+				</item>
+
+				<!-- MAIN AREA -->
+				<item>
+					<widget class="QWidget" name="mainAreaContainer" native="true">
+						<property name="sizePolicy">
+							<sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+								<horstretch>1</horstretch>
+								<verstretch>0</verstretch>
+							</sizepolicy>
+						</property>
+
+						<layout class="QVBoxLayout" name="mainAreaLayout">
+							<property name="leftMargin">
+								<number>0</number>
+							</property>
+							<property name="topMargin">
+								<number>0</number>
+							</property>
+							<property name="rightMargin">
+								<number>0</number>
+							</property>
+							<property name="bottomMargin">
+								<number>0</number>
+							</property>
+							<property name="spacing">
+								<number>10</number>
+							</property>
+
+							<!-- TOP HEADER CONTAINER -->
+							<item>
+								<widget class="QWidget" name="verticalContainer" native="true">
+									<property name="sizePolicy">
+										<sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+											<horstretch>0</horstretch>
+											<verstretch>0</verstretch>
+										</sizepolicy>
+									</property>
+									<property name="minimumSize">
+										<size>
+											<width>0</width>
+											<height>78</height>
+										</size>
+									</property>
+									<property name="maximumSize">
+										<size>
+											<width>16777215</width>
+											<height>78</height>
+										</size>
+									</property>
+								</widget>
+							</item>
+
+							<!-- STACK CONTENT -->
+							<item>
+								<widget class="QStackedWidget" name="mainStack">
+									<property name="sizePolicy">
+										<sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+											<horstretch>0</horstretch>
+											<verstretch>1</verstretch>
+										</sizepolicy>
+									</property>
+
+									<widget class="QWidget" name="dashboardPage">
+										<layout class="QHBoxLayout" name="dashboardPlaceholderLayout">
+											<property name="leftMargin">
+												<number>0</number>
+											</property>
+											<property name="topMargin">
+												<number>0</number>
+											</property>
+											<property name="rightMargin">
+												<number>0</number>
+											</property>
+											<property name="bottomMargin">
+												<number>0</number>
+											</property>
+										</layout>
+									</widget>
+
+									<widget class="QWidget" name="itemsPage"/>
+								</widget>
+							</item>
+
+						</layout>
+					</widget>
+				</item>
+
+			</layout>
+		</widget>
+
+		<widget class="QStatusBar" name="statusBar"/>
+	</widget>
+
+	<layoutdefault spacing="6" margin="11"/>
+	<resources/>
+	<connections/>
 </ui>

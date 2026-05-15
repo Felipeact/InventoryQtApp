@@ -129,3 +129,14 @@ bool ProductService::scanOut(const std::string& barcode, int quantity)
    
     return res.status_code == 200;
 }
+
+json ProductService::getLowStockProducts()
+{
+    auto res = api.get("/products/low-stock");
+
+    if (res.status_code != 200) {
+        return json::array();
+    }
+
+    return json::parse(res.text);
+}

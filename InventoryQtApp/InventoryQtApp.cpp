@@ -63,12 +63,8 @@ void InventoryQtApp::onLoginButtonClicked()
 	);
 
 	if (!loginResult.success) {
-		ui.statusLabel->setText("Login failed.");
-		QMessageBox::warning(
-			this,
-			"Login Failed",
-			QString::fromStdString(loginResult.errorMessage)
-		);
+		ui.statusLabel->setText("Login failed: " + QString::fromStdString(loginResult.errorMessage));
+		
 		return;
 	}
 

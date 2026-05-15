@@ -17,7 +17,7 @@ public:
 	~VerticalWidget();
 
 private:
-	Ui::VerticalWidgetClass ui;  // UI components
+	Ui::VerticalWidget ui;  // UI components
 
 	const std::string role;      // User's role
 	const std::string username;  // User's name

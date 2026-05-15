@@ -6,1133 +6,735 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1306</width>
-    <height>946</height>
+    <width>896</width>
+    <height>608</height>
    </rect>
   </property>
-  <property name="font">
-   <font>
-    <pointsize>14</pointsize>
-   </font>
+  <property name="styleSheet">
+   <string notr="true">
+				QWidget#DashboardPageClass {
+				background-color: #050B14;
+				}
+
+				QFrame {
+				background-color: #0B1627;
+				border: 1px solid #1E2F46;
+				border-radius: 12px;
+				}
+
+				QLabel {
+				color: #FFFFFF;
+				background: transparent;
+				border: none;
+				}
+
+				QLabel[class=&quot;muted&quot;] {
+				color: #94A3B8;
+				}
+
+				QTableWidget {
+				background-color: transparent;
+				border: none;
+				color: #CBD5E1;
+				gridline-color: #1E2F46;
+				selection-background-color: #1D4ED8;
+				selection-color: white;
+				}
+
+				QHeaderView::section {
+				background-color: transparent;
+				color: #94A3B8;
+				border: none;
+				border-bottom: 1px solid #1E2F46;
+				padding: 8px;
+				font-weight: 600;
+				}
+
+				QTableWidget::item {
+				border-bottom: 1px solid #132238;
+				padding: 8px;
+				}
+
+				QPushButton {
+				background-color: transparent;
+				color: #60A5FA;
+				border: 1px solid #1D4ED8;
+				border-radius: 6px;
+				padding: 4px 10px;
+				font-size: 11px;
+				font-weight: 600;
+				}
+
+				QPushButton:hover {
+				background-color: #10284A;
+				}
+			</string>
   </property>
-  <property name="windowTitle">
-   <string>DashboardPage</string>
-  </property>
-  <layout class="QVBoxLayout" name="verticalLayout_10">
+  <layout class="QVBoxLayout" name="mainLayout">
+   <property name="spacing">
+    <number>14</number>
+   </property>
+   <property name="leftMargin">
+    <number>18</number>
+   </property>
+   <property name="topMargin">
+    <number>18</number>
+   </property>
+   <property name="rightMargin">
+    <number>18</number>
+   </property>
+   <property name="bottomMargin">
+    <number>18</number>
+   </property>
    <item>
-    <widget class="QScrollArea" name="scrollArea">
-     <property name="frameShape">
-      <enum>QFrame::Shape::NoFrame</enum>
+    <layout class="QHBoxLayout" name="metricsLayout">
+     <property name="spacing">
+      <number>14</number>
      </property>
-     <property name="horizontalScrollBarPolicy">
-      <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
-     </property>
-     <property name="widgetResizable">
-      <bool>true</bool>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
-     </property>
-     <widget class="QWidget" name="scrollAreaWidgetContents_2">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>1274</width>
-        <height>959</height>
-       </rect>
-      </property>
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Expanding" vsizetype="MinimumExpanding">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <layout class="QFormLayout" name="formLayout">
-       <property name="labelAlignment">
-        <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
-       </property>
-       <property name="formAlignment">
-        <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
-       </property>
-       <property name="horizontalSpacing">
-        <number>20</number>
-       </property>
-       <property name="verticalSpacing">
-        <number>20</number>
-       </property>
-       <property name="leftMargin">
-        <number>16</number>
-       </property>
-       <property name="topMargin">
-        <number>16</number>
-       </property>
-       <property name="rightMargin">
-        <number>16</number>
-       </property>
-       <property name="bottomMargin">
-        <number>16</number>
-       </property>
-       <item row="0" column="0">
-        <widget class="QWidget" name="leftDashboardContainer" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="minimumSize">
-          <size>
-           <width>0</width>
-           <height>0</height>
-          </size>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout">
-          <property name="spacing">
-           <number>6</number>
-          </property>
-          <property name="leftMargin">
-           <number>9</number>
-          </property>
-          <property name="topMargin">
-           <number>9</number>
-          </property>
-          <property name="rightMargin">
-           <number>9</number>
-          </property>
-          <property name="bottomMargin">
-           <number>9</number>
-          </property>
+     <item>
+      <widget class="QFrame" name="totalItemsCard">
+       <layout class="QHBoxLayout" name="totalItemsLayout">
+        <property name="leftMargin">
+         <number>16</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>16</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="totalItemsTextLayout">
           <item>
-           <widget class="QWidget" name="itemListCard" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>510</width>
-              <height>433</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>510</width>
-              <height>433</height>
-             </size>
-            </property>
+           <widget class="QLabel" name="totalItemsTitle">
             <property name="styleSheet">
-             <string notr="true">QWidget#itemListCard {
-    background-color: #151515;
-    border-radius: 14px;
-}
-
-QLabel#itemListTitleLabel {
-    color: white;
-    font-size: 20px;
-    font-weight: 700;
-}
-
-QPushButton#viewAllItemsButton {
-    color: #3da5ff;
-    background: transparent;
-    border: none;
-}</string>
+             <string>color:#CBD5E1;font-size:12px;</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_2">
-             <item>
-              <widget class="QWidget" name="itemListHeader" native="true">
-               <property name="styleSheet">
-                <string notr="true">QWidget#itemListHeader 
-{
-		border-bottom: 1px solid #ffffff;
-}</string>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_4">
-                <item>
-                 <widget class="QLabel" name="itemListTitleLabel">
-                  <property name="font">
-                   <font>
-                    <family>GungsuhChe</family>
-                    <pointsize>-1</pointsize>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Item List</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>343</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="viewAllItemsButton">
-                  <property name="text">
-                   <string>View All</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QTableWidget" name="itemListTable">
-               <property name="styleSheet">
-                <string notr="true">QTableWidget {
-    background-color: #151515;
-    color: #f5f5f5;
-    border: none;
-    gridline-color: transparent;
-    outline: none;
-    font-size: 12px;
-	margin-top: 8px;
-}
-
-QHeaderView {
-    background-color: #202020;
-    border: none;
-}
-
-QHeaderView::section {
-    background-color: #202020;
-    color: #a0aec0;
-    border: none;
-    padding-left: 12px;
-    padding-right: 8px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-QTableWidget::item {
-    border: none;
-    padding-left: 12px;
-    color: #ffffff;
-}
-
-QTableWidget::item:selected {
-    background-color: transparent;
-    color: #ffffff;
-}</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <property name="text">
+             <string>Total Items</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="totalItemsValue">
+            <property name="styleSheet">
+             <string>font-size:28px;font-weight:700;</string>
+            </property>
+            <property name="text">
+             <string>1,250</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="totalItemsChange">
+            <property name="styleSheet">
+             <string>color:#22C55E;font-size:11px;font-weight:600;</string>
+            </property>
+            <property name="text">
+             <string>+12.5% from last month</string>
+            </property>
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item row="0" column="1">
-        <widget class="QWidget" name="rightDashBoardContainer" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_6">
-          <property name="leftMargin">
-           <number>9</number>
+        </item>
+        <item>
+         <widget class="QLabel" name="totalItemsIcon">
+          <property name="minimumSize">
+           <size>
+            <width>44</width>
+            <height>44</height>
+           </size>
           </property>
-          <property name="topMargin">
-           <number>9</number>
+          <property name="maximumSize">
+           <size>
+            <width>44</width>
+            <height>44</height>
+           </size>
           </property>
+          <property name="styleSheet">
+           <string>background-color:#123A78;color:#3B82F6;border-radius:10px;font-size:24px;</string>
+          </property>
+          <property name="text">
+           <string>◇</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="totalAssetsCard">
+       <layout class="QHBoxLayout" name="totalAssetsLayout">
+        <property name="leftMargin">
+         <number>16</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>16</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="totalAssetsTextLayout">
           <item>
-           <widget class="QWidget" name="assetListCard_3" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>510</width>
-              <height>433</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>510</width>
-              <height>433</height>
-             </size>
-            </property>
+           <widget class="QLabel" name="totalAssetsTitle">
             <property name="styleSheet">
-             <string notr="true">QWidget#assetListCard_3 {
-    background-color: #151515;
-    border-radius: 14px;
-}
-
-QLabel#assetListTitleLabel {
-    color: white;
-    font-size: 20px;
-    font-weight: 700;
-}
-
-QPushButton#viewAllIAssetButton {
-    color: #3da5ff;
-    background: transparent;
-    border: none;
-}</string>
+             <string>color:#CBD5E1;font-size:12px;</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_5">
-             <item>
-              <widget class="QWidget" name="assetListHeader" native="true">
-               <property name="styleSheet">
-                <string notr="true">QWidget#assetListHeader
-{
-		border-bottom: 1px solid #ffffff;
-}</string>
-               </property>
-               <layout class="QHBoxLayout" name="horizontalLayout_6">
-                <item>
-                 <widget class="QLabel" name="assetListTitleLabel">
-                  <property name="font">
-                   <font>
-                    <family>GungsuhChe</family>
-                    <pointsize>-1</pointsize>
-                    <bold>true</bold>
-                   </font>
-                  </property>
-                  <property name="text">
-                   <string>Asset List</string>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <spacer name="horizontalSpacer_2">
-                  <property name="orientation">
-                   <enum>Qt::Orientation::Horizontal</enum>
-                  </property>
-                  <property name="sizeHint" stdset="0">
-                   <size>
-                    <width>343</width>
-                    <height>20</height>
-                   </size>
-                  </property>
-                 </spacer>
-                </item>
-                <item>
-                 <widget class="QPushButton" name="viewAllIAssetButton">
-                  <property name="text">
-                   <string>View All</string>
-                  </property>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-             <item>
-              <widget class="QTableWidget" name="assetListTable_3">
-               <property name="styleSheet">
-                <string notr="true">QTableWidget {
-    background-color: #151515;
-    color: #f5f5f5;
-    border: none;
-    gridline-color: transparent;
-    outline: none;
-    font-size: 12px;
-	margin-top: 8px;
-}
-
-QHeaderView {
-    background-color: #202020;
-    border: none;
-}
-
-QHeaderView::section {
-    background-color: #202020;
-    color: #a0aec0;
-    border: none;
-    padding-left: 12px;
-    padding-right: 8px;
-    font-size: 12px;
-    font-weight: 600;
-}
-
-QTableWidget::item {
-    border: none;
-    padding-left: 12px;
-    color: #ffffff;
-}
-
-QTableWidget::item:selected {
-    background-color: transparent;
-    color: #ffffff;
-}</string>
-               </property>
-              </widget>
-             </item>
-            </layout>
+            <property name="text">
+             <string>Total Assets</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="totalAssetsValue">
+            <property name="styleSheet">
+             <string>font-size:28px;font-weight:700;</string>
+            </property>
+            <property name="text">
+             <string>320</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="totalAssetsChange">
+            <property name="styleSheet">
+             <string>color:#22C55E;font-size:11px;font-weight:600;</string>
+            </property>
+            <property name="text">
+             <string>+8.2% from last month</string>
+            </property>
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-       <item row="1" column="0">
-        <widget class="QWidget" name="itemSummaryContainer" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="maximumSize">
-          <size>
-           <width>16777215</width>
-           <height>16777215</height>
-          </size>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_7">
+        </item>
+        <item>
+         <widget class="QLabel" name="totalAssetsIcon">
+          <property name="minimumSize">
+           <size>
+            <width>44</width>
+            <height>44</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>44</width>
+            <height>44</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string>background-color:#123A78;color:#3B82F6;border-radius:10px;font-size:24px;</string>
+          </property>
+          <property name="text">
+           <string>▭</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="quantityInHandCard">
+       <layout class="QHBoxLayout" name="quantityInHandLayout">
+        <property name="leftMargin">
+         <number>16</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>16</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="quantityTextLayout">
           <item>
-           <widget class="QWidget" name="itemSummaryCard" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>380</width>
-              <height>160</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>384</width>
-              <height>206</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <bold>false</bold>
-             </font>
-            </property>
+           <widget class="QLabel" name="quantityTitle">
             <property name="styleSheet">
-             <string notr="true">QWidget#itemSummaryCard {
-    background-color: #151515;
-    border-radius: 14px;
-}
-
-QLabel#itemSummaryTitle {
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 700;
-	margin-top: 20px;
-	margin-bottom: 16px;
-	margin-left: 16px;
-}
-
-QLabel#leftTotalItem,
-QLabel#rightTotalItem
- {
-    color: #f59e0b;
-    font-size: 16px;
-}
-
-QLabel#leftIconItem,
-QLabel#rightIconItem
- {
-    color: #a78bfa;
-    font-size: 24px;
-}
-
-QLabel#leftDescriptionItem,
-QLabel#rightDescriptionItem {
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 700;
-}
-
-
-QFrame#verticalLine {
-    background-color: #2a2a2a;
-}</string>
+             <string>color:#CBD5E1;font-size:12px;</string>
             </property>
-            <layout class="QVBoxLayout" name="verticalLayout_8">
+            <property name="text">
+             <string>Quantity in Hand</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="quantityInHandValue">
+            <property name="styleSheet">
+             <string>font-size:28px;font-weight:700;</string>
+            </property>
+            <property name="text">
+             <string>2,450</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="quantityChange">
+            <property name="styleSheet">
+             <string>color:#22C55E;font-size:11px;font-weight:600;</string>
+            </property>
+            <property name="text">
+             <string>+15.7% from last month</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="quantityIcon">
+          <property name="minimumSize">
+           <size>
+            <width>44</width>
+            <height>44</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>44</width>
+            <height>44</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string>background-color:#14532D;color:#22C55E;border-radius:10px;font-size:22px;</string>
+          </property>
+          <property name="text">
+           <string>▣</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="receivedCard">
+       <layout class="QHBoxLayout" name="receivedLayout">
+        <property name="leftMargin">
+         <number>16</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>16</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="receivedTextLayout">
+          <item>
+           <widget class="QLabel" name="receivedTitle">
+            <property name="styleSheet">
+             <string>color:#CBD5E1;font-size:12px;</string>
+            </property>
+            <property name="text">
+             <string>To Be Received</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="toBeReceivedValue">
+            <property name="styleSheet">
+             <string>font-size:28px;font-weight:700;</string>
+            </property>
+            <property name="text">
+             <string>780</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="receivedChange">
+            <property name="styleSheet">
+             <string>color:#EF4444;font-size:11px;font-weight:600;</string>
+            </property>
+            <property name="text">
+             <string>-2.4% from last month</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QLabel" name="receivedIcon">
+          <property name="minimumSize">
+           <size>
+            <width>44</width>
+            <height>44</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>44</width>
+            <height>44</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string>background-color:#7C3A03;color:#F59E0B;border-radius:10px;font-size:24px;</string>
+          </property>
+          <property name="text">
+           <string>▱</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignmentFlag::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="summaryLayout">
+     <property name="spacing">
+      <number>14</number>
+     </property>
+     <item>
+      <widget class="QFrame" name="itemSummaryCard">
+       <layout class="QVBoxLayout" name="itemSummaryLayout">
+        <property name="leftMargin">
+         <number>16</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>16</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="itemSummaryTitle">
+          <property name="styleSheet">
+           <string>font-size:18px;font-weight:700;</string>
+          </property>
+          <property name="text">
+           <string>Item Summary</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="itemSummaryBody">
+          <item>
+           <widget class="QFrame" name="itemLeftMiniCard">
+            <layout class="QVBoxLayout" name="itemLeftLayout">
              <item>
-              <widget class="QLabel" name="itemSummaryTitle">
-               <property name="font">
-                <font>
-                 <family>GungsuhChe</family>
-                 <pointsize>-1</pointsize>
-                 <bold>true</bold>
-                </font>
+              <widget class="QLabel" name="itemLeftLabel">
+               <property name="styleSheet">
+                <string>color:#CBD5E1;font-size:12px;</string>
                </property>
                <property name="text">
-                <string>Item Summary</string>
+                <string>Quantity in Hand</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="horizontalWidget" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout">
-                <item>
-                 <widget class="QWidget" name="verticalWidget" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <layout class="QVBoxLayout" name="leftItemSummary">
-                   <property name="spacing">
-                    <number>6</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>1</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="leftIconItem">
-                     <property name="minimumSize">
-                      <size>
-                       <width>0</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Icon</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="leftTotalItem">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>800</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="leftDescriptionItem">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Quantity in Hand</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QFrame" name="frame">
-                  <property name="frameShape">
-                   <enum>QFrame::Shape::VLine</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Shadow::Plain</enum>
-                  </property>
-                  <property name="midLineWidth">
-                   <number>1</number>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QWidget" name="verticalWidget_2" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <layout class="QVBoxLayout" name="rightItemSummary">
-                   <item>
-                    <widget class="QLabel" name="rightIconItem">
-                     <property name="text">
-                      <string>Icon</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="rightTotalItem">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>200</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="rightDescriptionItem">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>To be received</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="1" column="1">
-        <widget class="QWidget" name="totalAssetContainer" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QWidget" name="assetCard" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>380</width>
-              <height>160</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>384</width>
-              <height>206</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QWidget#assetCard{
-    background-color: #151515;
-    border-radius: 14px;
-}
-
-QLabel#assetSummaryTitle {
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 700;
-	margin-top: 20px;
-	margin-bottom: 16px;
-	margin-left: 16px;
-}
-
-QLabel#leftTotalAsset,
-QLabel#rightTotalAsset
- {
-    color: #f59e0b;
-    font-size: 16px;
-}
-
-QLabel#leftIconAsset,
-QLabel#rightIconAsset
- {
-    color: #a78bfa;
-    font-size: 24px;
-}
-
-QLabel#leftDescriptionAsset,
-QLabel#rightDescriptionAsset {
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 700;
-}
-
-
-QFrame#verticalLine {
-    background-color: #2a2a2a;
-}</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_9">
-             <item>
-              <widget class="QLabel" name="assetSummaryTitle">
-               <property name="font">
-                <font>
-                 <family>GungsuhChe</family>
-                 <pointsize>-1</pointsize>
-                 <bold>true</bold>
-                </font>
+              <widget class="QLabel" name="itemQuantityValue">
+               <property name="styleSheet">
+                <string>font-size:26px;font-weight:700;</string>
                </property>
                <property name="text">
-                <string>Total Assets</string>
+                <string>2,450</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="horizontalWidget_2" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_2">
-                <item>
-                 <widget class="QWidget" name="verticalWidget_3" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <layout class="QVBoxLayout" name="leftItemSummary_2">
-                   <property name="spacing">
-                    <number>6</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>1</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="leftIconAsset">
-                     <property name="minimumSize">
-                      <size>
-                       <width>0</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>TextLabel</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="leftTotalAsset">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>800</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="leftDescriptionAsset">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Quantity in Hand</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QFrame" name="frame_2">
-                  <property name="frameShape">
-                   <enum>QFrame::Shape::VLine</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Shadow::Plain</enum>
-                  </property>
-                  <property name="midLineWidth">
-                   <number>1</number>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QWidget" name="verticalWidget_4" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <layout class="QVBoxLayout" name="rightItemSummary_2">
-                   <item>
-                    <widget class="QLabel" name="rightIconAsset">
-                     <property name="text">
-                      <string>TextLabel</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="rightTotalAsset">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>200</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="rightDescriptionAsset">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>To be received</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-               </layout>
-              </widget>
-             </item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </widget>
-       </item>
-       <item row="2" column="0">
-        <widget class="QWidget" name="totalItemContainer" native="true">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <layout class="QVBoxLayout" name="verticalLayout_4">
-          <item>
-           <widget class="QWidget" name="itemTotalCard" native="true">
-            <property name="sizePolicy">
-             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-              <horstretch>0</horstretch>
-              <verstretch>0</verstretch>
-             </sizepolicy>
-            </property>
-            <property name="minimumSize">
-             <size>
-              <width>380</width>
-              <height>160</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>384</width>
-              <height>206</height>
-             </size>
-            </property>
-            <property name="font">
-             <font>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="styleSheet">
-             <string notr="true">QWidget#itemTotalCard {
-    background-color: #151515;
-    border-radius: 14px;
-}
-
-QLabel#itemTotalTitle {
-    color: #ffffff;
-    font-size: 20px;
-    font-weight: 700;
-	margin-top: 20px;
-	margin-bottom: 16px;
-	margin-left: 16px;
-}
-
-QLabel#leftItemTotal,
-QLabel#rightItemTotal
- {
-    color: #f59e0b;
-    font-size: 16px;
-}
-
-QLabel#leftIconTotalItem,
-QLabel#rightIconTotalItem
- {
-    color: #a78bfa;
-    font-size: 24px;
-}
-
-QLabel#leftDescriptionTotalItem,
-QLabel#rightDescriptionTotalItem {
-    color: #ffffff;
-    font-size: 14px;
-    font-weight: 700;
-}
-
-
-QFrame#verticalLine {
-    background-color: #2a2a2a;
-}</string>
-            </property>
-            <layout class="QVBoxLayout" name="verticalLayout_11">
-             <item>
-              <widget class="QLabel" name="itemTotalTitle">
-               <property name="font">
-                <font>
-                 <family>GungsuhChe</family>
-                 <pointsize>-1</pointsize>
-                 <bold>true</bold>
-                </font>
+              <widget class="QLabel" name="itemChartBlue">
+               <property name="styleSheet">
+                <string>color:#3B82F6;font-size:22px;</string>
                </property>
                <property name="text">
-                <string>Total Items</string>
+                <string>╲▁▂▁▃▂▃▅▆▇</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="itemRightMiniCard">
+            <layout class="QVBoxLayout" name="itemRightLayout">
+             <item>
+              <widget class="QLabel" name="itemRightLabel">
+               <property name="styleSheet">
+                <string>color:#CBD5E1;font-size:12px;</string>
+               </property>
+               <property name="text">
+                <string>To Be Received</string>
                </property>
               </widget>
              </item>
              <item>
-              <widget class="QWidget" name="horizontalWidget_4" native="true">
-               <layout class="QHBoxLayout" name="horizontalLayout_5">
-                <item>
-                 <widget class="QWidget" name="verticalWidget_7" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <layout class="QVBoxLayout" name="leftItemSummary_4">
-                   <property name="spacing">
-                    <number>6</number>
-                   </property>
-                   <property name="leftMargin">
-                    <number>1</number>
-                   </property>
-                   <item>
-                    <widget class="QLabel" name="leftIconTotalItem">
-                     <property name="minimumSize">
-                      <size>
-                       <width>0</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>TextLabel</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="leftItemTotal">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>800</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="leftDescriptionTotalItem">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>Quantity in Hand</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QFrame" name="frame_4">
-                  <property name="frameShape">
-                   <enum>QFrame::Shape::VLine</enum>
-                  </property>
-                  <property name="frameShadow">
-                   <enum>QFrame::Shadow::Plain</enum>
-                  </property>
-                  <property name="midLineWidth">
-                   <number>1</number>
-                  </property>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QWidget" name="verticalWidget_8" native="true">
-                  <property name="sizePolicy">
-                   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                   </sizepolicy>
-                  </property>
-                  <layout class="QVBoxLayout" name="rightItemSummary_4">
-                   <item>
-                    <widget class="QLabel" name="rightIconTotalItem">
-                     <property name="text">
-                      <string>TextLabel</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="rightItemTotal">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>200</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                   <item>
-                    <widget class="QLabel" name="rightDescriptionTotalItem">
-                     <property name="font">
-                      <font>
-                       <pointsize>-1</pointsize>
-                       <bold>true</bold>
-                      </font>
-                     </property>
-                     <property name="text">
-                      <string>To be received</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignmentFlag::AlignCenter</set>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-               </layout>
+              <widget class="QLabel" name="itemReceivedValue">
+               <property name="styleSheet">
+                <string>font-size:26px;font-weight:700;</string>
+               </property>
+               <property name="text">
+                <string>780</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="itemChartOrange">
+               <property name="styleSheet">
+                <string>color:#F97316;font-size:22px;</string>
+               </property>
+               <property name="text">
+                <string>▆▅▃▅▃▂▃▁▂▃</string>
+               </property>
               </widget>
              </item>
             </layout>
            </widget>
           </item>
          </layout>
-        </widget>
-       </item>
-      </layout>
-     </widget>
-    </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="assetSummaryCard">
+       <layout class="QVBoxLayout" name="assetSummaryLayout">
+        <property name="leftMargin">
+         <number>16</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>16</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="assetSummaryTitle">
+          <property name="styleSheet">
+           <string>font-size:18px;font-weight:700;</string>
+          </property>
+          <property name="text">
+           <string>Asset Summary</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="assetSummaryBody">
+          <item>
+           <widget class="QFrame" name="assetLeftMiniCard">
+            <layout class="QVBoxLayout" name="assetLeftLayout">
+             <item>
+              <widget class="QLabel" name="assetActiveLabel">
+               <property name="styleSheet">
+                <string>color:#CBD5E1;font-size:12px;</string>
+               </property>
+               <property name="text">
+                <string>Active Assets</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="assetActiveValue">
+               <property name="styleSheet">
+                <string>font-size:26px;font-weight:700;</string>
+               </property>
+               <property name="text">
+                <string>200</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="assetChartGreen">
+               <property name="styleSheet">
+                <string>color:#22C55E;font-size:22px;</string>
+               </property>
+               <property name="text">
+                <string>▆▅▃▅▃▂▃▅▆▇</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QFrame" name="assetRightMiniCard">
+            <layout class="QVBoxLayout" name="assetRightLayout">
+             <item>
+              <widget class="QLabel" name="assetInactiveLabel">
+               <property name="styleSheet">
+                <string>color:#CBD5E1;font-size:12px;</string>
+               </property>
+               <property name="text">
+                <string>Inactive Assets</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="assetInactiveValue">
+               <property name="styleSheet">
+                <string>font-size:26px;font-weight:700;</string>
+               </property>
+               <property name="text">
+                <string>120</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="assetChartRed">
+               <property name="styleSheet">
+                <string>color:#EF4444;font-size:22px;</string>
+               </property>
+               <property name="text">
+                <string>▆▅▃▅▃▂▁▂▃▃</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="tablesLayout">
+     <property name="spacing">
+      <number>14</number>
+     </property>
+     <item>
+      <widget class="QFrame" name="recentItemsCard">
+       <layout class="QVBoxLayout" name="recentItemsLayout">
+        <property name="leftMargin">
+         <number>12</number>
+        </property>
+        <property name="topMargin">
+         <number>12</number>
+        </property>
+        <property name="rightMargin">
+         <number>12</number>
+        </property>
+        <property name="bottomMargin">
+         <number>12</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="recentHeaderLayout">
+          <item>
+           <widget class="QLabel" name="recentTitle">
+            <property name="styleSheet">
+             <string>font-size:16px;font-weight:700;</string>
+            </property>
+            <property name="text">
+             <string>Recent Items</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="recentSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="viewAllItemsButton">
+            <property name="text">
+             <string>View All</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="itemListTable"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QFrame" name="lowStockCard">
+       <layout class="QVBoxLayout" name="lowStockLayout">
+        <property name="leftMargin">
+         <number>12</number>
+        </property>
+        <property name="topMargin">
+         <number>12</number>
+        </property>
+        <property name="rightMargin">
+         <number>12</number>
+        </property>
+        <property name="bottomMargin">
+         <number>12</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="lowStockHeaderLayout">
+          <item>
+           <widget class="QLabel" name="lowStockTitle">
+            <property name="styleSheet">
+             <string>font-size:16px;font-weight:700;</string>
+            </property>
+            <property name="text">
+             <string>Low Stock Items</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="lowStockSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="viewAllLowStockButton">
+            <property name="text">
+             <string>View All</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="lowStockTable"/>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>

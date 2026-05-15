@@ -63,7 +63,7 @@ private:
 	// Initialization methods
 	void setupSidebar();       // Configures the sidebar navigation
 	void setupVerticalbar();     // Configures the top user information bar
-	void setupDashboardPage(); // Initializes the dashboard page
+	void setupPages(); // Initializes the dashboard page
 
 
 };

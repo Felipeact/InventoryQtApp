@@ -32,6 +32,9 @@ private:
 	void setupItemListTable();
 	void setupReportCards();
 
+	void setupLowStockTable();
+	void styleDashboardTable(QTableWidget* table);
+
 
 };
 
