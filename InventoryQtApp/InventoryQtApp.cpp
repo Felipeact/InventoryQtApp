@@ -1,5 +1,6 @@
 // InventoryQtApp.cpp - Implementation of the login window
 #include "InventoryQtApp.h"
+#include <Theme.h>
 #include <QMessageBox>
 
 // Constructor initializes the login window and sets up API client
@@ -12,8 +13,16 @@ InventoryQtApp::InventoryQtApp(QWidget *parent)
     ui.setupUi(this);
 
 	this->setWindowTitle("Inventory Management System - Login");
+	Theme::applyLogin(this);
 	this->resize(420, 320);
 	this->setMaximumSize(420, 320);
+
+	ui.emailInput->setPlaceholderText("Enter your email");
+	ui.passwordInput->setPlaceholderText("Enter your password");
+	this->setTabOrder(ui.emailInput, ui.passwordInput);
+	this->setTabOrder(ui.passwordInput, ui.rememberCheck);
+	this->setTabOrder(ui.rememberCheck, ui.forgotPasswordButton);
+	this->setTabOrder(ui.forgotPasswordButton, ui.loginButton);
 
 	ui.passwordInput->setEchoMode(QLineEdit::EchoMode::Password);
 	ui.statusLabel->setText("");
@@ -80,6 +89,7 @@ void InventoryQtApp::onLoginButtonClicked()
 
 	connect(dashboardWindow, &DashboardWindow::logoutRequested, this, [this]() {
 		authService.logout();
+		ui.statusLabel->setText("");
 		this->show();
 		});
 

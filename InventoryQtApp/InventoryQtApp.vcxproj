@@ -103,6 +103,7 @@
     <ClCompile Include="ReportService.cpp" />
     <ClCompile Include="ScanPage.cpp" />
     <ClCompile Include="SidebarWidget.cpp" />
+    <ClCompile Include="Theme.cpp" />
     <ClCompile Include="UserService.cpp" />
     <ClCompile Include="VerticalWidget.cpp" />
     <QtRcc Include="InventoryQtApp.qrc" />
@@ -137,6 +138,7 @@
     <QtMoc Include="SidebarWidget.h" />
     <ClInclude Include="ReportService.h" />
     <QtMoc Include="ScanPage.h" />
+    <ClInclude Include="Theme.h" />
     <ClInclude Include="UserService.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
