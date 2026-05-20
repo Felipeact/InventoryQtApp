@@ -124,6 +124,39 @@
     <ClCompile Include="Theme.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TruckStockDashboardPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TrucksPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AddEditTruckDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="StockTemplatesPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AddEditTemplateDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssignmentsPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AssignTemplateDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTruckStockPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UseTruckItemDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LowStockAlertsPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ReceiptsPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -145,6 +178,39 @@
       <Filter>Header Files\services</Filter>
     </ClInclude>
     <ClInclude Include="Theme.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TruckStockDashboardPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TrucksPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AddEditTruckDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StockTemplatesPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssignmentsPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssignTemplateDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyTruckStockPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UseTruckItemDialog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LowStockAlertsPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ReceiptsPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UploadReceiptDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -179,6 +245,9 @@
     <QtMoc Include="ScanPage.h">
       <Filter>Header Files\Pages</Filter>
     </QtMoc>
+    <QtMoc Include="AddEditTemplateDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DashboardPage.ui">
@@ -207,6 +276,42 @@
     </QtUic>
     <QtUic Include="ScanPage.ui">
       <Filter>Form Files\Pages</Filter>
+    </QtUic>
+    <QtUic Include="AddEditTemplateDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AddEditTruckDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AssignmentsPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AssignTemplateDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="LowStockAlertsPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="MyTruckStockPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ReceiptsPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="StockTemplatesPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="TrucksPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="TruckStockDashboardPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="UploadReceiptDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="UseTruckItemDialog.ui">
+      <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
 </Project>

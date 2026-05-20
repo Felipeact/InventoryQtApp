@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>UploadReceiptDialogClass</class>
+    <widget class="QDialog" name="UploadReceiptDialogClass">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>700</width>
+                <height>650</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Upload Receipt</string>
+        </property>
+        <property name="styleSheet">
+            <string notr="true">
+QDialog {
+    background-color: #050B14;
+    color: white;
+}
+QLabel#dialogTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+}
+QLabel#fieldLabel, QLabel#sectionTitle {
+    font-size: 13px;
+    color: #e6eefb;
+}
+QLabel#sectionTitle {
+    font-weight: 600;
+    font-size: 14px;
+}
+QLineEdit, QComboBox, QSpinBox, QPlainTextEdit {
+    background: #0b1626;
+    border: 1px solid #243751;
+    border-radius: 8px;
+    color: #e6eefb;
+    padding: 9px 13px;
+    min-height: 35px;
+}
+QLineEdit:focus, QComboBox:focus, QPlainTextEdit:focus {
+    border: 1px solid #2f80ed;
+    background: #0e1b2f;
+}
+QWidget#fileUploadArea, QWidget#previewArea {
+    background-color: #091426;
+    border: 2px dashed #243751;
+    border-radius: 10px;
+}
+QLabel#uploadPrompt {
+    color: #94A3B8;
+    font-size: 12px;
+}
+QLabel#fileName {
+    color: #e6eefb;
+    font-weight: 600;
+}
+QPushButton#browseButton, QPushButton#uploadReceiptButton {
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:0, stop:0 #2563eb, stop:1 #1d4ed8);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 650;
+}
+QPushButton#browseButton:hover, QPushButton#uploadReceiptButton:hover {
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:0, stop:0 #3b82f6, stop:1 #2563eb);
+}
+QPushButton#cancelButton {
+    background: #0b1626;
+    border: 1px solid #263a55;
+    color: #e6eefb;
+    border-radius: 8px;
+    padding: 10px 18px;
+}
+QPushButton#cancelButton:hover {
+    background: #14253d;
+    border-color: #2f80ed;
+}
+            </string>
+        </property>
+        <layout class="QVBoxLayout" name="rootLayout">
+            <property name="leftMargin">
+                <number>24</number>
+            </property>
+            <property name="topMargin">
+                <number>24</number>
+            </property>
+            <property name="rightMargin">
+                <number>24</number>
+            </property>
+            <property name="bottomMargin">
+                <number>24</number>
+            </property>
+            <property name="spacing">
+                <number>16</number>
+            </property>
+
+            <!-- Title -->
+            <item>
+                <widget class="QLabel" name="dialogTitle">
+                    <property name="text">
+                        <string>Upload Receipt</string>
+                    </property>
+                </widget>
+            </item>
+
+            <!-- Receipt Information Section -->
+            <item>
+                <widget class="QLabel" name="receiptInfoTitle">
+                    <property name="text">
+                        <string>Receipt Information</string>
+                    </property>
+                    <property name="styleSheet">
+                        <string notr="true">font-size: 14px; font-weight: 600;</string>
+                    </property>
+                </widget>
+            </item>
+
+            <!-- Truck Selection -->
+            <item>
+                <layout class="QVBoxLayout" name="infoLayout">
+                    <property name="spacing">
+                        <number>10</number>
+                    </property>
+
+                    <item>
+                        <widget class="QLabel" name="truckLabel">
+                            <property name="text">
+                                <string>Truck *</string>
+                            </property>
+                            <property name="styleSheet">
+                                <string notr="true">font-size: 13px;</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QComboBox" name="truckCombo">
+                            <item>
+                                <property name="text">
+                                    <string>Select a truck...</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Truck 1 - ABC-123</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Truck 2 - XYZ-456</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Truck 3 - DEF-789</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Truck 4 - GHI-012</string>
+                                </property>
+                            </item>
+                        </widget>
+                    </item>
+
+                    <!-- Total Amount -->
+                    <item>
+                        <widget class="QLabel" name="amountLabel">
+                            <property name="text">
+                                <string>Total Amount *</string>
+                            </property>
+                            <property name="styleSheet">
+                                <string notr="true">font-size: 13px;</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QLineEdit" name="amountInput">
+                            <property name="placeholderText">
+                                <string>$0.00</string>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+
+            <!-- File Upload Section -->
+            <item>
+                <widget class="QLabel" name="fileUploadTitle">
+                    <property name="text">
+                        <string>Receipt File</string>
+                    </property>
+                    <property name="styleSheet">
+                        <string notr="true">font-size: 14px; font-weight: 600;</string>
+                    </property>
+                </widget>
+            </item>
+
+            <!-- File Upload Area -->
+            <item>
+                <widget class="QWidget" name="fileUploadArea">
+                    <property name="styleSheet">
+                        <string notr="true">background-color: #091426; border: 2px dashed #243751; border-radius: 10px;</string>
+                    </property>
+                    <property name="minimumHeight">
+                        <number>100</number>
+                    </property>
+                    <layout class="QVBoxLayout" name="uploadAreaLayout">
+                        <property name="leftMargin">
+                            <number>16</number>
+                        </property>
+                        <property name="topMargin">
+                            <number>16</number>
+                        </property>
+                        <property name="rightMargin">
+                            <number>16</number>
+                        </property>
+                        <property name="bottomMargin">
+                            <number>16</number>
+                        </property>
+                        <item>
+                            <widget class="QLabel" name="uploadPrompt">
+                                <property name="text">
+                                    <string>Drag and drop receipt file here or click browse</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>Qt::AlignCenter</set>
+                                </property>
+                            </widget>
+                        </item>
+                        <item>
+                            <layout class="QHBoxLayout" name="browseLayout">
+                                <item>
+                                    <spacer name="browseSpacer1">
+                                        <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                        </property>
+                                        <property name="sizeHint" stdset="0">
+                                            <size>
+                                                <width>40</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </item>
+                                <item>
+                                    <widget class="QPushButton" name="browseButton">
+                                        <property name="text">
+                                            <string>Browse Files</string>
+                                        </property>
+                                        <property name="minimumWidth">
+                                            <number>120</number>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item>
+                                    <spacer name="browseSpacer2">
+                                        <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                        </property>
+                                        <property name="sizeHint" stdset="0">
+                                            <size>
+                                                <width>40</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </item>
+                            </layout>
+                        </item>
+                    </layout>
+                </widget>
+            </item>
+
+            <!-- File Name Display -->
+            <item>
+                <widget class="QLabel" name="fileNameDisplay">
+                    <property name="text">
+                        <string>No file selected</string>
+                    </property>
+                    <property name="styleSheet">
+                        <string notr="true">font-size: 12px; color: #94A3B8;</string>
+                    </property>
+                </widget>
+            </item>
+
+            <!-- Receipt Preview Section -->
+            <item>
+                <widget class="QLabel" name="previewTitle">
+                    <property name="text">
+                        <string>Receipt Preview</string>
+                    </property>
+                    <property name="styleSheet">
+                        <string notr="true">font-size: 14px; font-weight: 600;</string>
+                    </property>
+                </widget>
+            </item>
+
+            <!-- Preview Area -->
+            <item>
+                <widget class="QWidget" name="previewArea">
+                    <property name="styleSheet">
+                        <string notr="true">background-color: #091426; border: 1px solid #1A2A40; border-radius: 10px;</string>
+                    </property>
+                    <property name="minimumHeight">
+                        <number>120</number>
+                    </property>
+                    <layout class="QVBoxLayout" name="previewLayout">
+                        <property name="leftMargin">
+                            <number>16</number>
+                        </property>
+                        <property name="topMargin">
+                            <number>16</number>
+                        </property>
+                        <property name="rightMargin">
+                            <number>16</number>
+                        </property>
+                        <property name="bottomMargin">
+                            <number>16</number>
+                        </property>
+                        <item>
+                            <widget class="QLabel" name="previewPlaceholder">
+                                <property name="text">
+                                    <string>📄 Receipt preview will appear here</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>Qt::AlignCenter</set>
+                                </property>
+                                <property name="styleSheet">
+                                    <string notr="true">color: #94A3B8; font-size: 12px;</string>
+                                </property>
+                            </widget>
+                        </item>
+                    </layout>
+                </widget>
+            </item>
+
+            <item>
+                <spacer name="verticalSpacer">
+                    <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </item>
+
+            <!-- Buttons -->
+            <item>
+                <layout class="QHBoxLayout" name="buttonLayout">
+                    <property name="spacing">
+                        <number>12</number>
+                    </property>
+                    <item>
+                        <spacer name="buttonSpacer">
+                            <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                                <size>
+                                    <width>40</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="cancelButton">
+                            <property name="text">
+                                <string>Cancel</string>
+                            </property>
+                            <property name="minimumWidth">
+                                <number>100</number>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="uploadReceiptButton">
+                            <property name="text">
+                                <string>Upload Receipt</string>
+                            </property>
+                            <property name="minimumWidth">
+                                <number>140</number>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+        </layout>
+    </widget>
+</ui>

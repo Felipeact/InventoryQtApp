@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>AddEditTruckDialogClass</class>
+    <widget class="QDialog" name="AddEditTruckDialogClass">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>500</width>
+                <height>450</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Add New Truck</string>
+        </property>
+        <property name="styleSheet">
+            <string notr="true">
+QDialog {
+    background-color: #050B14;
+    color: white;
+}
+QLabel#dialogTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+}
+QLabel#fieldLabel {
+    font-size: 13px;
+    color: #e6eefb;
+}
+QLineEdit, QComboBox, QSpinBox, QPlainTextEdit {
+    background: #0b1626;
+    border: 1px solid #243751;
+    border-radius: 8px;
+    color: #e6eefb;
+    padding: 9px 13px;
+    min-height: 35px;
+}
+QLineEdit:focus, QComboBox:focus, QPlainTextEdit:focus {
+    border: 1px solid #2f80ed;
+    background: #0e1b2f;
+}
+QPushButton#saveButton {
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:0, stop:0 #2563eb, stop:1 #1d4ed8);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 650;
+}
+QPushButton#saveButton:hover {
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:0, stop:0 #3b82f6, stop:1 #2563eb);
+}
+QPushButton#cancelButton {
+    background: #0b1626;
+    border: 1px solid #263a55;
+    color: #e6eefb;
+    border-radius: 8px;
+    padding: 10px 18px;
+}
+QPushButton#cancelButton:hover {
+    background: #14253d;
+    border-color: #2f80ed;
+}
+            </string>
+        </property>
+        <layout class="QVBoxLayout" name="rootLayout">
+            <property name="leftMargin">
+                <number>24</number>
+            </property>
+            <property name="topMargin">
+                <number>24</number>
+            </property>
+            <property name="rightMargin">
+                <number>24</number>
+            </property>
+            <property name="bottomMargin">
+                <number>24</number>
+            </property>
+            <property name="spacing">
+                <number>16</number>
+            </property>
+
+            <!-- Title -->
+            <item>
+                <widget class="QLabel" name="dialogTitle">
+                    <property name="text">
+                        <string>Add New Truck</string>
+                    </property>
+                </widget>
+            </item>
+
+            <!-- Form Fields -->
+            <item>
+                <layout class="QVBoxLayout" name="formLayout">
+                    <property name="spacing">
+                        <number>12</number>
+                    </property>
+
+                    <!-- Truck Name -->
+                    <item>
+                        <widget class="QLabel" name="truckNameLabel">
+                            <property name="text">
+                                <string>Truck Name *</string>
+                            </property>
+                            <property name="styleSheet">
+                                <string notr="true">font-size: 13px;</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QLineEdit" name="truckNameInput">
+                            <property name="placeholderText">
+                                <string>Enter truck name</string>
+                            </property>
+                        </widget>
+                    </item>
+
+                    <!-- License Plate -->
+                    <item>
+                        <widget class="QLabel" name="licensePlateLabel">
+                            <property name="text">
+                                <string>License Plate *</string>
+                            </property>
+                            <property name="styleSheet">
+                                <string notr="true">font-size: 13px;</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QLineEdit" name="licensePlateInput">
+                            <property name="placeholderText">
+                                <string>e.g. ABC-123</string>
+                            </property>
+                        </widget>
+                    </item>
+
+                    <!-- Technician -->
+                    <item>
+                        <widget class="QLabel" name="technicianLabel">
+                            <property name="text">
+                                <string>Technician *</string>
+                            </property>
+                            <property name="styleSheet">
+                                <string notr="true">font-size: 13px;</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QComboBox" name="technicianCombo">
+                            <item>
+                                <property name="text">
+                                    <string>Select technician...</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>John Smith</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Mike Johnson</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Sarah Davis</string>
+                                </property>
+                            </item>
+                        </widget>
+                    </item>
+
+                    <!-- Status -->
+                    <item>
+                        <widget class="QLabel" name="statusLabel">
+                            <property name="text">
+                                <string>Status *</string>
+                            </property>
+                            <property name="styleSheet">
+                                <string notr="true">font-size: 13px;</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QComboBox" name="statusCombo">
+                            <item>
+                                <property name="text">
+                                    <string>Active</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Inactive</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Maintenance</string>
+                                </property>
+                            </item>
+                        </widget>
+                    </item>
+
+                    <!-- Notes -->
+                    <item>
+                        <widget class="QLabel" name="notesLabel">
+                            <property name="text">
+                                <string>Notes</string>
+                            </property>
+                            <property name="styleSheet">
+                                <string notr="true">font-size: 13px;</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPlainTextEdit" name="notesInput">
+                            <property name="placeholderText">
+                                <string>Add any additional notes...</string>
+                            </property>
+                            <property name="minimumHeight">
+                                <number>80</number>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+
+            <item>
+                <spacer name="formSpacer">
+                    <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                        <size>
+                            <width>20</width>
+                            <height>40</height>
+                        </size>
+                    </property>
+                </spacer>
+            </item>
+
+            <!-- Buttons -->
+            <item>
+                <layout class="QHBoxLayout" name="buttonLayout">
+                    <property name="spacing">
+                        <number>12</number>
+                    </property>
+                    <item>
+                        <spacer name="buttonSpacer">
+                            <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                                <size>
+                                    <width>40</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="cancelButton">
+                            <property name="text">
+                                <string>Cancel</string>
+                            </property>
+                            <property name="minimumWidth">
+                                <number>100</number>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="saveButton">
+                            <property name="text">
+                                <string>Save Truck</string>
+                            </property>
+                            <property name="minimumWidth">
+                                <number>120</number>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+        </layout>
+    </widget>
+</ui>

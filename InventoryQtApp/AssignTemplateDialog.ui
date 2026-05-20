@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>AssignTemplateDialogClass</class>
+	<widget class="QDialog" name="AssignTemplateDialogClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>700</width>
+				<height>550</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Assign Template to Truck</string>
+		</property>
+
+		<layout class="QVBoxLayout" name="rootLayout">
+			<property name="leftMargin">
+				<number>24</number>
+			</property>
+			<property name="topMargin">
+				<number>24</number>
+			</property>
+			<property name="rightMargin">
+				<number>24</number>
+			</property>
+			<property name="bottomMargin">
+				<number>24</number>
+			</property>
+			<property name="spacing">
+				<number>16</number>
+			</property>
+
+			<item>
+				<widget class="QLabel" name="dialogTitle">
+					<property name="text">
+						<string>Assign Template to Truck</string>
+					</property>
+				</widget>
+			</item>
+
+			<item>
+				<layout class="QVBoxLayout" name="selectLayout">
+					<property name="spacing">
+						<number>12</number>
+					</property>
+
+					<item>
+						<widget class="QLabel" name="truckLabel">
+							<property name="text">
+								<string>Select Truck *</string>
+							</property>
+						</widget>
+					</item>
+
+					<item>
+						<widget class="QComboBox" name="truckCombo">
+							<item>
+								<property name="text">
+									<string>Select a truck...</string>
+								</property>
+							</item>
+							<item>
+								<property name="text">
+									<string>Truck 1 - ABC-123</string>
+								</property>
+							</item>
+							<item>
+								<property name="text">
+									<string>Truck 2 - XYZ-456</string>
+								</property>
+							</item>
+							<item>
+								<property name="text">
+									<string>Truck 3 - DEF-789</string>
+								</property>
+							</item>
+							<item>
+								<property name="text">
+									<string>Truck 4 - GHI-012</string>
+								</property>
+							</item>
+						</widget>
+					</item>
+
+					<item>
+						<widget class="QLabel" name="templateLabel">
+							<property name="text">
+								<string>Select Template *</string>
+							</property>
+						</widget>
+					</item>
+
+					<item>
+						<widget class="QComboBox" name="templateCombo">
+							<item>
+								<property name="text">
+									<string>Select a template...</string>
+								</property>
+							</item>
+							<item>
+								<property name="text">
+									<string>Standard Tools</string>
+								</property>
+							</item>
+							<item>
+								<property name="text">
+									<string>Safety Kit</string>
+								</property>
+							</item>
+							<item>
+								<property name="text">
+									<string>Power Tools</string>
+								</property>
+							</item>
+							<item>
+								<property name="text">
+									<string>Diagnostic Kit</string>
+								</property>
+							</item>
+							<item>
+								<property name="text">
+									<string>Emergency Kit</string>
+								</property>
+							</item>
+						</widget>
+					</item>
+				</layout>
+			</item>
+
+			<item>
+				<widget class="QWidget" name="previewCard" native="true">
+					<layout class="QVBoxLayout" name="previewCardLayout">
+						<property name="leftMargin">
+							<number>14</number>
+						</property>
+						<property name="topMargin">
+							<number>14</number>
+						</property>
+						<property name="rightMargin">
+							<number>14</number>
+						</property>
+						<property name="bottomMargin">
+							<number>14</number>
+						</property>
+
+						<item>
+							<widget class="QLabel" name="previewTitle">
+								<property name="text">
+									<string>Template Items Preview</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QTableWidget" name="previewTable">
+								<property name="columnCount">
+									<number>3</number>
+								</property>
+								<property name="rowCount">
+									<number>3</number>
+								</property>
+								<property name="maximumHeight">
+									<number>150</number>
+								</property>
+
+								<column>
+									<property name="text">
+										<string>Item</string>
+									</property>
+								</column>
+								<column>
+									<property name="text">
+										<string>Required Qty</string>
+									</property>
+								</column>
+								<column>
+									<property name="text">
+										<string>Expected Price</string>
+									</property>
+								</column>
+
+								<item row="0" column="0">
+									<property name="text">
+										<string>Wrench Set</string>
+									</property>
+								</item>
+								<item row="0" column="1">
+									<property name="text">
+										<string>2</string>
+									</property>
+								</item>
+								<item row="0" column="2">
+									<property name="text">
+										<string>$45.00</string>
+									</property>
+								</item>
+
+								<item row="1" column="0">
+									<property name="text">
+										<string>Drill Bits</string>
+									</property>
+								</item>
+								<item row="1" column="1">
+									<property name="text">
+										<string>3</string>
+									</property>
+								</item>
+								<item row="1" column="2">
+									<property name="text">
+										<string>$25.00</string>
+									</property>
+								</item>
+
+								<item row="2" column="0">
+									<property name="text">
+										<string>Safety Gloves</string>
+									</property>
+								</item>
+								<item row="2" column="1">
+									<property name="text">
+										<string>5</string>
+									</property>
+								</item>
+								<item row="2" column="2">
+									<property name="text">
+										<string>$12.00</string>
+									</property>
+								</item>
+							</widget>
+						</item>
+					</layout>
+				</widget>
+			</item>
+
+			<item>
+				<spacer name="verticalSpacer">
+					<property name="orientation">
+						<enum>Qt::Vertical</enum>
+					</property>
+				</spacer>
+			</item>
+
+			<item>
+				<layout class="QHBoxLayout" name="buttonLayout">
+					<property name="spacing">
+						<number>12</number>
+					</property>
+
+					<item>
+						<spacer name="buttonSpacer">
+							<property name="orientation">
+								<enum>Qt::Horizontal</enum>
+							</property>
+						</spacer>
+					</item>
+
+					<item>
+						<widget class="QPushButton" name="cancelButton">
+							<property name="text">
+								<string>Cancel</string>
+							</property>
+							<property name="minimumWidth">
+								<number>100</number>
+							</property>
+						</widget>
+					</item>
+
+					<item>
+						<widget class="QPushButton" name="assignButton">
+							<property name="text">
+								<string>Assign Template</string>
+							</property>
+							<property name="minimumWidth">
+								<number>140</number>
+							</property>
+						</widget>
+					</item>
+				</layout>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>

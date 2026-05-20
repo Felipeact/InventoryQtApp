@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+    <class>UseTruckItemDialogClass</class>
+    <widget class="QDialog" name="UseTruckItemDialogClass">
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>500</width>
+                <height>450</height>
+            </rect>
+        </property>
+        <property name="windowTitle">
+            <string>Use Item</string>
+        </property>
+        <property name="styleSheet">
+            <string notr="true">
+QDialog {
+    background-color: #050B14;
+    color: white;
+}
+QLabel#dialogTitle {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+}
+QLabel#fieldLabel, QLabel#valueLabel {
+    font-size: 13px;
+    color: #e6eefb;
+}
+QLabel#valueLabel {
+    font-weight: 600;
+    color: white;
+    font-size: 14px;
+}
+QLabel#quantityDisplay {
+    font-size: 28px;
+    font-weight: 700;
+    color: #2563EB;
+    text-align: center;
+}
+QLineEdit, QComboBox, QSpinBox, QPlainTextEdit {
+    background: #0b1626;
+    border: 1px solid #243751;
+    border-radius: 8px;
+    color: #e6eefb;
+    padding: 9px 13px;
+    min-height: 35px;
+}
+QLineEdit:focus, QComboBox:focus, QPlainTextEdit:focus {
+    border: 1px solid #2f80ed;
+    background: #0e1b2f;
+}
+QWidget#quantityCard {
+    background-color: #091426;
+    border: 1px solid #1A2A40;
+    border-radius: 10px;
+    padding: 12px;
+}
+QPushButton#decreaseButton, QPushButton#increaseButton {
+    background-color: #0b1626;
+    border: 1px solid #243751;
+    color: white;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 16px;
+    min-width: 40px;
+    min-height: 40px;
+}
+QPushButton#decreaseButton:hover, QPushButton#increaseButton:hover {
+    background-color: #14253d;
+    border-color: #2f80ed;
+}
+QPushButton#useItemButton {
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:0, stop:0 #2563eb, stop:1 #1d4ed8);
+    border: none;
+    color: white;
+    border-radius: 8px;
+    padding: 10px 18px;
+    font-weight: 650;
+}
+QPushButton#useItemButton:hover {
+    background: qlineargradient(x1:0,y1:0,x2:1,y2:0, stop:0 #3b82f6, stop:1 #2563eb);
+}
+QPushButton#cancelButton {
+    background: #0b1626;
+    border: 1px solid #263a55;
+    color: #e6eefb;
+    border-radius: 8px;
+    padding: 10px 18px;
+}
+QPushButton#cancelButton:hover {
+    background: #14253d;
+    border-color: #2f80ed;
+}
+            </string>
+        </property>
+        <layout class="QVBoxLayout" name="rootLayout">
+            <property name="leftMargin">
+                <number>24</number>
+            </property>
+            <property name="topMargin">
+                <number>24</number>
+            </property>
+            <property name="rightMargin">
+                <number>24</number>
+            </property>
+            <property name="bottomMargin">
+                <number>24</number>
+            </property>
+            <property name="spacing">
+                <number>16</number>
+            </property>
+
+            <!-- Title -->
+            <item>
+                <widget class="QLabel" name="dialogTitle">
+                    <property name="text">
+                        <string>Use Item</string>
+                    </property>
+                </widget>
+            </item>
+
+            <!-- Item Information -->
+            <item>
+                <layout class="QVBoxLayout" name="itemInfoLayout">
+                    <property name="spacing">
+                        <number>12</number>
+                    </property>
+
+                    <!-- Item -->
+                    <item>
+                        <widget class="QLabel" name="itemLabel">
+                            <property name="text">
+                                <string>Item *</string>
+                            </property>
+                            <property name="styleSheet">
+                                <string notr="true">font-size: 13px;</string>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QComboBox" name="itemCombo">
+                            <item>
+                                <property name="text">
+                                    <string>Select an item...</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Wrench Set</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Drill Bits</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Safety Gloves</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Hammer</string>
+                                </property>
+                            </item>
+                        </widget>
+                    </item>
+
+                    <!-- Current Quantity Label -->
+                    <item>
+                        <layout class="QHBoxLayout" name="currentQtyLayout">
+                            <item>
+                                <widget class="QLabel" name="currentQtyLabel">
+                                    <property name="text">
+                                        <string>Current Quantity:</string>
+                                    </property>
+                                    <property name="styleSheet">
+                                        <string notr="true">font-size: 13px;</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <widget class="QLabel" name="currentQtyValue">
+                                    <property name="text">
+                                        <string>5</string>
+                                    </property>
+                                    <property name="styleSheet">
+                                        <string notr="true">font-size: 14px; font-weight: 600; color: white;</string>
+                                    </property>
+                                </widget>
+                            </item>
+                            <item>
+                                <spacer name="currentQtySpacer">
+                                    <property name="orientation">
+                                        <enum>Qt::Horizontal</enum>
+                                    </property>
+                                    <property name="sizeHint" stdset="0">
+                                        <size>
+                                            <width>40</width>
+                                            <height>20</height>
+                                        </size>
+                                    </property>
+                                </spacer>
+                            </item>
+                        </layout>
+                    </item>
+                </layout>
+            </item>
+
+            <!-- Quantity Selector Card -->
+            <item>
+                <widget class="QWidget" name="quantityCard">
+                    <property name="styleSheet">
+                        <string notr="true">background-color: #091426; border: 1px solid #1A2A40; border-radius: 10px;</string>
+                    </property>
+                    <layout class="QVBoxLayout" name="quantityCardLayout">
+                        <property name="spacing">
+                            <number>12</number>
+                        </property>
+
+                        <!-- Quantity Label -->
+                        <item>
+                            <widget class="QLabel" name="quantityLabel">
+                                <property name="text">
+                                    <string>Quantity to Use *</string>
+                                </property>
+                                <property name="styleSheet">
+                                    <string notr="true">font-size: 13px;</string>
+                                </property>
+                            </widget>
+                        </item>
+
+                        <!-- Quantity Selector -->
+                        <item>
+                            <layout class="QHBoxLayout" name="quantitySelectorLayout">
+                                <property name="spacing">
+                                    <number>8</number>
+                                </property>
+                                <item>
+                                    <widget class="QPushButton" name="decreaseButton">
+                                        <property name="text">
+                                            <string>−</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item>
+                                    <widget class="QLabel" name="quantityDisplay">
+                                        <property name="text">
+                                            <string>1</string>
+                                        </property>
+                                        <property name="alignment">
+                                            <set>Qt::AlignCenter</set>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item>
+                                    <widget class="QPushButton" name="increaseButton">
+                                        <property name="text">
+                                            <string>+</string>
+                                        </property>
+                                    </widget>
+                                </item>
+                                <item>
+                                    <spacer name="quantitySpacer">
+                                        <property name="orientation">
+                                            <enum>Qt::Horizontal</enum>
+                                        </property>
+                                        <property name="sizeHint" stdset="0">
+                                            <size>
+                                                <width>40</width>
+                                                <height>20</height>
+                                            </size>
+                                        </property>
+                                    </spacer>
+                                </item>
+                            </layout>
+                        </item>
+                    </layout>
+                </widget>
+            </item>
+
+            <!-- Notes -->
+            <item>
+                <widget class="QLabel" name="notesLabel">
+                    <property name="text">
+                        <string>Notes (Optional)</string>
+                    </property>
+                    <property name="styleSheet">
+                        <string notr="true">font-size: 13px;</string>
+                    </property>
+                </widget>
+            </item>
+            <item>
+                <widget class="QPlainTextEdit" name="notesInput">
+                    <property name="placeholderText">
+                        <string>Add any notes about this item usage...</string>
+                    </property>
+                    <property name="minimumHeight">
+                        <number>60</number>
+                    </property>
+                </widget>
+            </item>
+
+            <item>
+                <spacer name="verticalSpacer">
+                    <property name="orientation">
+                        <enum>Qt::Vertical</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                        <size>
+                            <width>20</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </item>
+
+            <!-- Buttons -->
+            <item>
+                <layout class="QHBoxLayout" name="buttonLayout">
+                    <property name="spacing">
+                        <number>12</number>
+                    </property>
+                    <item>
+                        <spacer name="buttonSpacer">
+                            <property name="orientation">
+                                <enum>Qt::Horizontal</enum>
+                            </property>
+                            <property name="sizeHint" stdset="0">
+                                <size>
+                                    <width>40</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="cancelButton">
+                            <property name="text">
+                                <string>Cancel</string>
+                            </property>
+                            <property name="minimumWidth">
+                                <number>100</number>
+                            </property>
+                        </widget>
+                    </item>
+                    <item>
+                        <widget class="QPushButton" name="useItemButton">
+                            <property name="text">
+                                <string>Use Item</string>
+                            </property>
+                            <property name="minimumWidth">
+                                <number>100</number>
+                            </property>
+                        </widget>
+                    </item>
+                </layout>
+            </item>
+        </layout>
+    </widget>
+</ui>

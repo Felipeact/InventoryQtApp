@@ -1,0 +1,466 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>TruckStockDashboardPageClass</class>
+
+	<widget class="QWidget" name="TruckStockDashboardPageClass">
+
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>1280</width>
+				<height>820</height>
+			</rect>
+		</property>
+
+		<property name="windowTitle">
+			<string>Truck Stock Dashboard</string>
+		</property>
+
+		<layout class="QVBoxLayout" name="rootLayout">
+
+			<property name="leftMargin">
+				<number>20</number>
+			</property>
+
+			<property name="topMargin">
+				<number>20</number>
+			</property>
+
+			<property name="rightMargin">
+				<number>20</number>
+			</property>
+
+			<property name="bottomMargin">
+				<number>20</number>
+			</property>
+
+			<property name="spacing">
+				<number>16</number>
+			</property>
+
+			<!-- TITLE -->
+
+			<item>
+
+				<layout class="QHBoxLayout" name="titleLayout">
+
+					<item>
+						<widget class="QLabel" name="pageTitle">
+							<property name="text">
+								<string>Truck Stock Dashboard</string>
+							</property>
+						</widget>
+					</item>
+
+					<item>
+						<spacer name="titleSpacer">
+							<property name="orientation">
+								<enum>Qt::Horizontal</enum>
+							</property>
+						</spacer>
+					</item>
+
+				</layout>
+
+			</item>
+
+			<!-- METRICS -->
+
+			<item>
+
+				<layout class="QHBoxLayout" name="metricsLayout">
+
+					<property name="spacing">
+						<number>12</number>
+					</property>
+
+					<!-- CARD 1 -->
+
+					<item>
+
+						<widget class="QWidget" name="metricCard1">
+
+							<layout class="QVBoxLayout" name="metricCardLayout1">
+
+								<item>
+									<widget class="QLabel" name="metricLabel1">
+										<property name="text">
+											<string>Active Trucks</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QLabel" name="metricValue1">
+										<property name="text">
+											<string>12</string>
+										</property>
+									</widget>
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+					<!-- CARD 2 -->
+
+					<item>
+
+						<widget class="QWidget" name="metricCard2">
+
+							<layout class="QVBoxLayout" name="metricCardLayout2">
+
+								<item>
+									<widget class="QLabel" name="metricLabel2">
+										<property name="text">
+											<string>Templates</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QLabel" name="metricValue2">
+										<property name="text">
+											<string>8</string>
+										</property>
+									</widget>
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+					<!-- CARD 3 -->
+
+					<item>
+
+						<widget class="QWidget" name="metricCard3">
+
+							<layout class="QVBoxLayout" name="metricCardLayout3">
+
+								<item>
+									<widget class="QLabel" name="metricLabel3">
+										<property name="text">
+											<string>Low Stock Items</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QLabel" name="metricValue3">
+										<property name="text">
+											<string>5</string>
+										</property>
+									</widget>
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+					<!-- CARD 4 -->
+
+					<item>
+
+						<widget class="QWidget" name="metricCard4">
+
+							<layout class="QVBoxLayout" name="metricCardLayout4">
+
+								<item>
+									<widget class="QLabel" name="metricLabel4">
+										<property name="text">
+											<string>Pending Receipts</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QLabel" name="metricValue4">
+										<property name="text">
+											<string>3</string>
+										</property>
+									</widget>
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+				</layout>
+
+			</item>
+
+			<!-- CONTENT -->
+
+			<item>
+
+				<layout class="QHBoxLayout" name="contentLayout">
+
+					<property name="spacing">
+						<number>16</number>
+					</property>
+
+					<!-- TRUCKS TABLE -->
+
+					<item>
+
+						<widget class="QWidget" name="trucksCard">
+
+							<layout class="QVBoxLayout" name="trucksCardLayout">
+
+								<item>
+									<widget class="QLabel" name="trucksTitle">
+										<property name="text">
+											<string>Recent Trucks</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+
+									<widget class="QTableWidget" name="trucksPreviewTable">
+
+										<property name="columnCount">
+											<number>4</number>
+										</property>
+
+										<property name="rowCount">
+											<number>3</number>
+										</property>
+
+										<column>
+											<property name="text">
+												<string>Truck</string>
+											</property>
+										</column>
+
+										<column>
+											<property name="text">
+												<string>Plate</string>
+											</property>
+										</column>
+
+										<column>
+											<property name="text">
+												<string>Technician</string>
+											</property>
+										</column>
+
+										<column>
+											<property name="text">
+												<string>Status</string>
+											</property>
+										</column>
+
+										<item row="0" column="0">
+											<property name="text">
+												<string>Truck 1</string>
+											</property>
+										</item>
+
+										<item row="0" column="1">
+											<property name="text">
+												<string>ABC-123</string>
+											</property>
+										</item>
+
+										<item row="0" column="2">
+											<property name="text">
+												<string>John Smith</string>
+											</property>
+										</item>
+
+										<item row="0" column="3">
+											<property name="text">
+												<string>Active</string>
+											</property>
+										</item>
+
+										<item row="1" column="0">
+											<property name="text">
+												<string>Truck 2</string>
+											</property>
+										</item>
+
+										<item row="1" column="1">
+											<property name="text">
+												<string>XYZ-456</string>
+											</property>
+										</item>
+
+										<item row="1" column="2">
+											<property name="text">
+												<string>Mike Johnson</string>
+											</property>
+										</item>
+
+										<item row="1" column="3">
+											<property name="text">
+												<string>Active</string>
+											</property>
+										</item>
+
+										<item row="2" column="0">
+											<property name="text">
+												<string>Truck 3</string>
+											</property>
+										</item>
+
+										<item row="2" column="1">
+											<property name="text">
+												<string>DEF-789</string>
+											</property>
+										</item>
+
+										<item row="2" column="2">
+											<property name="text">
+												<string>Sarah Davis</string>
+											</property>
+										</item>
+
+										<item row="2" column="3">
+											<property name="text">
+												<string>Inactive</string>
+											</property>
+										</item>
+
+									</widget>
+
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+					<!-- TEMPLATE TABLE -->
+
+					<item>
+
+						<widget class="QWidget" name="templatesCard">
+
+							<layout class="QVBoxLayout" name="templatesCardLayout">
+
+								<item>
+									<widget class="QLabel" name="templatesTitle">
+										<property name="text">
+											<string>Recent Templates</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+
+									<widget class="QTableWidget" name="templatesPreviewTable">
+
+										<property name="columnCount">
+											<number>3</number>
+										</property>
+
+										<property name="rowCount">
+											<number>3</number>
+										</property>
+
+										<column>
+											<property name="text">
+												<string>Template</string>
+											</property>
+										</column>
+
+										<column>
+											<property name="text">
+												<string>Description</string>
+											</property>
+										</column>
+
+										<column>
+											<property name="text">
+												<string>Items</string>
+											</property>
+										</column>
+
+										<item row="0" column="0">
+											<property name="text">
+												<string>Standard Tools</string>
+											</property>
+										</item>
+
+										<item row="0" column="1">
+											<property name="text">
+												<string>Basic hand tools</string>
+											</property>
+										</item>
+
+										<item row="0" column="2">
+											<property name="text">
+												<string>15</string>
+											</property>
+										</item>
+
+										<item row="1" column="0">
+											<property name="text">
+												<string>Safety Kit</string>
+											</property>
+										</item>
+
+										<item row="1" column="1">
+											<property name="text">
+												<string>Safety equipment</string>
+											</property>
+										</item>
+
+										<item row="1" column="2">
+											<property name="text">
+												<string>12</string>
+											</property>
+										</item>
+
+										<item row="2" column="0">
+											<property name="text">
+												<string>Power Tools</string>
+											</property>
+										</item>
+
+										<item row="2" column="1">
+											<property name="text">
+												<string>Electric tools</string>
+											</property>
+										</item>
+
+										<item row="2" column="2">
+											<property name="text">
+												<string>8</string>
+											</property>
+										</item>
+
+									</widget>
+
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+				</layout>
+
+			</item>
+
+		</layout>
+
+	</widget>
+
+	<resources/>
+	<connections/>
+</ui>

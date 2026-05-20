@@ -83,6 +83,7 @@
       <ConformanceMode>true</ConformanceMode>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions xmlns="">_HAS_STD_BYTE=1</PreprocessorDefinitions>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -153,7 +154,7 @@
     <ClInclude Include="UseTruckItemDialog.h" />
     <QtMoc Include="AddProductDialog.h" />
     <QtMoc Include="AddAssetDialog.h" />
-    <QtMoc Include="AddEditTemplateDialog.h" />
+    <ClInclude Include="AddEditTemplateDialog.h" />
     <ClInclude Include="AddEditTruckDialog.h" />
     <ClInclude Include="ApiClient.h" />
     <ClInclude Include="AssetService.h" />

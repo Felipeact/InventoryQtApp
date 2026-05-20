@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>TrucksPageClass</class>
+	<widget class="QWidget" name="TrucksPageClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>1280</width>
+				<height>820</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Trucks</string>
+		</property>
+
+		<layout class="QVBoxLayout" name="rootLayout">
+			<property name="leftMargin">
+				<number>20</number>
+			</property>
+			<property name="topMargin">
+				<number>20</number>
+			</property>
+			<property name="rightMargin">
+				<number>20</number>
+			</property>
+			<property name="bottomMargin">
+				<number>20</number>
+			</property>
+			<property name="spacing">
+				<number>16</number>
+			</property>
+
+			<item>
+				<widget class="QLabel" name="pageTitle">
+					<property name="text">
+						<string>Trucks</string>
+					</property>
+				</widget>
+			</item>
+
+			<item>
+				<widget class="QWidget" name="toolbarContainer" native="true">
+					<layout class="QHBoxLayout" name="toolbarLayout">
+						<property name="leftMargin">
+							<number>14</number>
+						</property>
+						<property name="topMargin">
+							<number>12</number>
+						</property>
+						<property name="rightMargin">
+							<number>14</number>
+						</property>
+						<property name="bottomMargin">
+							<number>12</number>
+						</property>
+						<property name="spacing">
+							<number>12</number>
+						</property>
+
+						<item>
+							<widget class="QLineEdit" name="searchInput">
+								<property name="placeholderText">
+									<string>Search trucks...</string>
+								</property>
+								<property name="minimumWidth">
+									<number>250</number>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<spacer name="toolbarSpacer">
+								<property name="orientation">
+									<enum>Qt::Horizontal</enum>
+								</property>
+							</spacer>
+						</item>
+
+						<item>
+							<widget class="QPushButton" name="addTruckButton">
+								<property name="text">
+									<string>+ Add Truck</string>
+								</property>
+							</widget>
+						</item>
+					</layout>
+				</widget>
+			</item>
+
+			<item>
+				<widget class="QWidget" name="tableCard" native="true">
+					<layout class="QVBoxLayout" name="tableCardLayout">
+						<property name="leftMargin">
+							<number>14</number>
+						</property>
+						<property name="topMargin">
+							<number>14</number>
+						</property>
+						<property name="rightMargin">
+							<number>14</number>
+						</property>
+						<property name="bottomMargin">
+							<number>14</number>
+						</property>
+
+						<item>
+							<widget class="QTableWidget" name="trucksTable">
+								<property name="columnCount">
+									<number>5</number>
+								</property>
+								<property name="rowCount">
+									<number>6</number>
+								</property>
+
+								<column>
+									<property name="text">
+										<string>Truck Name</string>
+									</property>
+								</column>
+								<column>
+									<property name="text">
+										<string>License Plate</string>
+									</property>
+								</column>
+								<column>
+									<property name="text">
+										<string>Technician</string>
+									</property>
+								</column>
+								<column>
+									<property name="text">
+										<string>Status</string>
+									</property>
+								</column>
+								<column>
+									<property name="text">
+										<string>Actions</string>
+									</property>
+								</column>
+
+								<item row="0" column="0">
+									<property name="text">
+										<string>Truck 1</string>
+									</property>
+								</item>
+								<item row="0" column="1">
+									<property name="text">
+										<string>ABC-123</string>
+									</property>
+								</item>
+								<item row="0" column="2">
+									<property name="text">
+										<string>John Smith</string>
+									</property>
+								</item>
+								<item row="0" column="3">
+									<property name="text">
+										<string>Active</string>
+									</property>
+								</item>
+								<item row="0" column="4">
+									<property name="text">
+										<string>⋯</string>
+									</property>
+								</item>
+
+								<item row="1" column="0">
+									<property name="text">
+										<string>Truck 2</string>
+									</property>
+								</item>
+								<item row="1" column="1">
+									<property name="text">
+										<string>XYZ-456</string>
+									</property>
+								</item>
+								<item row="1" column="2">
+									<property name="text">
+										<string>Mike Johnson</string>
+									</property>
+								</item>
+								<item row="1" column="3">
+									<property name="text">
+										<string>Active</string>
+									</property>
+								</item>
+								<item row="1" column="4">
+									<property name="text">
+										<string>⋯</string>
+									</property>
+								</item>
+
+								<item row="2" column="0">
+									<property name="text">
+										<string>Truck 3</string>
+									</property>
+								</item>
+								<item row="2" column="1">
+									<property name="text">
+										<string>DEF-789</string>
+									</property>
+								</item>
+								<item row="2" column="2">
+									<property name="text">
+										<string>Sarah Davis</string>
+									</property>
+								</item>
+								<item row="2" column="3">
+									<property name="text">
+										<string>Active</string>
+									</property>
+								</item>
+								<item row="2" column="4">
+									<property name="text">
+										<string>⋯</string>
+									</property>
+								</item>
+
+								<item row="3" column="0">
+									<property name="text">
+										<string>Truck 4</string>
+									</property>
+								</item>
+								<item row="3" column="1">
+									<property name="text">
+										<string>GHI-012</string>
+									</property>
+								</item>
+								<item row="3" column="2">
+									<property name="text">
+										<string>Robert Brown</string>
+									</property>
+								</item>
+								<item row="3" column="3">
+									<property name="text">
+										<string>Inactive</string>
+									</property>
+								</item>
+								<item row="3" column="4">
+									<property name="text">
+										<string>⋯</string>
+									</property>
+								</item>
+
+								<item row="4" column="0">
+									<property name="text">
+										<string>Truck 5</string>
+									</property>
+								</item>
+								<item row="4" column="1">
+									<property name="text">
+										<string>JKL-345</string>
+									</property>
+								</item>
+								<item row="4" column="2">
+									<property name="text">
+										<string>Emily Wilson</string>
+									</property>
+								</item>
+								<item row="4" column="3">
+									<property name="text">
+										<string>Active</string>
+									</property>
+								</item>
+								<item row="4" column="4">
+									<property name="text">
+										<string>⋯</string>
+									</property>
+								</item>
+
+								<item row="5" column="0">
+									<property name="text">
+										<string>Truck 6</string>
+									</property>
+								</item>
+								<item row="5" column="1">
+									<property name="text">
+										<string>MNO-678</string>
+									</property>
+								</item>
+								<item row="5" column="2">
+									<property name="text">
+										<string>James Taylor</string>
+									</property>
+								</item>
+								<item row="5" column="3">
+									<property name="text">
+										<string>Active</string>
+									</property>
+								</item>
+								<item row="5" column="4">
+									<property name="text">
+										<string>⋯</string>
+									</property>
+								</item>
+							</widget>
+						</item>
+
+						<item>
+							<layout class="QHBoxLayout" name="paginationLayout">
+								<property name="spacing">
+									<number>8</number>
+								</property>
+
+								<item>
+									<widget class="QLabel" name="paginationLabel">
+										<property name="text">
+											<string>Showing 1 to 6 of 12 trucks</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<spacer name="paginationSpacer">
+										<property name="orientation">
+											<enum>Qt::Horizontal</enum>
+										</property>
+									</spacer>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="prevPageButton">
+										<property name="text">
+											<string>← Prev</string>
+										</property>
+									</widget>
+								</item>
+								<item>
+									<widget class="QPushButton" name="page1Button">
+										<property name="text">
+											<string>1</string>
+										</property>
+									</widget>
+								</item>
+								<item>
+									<widget class="QPushButton" name="page2Button">
+										<property name="text">
+											<string>2</string>
+										</property>
+									</widget>
+								</item>
+								<item>
+									<widget class="QPushButton" name="nextPageButton">
+										<property name="text">
+											<string>Next →</string>
+										</property>
+									</widget>
+								</item>
+							</layout>
+						</item>
+					</layout>
+				</widget>
+			</item>
+
+			<item>
+				<spacer name="verticalSpacer">
+					<property name="orientation">
+						<enum>Qt::Vertical</enum>
+					</property>
+				</spacer>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>

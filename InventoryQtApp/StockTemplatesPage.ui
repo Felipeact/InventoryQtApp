@@ -1,0 +1,415 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>StockTemplatesPageClass</class>
+	<widget class="QWidget" name="StockTemplatesPageClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>1280</width>
+				<height>820</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Stock Templates</string>
+		</property>
+		<property name="styleSheet">
+			<string notr="true">
+				QWidget#StockTemplatesPageClass {
+				background-color: #050B14;
+				color: white;
+				}
+
+				QLabel#pageTitle {
+				font-size: 24px;
+				font-weight: 700;
+				color: white;
+				}
+
+				QWidget#toolbarContainer,
+				QWidget#tableCard {
+				background-color: #091426;
+				border: 1px solid #1A2A40;
+				border-radius: 14px;
+				}
+
+				QLineEdit#searchInput {
+				border: 1px solid #22324A;
+				background: #111C2D;
+				color: white;
+				padding: 8px 12px;
+				border-radius: 8px;
+				}
+
+				QPushButton#newTemplateButton {
+				background-color: #2563EB;
+				color: white;
+				border: none;
+				border-radius: 8px;
+				padding: 8px 16px;
+				font-weight: 600;
+				}
+
+				QPushButton#newTemplateButton:hover {
+				background-color: #3B82F6;
+				}
+
+				QTableWidget {
+				background-color: transparent;
+				border: none;
+				color: white;
+				gridline-color: transparent;
+				}
+
+				QHeaderView::section {
+				background-color: #0C1728;
+				color: #94A3B8;
+				border: none;
+				border-bottom: 1px solid #1F2E45;
+				padding-left: 12px;
+				height: 40px;
+				font-weight: 600;
+				}
+
+				QTableWidget::item {
+				border-bottom: 1px solid #132238;
+				padding-left: 12px;
+				height: 42px;
+				}
+
+				QTableWidget::item:selected {
+				background-color: #132238;
+				}
+
+				QPushButton#prevPageButton,
+				QPushButton#page1Button,
+				QPushButton#page2Button,
+				QPushButton#nextPageButton {
+				background-color: #111C2D;
+				border: 1px solid #22324A;
+				border-radius: 6px;
+				color: white;
+				min-width: 28px;
+				min-height: 28px;
+				}
+
+				QPushButton#page1Button {
+				background-color: #2563EB;
+				border: none;
+				}
+
+				QPushButton#prevPageButton:hover,
+				QPushButton#page2Button:hover,
+				QPushButton#nextPageButton:hover {
+				background-color: #1D4ED8;
+				}
+			</string>
+		</property>
+
+		<layout class="QVBoxLayout" name="rootLayout">
+			<property name="leftMargin">
+				<number>20</number>
+			</property>
+			<property name="topMargin">
+				<number>20</number>
+			</property>
+			<property name="rightMargin">
+				<number>20</number>
+			</property>
+			<property name="bottomMargin">
+				<number>20</number>
+			</property>
+			<property name="spacing">
+				<number>16</number>
+			</property>
+
+			<item>
+				<widget class="QLabel" name="pageTitle">
+					<property name="text">
+						<string>Stock Templates</string>
+					</property>
+				</widget>
+			</item>
+
+			<item>
+				<widget class="QWidget" name="toolbarContainer" native="true">
+					<layout class="QHBoxLayout" name="toolbarLayout">
+						<property name="leftMargin">
+							<number>14</number>
+						</property>
+						<property name="topMargin">
+							<number>12</number>
+						</property>
+						<property name="rightMargin">
+							<number>14</number>
+						</property>
+						<property name="bottomMargin">
+							<number>12</number>
+						</property>
+						<property name="spacing">
+							<number>12</number>
+						</property>
+
+						<item>
+							<widget class="QLineEdit" name="searchInput">
+								<property name="placeholderText">
+									<string>Search templates...</string>
+								</property>
+								<property name="minimumWidth">
+									<number>250</number>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<spacer name="toolbarSpacer">
+								<property name="orientation">
+									<enum>Qt::Horizontal</enum>
+								</property>
+							</spacer>
+						</item>
+
+						<item>
+							<widget class="QPushButton" name="newTemplateButton">
+								<property name="text">
+									<string>+ New Template</string>
+								</property>
+							</widget>
+						</item>
+					</layout>
+				</widget>
+			</item>
+
+			<item>
+				<widget class="QWidget" name="tableCard" native="true">
+					<layout class="QVBoxLayout" name="tableCardLayout">
+						<property name="leftMargin">
+							<number>14</number>
+						</property>
+						<property name="topMargin">
+							<number>14</number>
+						</property>
+						<property name="rightMargin">
+							<number>14</number>
+						</property>
+						<property name="bottomMargin">
+							<number>14</number>
+						</property>
+						<property name="spacing">
+							<number>10</number>
+						</property>
+
+						<item>
+							<widget class="QTableWidget" name="templatesTable">
+								<property name="columnCount">
+									<number>4</number>
+								</property>
+								<property name="rowCount">
+									<number>5</number>
+								</property>
+								<property name="frameShape">
+									<enum>QFrame::NoFrame</enum>
+								</property>
+
+								<column>
+									<property name="text">
+										<string>Template Name</string>
+									</property>
+								</column>
+								<column>
+									<property name="text">
+										<string>Description</string>
+									</property>
+								</column>
+								<column>
+									<property name="text">
+										<string>Items</string>
+									</property>
+								</column>
+								<column>
+									<property name="text">
+										<string>Actions</string>
+									</property>
+								</column>
+
+								<item row="0" column="0">
+									<property name="text">
+										<string>Standard Tools</string>
+									</property>
+								</item>
+								<item row="0" column="1">
+									<property name="text">
+										<string>Basic hand tools kit</string>
+									</property>
+								</item>
+								<item row="0" column="2">
+									<property name="text">
+										<string>15</string>
+									</property>
+								</item>
+								<item row="0" column="3">
+									<property name="text">
+										<string>⋯</string>
+									</property>
+								</item>
+
+								<item row="1" column="0">
+									<property name="text">
+										<string>Safety Kit</string>
+									</property>
+								</item>
+								<item row="1" column="1">
+									<property name="text">
+										<string>Safety equipment and gear</string>
+									</property>
+								</item>
+								<item row="1" column="2">
+									<property name="text">
+										<string>12</string>
+									</property>
+								</item>
+								<item row="1" column="3">
+									<property name="text">
+										<string>⋯</string>
+									</property>
+								</item>
+
+								<item row="2" column="0">
+									<property name="text">
+										<string>Power Tools</string>
+									</property>
+								</item>
+								<item row="2" column="1">
+									<property name="text">
+										<string>Electric power tools</string>
+									</property>
+								</item>
+								<item row="2" column="2">
+									<property name="text">
+										<string>8</string>
+									</property>
+								</item>
+								<item row="2" column="3">
+									<property name="text">
+										<string>⋯</string>
+									</property>
+								</item>
+
+								<item row="3" column="0">
+									<property name="text">
+										<string>Diagnostic Kit</string>
+									</property>
+								</item>
+								<item row="3" column="1">
+									<property name="text">
+										<string>Diagnostic instruments</string>
+									</property>
+								</item>
+								<item row="3" column="2">
+									<property name="text">
+										<string>6</string>
+									</property>
+								</item>
+								<item row="3" column="3">
+									<property name="text">
+										<string>⋯</string>
+									</property>
+								</item>
+
+								<item row="4" column="0">
+									<property name="text">
+										<string>Emergency Kit</string>
+									</property>
+								</item>
+								<item row="4" column="1">
+									<property name="text">
+										<string>Emergency supplies</string>
+									</property>
+								</item>
+								<item row="4" column="2">
+									<property name="text">
+										<string>10</string>
+									</property>
+								</item>
+								<item row="4" column="3">
+									<property name="text">
+										<string>⋯</string>
+									</property>
+								</item>
+							</widget>
+						</item>
+
+						<item>
+							<layout class="QHBoxLayout" name="paginationLayout">
+								<property name="spacing">
+									<number>8</number>
+								</property>
+
+								<item>
+									<widget class="QLabel" name="paginationLabel">
+										<property name="text">
+											<string>Showing 1 to 5 of 8 templates</string>
+										</property>
+										<property name="styleSheet">
+											<string notr="true">background: transparent; border: none; color: #94A3B8; font-size: 12px;</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<spacer name="paginationSpacer">
+										<property name="orientation">
+											<enum>Qt::Horizontal</enum>
+										</property>
+									</spacer>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="prevPageButton">
+										<property name="text">
+											<string>← Prev</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="page1Button">
+										<property name="text">
+											<string>1</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="page2Button">
+										<property name="text">
+											<string>2</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="nextPageButton">
+										<property name="text">
+											<string>Next →</string>
+										</property>
+									</widget>
+								</item>
+							</layout>
+						</item>
+					</layout>
+				</widget>
+			</item>
+
+			<item>
+				<spacer name="verticalSpacer">
+					<property name="orientation">
+						<enum>Qt::Vertical</enum>
+					</property>
+				</spacer>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>
