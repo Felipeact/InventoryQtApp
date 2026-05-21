@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
 	<class>TrucksPageClass</class>
+
 	<widget class="QWidget" name="TrucksPageClass">
+
 		<property name="geometry">
 			<rect>
 				<x>0</x>
@@ -10,26 +12,200 @@
 				<height>820</height>
 			</rect>
 		</property>
+
 		<property name="windowTitle">
 			<string>Trucks</string>
 		</property>
 
+		<property name="styleSheet">
+			<string notr="true">
+
+				QWidget#TrucksPageClass {
+				background-color: #050B14;
+				color: #FFFFFF;
+				font-family: "Segoe UI";
+				}
+
+				QLabel {
+				background: transparent;
+				color: white;
+				}
+
+				QLabel#pageTitle {
+				font-size: 26px;
+				font-weight: 800;
+				}
+
+				QWidget#toolbarCard,
+				QWidget#tableCard {
+				background: qlineargradient(
+				x1:0, y1:0,
+				x2:1, y2:1,
+				stop:0 #0B1626,
+				stop:1 #091322
+				);
+				border: 1px solid #1B2A40;
+				border-radius: 12px;
+				}
+
+				QLineEdit#searchInput {
+				background-color: #08111F;
+				border: 1px solid #1E3350;
+				border-radius: 8px;
+				padding-left: 14px;
+				color: white;
+				min-height: 36px;
+				font-size: 12px;
+				}
+
+				QLineEdit#searchInput:focus {
+				border: 1px solid #2563EB;
+				}
+
+				QPushButton#addTruckButton {
+				background-color: #2563EB;
+				border: none;
+				border-radius: 8px;
+				color: white;
+				min-height: 36px;
+				min-width: 120px;
+				font-size: 12px;
+				font-weight: 700;
+				}
+
+				QPushButton#addTruckButton:hover {
+				background-color: #1D4ED8;
+				}
+
+				QTableWidget {
+				background-color: transparent;
+				border: none;
+				color: white;
+				gridline-color: transparent;
+				outline: none;
+				font-size: 12px;
+				}
+
+				QHeaderView::section {
+				background-color: #0D1726;
+				color: #94A3B8;
+				border: none;
+				border-bottom: 1px solid #1B2A40;
+				height: 38px;
+				padding-left: 10px;
+				font-size: 11px;
+				font-weight: 700;
+				}
+
+				QTableWidget::item {
+				border-bottom: 1px solid #122033;
+				padding-left: 10px;
+				height: 40px;
+				}
+
+				QTableWidget::item:selected {
+				background-color: #122033;
+				}
+
+				QPushButton#activeBadge {
+				background-color: rgba(34,197,94,0.18);
+				color: #22C55E;
+				border-radius: 10px;
+				border: none;
+				min-width: 58px;
+				min-height: 24px;
+				font-size: 11px;
+				font-weight: 700;
+				}
+
+				QPushButton#inactiveBadge {
+				background-color: rgba(239,68,68,0.18);
+				color: #EF4444;
+				border-radius: 10px;
+				border: none;
+				min-width: 58px;
+				min-height: 24px;
+				font-size: 11px;
+				font-weight: 700;
+				}
+
+				QPushButton#actionButton {
+				background-color: transparent;
+				border: 1px solid #22324A;
+				border-radius: 6px;
+				color: #CBD5E1;
+				min-width: 28px;
+				min-height: 28px;
+				font-size: 12px;
+				}
+
+				QPushButton#actionButton:hover {
+				border: 1px solid #2563EB;
+				color: #3B82F6;
+				}
+
+				QWidget#paginationContainer {
+				background-color: transparent;
+				border: none;
+				}
+
+				QPushButton#pageButton {
+				background-color: #111C2D;
+				border: 1px solid #22324A;
+				border-radius: 8px;
+				color: white;
+				min-width: 32px;
+				min-height: 32px;
+				font-size: 12px;
+				font-weight: 600;
+				}
+
+				QPushButton#pageButton:hover {
+				border: 1px solid #2563EB;
+				}
+
+				QPushButton#activePageButton {
+				background-color: #2563EB;
+				border: none;
+				border-radius: 8px;
+				color: white;
+				min-width: 32px;
+				min-height: 32px;
+				font-size: 12px;
+				font-weight: 700;
+				}
+
+				QLabel#paginationLabel {
+				color: #94A3B8;
+				font-size: 11px;
+				}
+
+			</string>
+		</property>
+
 		<layout class="QVBoxLayout" name="rootLayout">
+
 			<property name="leftMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="topMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="rightMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="bottomMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="spacing">
 				<number>16</number>
 			</property>
+
+			<!-- PAGE TITLE -->
 
 			<item>
 				<widget class="QLabel" name="pageTitle">
@@ -39,329 +215,416 @@
 				</widget>
 			</item>
 
+			<!-- TOOLBAR -->
+
 			<item>
-				<widget class="QWidget" name="toolbarContainer" native="true">
+
+				<widget class="QWidget" name="toolbarCard" native="true">
+
 					<layout class="QHBoxLayout" name="toolbarLayout">
+
 						<property name="leftMargin">
 							<number>14</number>
 						</property>
+
 						<property name="topMargin">
 							<number>12</number>
 						</property>
+
 						<property name="rightMargin">
 							<number>14</number>
 						</property>
+
 						<property name="bottomMargin">
 							<number>12</number>
 						</property>
+
 						<property name="spacing">
 							<number>12</number>
 						</property>
 
 						<item>
+
 							<widget class="QLineEdit" name="searchInput">
+
+								<property name="minimumWidth">
+									<number>320</number>
+								</property>
+
 								<property name="placeholderText">
 									<string>Search trucks...</string>
 								</property>
-								<property name="minimumWidth">
-									<number>250</number>
-								</property>
+
 							</widget>
+
 						</item>
 
 						<item>
+
 							<spacer name="toolbarSpacer">
+
 								<property name="orientation">
 									<enum>Qt::Horizontal</enum>
 								</property>
+
 							</spacer>
+
 						</item>
 
 						<item>
+
 							<widget class="QPushButton" name="addTruckButton">
+
 								<property name="text">
 									<string>+ Add Truck</string>
 								</property>
+
 							</widget>
+
 						</item>
+
 					</layout>
+
 				</widget>
+
 			</item>
 
+			<!-- TABLE CARD -->
+
 			<item>
+
 				<widget class="QWidget" name="tableCard" native="true">
+
 					<layout class="QVBoxLayout" name="tableCardLayout">
+
 						<property name="leftMargin">
 							<number>14</number>
 						</property>
+
 						<property name="topMargin">
 							<number>14</number>
 						</property>
+
 						<property name="rightMargin">
 							<number>14</number>
 						</property>
+
 						<property name="bottomMargin">
 							<number>14</number>
 						</property>
 
+						<property name="spacing">
+							<number>14</number>
+						</property>
+
+						<!-- TABLE -->
+
 						<item>
+
 							<widget class="QTableWidget" name="trucksTable">
+
 								<property name="columnCount">
 									<number>5</number>
 								</property>
+
 								<property name="rowCount">
-									<number>6</number>
+									<number>4</number>
 								</property>
+
+								<property name="alternatingRowColors">
+									<bool>false</bool>
+								</property>
+
+								<property name="selectionBehavior">
+									<enum>QAbstractItemView::SelectRows</enum>
+								</property>
+
+								<property name="showGrid">
+									<bool>false</bool>
+								</property>
+
+								<attribute name="horizontalHeaderStretchLastSection">
+									<bool>true</bool>
+								</attribute>
 
 								<column>
 									<property name="text">
 										<string>Truck Name</string>
 									</property>
 								</column>
+
 								<column>
 									<property name="text">
 										<string>License Plate</string>
 									</property>
 								</column>
+
 								<column>
 									<property name="text">
 										<string>Technician</string>
 									</property>
 								</column>
+
 								<column>
 									<property name="text">
 										<string>Status</string>
 									</property>
 								</column>
+
 								<column>
 									<property name="text">
 										<string>Actions</string>
 									</property>
 								</column>
 
+								<!-- ROW 1 -->
+
 								<item row="0" column="0">
 									<property name="text">
 										<string>Truck 1</string>
 									</property>
 								</item>
+
 								<item row="0" column="1">
 									<property name="text">
 										<string>ABC-123</string>
 									</property>
 								</item>
+
 								<item row="0" column="2">
 									<property name="text">
 										<string>John Smith</string>
 									</property>
 								</item>
+
 								<item row="0" column="3">
 									<property name="text">
 										<string>Active</string>
 									</property>
 								</item>
+
 								<item row="0" column="4">
 									<property name="text">
-										<string>⋯</string>
+										<string>✎   🗑</string>
 									</property>
 								</item>
+
+								<!-- ROW 2 -->
 
 								<item row="1" column="0">
 									<property name="text">
 										<string>Truck 2</string>
 									</property>
 								</item>
+
 								<item row="1" column="1">
 									<property name="text">
-										<string>XYZ-456</string>
+										<string>DEF-456</string>
 									</property>
 								</item>
+
 								<item row="1" column="2">
 									<property name="text">
 										<string>Mike Johnson</string>
 									</property>
 								</item>
+
 								<item row="1" column="3">
 									<property name="text">
 										<string>Active</string>
 									</property>
 								</item>
+
 								<item row="1" column="4">
 									<property name="text">
-										<string>⋯</string>
+										<string>✎   🗑</string>
 									</property>
 								</item>
+
+								<!-- ROW 3 -->
 
 								<item row="2" column="0">
 									<property name="text">
 										<string>Truck 3</string>
 									</property>
 								</item>
+
 								<item row="2" column="1">
 									<property name="text">
-										<string>DEF-789</string>
+										<string>GHI-789</string>
 									</property>
 								</item>
+
 								<item row="2" column="2">
 									<property name="text">
-										<string>Sarah Davis</string>
+										<string>David Williams</string>
 									</property>
 								</item>
+
 								<item row="2" column="3">
 									<property name="text">
-										<string>Active</string>
+										<string>Inactive</string>
 									</property>
 								</item>
+
 								<item row="2" column="4">
 									<property name="text">
-										<string>⋯</string>
+										<string>✎   🗑</string>
 									</property>
 								</item>
+
+								<!-- ROW 4 -->
 
 								<item row="3" column="0">
 									<property name="text">
 										<string>Truck 4</string>
 									</property>
 								</item>
+
 								<item row="3" column="1">
 									<property name="text">
-										<string>GHI-012</string>
+										<string>JKL-012</string>
 									</property>
 								</item>
+
 								<item row="3" column="2">
 									<property name="text">
 										<string>Robert Brown</string>
 									</property>
 								</item>
+
 								<item row="3" column="3">
 									<property name="text">
-										<string>Inactive</string>
+										<string>Active</string>
 									</property>
 								</item>
+
 								<item row="3" column="4">
 									<property name="text">
-										<string>⋯</string>
+										<string>✎   🗑</string>
 									</property>
 								</item>
 
-								<item row="4" column="0">
-									<property name="text">
-										<string>Truck 5</string>
-									</property>
-								</item>
-								<item row="4" column="1">
-									<property name="text">
-										<string>JKL-345</string>
-									</property>
-								</item>
-								<item row="4" column="2">
-									<property name="text">
-										<string>Emily Wilson</string>
-									</property>
-								</item>
-								<item row="4" column="3">
-									<property name="text">
-										<string>Active</string>
-									</property>
-								</item>
-								<item row="4" column="4">
-									<property name="text">
-										<string>⋯</string>
-									</property>
-								</item>
-
-								<item row="5" column="0">
-									<property name="text">
-										<string>Truck 6</string>
-									</property>
-								</item>
-								<item row="5" column="1">
-									<property name="text">
-										<string>MNO-678</string>
-									</property>
-								</item>
-								<item row="5" column="2">
-									<property name="text">
-										<string>James Taylor</string>
-									</property>
-								</item>
-								<item row="5" column="3">
-									<property name="text">
-										<string>Active</string>
-									</property>
-								</item>
-								<item row="5" column="4">
-									<property name="text">
-										<string>⋯</string>
-									</property>
-								</item>
 							</widget>
+
 						</item>
+
+						<!-- PAGINATION -->
 
 						<item>
-							<layout class="QHBoxLayout" name="paginationLayout">
-								<property name="spacing">
-									<number>8</number>
-								</property>
 
-								<item>
-									<widget class="QLabel" name="paginationLabel">
-										<property name="text">
-											<string>Showing 1 to 6 of 12 trucks</string>
-										</property>
-									</widget>
-								</item>
+							<widget class="QWidget" name="paginationContainer" native="true">
 
-								<item>
-									<spacer name="paginationSpacer">
-										<property name="orientation">
-											<enum>Qt::Horizontal</enum>
-										</property>
-									</spacer>
-								</item>
+								<layout class="QHBoxLayout" name="paginationLayout">
 
-								<item>
-									<widget class="QPushButton" name="prevPageButton">
-										<property name="text">
-											<string>← Prev</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QPushButton" name="page1Button">
-										<property name="text">
-											<string>1</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QPushButton" name="page2Button">
-										<property name="text">
-											<string>2</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QPushButton" name="nextPageButton">
-										<property name="text">
-											<string>Next →</string>
-										</property>
-									</widget>
-								</item>
-							</layout>
+									<property name="leftMargin">
+										<number>0</number>
+									</property>
+
+									<property name="topMargin">
+										<number>0</number>
+									</property>
+
+									<property name="rightMargin">
+										<number>0</number>
+									</property>
+
+									<property name="bottomMargin">
+										<number>0</number>
+									</property>
+
+									<property name="spacing">
+										<number>8</number>
+									</property>
+
+									<item>
+
+										<widget class="QLabel" name="paginationLabel">
+
+											<property name="text">
+												<string>Showing 1 to 4 of 12 trucks</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<spacer name="paginationSpacer">
+
+											<property name="orientation">
+												<enum>Qt::Horizontal</enum>
+											</property>
+
+										</spacer>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="pageButton">
+
+											<property name="text">
+												<string>&lt;</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="activePageButton">
+
+											<property name="text">
+												<string>1</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="pageButton_2">
+
+											<property name="text">
+												<string>2</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="pageButton_3">
+
+											<property name="text">
+												<string>&gt;</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+								</layout>
+
+							</widget>
+
 						</item>
+
 					</layout>
+
 				</widget>
+
 			</item>
 
-			<item>
-				<spacer name="verticalSpacer">
-					<property name="orientation">
-						<enum>Qt::Vertical</enum>
-					</property>
-				</spacer>
-			</item>
 		</layout>
+
 	</widget>
+
 	<resources/>
 	<connections/>
 </ui>

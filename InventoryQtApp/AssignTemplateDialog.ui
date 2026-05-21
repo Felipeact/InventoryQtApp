@@ -1,285 +1,496 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
 	<class>AssignTemplateDialogClass</class>
+
 	<widget class="QDialog" name="AssignTemplateDialogClass">
 		<property name="geometry">
 			<rect>
 				<x>0</x>
 				<y>0</y>
-				<width>700</width>
-				<height>550</height>
+				<width>760</width>
+				<height>520</height>
 			</rect>
 		</property>
+
 		<property name="windowTitle">
-			<string>Assign Template to Truck</string>
+			<string>Assign Template</string>
+		</property>
+
+		<property name="styleSheet">
+			<string notr="true">
+
+				QDialog#AssignTemplateDialogClass {
+				background-color: #050B14;
+				color: #FFFFFF;
+				font-family: "Segoe UI";
+				}
+
+				QLabel {
+				background: transparent;
+				color: #FFFFFF;
+				}
+
+				QLabel#dialogTitle {
+				font-size: 24px;
+				font-weight: 800;
+				}
+
+				QLabel#backLabel {
+				color: #3B82F6;
+				font-size: 12px;
+				}
+
+				QWidget#formCard {
+				background: qlineargradient(
+				x1:0, y1:0,
+				x2:1, y2:1,
+				stop:0 #0B1626,
+				stop:1 #091322
+				);
+				border: 1px solid #1B2A40;
+				border-radius: 12px;
+				}
+
+				QLabel#sectionTitle {
+				font-size: 16px;
+				font-weight: 800;
+				color: #FFFFFF;
+				}
+
+				QLabel#fieldLabel {
+				color: #CBD5E1;
+				font-size: 12px;
+				font-weight: 600;
+				}
+
+				QComboBox,
+				QDateEdit,
+				QPlainTextEdit {
+				background-color: #08111F;
+				border: 1px solid #1E3350;
+				border-radius: 8px;
+				color: #FFFFFF;
+				padding: 8px 12px;
+				min-height: 36px;
+				font-size: 12px;
+				}
+
+				QComboBox:focus,
+				QDateEdit:focus,
+				QPlainTextEdit:focus {
+				border: 1px solid #2563EB;
+				}
+
+				QComboBox::drop-down {
+				border: none;
+				width: 26px;
+				}
+
+				QPlainTextEdit {
+				min-height: 110px;
+				}
+
+				QPushButton#cancelButton {
+				background-color: #08111F;
+				border: 1px solid #1E3350;
+				border-radius: 8px;
+				color: white;
+				min-height: 38px;
+				min-width: 120px;
+				font-weight: 700;
+				}
+
+				QPushButton#cancelButton:hover {
+				background-color: #111C2D;
+				}
+
+				QPushButton#assignButton {
+				background-color: #2563EB;
+				border: none;
+				border-radius: 8px;
+				color: white;
+				min-height: 38px;
+				min-width: 140px;
+				font-weight: 800;
+				}
+
+				QPushButton#assignButton:hover {
+				background-color: #1D4ED8;
+				}
+
+			</string>
 		</property>
 
 		<layout class="QVBoxLayout" name="rootLayout">
+
 			<property name="leftMargin">
-				<number>24</number>
+				<number>18</number>
 			</property>
+
 			<property name="topMargin">
-				<number>24</number>
+				<number>18</number>
 			</property>
+
 			<property name="rightMargin">
-				<number>24</number>
+				<number>18</number>
 			</property>
+
 			<property name="bottomMargin">
-				<number>24</number>
+				<number>18</number>
 			</property>
+
 			<property name="spacing">
-				<number>16</number>
+				<number>14</number>
 			</property>
 
-			<item>
-				<widget class="QLabel" name="dialogTitle">
-					<property name="text">
-						<string>Assign Template to Truck</string>
-					</property>
-				</widget>
-			</item>
+			<!-- TITLE -->
 
 			<item>
-				<layout class="QVBoxLayout" name="selectLayout">
+
+				<layout class="QVBoxLayout" name="titleLayout">
+
 					<property name="spacing">
-						<number>12</number>
+						<number>4</number>
 					</property>
 
 					<item>
-						<widget class="QLabel" name="truckLabel">
-							<property name="text">
-								<string>Select Truck *</string>
-							</property>
-						</widget>
-					</item>
 
-					<item>
-						<widget class="QComboBox" name="truckCombo">
-							<item>
-								<property name="text">
-									<string>Select a truck...</string>
-								</property>
-							</item>
-							<item>
-								<property name="text">
-									<string>Truck 1 - ABC-123</string>
-								</property>
-							</item>
-							<item>
-								<property name="text">
-									<string>Truck 2 - XYZ-456</string>
-								</property>
-							</item>
-							<item>
-								<property name="text">
-									<string>Truck 3 - DEF-789</string>
-								</property>
-							</item>
-							<item>
-								<property name="text">
-									<string>Truck 4 - GHI-012</string>
-								</property>
-							</item>
-						</widget>
-					</item>
+						<widget class="QLabel" name="dialogTitle">
 
-					<item>
-						<widget class="QLabel" name="templateLabel">
-							<property name="text">
-								<string>Select Template *</string>
-							</property>
-						</widget>
-					</item>
-
-					<item>
-						<widget class="QComboBox" name="templateCombo">
-							<item>
-								<property name="text">
-									<string>Select a template...</string>
-								</property>
-							</item>
-							<item>
-								<property name="text">
-									<string>Standard Tools</string>
-								</property>
-							</item>
-							<item>
-								<property name="text">
-									<string>Safety Kit</string>
-								</property>
-							</item>
-							<item>
-								<property name="text">
-									<string>Power Tools</string>
-								</property>
-							</item>
-							<item>
-								<property name="text">
-									<string>Diagnostic Kit</string>
-								</property>
-							</item>
-							<item>
-								<property name="text">
-									<string>Emergency Kit</string>
-								</property>
-							</item>
-						</widget>
-					</item>
-				</layout>
-			</item>
-
-			<item>
-				<widget class="QWidget" name="previewCard" native="true">
-					<layout class="QVBoxLayout" name="previewCardLayout">
-						<property name="leftMargin">
-							<number>14</number>
-						</property>
-						<property name="topMargin">
-							<number>14</number>
-						</property>
-						<property name="rightMargin">
-							<number>14</number>
-						</property>
-						<property name="bottomMargin">
-							<number>14</number>
-						</property>
-
-						<item>
-							<widget class="QLabel" name="previewTitle">
-								<property name="text">
-									<string>Template Items Preview</string>
-								</property>
-							</widget>
-						</item>
-
-						<item>
-							<widget class="QTableWidget" name="previewTable">
-								<property name="columnCount">
-									<number>3</number>
-								</property>
-								<property name="rowCount">
-									<number>3</number>
-								</property>
-								<property name="maximumHeight">
-									<number>150</number>
-								</property>
-
-								<column>
-									<property name="text">
-										<string>Item</string>
-									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Required Qty</string>
-									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Expected Price</string>
-									</property>
-								</column>
-
-								<item row="0" column="0">
-									<property name="text">
-										<string>Wrench Set</string>
-									</property>
-								</item>
-								<item row="0" column="1">
-									<property name="text">
-										<string>2</string>
-									</property>
-								</item>
-								<item row="0" column="2">
-									<property name="text">
-										<string>$45.00</string>
-									</property>
-								</item>
-
-								<item row="1" column="0">
-									<property name="text">
-										<string>Drill Bits</string>
-									</property>
-								</item>
-								<item row="1" column="1">
-									<property name="text">
-										<string>3</string>
-									</property>
-								</item>
-								<item row="1" column="2">
-									<property name="text">
-										<string>$25.00</string>
-									</property>
-								</item>
-
-								<item row="2" column="0">
-									<property name="text">
-										<string>Safety Gloves</string>
-									</property>
-								</item>
-								<item row="2" column="1">
-									<property name="text">
-										<string>5</string>
-									</property>
-								</item>
-								<item row="2" column="2">
-									<property name="text">
-										<string>$12.00</string>
-									</property>
-								</item>
-							</widget>
-						</item>
-					</layout>
-				</widget>
-			</item>
-
-			<item>
-				<spacer name="verticalSpacer">
-					<property name="orientation">
-						<enum>Qt::Vertical</enum>
-					</property>
-				</spacer>
-			</item>
-
-			<item>
-				<layout class="QHBoxLayout" name="buttonLayout">
-					<property name="spacing">
-						<number>12</number>
-					</property>
-
-					<item>
-						<spacer name="buttonSpacer">
-							<property name="orientation">
-								<enum>Qt::Horizontal</enum>
-							</property>
-						</spacer>
-					</item>
-
-					<item>
-						<widget class="QPushButton" name="cancelButton">
-							<property name="text">
-								<string>Cancel</string>
-							</property>
-							<property name="minimumWidth">
-								<number>100</number>
-							</property>
-						</widget>
-					</item>
-
-					<item>
-						<widget class="QPushButton" name="assignButton">
 							<property name="text">
 								<string>Assign Template</string>
 							</property>
-							<property name="minimumWidth">
-								<number>140</number>
-							</property>
+
 						</widget>
+
 					</item>
+
+					<item>
+
+						<widget class="QLabel" name="backLabel">
+
+							<property name="text">
+								<string>← Back to Assignments</string>
+							</property>
+
+						</widget>
+
+					</item>
+
 				</layout>
+
 			</item>
+
+			<!-- FORM CARD -->
+
+			<item>
+
+				<widget class="QWidget" name="formCard" native="true">
+
+					<layout class="QVBoxLayout" name="formCardLayout">
+
+						<property name="leftMargin">
+							<number>18</number>
+						</property>
+
+						<property name="topMargin">
+							<number>18</number>
+						</property>
+
+						<property name="rightMargin">
+							<number>18</number>
+						</property>
+
+						<property name="bottomMargin">
+							<number>18</number>
+						</property>
+
+						<property name="spacing">
+							<number>16</number>
+						</property>
+
+						<!-- SECTION TITLE -->
+
+						<item>
+
+							<widget class="QLabel" name="sectionTitle">
+
+								<property name="text">
+									<string>Assignment Information</string>
+								</property>
+
+							</widget>
+
+						</item>
+
+						<!-- FORM -->
+
+						<item>
+
+							<layout class="QGridLayout" name="formGrid">
+
+								<property name="horizontalSpacing">
+									<number>18</number>
+								</property>
+
+								<property name="verticalSpacing">
+									<number>14</number>
+								</property>
+
+								<!-- TRUCK -->
+
+								<item row="0" column="0">
+
+									<widget class="QLabel" name="truckLabel">
+
+										<property name="text">
+											<string>Select Truck *</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item row="1" column="0">
+
+									<widget class="QComboBox" name="truckComboBox">
+
+										<item>
+											<property name="text">
+												<string>Select Truck</string>
+											</property>
+										</item>
+
+										<item>
+											<property name="text">
+												<string>Truck 1 - ABC-123</string>
+											</property>
+										</item>
+
+										<item>
+											<property name="text">
+												<string>Truck 2 - DEF-456</string>
+											</property>
+										</item>
+
+										<item>
+											<property name="text">
+												<string>Truck 3 - GHI-789</string>
+											</property>
+										</item>
+
+									</widget>
+
+								</item>
+
+								<!-- TEMPLATE -->
+
+								<item row="0" column="1">
+
+									<widget class="QLabel" name="templateLabel">
+
+										<property name="text">
+											<string>Select Template *</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item row="1" column="1">
+
+									<widget class="QComboBox" name="templateComboBox">
+
+										<item>
+											<property name="text">
+												<string>Select Template</string>
+											</property>
+										</item>
+
+										<item>
+											<property name="text">
+												<string>HVAC Basic</string>
+											</property>
+										</item>
+
+										<item>
+											<property name="text">
+												<string>Electrical Standard</string>
+											</property>
+										</item>
+
+										<item>
+											<property name="text">
+												<string>Full Truck Stock</string>
+											</property>
+										</item>
+
+									</widget>
+
+								</item>
+
+								<!-- TECHNICIAN -->
+
+								<item row="2" column="0">
+
+									<widget class="QLabel" name="technicianLabel">
+
+										<property name="text">
+											<string>Technician *</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item row="3" column="0">
+
+									<widget class="QComboBox" name="technicianComboBox">
+
+										<item>
+											<property name="text">
+												<string>Select Technician</string>
+											</property>
+										</item>
+
+										<item>
+											<property name="text">
+												<string>John Smith</string>
+											</property>
+										</item>
+
+										<item>
+											<property name="text">
+												<string>Mike Johnson</string>
+											</property>
+										</item>
+
+										<item>
+											<property name="text">
+												<string>Sarah Davis</string>
+											</property>
+										</item>
+
+									</widget>
+
+								</item>
+
+								<!-- DATE -->
+
+								<item row="2" column="1">
+
+									<widget class="QLabel" name="dateLabel">
+
+										<property name="text">
+											<string>Assignment Date</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item row="3" column="1">
+
+									<widget class="QDateEdit" name="assignmentDateEdit">
+
+										<property name="calendarPopup">
+											<bool>true</bool>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<!-- NOTES -->
+
+								<item row="4" column="0" colspan="2">
+
+									<widget class="QLabel" name="notesLabel">
+
+										<property name="text">
+											<string>Notes</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item row="5" column="0" colspan="2">
+
+									<widget class="QPlainTextEdit" name="notesInput">
+
+										<property name="placeholderText">
+											<string>Add notes about this assignment...</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+							</layout>
+
+						</item>
+
+						<!-- BUTTONS -->
+
+						<item>
+
+							<layout class="QHBoxLayout" name="buttonLayout">
+
+								<property name="spacing">
+									<number>12</number>
+								</property>
+
+								<item>
+
+									<spacer name="buttonSpacer">
+
+										<property name="orientation">
+											<enum>Qt::Horizontal</enum>
+										</property>
+
+									</spacer>
+
+								</item>
+
+								<item>
+
+									<widget class="QPushButton" name="cancelButton">
+
+										<property name="text">
+											<string>Cancel</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QPushButton" name="assignButton">
+
+										<property name="text">
+											<string>Assign Template</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+							</layout>
+
+						</item>
+
+					</layout>
+
+				</widget>
+
+			</item>
+
 		</layout>
+
 	</widget>
+
 	<resources/>
 	<connections/>
 </ui>

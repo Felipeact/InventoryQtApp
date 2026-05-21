@@ -1,459 +1,510 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>AddEditTemplateDialogClass</class>
-    <widget class="QDialog" name="AddEditTemplateDialogClass">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>800</width>
-                <height>600</height>
-            </rect>
-        </property>
-        <property name="windowTitle">
-            <string>Add / Edit Template</string>
-        </property>
-        <property name="styleSheet">
-            <string notr="true">
-QDialog {
-    background-color: #050B14;
-    color: white;
-}
-QLabel#dialogTitle {
-    font-size: 18px;
-    font-weight: 700;
-    color: white;
-}
-QLabel#sectionTitle {
-    font-size: 14px;
-    font-weight: 600;
-    color: #e6eefb;
-}
-QLabel#fieldLabel {
-    font-size: 13px;
-    color: #e6eefb;
-}
-QLineEdit, QComboBox, QSpinBox, QPlainTextEdit {
-    background: #0b1626;
-    border: 1px solid #243751;
-    border-radius: 8px;
-    color: #e6eefb;
-    padding: 9px 13px;
-    min-height: 35px;
-}
-QLineEdit:focus, QComboBox:focus, QPlainTextEdit:focus {
-    border: 1px solid #2f80ed;
-    background: #0e1b2f;
-}
-QWidget#leftPanel, QWidget#rightPanel {
-    background-color: transparent;
-}
-QWidget#itemsCard {
-    background-color: #091426;
-    border: 1px solid #1A2A40;
-    border-radius: 10px;
-}
-QTableWidget {
-    background-color: transparent;
-    border: none;
-    color: white;
-    gridline-color: transparent;
-}
-QHeaderView::section {
-    background-color: #0C1728;
-    color: #94A3B8;
-    border: none;
-    border-bottom: 1px solid #1F2E45;
-    padding-left: 10px;
-    height: 34px;
-    font-weight: 600;
-    font-size: 11px;
-}
-QTableWidget::item {
-    border-bottom: 1px solid #132238;
-    padding-left: 10px;
-    height: 36px;
-}
-QTableWidget::item:selected {
-    background-color: #132238;
-}
-QPushButton#addItemButton, QPushButton#saveButton {
-    background: qlineargradient(x1:0,y1:0,x2:1,y2:0, stop:0 #2563eb, stop:1 #1d4ed8);
-    border: none;
-    color: white;
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-weight: 650;
-}
-QPushButton#addItemButton:hover, QPushButton#saveButton:hover {
-    background: qlineargradient(x1:0,y1:0,x2:1,y2:0, stop:0 #3b82f6, stop:1 #2563eb);
-}
-QPushButton#cancelButton, QPushButton#removeItemButton {
-    background: #0b1626;
-    border: 1px solid #263a55;
-    color: #e6eefb;
-    border-radius: 8px;
-    padding: 8px 16px;
-}
-QPushButton#cancelButton:hover, QPushButton#removeItemButton:hover {
-    background: #14253d;
-    border-color: #2f80ed;
-}
-QPushButton#editItemButton {
-    background: transparent;
-    border: none;
-    color: #2563EB;
-    padding: 4px 8px;
-}
-QPushButton#editItemButton:hover {
-    color: #3B82F6;
-}
-            </string>
-        </property>
-        <layout class="QVBoxLayout" name="rootLayout">
-            <property name="leftMargin">
-                <number>24</number>
-            </property>
-            <property name="topMargin">
-                <number>24</number>
-            </property>
-            <property name="rightMargin">
-                <number>24</number>
-            </property>
-            <property name="bottomMargin">
-                <number>24</number>
-            </property>
-            <property name="spacing">
-                <number>16</number>
-            </property>
+	<class>AddEditTemplateDialogClass</class>
 
-            <!-- Title -->
-            <item>
-                <widget class="QLabel" name="dialogTitle">
-                    <property name="text">
-                        <string>Add / Edit Template</string>
-                    </property>
-                </widget>
-            </item>
+	<widget class="QDialog" name="AddEditTemplateDialogClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>920</width>
+				<height>620</height>
+			</rect>
+		</property>
 
-            <!-- Content -->
-            <item>
-                <layout class="QHBoxLayout" name="contentLayout">
-                    <property name="spacing">
-                        <number>24</number>
-                    </property>
+		<property name="windowTitle">
+			<string>Add / Edit Template</string>
+		</property>
 
-                    <!-- Left Panel: Template Info -->
-                    <item>
-                        <widget class="QWidget" name="leftPanel">
-                            <layout class="QVBoxLayout" name="leftPanelLayout">
-                                <property name="spacing">
-                                    <number>12</number>
-                                </property>
+		<property name="styleSheet">
+			<string notr="true">
+				QDialog#AddEditTemplateDialogClass {
+				background-color: #050B14;
+				color: #FFFFFF;
+				font-family: "Segoe UI";
+				}
 
-                                <!-- Section Title -->
-                                <item>
-                                    <widget class="QLabel" name="infoSectionTitle">
-                                        <property name="text">
-                                            <string>Template Information</string>
-                                        </property>
-                                        <property name="styleSheet">
-                                            <string notr="true">font-size: 14px; font-weight: 600;</string>
-                                        </property>
-                                    </widget>
-                                </item>
+				QLabel {
+				background: transparent;
+				color: white;
+				}
 
-                                <!-- Template Name -->
-                                <item>
-                                    <widget class="QLabel" name="templateNameLabel">
-                                        <property name="text">
-                                            <string>Template Name *</string>
-                                        </property>
-                                        <property name="styleSheet">
-                                            <string notr="true">font-size: 13px;</string>
-                                        </property>
-                                    </widget>
-                                </item>
-                                <item>
-                                    <widget class="QLineEdit" name="templateNameInput">
-                                        <property name="placeholderText">
-                                            <string>Enter template name</string>
-                                        </property>
-                                    </widget>
-                                </item>
+				QLabel#dialogTitle {
+				font-size: 24px;
+				font-weight: 800;
+				}
 
-                                <!-- Description -->
-                                <item>
-                                    <widget class="QLabel" name="descriptionLabel">
-                                        <property name="text">
-                                            <string>Description</string>
-                                        </property>
-                                        <property name="styleSheet">
-                                            <string notr="true">font-size: 13px;</string>
-                                        </property>
-                                    </widget>
-                                </item>
-                                <item>
-                                    <widget class="QPlainTextEdit" name="descriptionInput">
-                                        <property name="placeholderText">
-                                            <string>Enter template description</string>
-                                        </property>
-                                        <property name="minimumHeight">
-                                            <number>100</number>
-                                        </property>
-                                    </widget>
-                                </item>
+				QLabel#backLabel {
+				color: #3B82F6;
+				font-size: 12px;
+				}
 
-                                <item>
-                                    <spacer name="leftPanelSpacer">
-                                        <property name="orientation">
-                                            <enum>Qt::Vertical</enum>
-                                        </property>
-                                        <property name="sizeHint" stdset="0">
-                                            <size>
-                                                <width>20</width>
-                                                <height>40</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </item>
-                            </layout>
-                        </widget>
-                    </item>
+				QWidget#leftCard,
+				QWidget#rightCard {
+				background: qlineargradient(
+				x1:0, y1:0,
+				x2:1, y2:1,
+				stop:0 #0B1626,
+				stop:1 #091322
+				);
+				border: 1px solid #1B2A40;
+				border-radius: 12px;
+				}
 
-                    <!-- Right Panel: Template Items -->
-                    <item>
-                        <widget class="QWidget" name="rightPanel">
-                            <layout class="QVBoxLayout" name="rightPanelLayout">
-                                <property name="spacing">
-                                    <number>12</number>
-                                </property>
+				QLabel#sectionTitle {
+				font-size: 16px;
+				font-weight: 800;
+				}
 
-                                <!-- Section Title -->
-                                <item>
-                                    <widget class="QLabel" name="itemsSectionTitle">
-                                        <property name="text">
-                                            <string>Template Items</string>
-                                        </property>
-                                        <property name="styleSheet">
-                                            <string notr="true">font-size: 14px; font-weight: 600;</string>
-                                        </property>
-                                    </widget>
-                                </item>
+				QLabel#fieldLabel {
+				color: #CBD5E1;
+				font-size: 12px;
+				font-weight: 600;
+				}
 
-                                <!-- Items Card -->
-                                <item>
-                                    <widget class="QWidget" name="itemsCard">
-                                        <property name="styleSheet">
-                                            <string notr="true">background-color: #091426; border: 1px solid #1A2A40; border-radius: 10px;</string>
-                                        </property>
-                                        <layout class="QVBoxLayout" name="itemsCardLayout">
-                                            <property name="leftMargin">
-                                                <number>12</number>
-                                            </property>
-                                            <property name="topMargin">
-                                                <number>12</number>
-                                            </property>
-                                            <property name="rightMargin">
-                                                <number>12</number>
-                                            </property>
-                                            <property name="bottomMargin">
-                                                <number>12</number>
-                                            </property>
+				QLineEdit,
+				QSpinBox,
+				QPlainTextEdit {
+				background-color: #08111F;
+				border: 1px solid #1E3350;
+				border-radius: 8px;
+				color: white;
+				padding: 8px 12px;
+				min-height: 34px;
+				font-size: 12px;
+				}
 
-                                            <!-- Items Table -->
-                                            <item>
-                                                <widget class="QTableWidget" name="itemsTable">
-                                                    <property name="columnCount">
-                                                        <number>5</number>
-                                                    </property>
-                                                    <property name="rowCount">
-                                                        <number>3</number>
-                                                    </property>
-                                                    <column>
-                                                        <property name="text">
-                                                            <string>Item</string>
-                                                        </property>
-                                                    </column>
-                                                    <column>
-                                                        <property name="text">
-                                                            <string>Required Qty</string>
-                                                        </property>
-                                                    </column>
-                                                    <column>
-                                                        <property name="text">
-                                                            <string>Expected Price</string>
-                                                        </property>
-                                                    </column>
-                                                    <column>
-                                                        <property name="text">
-                                                            <string>Minimum Qty</string>
-                                                        </property>
-                                                    </column>
-                                                    <column>
-                                                        <property name="text">
-                                                            <string>Actions</string>
-                                                        </property>
-                                                    </column>
-                                                    <item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>Wrench Set</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>2</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>$45.00</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>1</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>⋯</string>
-                                                            </property>
-                                                        </item>
-                                                    </item>
-                                                    <item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>Drill Bits</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>3</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>$25.00</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>2</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>⋯</string>
-                                                            </property>
-                                                        </item>
-                                                    </item>
-                                                    <item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>Safety Gloves</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>5</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>$12.00</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>3</string>
-                                                            </property>
-                                                        </item>
-                                                        <item>
-                                                            <property name="text">
-                                                                <string>⋯</string>
-                                                            </property>
-                                                        </item>
-                                                    </item>
-                                                </widget>
-                                            </item>
+				QLineEdit:focus,
+				QSpinBox:focus,
+				QPlainTextEdit:focus {
+				border: 1px solid #2563EB;
+				}
 
-                                            <!-- Add Item Button -->
-                                            <item>
-                                                <widget class="QPushButton" name="addItemButton">
-                                                    <property name="text">
-                                                        <string>+ Add Item</string>
-                                                    </property>
-                                                    <property name="minimumHeight">
-                                                        <number>34</number>
-                                                    </property>
-                                                </widget>
-                                            </item>
-                                        </layout>
-                                    </widget>
-                                </item>
+				QPlainTextEdit {
+				min-height: 120px;
+				}
 
-                                <item>
-                                    <spacer name="rightPanelSpacer">
-                                        <property name="orientation">
-                                            <enum>Qt::Vertical</enum>
-                                        </property>
-                                        <property name="sizeHint" stdset="0">
-                                            <size>
-                                                <width>20</width>
-                                                <height>40</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </item>
-                            </layout>
-                        </widget>
-                    </item>
-                </layout>
-            </item>
+				QPushButton#addItemButton {
+				background-color: #0F172A;
+				border: 1px solid #2563EB;
+				color: #3B82F6;
+				border-radius: 8px;
+				min-height: 34px;
+				font-weight: 700;
+				}
 
-            <!-- Buttons -->
-            <item>
-                <layout class="QHBoxLayout" name="buttonLayout">
-                    <property name="spacing">
-                        <number>12</number>
-                    </property>
-                    <item>
-                        <spacer name="buttonSpacer">
-                            <property name="orientation">
-                                <enum>Qt::Horizontal</enum>
-                            </property>
-                            <property name="sizeHint" stdset="0">
-                                <size>
-                                    <width>40</width>
-                                    <height>20</height>
-                                </size>
-                            </property>
-                        </spacer>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="cancelButton">
-                            <property name="text">
-                                <string>Cancel</string>
-                            </property>
-                            <property name="minimumWidth">
-                                <number>100</number>
-                            </property>
-                        </widget>
-                    </item>
-                    <item>
-                        <widget class="QPushButton" name="saveButton">
-                            <property name="text">
-                                <string>Save Template</string>
-                            </property>
-                            <property name="minimumWidth">
-                                <number>120</number>
-                            </property>
-                        </widget>
-                    </item>
-                </layout>
-            </item>
-        </layout>
-    </widget>
+				QPushButton#addItemButton:hover {
+				background-color: #102A5C;
+				}
+
+				QPushButton#cancelButton {
+				background-color: #08111F;
+				border: 1px solid #1E3350;
+				border-radius: 8px;
+				color: white;
+				min-height: 36px;
+				font-weight: 700;
+				}
+
+				QPushButton#saveButton {
+				background-color: #2563EB;
+				border: none;
+				border-radius: 8px;
+				color: white;
+				min-height: 36px;
+				font-weight: 800;
+				}
+
+				QPushButton#saveButton:hover {
+				background-color: #1D4ED8;
+				}
+
+				QTableWidget {
+				background-color: transparent;
+				border: none;
+				color: white;
+				gridline-color: transparent;
+				outline: none;
+				font-size: 12px;
+				}
+
+				QHeaderView::section {
+				background-color: #0D1726;
+				color: #94A3B8;
+				border: none;
+				border-bottom: 1px solid #1B2A40;
+				height: 34px;
+				padding-left: 8px;
+				font-size: 11px;
+				font-weight: 700;
+				}
+
+				QTableWidget::item {
+				border-bottom: 1px solid #122033;
+				padding-left: 8px;
+				height: 36px;
+				}
+
+				QTableWidget::item:selected {
+				background-color: #122033;
+				}
+			</string>
+		</property>
+
+		<layout class="QVBoxLayout" name="rootLayout">
+			<property name="leftMargin">
+				<number>18</number>
+			</property>
+			<property name="topMargin">
+				<number>18</number>
+			</property>
+			<property name="rightMargin">
+				<number>18</number>
+			</property>
+			<property name="bottomMargin">
+				<number>18</number>
+			</property>
+			<property name="spacing">
+				<number>14</number>
+			</property>
+
+			<item>
+				<layout class="QVBoxLayout" name="titleLayout">
+					<item>
+						<widget class="QLabel" name="dialogTitle">
+							<property name="text">
+								<string>Add / Edit Stock Template</string>
+							</property>
+						</widget>
+					</item>
+					<item>
+						<widget class="QLabel" name="backLabel">
+							<property name="text">
+								<string>← Back to Stock Templates</string>
+							</property>
+						</widget>
+					</item>
+				</layout>
+			</item>
+
+			<item>
+				<layout class="QHBoxLayout" name="contentLayout">
+					<property name="spacing">
+						<number>14</number>
+					</property>
+
+					<item>
+						<widget class="QWidget" name="leftCard" native="true">
+							<layout class="QVBoxLayout" name="leftLayout">
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+								<property name="topMargin">
+									<number>18</number>
+								</property>
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+								<property name="bottomMargin">
+									<number>18</number>
+								</property>
+								<property name="spacing">
+									<number>12</number>
+								</property>
+
+								<item>
+									<widget class="QLabel" name="sectionTitle">
+										<property name="text">
+											<string>Template Information</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QLabel" name="templateNameLabel">
+										<property name="text">
+											<string>Template Name *</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QLineEdit" name="templateNameInput">
+										<property name="placeholderText">
+											<string>Example: HVAC Standard Truck Stock</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QLabel" name="descriptionLabel">
+										<property name="text">
+											<string>Description</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QPlainTextEdit" name="descriptionInput">
+										<property name="placeholderText">
+											<string>Describe this truck stock template...</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QLabel" name="tradeTypeLabel">
+										<property name="text">
+											<string>Trade Type</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QLineEdit" name="tradeTypeInput">
+										<property name="placeholderText">
+											<string>HVAC, Plumbing, Appliance Repair...</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<spacer name="leftSpacer">
+										<property name="orientation">
+											<enum>Qt::Vertical</enum>
+										</property>
+									</spacer>
+								</item>
+							</layout>
+						</widget>
+					</item>
+
+					<item>
+						<widget class="QWidget" name="rightCard" native="true">
+							<layout class="QVBoxLayout" name="rightLayout">
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+								<property name="topMargin">
+									<number>18</number>
+								</property>
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+								<property name="bottomMargin">
+									<number>18</number>
+								</property>
+								<property name="spacing">
+									<number>12</number>
+								</property>
+
+								<item>
+									<layout class="QHBoxLayout" name="itemsHeaderLayout">
+										<item>
+											<widget class="QLabel" name="sectionTitleItems">
+												<property name="text">
+													<string>Template Items</string>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<spacer name="itemsHeaderSpacer">
+												<property name="orientation">
+													<enum>Qt::Horizontal</enum>
+												</property>
+											</spacer>
+										</item>
+										<item>
+											<widget class="QPushButton" name="addItemButton">
+												<property name="text">
+													<string>+ Add Item</string>
+												</property>
+											</widget>
+										</item>
+									</layout>
+								</item>
+
+								<item>
+									<widget class="QTableWidget" name="templateItemsTable">
+										<property name="columnCount">
+											<number>5</number>
+										</property>
+										<property name="rowCount">
+											<number>4</number>
+										</property>
+										<property name="showGrid">
+											<bool>false</bool>
+										</property>
+										<attribute name="horizontalHeaderStretchLastSection">
+											<bool>true</bool>
+										</attribute>
+
+										<column>
+											<property name="text">
+												<string>Item</string>
+											</property>
+										</column>
+										<column>
+											<property name="text">
+												<string>Required Qty</string>
+											</property>
+										</column>
+										<column>
+											<property name="text">
+												<string>Expected Price</string>
+											</property>
+										</column>
+										<column>
+											<property name="text">
+												<string>Minimum Qty</string>
+											</property>
+										</column>
+										<column>
+											<property name="text">
+												<string>Actions</string>
+											</property>
+										</column>
+
+										<item row="0" column="0">
+											<property name="text">
+												<string>Capacitor 45/5 μF</string>
+											</property>
+										</item>
+										<item row="0" column="1">
+											<property name="text">
+												<string>2</string>
+											</property>
+										</item>
+										<item row="0" column="2">
+											<property name="text">
+												<string>$18.50</string>
+											</property>
+										</item>
+										<item row="0" column="3">
+											<property name="text">
+												<string>1</string>
+											</property>
+										</item>
+										<item row="0" column="4">
+											<property name="text">
+												<string>✎ 🗑</string>
+											</property>
+										</item>
+
+										<item row="1" column="0">
+											<property name="text">
+												<string>Contactor 24V</string>
+											</property>
+										</item>
+										<item row="1" column="1">
+											<property name="text">
+												<string>2</string>
+											</property>
+										</item>
+										<item row="1" column="2">
+											<property name="text">
+												<string>$24.00</string>
+											</property>
+										</item>
+										<item row="1" column="3">
+											<property name="text">
+												<string>1</string>
+											</property>
+										</item>
+										<item row="1" column="4">
+											<property name="text">
+												<string>✎ 🗑</string>
+											</property>
+										</item>
+
+										<item row="2" column="0">
+											<property name="text">
+												<string>Fuses 30A</string>
+											</property>
+										</item>
+										<item row="2" column="1">
+											<property name="text">
+												<string>10</string>
+											</property>
+										</item>
+										<item row="2" column="2">
+											<property name="text">
+												<string>$2.00</string>
+											</property>
+										</item>
+										<item row="2" column="3">
+											<property name="text">
+												<string>5</string>
+											</property>
+										</item>
+										<item row="2" column="4">
+											<property name="text">
+												<string>✎ 🗑</string>
+											</property>
+										</item>
+
+										<item row="3" column="0">
+											<property name="text">
+												<string>Thermostat</string>
+											</property>
+										</item>
+										<item row="3" column="1">
+											<property name="text">
+												<string>1</string>
+											</property>
+										</item>
+										<item row="3" column="2">
+											<property name="text">
+												<string>$75.00</string>
+											</property>
+										</item>
+										<item row="3" column="3">
+											<property name="text">
+												<string>1</string>
+											</property>
+										</item>
+										<item row="3" column="4">
+											<property name="text">
+												<string>✎ 🗑</string>
+											</property>
+										</item>
+									</widget>
+								</item>
+							</layout>
+						</widget>
+					</item>
+				</layout>
+			</item>
+
+			<item>
+				<layout class="QHBoxLayout" name="buttonLayout">
+					<item>
+						<spacer name="buttonSpacer">
+							<property name="orientation">
+								<enum>Qt::Horizontal</enum>
+							</property>
+						</spacer>
+					</item>
+					<item>
+						<widget class="QPushButton" name="cancelButton">
+							<property name="text">
+								<string>Cancel</string>
+							</property>
+						</widget>
+					</item>
+					<item>
+						<widget class="QPushButton" name="saveButton">
+							<property name="text">
+								<string>Save Template</string>
+							</property>
+						</widget>
+					</item>
+				</layout>
+			</item>
+
+		</layout>
+	</widget>
+
+	<resources/>
+	<connections/>
 </ui>

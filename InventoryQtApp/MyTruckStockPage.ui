@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
 	<class>MyTruckStockPageClass</class>
+
 	<widget class="QWidget" name="MyTruckStockPageClass">
+
 		<property name="geometry">
 			<rect>
 				<x>0</x>
@@ -10,120 +12,600 @@
 				<height>820</height>
 			</rect>
 		</property>
+
 		<property name="windowTitle">
 			<string>My Truck Stock</string>
 		</property>
 
+		<property name="styleSheet">
+			<string notr="true">
+
+				QWidget#MyTruckStockPageClass {
+				background-color: #050B14;
+				color: #FFFFFF;
+				font-family: "Segoe UI";
+				}
+
+				QLabel {
+				background: transparent;
+				color: white;
+				}
+
+				QLabel#pageTitle {
+				font-size: 26px;
+				font-weight: 800;
+				}
+
+				QLabel#subtitleLabel {
+				color: #94A3B8;
+				font-size: 12px;
+				}
+
+				QWidget#metricCard1,
+				QWidget#metricCard2,
+				QWidget#metricCard3,
+				QWidget#toolbarCard,
+				QWidget#tableCard {
+				background: qlineargradient(
+				x1:0, y1:0,
+				x2:1, y2:1,
+				stop:0 #0B1626,
+				stop:1 #091322
+				);
+				border: 1px solid #1B2A40;
+				border-radius: 12px;
+				}
+
+				QLabel#metricTitle {
+				color: #CBD5E1;
+				font-size: 12px;
+				font-weight: 600;
+				}
+
+				QLabel#metricValue {
+				color: white;
+				font-size: 28px;
+				font-weight: 800;
+				}
+
+				QLabel#metricSubtextGreen {
+				color: #22C55E;
+				font-size: 11px;
+				font-weight: 700;
+				}
+
+				QLabel#metricSubtextOrange {
+				color: #F59E0B;
+				font-size: 11px;
+				font-weight: 700;
+				}
+
+				QLabel#metricSubtextBlue {
+				color: #3B82F6;
+				font-size: 11px;
+				font-weight: 700;
+				}
+
+				QLineEdit#searchInput {
+				background-color: #08111F;
+				border: 1px solid #1E3350;
+				border-radius: 8px;
+				padding-left: 14px;
+				color: white;
+				min-height: 36px;
+				font-size: 12px;
+				}
+
+				QLineEdit#searchInput:focus {
+				border: 1px solid #2563EB;
+				}
+
+				QPushButton#useItemButton {
+				background-color: #2563EB;
+				border: none;
+				border-radius: 8px;
+				color: white;
+				min-height: 36px;
+				min-width: 120px;
+				font-size: 12px;
+				font-weight: 700;
+				}
+
+				QPushButton#useItemButton:hover {
+				background-color: #1D4ED8;
+				}
+
+				QTableWidget {
+				background-color: transparent;
+				border: none;
+				color: white;
+				gridline-color: transparent;
+				outline: none;
+				font-size: 12px;
+				}
+
+				QHeaderView::section {
+				background-color: #0D1726;
+				color: #94A3B8;
+				border: none;
+				border-bottom: 1px solid #1B2A40;
+				height: 38px;
+				padding-left: 10px;
+				font-size: 11px;
+				font-weight: 700;
+				}
+
+				QTableWidget::item {
+				border-bottom: 1px solid #122033;
+				padding-left: 10px;
+				height: 40px;
+				}
+
+				QTableWidget::item:selected {
+				background-color: #122033;
+				}
+
+				QWidget#paginationContainer {
+				background-color: transparent;
+				border: none;
+				}
+
+				QPushButton#pageButton,
+				QPushButton#pageButton2,
+				QPushButton#pageButton3 {
+				background-color: #111C2D;
+				border: 1px solid #22324A;
+				border-radius: 8px;
+				color: white;
+				min-width: 32px;
+				min-height: 32px;
+				font-size: 12px;
+				font-weight: 600;
+				}
+
+				QPushButton#activePageButton {
+				background-color: #2563EB;
+				border: none;
+				border-radius: 8px;
+				color: white;
+				min-width: 32px;
+				min-height: 32px;
+				font-size: 12px;
+				font-weight: 700;
+				}
+
+				QLabel#paginationLabel {
+				color: #94A3B8;
+				font-size: 11px;
+				}
+
+			</string>
+		</property>
+
 		<layout class="QVBoxLayout" name="rootLayout">
+
 			<property name="leftMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="topMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="rightMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="bottomMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="spacing">
 				<number>16</number>
 			</property>
 
-			<item>
-				<layout class="QVBoxLayout" name="titleLayout">
-					<item>
-						<widget class="QLabel" name="pageTitle">
-							<property name="text">
-								<string>My Truck Stock (Technician View)</string>
-							</property>
-						</widget>
-					</item>
-					<item>
-						<widget class="QLabel" name="subtitleLabel">
-							<property name="text">
-								<string>Manage your assigned truck inventory</string>
-							</property>
-						</widget>
-					</item>
-				</layout>
-			</item>
+			<!-- TITLE -->
 
 			<item>
-				<widget class="QWidget" name="toolbarContainer" native="true">
+
+				<layout class="QVBoxLayout" name="titleLayout">
+
+					<item>
+
+						<widget class="QLabel" name="pageTitle">
+
+							<property name="text">
+								<string>My Truck Stock</string>
+							</property>
+
+						</widget>
+
+					</item>
+
+					<item>
+
+						<widget class="QLabel" name="subtitleLabel">
+
+							<property name="text">
+								<string>Track inventory and usage for your assigned truck</string>
+							</property>
+
+						</widget>
+
+					</item>
+
+				</layout>
+
+			</item>
+
+			<!-- METRIC CARDS -->
+
+			<item>
+
+				<layout class="QHBoxLayout" name="metricsLayout">
+
+					<property name="spacing">
+						<number>14</number>
+					</property>
+
+					<!-- CARD 1 -->
+
+					<item>
+
+						<widget class="QWidget" name="metricCard1" native="true">
+
+							<layout class="QVBoxLayout" name="metricLayout1">
+
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+
+								<property name="topMargin">
+									<number>18</number>
+								</property>
+
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+
+								<property name="bottomMargin">
+									<number>18</number>
+								</property>
+
+								<item>
+
+									<widget class="QLabel" name="metricTitle">
+
+										<property name="text">
+											<string>Total Items</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricValue">
+
+										<property name="text">
+											<string>125</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricSubtextGreen">
+
+										<property name="text">
+											<string>+8 items added this week</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+					<!-- CARD 2 -->
+
+					<item>
+
+						<widget class="QWidget" name="metricCard2" native="true">
+
+							<layout class="QVBoxLayout" name="metricLayout2">
+
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+
+								<property name="topMargin">
+									<number>18</number>
+								</property>
+
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+
+								<property name="bottomMargin">
+									<number>18</number>
+								</property>
+
+								<item>
+
+									<widget class="QLabel" name="metricTitle">
+
+										<property name="text">
+											<string>Low Stock Items</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricValue">
+
+										<property name="text">
+											<string>7</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricSubtextOrange">
+
+										<property name="text">
+											<string>Needs restocking soon</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+					<!-- CARD 3 -->
+
+					<item>
+
+						<widget class="QWidget" name="metricCard3" native="true">
+
+							<layout class="QVBoxLayout" name="metricLayout3">
+
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+
+								<property name="topMargin">
+									<number>18</number>
+								</property>
+
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+
+								<property name="bottomMargin">
+									<number>18</number>
+								</property>
+
+								<item>
+
+									<widget class="QLabel" name="metricTitle">
+
+										<property name="text">
+											<string>Items Used Today</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricValue">
+
+										<property name="text">
+											<string>12</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricSubtextBlue">
+
+										<property name="text">
+											<string>Updated 5 minutes ago</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+				</layout>
+
+			</item>
+
+			<!-- TOOLBAR -->
+
+			<item>
+
+				<widget class="QWidget" name="toolbarCard" native="true">
+
 					<layout class="QHBoxLayout" name="toolbarLayout">
+
+						<property name="leftMargin">
+							<number>14</number>
+						</property>
+
+						<property name="topMargin">
+							<number>12</number>
+						</property>
+
+						<property name="rightMargin">
+							<number>14</number>
+						</property>
+
+						<property name="bottomMargin">
+							<number>12</number>
+						</property>
+
+						<property name="spacing">
+							<number>12</number>
+						</property>
+
 						<item>
-							<widget class="QLabel" name="truckLabel">
-								<property name="text">
-									<string>Truck:</string>
-								</property>
-							</widget>
-						</item>
-						<item>
-							<widget class="QComboBox" name="truckSelector">
-								<item>
-									<property name="text">
-										<string>Truck 1 - ABC-123</string>
-									</property>
-								</item>
-								<item>
-									<property name="text">
-										<string>Truck 2 - XYZ-456</string>
-									</property>
-								</item>
-							</widget>
-						</item>
-						<item>
+
 							<widget class="QLineEdit" name="searchInput">
-								<property name="placeholderText">
-									<string>Search items...</string>
+
+								<property name="minimumWidth">
+									<number>320</number>
 								</property>
+
+								<property name="placeholderText">
+									<string>Search truck stock...</string>
+								</property>
+
 							</widget>
+
 						</item>
+
 						<item>
+
 							<spacer name="toolbarSpacer">
+
 								<property name="orientation">
 									<enum>Qt::Horizontal</enum>
 								</property>
+
 							</spacer>
+
 						</item>
+
+						<item>
+
+							<widget class="QPushButton" name="useItemButton">
+
+								<property name="text">
+									<string>+ Use Item</string>
+								</property>
+
+							</widget>
+
+						</item>
+
 					</layout>
+
 				</widget>
+
 			</item>
 
+			<!-- TABLE -->
+
 			<item>
+
 				<widget class="QWidget" name="tableCard" native="true">
-					<layout class="QVBoxLayout" name="tableCardLayout">
+
+					<layout class="QVBoxLayout" name="tableLayout">
+
+						<property name="leftMargin">
+							<number>14</number>
+						</property>
+
+						<property name="topMargin">
+							<number>14</number>
+						</property>
+
+						<property name="rightMargin">
+							<number>14</number>
+						</property>
+
+						<property name="bottomMargin">
+							<number>14</number>
+						</property>
+
+						<property name="spacing">
+							<number>14</number>
+						</property>
+
 						<item>
-							<widget class="QTableWidget" name="stockTable">
+
+							<widget class="QTableWidget" name="truckStockTable">
+
 								<property name="columnCount">
-									<number>5</number>
-								</property>
-								<property name="rowCount">
 									<number>6</number>
 								</property>
+
+								<property name="rowCount">
+									<number>5</number>
+								</property>
+
+								<property name="selectionBehavior">
+									<enum>QAbstractItemView::SelectRows</enum>
+								</property>
+
+								<property name="showGrid">
+									<bool>false</bool>
+								</property>
+
+								<attribute name="horizontalHeaderStretchLastSection">
+									<bool>true</bool>
+								</attribute>
 
 								<column>
 									<property name="text">
 										<string>Item</string>
 									</property>
 								</column>
+
+								<column>
+									<property name="text">
+										<string>Category</string>
+									</property>
+								</column>
+
 								<column>
 									<property name="text">
 										<string>Current Qty</string>
 									</property>
 								</column>
+
 								<column>
 									<property name="text">
 										<string>Minimum Qty</string>
 									</property>
 								</column>
+
 								<column>
 									<property name="text">
 										<string>Status</string>
 									</property>
 								</column>
+
 								<column>
 									<property name="text">
 										<string>Actions</string>
@@ -132,12 +614,12 @@
 
 								<item row="0" column="0">
 									<property name="text">
-										<string>Wrench Set</string>
+										<string>Capacitor 45/5 μF</string>
 									</property>
 								</item>
 								<item row="0" column="1">
 									<property name="text">
-										<string>3</string>
+										<string>Electrical</string>
 									</property>
 								</item>
 								<item row="0" column="2">
@@ -147,10 +629,15 @@
 								</item>
 								<item row="0" column="3">
 									<property name="text">
-										<string>Good</string>
+										<string>1</string>
 									</property>
 								</item>
 								<item row="0" column="4">
+									<property name="text">
+										<string>OK</string>
+									</property>
+								</item>
+								<item row="0" column="5">
 									<property name="text">
 										<string>Use</string>
 									</property>
@@ -158,25 +645,30 @@
 
 								<item row="1" column="0">
 									<property name="text">
-										<string>Drill Bits</string>
+										<string>Contactor 24V</string>
 									</property>
 								</item>
 								<item row="1" column="1">
 									<property name="text">
-										<string>1</string>
+										<string>Electrical</string>
 									</property>
 								</item>
 								<item row="1" column="2">
 									<property name="text">
-										<string>3</string>
+										<string>1</string>
 									</property>
 								</item>
 								<item row="1" column="3">
 									<property name="text">
-										<string>Low</string>
+										<string>1</string>
 									</property>
 								</item>
 								<item row="1" column="4">
+									<property name="text">
+										<string>LOW</string>
+									</property>
+								</item>
+								<item row="1" column="5">
 									<property name="text">
 										<string>Use</string>
 									</property>
@@ -184,25 +676,30 @@
 
 								<item row="2" column="0">
 									<property name="text">
-										<string>Safety Gloves</string>
+										<string>Fuse 30A</string>
 									</property>
 								</item>
 								<item row="2" column="1">
 									<property name="text">
-										<string>8</string>
+										<string>Electrical</string>
 									</property>
 								</item>
 								<item row="2" column="2">
 									<property name="text">
-										<string>5</string>
+										<string>10</string>
 									</property>
 								</item>
 								<item row="2" column="3">
 									<property name="text">
-										<string>Good</string>
+										<string>5</string>
 									</property>
 								</item>
 								<item row="2" column="4">
+									<property name="text">
+										<string>OK</string>
+									</property>
+								</item>
+								<item row="2" column="5">
 									<property name="text">
 										<string>Use</string>
 									</property>
@@ -210,25 +707,30 @@
 
 								<item row="3" column="0">
 									<property name="text">
-										<string>Hammer</string>
+										<string>Thermostat</string>
 									</property>
 								</item>
 								<item row="3" column="1">
 									<property name="text">
-										<string>1</string>
+										<string>HVAC</string>
 									</property>
 								</item>
 								<item row="3" column="2">
 									<property name="text">
-										<string>1</string>
+										<string>0</string>
 									</property>
 								</item>
 								<item row="3" column="3">
 									<property name="text">
-										<string>Good</string>
+										<string>1</string>
 									</property>
 								</item>
 								<item row="3" column="4">
+									<property name="text">
+										<string>OUT</string>
+									</property>
+								</item>
+								<item row="3" column="5">
 									<property name="text">
 										<string>Use</string>
 									</property>
@@ -236,62 +738,139 @@
 
 								<item row="4" column="0">
 									<property name="text">
-										<string>Screwdriver Set</string>
+										<string>Electrical Tape</string>
 									</property>
 								</item>
 								<item row="4" column="1">
 									<property name="text">
-										<string>0</string>
+										<string>Consumables</string>
 									</property>
 								</item>
 								<item row="4" column="2">
 									<property name="text">
-										<string>2</string>
+										<string>6</string>
 									</property>
 								</item>
 								<item row="4" column="3">
 									<property name="text">
-										<string>Critical</string>
+										<string>2</string>
 									</property>
 								</item>
 								<item row="4" column="4">
+									<property name="text">
+										<string>OK</string>
+									</property>
+								</item>
+								<item row="4" column="5">
 									<property name="text">
 										<string>Use</string>
 									</property>
 								</item>
 
-								<item row="5" column="0">
-									<property name="text">
-										<string>Pliers</string>
-									</property>
-								</item>
-								<item row="5" column="1">
-									<property name="text">
-										<string>4</string>
-									</property>
-								</item>
-								<item row="5" column="2">
-									<property name="text">
-										<string>2</string>
-									</property>
-								</item>
-								<item row="5" column="3">
-									<property name="text">
-										<string>Good</string>
-									</property>
-								</item>
-								<item row="5" column="4">
-									<property name="text">
-										<string>Use</string>
-									</property>
-								</item>
 							</widget>
+
 						</item>
+
+						<!-- PAGINATION -->
+
+						<item>
+
+							<widget class="QWidget" name="paginationContainer" native="true">
+
+								<layout class="QHBoxLayout" name="paginationLayout">
+
+									<property name="spacing">
+										<number>8</number>
+									</property>
+
+									<item>
+
+										<widget class="QLabel" name="paginationLabel">
+
+											<property name="text">
+												<string>Showing 1 to 5 of 32 items</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<spacer name="paginationSpacer">
+
+											<property name="orientation">
+												<enum>Qt::Horizontal</enum>
+											</property>
+
+										</spacer>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="pageButton">
+
+											<property name="text">
+												<string>&lt;</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="activePageButton">
+
+											<property name="text">
+												<string>1</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="pageButton2">
+
+											<property name="text">
+												<string>2</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="pageButton3">
+
+											<property name="text">
+												<string>&gt;</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+								</layout>
+
+							</widget>
+
+						</item>
+
 					</layout>
+
 				</widget>
+
 			</item>
+
 		</layout>
+
 	</widget>
+
 	<resources/>
 	<connections/>
 </ui>

@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
 	<class>ReceiptsPageClass</class>
+
 	<widget class="QWidget" name="ReceiptsPageClass">
+
 		<property name="geometry">
 			<rect>
 				<x>0</x>
@@ -10,205 +12,606 @@
 				<height>820</height>
 			</rect>
 		</property>
+
 		<property name="windowTitle">
 			<string>Receipts</string>
 		</property>
+
 		<property name="styleSheet">
 			<string notr="true">
+
 				QWidget#ReceiptsPageClass {
 				background-color: #050B14;
+				color: #FFFFFF;
+				font-family: "Segoe UI";
+				}
+
+				QLabel {
+				background: transparent;
 				color: white;
 				}
+
 				QLabel#pageTitle {
-				font-size: 24px;
-				font-weight: 700;
-				color: white;
+				font-size: 26px;
+				font-weight: 800;
 				}
-				QWidget#toolbarContainer,
+
+				QLabel#subtitleLabel {
+				color: #94A3B8;
+				font-size: 12px;
+				}
+
+				QWidget#metricCard1,
+				QWidget#metricCard2,
+				QWidget#metricCard3,
+				QWidget#toolbarCard,
 				QWidget#tableCard {
-				background-color: #091426;
-				border: 1px solid #1A2A40;
-				border-radius: 14px;
+				background: qlineargradient(
+				x1:0, y1:0,
+				x2:1, y2:1,
+				stop:0 #0B1626,
+				stop:1 #091322
+				);
+				border: 1px solid #1B2A40;
+				border-radius: 12px;
 				}
-				QLineEdit#searchInput {
-				border: 1px solid #22324A;
-				background: #111C2D;
-				color: white;
-				padding: 8px 12px;
-				border-radius: 8px;
-				}
-				QPushButton#uploadReceiptButton {
-				background-color: #2563EB;
-				color: white;
-				border: none;
-				border-radius: 8px;
-				padding: 8px 16px;
+
+				QLabel#metricTitle {
+				color: #CBD5E1;
+				font-size: 12px;
 				font-weight: 600;
 				}
-				QPushButton#uploadReceiptButton:hover {
-				background-color: #3B82F6;
+
+				QLabel#metricValue {
+				color: white;
+				font-size: 28px;
+				font-weight: 800;
 				}
+
+				QLabel#metricBlue {
+				color: #3B82F6;
+				font-size: 11px;
+				font-weight: 700;
+				}
+
+				QLabel#metricGreen {
+				color: #22C55E;
+				font-size: 11px;
+				font-weight: 700;
+				}
+
+				QLabel#metricOrange {
+				color: #F59E0B;
+				font-size: 11px;
+				font-weight: 700;
+				}
+
+				QLineEdit#searchInput,
+				QComboBox#statusFilter {
+				background-color: #08111F;
+				border: 1px solid #1E3350;
+				border-radius: 8px;
+				color: white;
+				min-height: 36px;
+				padding-left: 12px;
+				font-size: 12px;
+				}
+
+				QLineEdit#searchInput:focus,
+				QComboBox#statusFilter:focus {
+				border: 1px solid #2563EB;
+				}
+
+				QComboBox::drop-down {
+				border: none;
+				width: 24px;
+				}
+
+				QPushButton#uploadButton {
+				background-color: #2563EB;
+				border: none;
+				border-radius: 8px;
+				color: white;
+				min-width: 140px;
+				min-height: 36px;
+				font-size: 12px;
+				font-weight: 700;
+				}
+
+				QPushButton#uploadButton:hover {
+				background-color: #1D4ED8;
+				}
+
 				QTableWidget {
 				background-color: transparent;
 				border: none;
 				color: white;
 				gridline-color: transparent;
+				outline: none;
+				font-size: 12px;
 				}
+
 				QHeaderView::section {
-				background-color: #0C1728;
+				background-color: #0D1726;
 				color: #94A3B8;
 				border: none;
-				border-bottom: 1px solid #1F2E45;
-				padding-left: 12px;
-				height: 40px;
-				font-weight: 600;
+				border-bottom: 1px solid #1B2A40;
+				height: 38px;
+				padding-left: 10px;
+				font-size: 11px;
+				font-weight: 700;
 				}
+
 				QTableWidget::item {
-				border-bottom: 1px solid #132238;
-				padding-left: 12px;
-				height: 42px;
+				border-bottom: 1px solid #122033;
+				padding-left: 10px;
+				height: 40px;
 				}
+
 				QTableWidget::item:selected {
-				background-color: #132238;
+				background-color: #122033;
 				}
-				QPushButton#prevPageButton,
-				QPushButton#page1Button,
-				QPushButton#page2Button,
-				QPushButton#page3Button,
-				QPushButton#nextPageButton {
-				background-color: #111C2D;
-				border: 1px solid #22324A;
-				border-radius: 6px;
-				color: white;
-				min-width: 28px;
-				min-height: 28px;
-				}
-				QPushButton#page1Button {
-				background-color: #2563EB;
+
+				QWidget#paginationContainer {
+				background-color: transparent;
 				border: none;
 				}
-				QPushButton#prevPageButton:hover,
-				QPushButton#page2Button:hover,
-				QPushButton#page3Button:hover,
-				QPushButton#nextPageButton:hover {
-				background-color: #1D4ED8;
+
+				QPushButton#pageButton,
+				QPushButton#pageButton2,
+				QPushButton#pageButton3 {
+				background-color: #111C2D;
+				border: 1px solid #22324A;
+				border-radius: 8px;
+				color: white;
+				min-width: 32px;
+				min-height: 32px;
+				font-size: 12px;
+				font-weight: 600;
 				}
+
+				QPushButton#activePageButton {
+				background-color: #2563EB;
+				border: none;
+				border-radius: 8px;
+				color: white;
+				min-width: 32px;
+				min-height: 32px;
+				font-size: 12px;
+				font-weight: 700;
+				}
+
+				QLabel#paginationLabel {
+				color: #94A3B8;
+				font-size: 11px;
+				}
+
 			</string>
 		</property>
 
 		<layout class="QVBoxLayout" name="rootLayout">
+
 			<property name="leftMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="topMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="rightMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="bottomMargin">
-				<number>20</number>
+				<number>18</number>
 			</property>
+
 			<property name="spacing">
 				<number>16</number>
 			</property>
 
-			<item>
-				<widget class="QLabel" name="pageTitle">
-					<property name="text">
-						<string>Receipts</string>
-					</property>
-				</widget>
-			</item>
+			<!-- TITLE -->
 
 			<item>
-				<widget class="QWidget" name="toolbarContainer" native="true">
+
+				<layout class="QVBoxLayout" name="titleLayout">
+
+					<item>
+
+						<widget class="QLabel" name="pageTitle">
+
+							<property name="text">
+								<string>Receipts</string>
+							</property>
+
+						</widget>
+
+					</item>
+
+					<item>
+
+						<widget class="QLabel" name="subtitleLabel">
+
+							<property name="text">
+								<string>Upload and manage technician purchase receipts</string>
+							</property>
+
+						</widget>
+
+					</item>
+
+				</layout>
+
+			</item>
+
+			<!-- METRICS -->
+
+			<item>
+
+				<layout class="QHBoxLayout" name="metricsLayout">
+
+					<property name="spacing">
+						<number>14</number>
+					</property>
+
+					<item>
+
+						<widget class="QWidget" name="metricCard1" native="true">
+
+							<layout class="QVBoxLayout" name="metricLayout1">
+
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+
+								<property name="topMargin">
+									<number>18</number>
+								</property>
+
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+
+								<property name="bottomMargin">
+									<number>18</number>
+								</property>
+
+								<item>
+
+									<widget class="QLabel" name="metricTitle">
+
+										<property name="text">
+											<string>Total Receipts</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricValue">
+
+										<property name="text">
+											<string>145</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricBlue">
+
+										<property name="text">
+											<string>Uploaded this month</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+					<item>
+
+						<widget class="QWidget" name="metricCard2" native="true">
+
+							<layout class="QVBoxLayout" name="metricLayout2">
+
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+
+								<property name="topMargin">
+									<number>18</number>
+								</property>
+
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+
+								<property name="bottomMargin">
+									<number>18</number>
+								</property>
+
+								<item>
+
+									<widget class="QLabel" name="metricTitle">
+
+										<property name="text">
+											<string>Approved</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricValue">
+
+										<property name="text">
+											<string>121</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricGreen">
+
+										<property name="text">
+											<string>Successfully reconciled</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+					<item>
+
+						<widget class="QWidget" name="metricCard3" native="true">
+
+							<layout class="QVBoxLayout" name="metricLayout3">
+
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+
+								<property name="topMargin">
+									<number>18</number>
+								</property>
+
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+
+								<property name="bottomMargin">
+									<number>18</number>
+								</property>
+
+								<item>
+
+									<widget class="QLabel" name="metricTitle">
+
+										<property name="text">
+											<string>Pending Review</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricValue">
+
+										<property name="text">
+											<string>24</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+								<item>
+
+									<widget class="QLabel" name="metricOrange">
+
+										<property name="text">
+											<string>Needs admin approval</string>
+										</property>
+
+									</widget>
+
+								</item>
+
+							</layout>
+
+						</widget>
+
+					</item>
+
+				</layout>
+
+			</item>
+
+			<!-- TOOLBAR -->
+
+			<item>
+
+				<widget class="QWidget" name="toolbarCard" native="true">
+
 					<layout class="QHBoxLayout" name="toolbarLayout">
+
 						<property name="leftMargin">
 							<number>14</number>
 						</property>
+
 						<property name="topMargin">
 							<number>12</number>
 						</property>
+
 						<property name="rightMargin">
 							<number>14</number>
 						</property>
+
 						<property name="bottomMargin">
 							<number>12</number>
 						</property>
+
 						<property name="spacing">
 							<number>12</number>
 						</property>
 
 						<item>
+
 							<widget class="QLineEdit" name="searchInput">
+
+								<property name="minimumWidth">
+									<number>320</number>
+								</property>
+
 								<property name="placeholderText">
 									<string>Search receipts...</string>
 								</property>
-								<property name="minimumWidth">
-									<number>250</number>
-								</property>
+
 							</widget>
+
 						</item>
 
 						<item>
+
+							<widget class="QComboBox" name="statusFilter">
+
+								<item>
+									<property name="text">
+										<string>All Status</string>
+									</property>
+								</item>
+
+								<item>
+									<property name="text">
+										<string>Pending</string>
+									</property>
+								</item>
+
+								<item>
+									<property name="text">
+										<string>Approved</string>
+									</property>
+								</item>
+
+								<item>
+									<property name="text">
+										<string>Rejected</string>
+									</property>
+								</item>
+
+							</widget>
+
+						</item>
+
+						<item>
+
 							<spacer name="toolbarSpacer">
+
 								<property name="orientation">
 									<enum>Qt::Horizontal</enum>
 								</property>
+
 							</spacer>
+
 						</item>
 
 						<item>
-							<widget class="QPushButton" name="uploadReceiptButton">
+
+							<widget class="QPushButton" name="uploadButton">
+
 								<property name="text">
 									<string>+ Upload Receipt</string>
 								</property>
+
 							</widget>
+
 						</item>
+
 					</layout>
+
 				</widget>
+
 			</item>
 
+			<!-- TABLE -->
+
 			<item>
+
 				<widget class="QWidget" name="tableCard" native="true">
-					<layout class="QVBoxLayout" name="tableCardLayout">
+
+					<layout class="QVBoxLayout" name="tableLayout">
+
 						<property name="leftMargin">
 							<number>14</number>
 						</property>
+
 						<property name="topMargin">
 							<number>14</number>
 						</property>
+
 						<property name="rightMargin">
 							<number>14</number>
 						</property>
+
 						<property name="bottomMargin">
 							<number>14</number>
 						</property>
+
 						<property name="spacing">
-							<number>10</number>
+							<number>14</number>
 						</property>
 
 						<item>
+
 							<widget class="QTableWidget" name="receiptsTable">
+
 								<property name="columnCount">
-									<number>6</number>
+									<number>7</number>
 								</property>
+
 								<property name="rowCount">
-									<number>6</number>
+									<number>5</number>
 								</property>
-								<property name="frameShape">
-									<enum>QFrame::NoFrame</enum>
+
+								<property name="selectionBehavior">
+									<enum>QAbstractItemView::SelectRows</enum>
 								</property>
+
+								<property name="showGrid">
+									<bool>false</bool>
+								</property>
+
+								<attribute name="horizontalHeaderStretchLastSection">
+									<bool>true</bool>
+								</attribute>
 
 								<column>
 									<property name="text">
 										<string>Receipt #</string>
-									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Truck</string>
 									</property>
 								</column>
 								<column>
@@ -218,7 +621,12 @@
 								</column>
 								<column>
 									<property name="text">
-										<string>Total Amount</string>
+										<string>Truck</string>
+									</property>
+								</column>
+								<column>
+									<property name="text">
+										<string>Total</string>
 									</property>
 								</column>
 								<column>
@@ -228,28 +636,33 @@
 								</column>
 								<column>
 									<property name="text">
-										<string>Uploaded On</string>
+										<string>Date</string>
+									</property>
+								</column>
+								<column>
+									<property name="text">
+										<string>Actions</string>
 									</property>
 								</column>
 
 								<item row="0" column="0">
 									<property name="text">
-										<string>RCPT-001</string>
+										<string>REC-001</string>
 									</property>
 								</item>
 								<item row="0" column="1">
 									<property name="text">
-										<string>Truck 1</string>
+										<string>John Smith</string>
 									</property>
 								</item>
 								<item row="0" column="2">
 									<property name="text">
-										<string>John Smith</string>
+										<string>Truck 1</string>
 									</property>
 								</item>
 								<item row="0" column="3">
 									<property name="text">
-										<string>$125.00</string>
+										<string>$245.80</string>
 									</property>
 								</item>
 								<item row="0" column="4">
@@ -259,28 +672,33 @@
 								</item>
 								<item row="0" column="5">
 									<property name="text">
-										<string>May 25, 2024</string>
+										<string>May 20, 2024</string>
+									</property>
+								</item>
+								<item row="0" column="6">
+									<property name="text">
+										<string>👁 ✓ ✕</string>
 									</property>
 								</item>
 
 								<item row="1" column="0">
 									<property name="text">
-										<string>RCPT-002</string>
+										<string>REC-002</string>
 									</property>
 								</item>
 								<item row="1" column="1">
 									<property name="text">
-										<string>Truck 2</string>
+										<string>Mike Johnson</string>
 									</property>
 								</item>
 								<item row="1" column="2">
 									<property name="text">
-										<string>Mike Johnson</string>
+										<string>Truck 2</string>
 									</property>
 								</item>
 								<item row="1" column="3">
 									<property name="text">
-										<string>$89.50</string>
+										<string>$88.50</string>
 									</property>
 								</item>
 								<item row="1" column="4">
@@ -290,28 +708,33 @@
 								</item>
 								<item row="1" column="5">
 									<property name="text">
-										<string>May 24, 2024</string>
+										<string>May 19, 2024</string>
+									</property>
+								</item>
+								<item row="1" column="6">
+									<property name="text">
+										<string>👁 ✓ ✕</string>
 									</property>
 								</item>
 
 								<item row="2" column="0">
 									<property name="text">
-										<string>RCPT-003</string>
+										<string>REC-003</string>
 									</property>
 								</item>
 								<item row="2" column="1">
 									<property name="text">
-										<string>Truck 3</string>
+										<string>Sarah Davis</string>
 									</property>
 								</item>
 								<item row="2" column="2">
 									<property name="text">
-										<string>Sarah Davis</string>
+										<string>Truck 3</string>
 									</property>
 								</item>
 								<item row="2" column="3">
 									<property name="text">
-										<string>$250.00</string>
+										<string>$430.00</string>
 									</property>
 								</item>
 								<item row="2" column="4">
@@ -321,28 +744,33 @@
 								</item>
 								<item row="2" column="5">
 									<property name="text">
-										<string>May 23, 2024</string>
+										<string>May 18, 2024</string>
+									</property>
+								</item>
+								<item row="2" column="6">
+									<property name="text">
+										<string>👁 ✓ ✕</string>
 									</property>
 								</item>
 
 								<item row="3" column="0">
 									<property name="text">
-										<string>RCPT-004</string>
+										<string>REC-004</string>
 									</property>
 								</item>
 								<item row="3" column="1">
 									<property name="text">
-										<string>Truck 1</string>
+										<string>John Smith</string>
 									</property>
 								</item>
 								<item row="3" column="2">
 									<property name="text">
-										<string>John Smith</string>
+										<string>Truck 1</string>
 									</property>
 								</item>
 								<item row="3" column="3">
 									<property name="text">
-										<string>$175.75</string>
+										<string>$64.25</string>
 									</property>
 								</item>
 								<item row="3" column="4">
@@ -352,28 +780,33 @@
 								</item>
 								<item row="3" column="5">
 									<property name="text">
-										<string>May 22, 2024</string>
+										<string>May 17, 2024</string>
+									</property>
+								</item>
+								<item row="3" column="6">
+									<property name="text">
+										<string>👁 ✓ ✕</string>
 									</property>
 								</item>
 
 								<item row="4" column="0">
 									<property name="text">
-										<string>RCPT-005</string>
+										<string>REC-005</string>
 									</property>
 								</item>
 								<item row="4" column="1">
 									<property name="text">
-										<string>Truck 4</string>
+										<string>Mike Johnson</string>
 									</property>
 								</item>
 								<item row="4" column="2">
 									<property name="text">
-										<string>Robert Brown</string>
+										<string>Truck 2</string>
 									</property>
 								</item>
 								<item row="4" column="3">
 									<property name="text">
-										<string>$95.25</string>
+										<string>$152.75</string>
 									</property>
 								</item>
 								<item row="4" column="4">
@@ -383,118 +816,119 @@
 								</item>
 								<item row="4" column="5">
 									<property name="text">
-										<string>May 21, 2024</string>
+										<string>May 16, 2024</string>
+									</property>
+								</item>
+								<item row="4" column="6">
+									<property name="text">
+										<string>👁 ✓ ✕</string>
 									</property>
 								</item>
 
-								<item row="5" column="0">
-									<property name="text">
-										<string>RCPT-006</string>
-									</property>
-								</item>
-								<item row="5" column="1">
-									<property name="text">
-										<string>Truck 2</string>
-									</property>
-								</item>
-								<item row="5" column="2">
-									<property name="text">
-										<string>Mike Johnson</string>
-									</property>
-								</item>
-								<item row="5" column="3">
-									<property name="text">
-										<string>$310.00</string>
-									</property>
-								</item>
-								<item row="5" column="4">
-									<property name="text">
-										<string>Approved</string>
-									</property>
-								</item>
-								<item row="5" column="5">
-									<property name="text">
-										<string>May 20, 2024</string>
-									</property>
-								</item>
 							</widget>
+
 						</item>
+
+						<!-- PAGINATION -->
 
 						<item>
-							<layout class="QHBoxLayout" name="paginationLayout">
-								<property name="spacing">
-									<number>8</number>
-								</property>
 
-								<item>
-									<widget class="QLabel" name="paginationLabel">
-										<property name="text">
-											<string>Showing 1 to 6 of 18 receipts</string>
-										</property>
-										<property name="styleSheet">
-											<string notr="true">background: transparent; border: none; color: #94A3B8; font-size: 12px;</string>
-										</property>
-									</widget>
-								</item>
+							<widget class="QWidget" name="paginationContainer" native="true">
 
-								<item>
-									<spacer name="paginationSpacer">
-										<property name="orientation">
-											<enum>Qt::Horizontal</enum>
-										</property>
-									</spacer>
-								</item>
+								<layout class="QHBoxLayout" name="paginationLayout">
 
-								<item>
-									<widget class="QPushButton" name="prevPageButton">
-										<property name="text">
-											<string>← Prev</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QPushButton" name="page1Button">
-										<property name="text">
-											<string>1</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QPushButton" name="page2Button">
-										<property name="text">
-											<string>2</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QPushButton" name="page3Button">
-										<property name="text">
-											<string>3</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QPushButton" name="nextPageButton">
-										<property name="text">
-											<string>Next →</string>
-										</property>
-									</widget>
-								</item>
-							</layout>
+									<property name="spacing">
+										<number>8</number>
+									</property>
+
+									<item>
+
+										<widget class="QLabel" name="paginationLabel">
+
+											<property name="text">
+												<string>Showing 1 to 5 of 145 receipts</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<spacer name="paginationSpacer">
+
+											<property name="orientation">
+												<enum>Qt::Horizontal</enum>
+											</property>
+
+										</spacer>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="pageButton">
+
+											<property name="text">
+												<string>&lt;</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="activePageButton">
+
+											<property name="text">
+												<string>1</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="pageButton2">
+
+											<property name="text">
+												<string>2</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+									<item>
+
+										<widget class="QPushButton" name="pageButton3">
+
+											<property name="text">
+												<string>&gt;</string>
+											</property>
+
+										</widget>
+
+									</item>
+
+								</layout>
+
+							</widget>
+
 						</item>
+
 					</layout>
+
 				</widget>
+
 			</item>
 
-			<item>
-				<spacer name="verticalSpacer">
-					<property name="orientation">
-						<enum>Qt::Vertical</enum>
-					</property>
-				</spacer>
-			</item>
 		</layout>
+
 	</widget>
+
 	<resources/>
 	<connections/>
 </ui>

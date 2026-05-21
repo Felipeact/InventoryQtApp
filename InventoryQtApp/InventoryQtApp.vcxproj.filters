@@ -278,40 +278,40 @@
       <Filter>Form Files\Pages</Filter>
     </QtUic>
     <QtUic Include="AddEditTemplateDialog.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Modals</Filter>
     </QtUic>
     <QtUic Include="AddEditTruckDialog.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
-    <QtUic Include="AssignmentsPage.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Modals</Filter>
     </QtUic>
     <QtUic Include="AssignTemplateDialog.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Modals</Filter>
+    </QtUic>
+    <QtUic Include="AssignmentsPage.ui">
+      <Filter>Form Files\Pages</Filter>
     </QtUic>
     <QtUic Include="LowStockAlertsPage.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Pages</Filter>
     </QtUic>
     <QtUic Include="MyTruckStockPage.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Pages</Filter>
     </QtUic>
     <QtUic Include="ReceiptsPage.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Pages</Filter>
     </QtUic>
     <QtUic Include="StockTemplatesPage.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Pages</Filter>
     </QtUic>
     <QtUic Include="TrucksPage.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Pages</Filter>
     </QtUic>
     <QtUic Include="TruckStockDashboardPage.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Pages</Filter>
     </QtUic>
     <QtUic Include="UploadReceiptDialog.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Modals</Filter>
     </QtUic>
     <QtUic Include="UseTruckItemDialog.ui">
-      <Filter>Form Files</Filter>
+      <Filter>Form Files\Modals</Filter>
     </QtUic>
   </ItemGroup>
 </Project>
