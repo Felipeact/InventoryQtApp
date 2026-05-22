@@ -7,6 +7,13 @@
 #include "ReportService.h"
 #include <AssetsPage.h>
 #include <ScanPage.h>
+#include <TruckStockDashboardPage.h>
+#include <TrucksPage.h>
+#include <StockTemplatesPage.h>
+#include <AssignmentsPage.h>
+#include <MyTruckStockPage.h>
+#include <LowStockAlertsPage.h>
+#include <ReceiptsPage.h>
 
 #include <QMainWindow>
 #include <vector>
@@ -58,6 +65,14 @@ private:
 	AssetsPage* assetsPage = nullptr;         // Assets management page
 	ScanPage* scanInPage = nullptr;
 	ScanPage* scanOutPage = nullptr;
+
+	TruckStockDashboardPage* truckStockDashboardPage = nullptr;
+	TrucksPage* trucksPage = nullptr;
+	StockTemplatesPage* stockTemplatesPage = nullptr;
+	AssignmentsPage* assignmentsPage = nullptr;
+	MyTruckStockPage* myTruckStockPage = nullptr;
+	LowStockAlertsPage* lowStockAlertsPage = nullptr;
+	ReceiptsPage* receiptsPage = nullptr;
 	
 
 	// Initialization methods

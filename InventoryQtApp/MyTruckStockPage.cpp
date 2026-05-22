@@ -1,11 +1,13 @@
 #include "MyTruckStockPage.h"
 
+#include <QComboBox>
+#include <QLineEdit>
+
 MyTruckStockPage::MyTruckStockPage(QWidget* parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
     setupConnections();
-    loadTrucks();
     loadStock();
 }
 
@@ -15,19 +17,18 @@ MyTruckStockPage::~MyTruckStockPage()
 
 void MyTruckStockPage::setupConnections()
 {
-    connect(ui.truckSelector, QOverload<int>::of(&QComboBox::currentIndexChanged), 
-        this, &MyTruckStockPage::onTruckSelected);
-    connect(ui.searchInput, &QLineEdit::textChanged, this, &MyTruckStockPage::onSearchChanged);
+    connect(ui.searchInput, &QLineEdit::textChanged,
+        this, &MyTruckStockPage::onSearchChanged);
 }
 
 void MyTruckStockPage::loadTrucks()
 {
-    // Load assigned trucks for current technician
+    // Not used anymore because the new UI has no truckSelector.
 }
 
 void MyTruckStockPage::loadStock()
 {
-    // Load stock items for selected truck
+    // Load stock items for current technician.
 }
 
 void MyTruckStockPage::refreshStock()
@@ -37,15 +38,17 @@ void MyTruckStockPage::refreshStock()
 
 void MyTruckStockPage::onTruckSelected(int index)
 {
+    Q_UNUSED(index);
     loadStock();
 }
 
 void MyTruckStockPage::onSearchChanged(const QString& text)
 {
-    // Filter stock items based on search text
+    Q_UNUSED(text);
+    // Filter stock items later.
 }
 
 void MyTruckStockPage::onUseItemClicked()
 {
-    // Open use item dialog
+    // Open UseTruckItemDialog later.
 }

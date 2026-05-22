@@ -20,6 +20,6 @@ private slots:
 private:
     Ui::LowStockAlertsPageClass ui;
 
-    void setupConnections();
+    //void setupConnections();
     void loadAlerts();
 };

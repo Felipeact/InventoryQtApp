@@ -14,7 +14,7 @@ ReceiptsPage::~ReceiptsPage()
 
 void ReceiptsPage::setupConnections()
 {
-    connect(ui.uploadReceiptButton, &QPushButton::clicked, this, &ReceiptsPage::onUploadReceiptClicked);
+    connect(ui.uploadButton, &QPushButton::clicked, this, &ReceiptsPage::onUploadReceiptClicked);
     connect(ui.searchInput, &QLineEdit::textChanged, this, &ReceiptsPage::onSearchChanged);
 }
 

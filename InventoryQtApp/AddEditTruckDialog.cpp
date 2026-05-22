@@ -41,12 +41,12 @@ QString AddEditTruckDialog::getLicensePlate() const
 
 QString AddEditTruckDialog::getTechnician() const
 {
-    return ui.technicianCombo->currentText();
+    return ui.technicianComboBox->currentText();
 }
 
 QString AddEditTruckDialog::getStatus() const
 {
-    return ui.statusCombo->currentText();
+    return ui.statusComboBox->currentText();
 }
 
 QString AddEditTruckDialog::getNotes() const

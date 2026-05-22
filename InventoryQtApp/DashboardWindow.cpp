@@ -75,6 +75,27 @@ void DashboardWindow::setupPages()
         dashboardPage->refreshDashboard();
         itemsPage->refreshProducts();
         });
+
+    truckStockDashboardPage = new TruckStockDashboardPage(this);
+    ui.mainStack->addWidget(truckStockDashboardPage);
+
+    trucksPage = new TrucksPage(this);
+    ui.mainStack->addWidget(trucksPage);
+
+    stockTemplatesPage = new StockTemplatesPage(this);
+    ui.mainStack->addWidget(stockTemplatesPage);
+
+    assignmentsPage = new AssignmentsPage(this);
+    ui.mainStack->addWidget(assignmentsPage);
+
+    myTruckStockPage = new MyTruckStockPage(this);
+    ui.mainStack->addWidget(myTruckStockPage);
+
+    lowStockAlertsPage = new LowStockAlertsPage(this);
+    ui.mainStack->addWidget(lowStockAlertsPage);
+
+    receiptsPage = new ReceiptsPage(this);
+    ui.mainStack->addWidget(receiptsPage);
 }
 
 void DashboardWindow::setupSidebar()
@@ -104,6 +125,34 @@ void DashboardWindow::setupSidebar()
 
     connect(sidebar, &SidebarWidget::scanOutClicked, this, [this]() {
         ui.mainStack->setCurrentWidget(scanOutPage);
+        });
+
+    connect(sidebar, &SidebarWidget::truckStockDashboardClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(truckStockDashboardPage);
+        });
+
+    connect(sidebar, &SidebarWidget::trucksClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(trucksPage);
+        });
+
+    connect(sidebar, &SidebarWidget::templatesClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(stockTemplatesPage);
+        });
+
+    connect(sidebar, &SidebarWidget::assignmentsClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(assignmentsPage);
+        });
+
+    connect(sidebar, &SidebarWidget::myTruckStockClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(myTruckStockPage);
+        });
+
+    connect(sidebar, &SidebarWidget::lowStockAlertsClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(lowStockAlertsPage);
+        });
+
+    connect(sidebar, &SidebarWidget::receiptsClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(receiptsPage);
         });
 
     connect(sidebar, &SidebarWidget::logoutClicked, this, [this]() {

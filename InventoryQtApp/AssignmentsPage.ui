@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
 	<class>AssignmentsPageClass</class>
-
 	<widget class="QWidget" name="AssignmentsPageClass">
 		<property name="geometry">
 			<rect>
@@ -11,7 +10,6 @@
 				<height>820</height>
 			</rect>
 		</property>
-
 		<property name="windowTitle">
 			<string>Assignments</string>
 		</property>
@@ -221,7 +219,7 @@
 									<number>6</number>
 								</property>
 								<property name="rowCount">
-									<number>4</number>
+									<number>0</number>
 								</property>
 								<property name="selectionBehavior">
 									<enum>QAbstractItemView::SelectRows</enum>
@@ -263,130 +261,6 @@
 										<string>Actions</string>
 									</property>
 								</column>
-
-								<item row="0" column="0">
-									<property name="text">
-										<string>Truck 1</string>
-									</property>
-								</item>
-								<item row="0" column="1">
-									<property name="text">
-										<string>HVAC Basic</string>
-									</property>
-								</item>
-								<item row="0" column="2">
-									<property name="text">
-										<string>May 20, 2024</string>
-									</property>
-								</item>
-								<item row="0" column="3">
-									<property name="text">
-										<string>Admin User</string>
-									</property>
-								</item>
-								<item row="0" column="4">
-									<property name="text">
-										<string>Active</string>
-									</property>
-								</item>
-								<item row="0" column="5">
-									<property name="text">
-										<string>👁   ✎   🗑</string>
-									</property>
-								</item>
-
-								<item row="1" column="0">
-									<property name="text">
-										<string>Truck 2</string>
-									</property>
-								</item>
-								<item row="1" column="1">
-									<property name="text">
-										<string>Electrical Standard</string>
-									</property>
-								</item>
-								<item row="1" column="2">
-									<property name="text">
-										<string>May 18, 2024</string>
-									</property>
-								</item>
-								<item row="1" column="3">
-									<property name="text">
-										<string>Admin User</string>
-									</property>
-								</item>
-								<item row="1" column="4">
-									<property name="text">
-										<string>Active</string>
-									</property>
-								</item>
-								<item row="1" column="5">
-									<property name="text">
-										<string>👁   ✎   🗑</string>
-									</property>
-								</item>
-
-								<item row="2" column="0">
-									<property name="text">
-										<string>Truck 3</string>
-									</property>
-								</item>
-								<item row="2" column="1">
-									<property name="text">
-										<string>Plumbing Basic</string>
-									</property>
-								</item>
-								<item row="2" column="2">
-									<property name="text">
-										<string>May 15, 2024</string>
-									</property>
-								</item>
-								<item row="2" column="3">
-									<property name="text">
-										<string>Admin User</string>
-									</property>
-								</item>
-								<item row="2" column="4">
-									<property name="text">
-										<string>Active</string>
-									</property>
-								</item>
-								<item row="2" column="5">
-									<property name="text">
-										<string>👁   ✎   🗑</string>
-									</property>
-								</item>
-
-								<item row="3" column="0">
-									<property name="text">
-										<string>Truck 4</string>
-									</property>
-								</item>
-								<item row="3" column="1">
-									<property name="text">
-										<string>Full Stock</string>
-									</property>
-								</item>
-								<item row="3" column="2">
-									<property name="text">
-										<string>May 10, 2024</string>
-									</property>
-								</item>
-								<item row="3" column="3">
-									<property name="text">
-										<string>Admin User</string>
-									</property>
-								</item>
-								<item row="3" column="4">
-									<property name="text">
-										<string>Inactive</string>
-									</property>
-								</item>
-								<item row="3" column="5">
-									<property name="text">
-										<string>👁   ✎   🗑</string>
-									</property>
-								</item>
 							</widget>
 						</item>
 
@@ -462,7 +336,6 @@
 			</item>
 		</layout>
 	</widget>
-
 	<resources/>
 	<connections/>
 </ui>

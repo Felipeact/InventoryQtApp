@@ -1,575 +1,957 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>TruckStockDashboardPageClass</class>
- <widget class="QWidget" name="TruckStockDashboardPageClass">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>1280</width>
-    <height>820</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Truck Stock Dashboard</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">
-QWidget#TruckStockDashboardPageClass {
-    background-color: #050B14;
-    color: #FFFFFF;
-    font-family: "Segoe UI";
-}
+	<class>TruckStockDashboardPageClass</class>
+	<widget class="QWidget" name="TruckStockDashboardPageClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>1280</width>
+				<height>820</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Truck Stock Dashboard</string>
+		</property>
+		<property name="styleSheet">
+			<string notr="true">
+				QWidget#TruckStockDashboardPageClass {
+				background-color: #050B14;
+				color: #FFFFFF;
+				font-family: "Segoe UI";
+				}
 
-QLabel {
-    background: transparent;
-    color: #FFFFFF;
-}
+				QLabel {
+				background: transparent;
+				color: #FFFFFF;
+				}
 
-QLabel#pageTitle {
-    font-size: 24px;
-    font-weight: 800;
-}
+				QLabel#pageTitle {
+				font-size: 24px;
+				font-weight: 800;
+				}
 
-QLabel#subtitleLabel {
-    font-size: 12px;
-    color: #94A3B8;
-}
+				QLabel#subtitleLabel {
+				font-size: 12px;
+				color: #94A3B8;
+				}
 
-QWidget#metricCard1,
-QWidget#metricCard2,
-QWidget#metricCard3,
-QWidget#metricCard4,
-QWidget#itemSummaryCard,
-QWidget#assetSummaryCard,
-QWidget#recentItemsCard,
-QWidget#lowStockCard {
-    background: qlineargradient(
-        x1:0, y1:0, x2:1, y2:1,
-        stop:0 #0B1626,
-        stop:1 #091322
-    );
-    border: 1px solid #1E2F46;
-    border-radius: 12px;
-}
+				QWidget#metricCard1,
+				QWidget#metricCard2,
+				QWidget#metricCard3,
+				QWidget#metricCard4,
+				QWidget#itemSummaryCard,
+				QWidget#assetSummaryCard,
+				QWidget#recentItemsCard,
+				QWidget#lowStockCard {
+				background: qlineargradient(
+				x1:0, y1:0, x2:1, y2:1,
+				stop:0 #0B1626,
+				stop:1 #091322
+				);
+				border: 1px solid #1E2F46;
+				border-radius: 12px;
+				}
 
-QLabel#metricTitle1,
-QLabel#metricTitle2,
-QLabel#metricTitle3,
-QLabel#metricTitle4 {
-    font-size: 12px;
-    color: #CBD5E1;
-}
+				QLabel#metricTitle1,
+				QLabel#metricTitle2,
+				QLabel#metricTitle3,
+				QLabel#metricTitle4 {
+				font-size: 12px;
+				color: #CBD5E1;
+				}
 
-QLabel#metricValue1,
-QLabel#metricValue2,
-QLabel#metricValue3,
-QLabel#metricValue4 {
-    font-size: 26px;
-    font-weight: 800;
-    color: #FFFFFF;
-}
+				QLabel#metricValue1,
+				QLabel#metricValue2,
+				QLabel#metricValue3,
+				QLabel#metricValue4 {
+				font-size: 26px;
+				font-weight: 800;
+				color: #FFFFFF;
+				}
 
-QLabel#positiveLabel1,
-QLabel#positiveLabel2,
-QLabel#positiveLabel3 {
-    font-size: 12px;
-    color: #22C55E;
-    font-weight: 700;
-}
+				QLabel#positiveLabel1,
+				QLabel#positiveLabel2,
+				QLabel#positiveLabel3 {
+				font-size: 12px;
+				color: #22C55E;
+				font-weight: 700;
+				}
 
-QLabel#negativeLabel1 {
-    font-size: 12px;
-    color: #EF4444;
-    font-weight: 700;
-}
+				QLabel#negativeLabel1 {
+				font-size: 12px;
+				color: #EF4444;
+				font-weight: 700;
+				}
 
-QLabel#cardTitle1,
-QLabel#cardTitle2,
-QLabel#cardTitle3,
-QLabel#cardTitle4 {
-    font-size: 16px;
-    font-weight: 800;
-}
+				QLabel#cardTitle1,
+				QLabel#cardTitle2,
+				QLabel#cardTitle3,
+				QLabel#cardTitle4 {
+				font-size: 16px;
+				font-weight: 800;
+				}
 
-QPushButton#viewAllItemsButton,
-QPushButton#viewAllLowStockButton {
-    background: transparent;
-    border: 1px solid #1D4ED8;
-    border-radius: 6px;
-    color: #3B82F6;
-    padding: 4px 10px;
-    font-size: 11px;
-    font-weight: 600;
-}
+				QPushButton#viewAllItemsButton,
+				QPushButton#viewAllLowStockButton {
+				background: transparent;
+				border: 1px solid #1D4ED8;
+				border-radius: 6px;
+				color: #3B82F6;
+				padding: 4px 10px;
+				font-size: 11px;
+				font-weight: 600;
+				}
 
-QPushButton#viewAllItemsButton:hover,
-QPushButton#viewAllLowStockButton:hover {
-    background-color: #102A5C;
-}
+				QPushButton#viewAllItemsButton:hover,
+				QPushButton#viewAllLowStockButton:hover {
+				background-color: #102A5C;
+				}
 
-QTableWidget {
-    background-color: transparent;
-    border: none;
-    color: #E5EEF8;
-    gridline-color: transparent;
-    outline: none;
-    font-size: 12px;
-}
+				QTableWidget {
+				background-color: transparent;
+				border: none;
+				color: #E5EEF8;
+				gridline-color: transparent;
+				outline: none;
+				font-size: 12px;
+				}
 
-QHeaderView::section {
-    background-color: #0C1728;
-    color: #94A3B8;
-    border: none;
-    border-bottom: 1px solid #1F2E45;
-    padding-left: 10px;
-    height: 34px;
-    font-size: 11px;
-    font-weight: 700;
-}
+				QHeaderView::section {
+				background-color: #0C1728;
+				color: #94A3B8;
+				border: none;
+				border-bottom: 1px solid #1F2E45;
+				padding-left: 10px;
+				height: 34px;
+				font-size: 11px;
+				font-weight: 700;
+				}
 
-QTableWidget::item {
-    border-bottom: 1px solid #132238;
-    padding-left: 10px;
-    height: 34px;
-}
+				QTableWidget::item {
+				border-bottom: 1px solid #132238;
+				padding-left: 10px;
+				height: 34px;
+				}
 
-QTableWidget::item:selected {
-    background-color: #132238;
-}
+				QTableWidget::item:selected {
+				background-color: #132238;
+				}
 
-QWidget#blueIconBox,
-QWidget#blueIconBox2 {
-    background-color: #123B83;
-    border-radius: 10px;
-}
+				QWidget#blueIconBox,
+				QWidget#blueIconBox2 {
+				background-color: #123B83;
+				border-radius: 10px;
+				}
 
-QWidget#greenIconBox {
-    background-color: #14532D;
-    border-radius: 10px;
-}
+				QWidget#greenIconBox {
+				background-color: #14532D;
+				border-radius: 10px;
+				}
 
-QWidget#orangeIconBox {
-    background-color: #7C3A00;
-    border-radius: 10px;
-}
+				QWidget#orangeIconBox {
+				background-color: #7C3A00;
+				border-radius: 10px;
+				}
 
-QLabel#blueIconLabel,
-QLabel#blueIconLabel2,
-QLabel#greenIconLabel,
-QLabel#orangeIconLabel {
-    font-size: 22px;
-    font-weight: 800;
-}
+				QLabel#blueIconLabel,
+				QLabel#blueIconLabel2,
+				QLabel#greenIconLabel,
+				QLabel#orangeIconLabel {
+				font-size: 22px;
+				font-weight: 800;
+				}
 
-QLabel#blueIconLabel,
-QLabel#blueIconLabel2 {
-    color: #3B82F6;
-}
+				QLabel#blueIconLabel,
+				QLabel#blueIconLabel2 {
+				color: #3B82F6;
+				}
 
-QLabel#greenIconLabel {
-    color: #22C55E;
-}
+				QLabel#greenIconLabel {
+				color: #22C55E;
+				}
 
-QLabel#orangeIconLabel {
-    color: #F97316;
-}
+				QLabel#orangeIconLabel {
+				color: #F97316;
+				}
 
-QWidget#miniSummaryBox1,
-QWidget#miniSummaryBox2,
-QWidget#miniSummaryBox3,
-QWidget#miniSummaryBox4 {
-    background-color: #0A1525;
-    border: 1px solid #1A2A40;
-    border-radius: 8px;
-}
+				QWidget#miniSummaryBox1,
+				QWidget#miniSummaryBox2,
+				QWidget#miniSummaryBox3,
+				QWidget#miniSummaryBox4 {
+				background-color: #0A1525;
+				border: 1px solid #1A2A40;
+				border-radius: 8px;
+				}
 
-QLabel#summarySmallLabel1,
-QLabel#summarySmallLabel2,
-QLabel#summarySmallLabel3,
-QLabel#summarySmallLabel4 {
-    color: #CBD5E1;
-    font-size: 12px;
-}
+				QLabel#summarySmallLabel1,
+				QLabel#summarySmallLabel2,
+				QLabel#summarySmallLabel3,
+				QLabel#summarySmallLabel4 {
+				color: #CBD5E1;
+				font-size: 12px;
+				}
 
-QLabel#summaryValue1,
-QLabel#summaryValue2,
-QLabel#summaryValue3,
-QLabel#summaryValue4 {
-    color: #FFFFFF;
-    font-size: 24px;
-    font-weight: 800;
-}
+				QLabel#summaryValue1,
+				QLabel#summaryValue2,
+				QLabel#summaryValue3,
+				QLabel#summaryValue4 {
+				color: #FFFFFF;
+				font-size: 24px;
+				font-weight: 800;
+				}
 
-QLabel#summaryPositive1,
-QLabel#summaryPositive2 {
-    color: #22C55E;
-    font-size: 11px;
-    font-weight: 700;
-}
+				QLabel#summaryPositive1,
+				QLabel#summaryPositive2 {
+				color: #22C55E;
+				font-size: 11px;
+				font-weight: 700;
+				}
 
-QLabel#summaryNegative1,
-QLabel#summaryNegative2 {
-    color: #EF4444;
-    font-size: 11px;
-    font-weight: 700;
-}
+				QLabel#summaryNegative1,
+				QLabel#summaryNegative2 {
+				color: #EF4444;
+				font-size: 11px;
+				font-weight: 700;
+				}
 
-QLabel#blueSparkline,
-QLabel#orangeSparkline,
-QLabel#greenSparkline,
-QLabel#redSparkline {
-    font-size: 18px;
-    font-weight: 700;
-}
+				QLabel#blueSparkline,
+				QLabel#orangeSparkline,
+				QLabel#greenSparkline,
+				QLabel#redSparkline {
+				font-size: 18px;
+				font-weight: 700;
+				}
 
-QLabel#blueSparkline {
-    color: #3B82F6;
-}
+				QLabel#blueSparkline {
+				color: #3B82F6;
+				}
 
-QLabel#orangeSparkline {
-    color: #F97316;
-}
+				QLabel#orangeSparkline {
+				color: #F97316;
+				}
 
-QLabel#greenSparkline {
-    color: #22C55E;
-}
+				QLabel#greenSparkline {
+				color: #22C55E;
+				}
 
-QLabel#redSparkline {
-    color: #EF4444;
-}
-   </string>
-  </property>
+				QLabel#redSparkline {
+				color: #EF4444;
+				}
+			</string>
+		</property>
 
-  <layout class="QVBoxLayout" name="rootLayout">
-   <property name="leftMargin"><number>18</number></property>
-   <property name="topMargin"><number>18</number></property>
-   <property name="rightMargin"><number>18</number></property>
-   <property name="bottomMargin"><number>18</number></property>
-   <property name="spacing"><number>16</number></property>
+		<layout class="QVBoxLayout" name="rootLayout">
+			<property name="leftMargin">
+				<number>18</number>
+			</property>
+			<property name="topMargin">
+				<number>18</number>
+			</property>
+			<property name="rightMargin">
+				<number>18</number>
+			</property>
+			<property name="bottomMargin">
+				<number>18</number>
+			</property>
+			<property name="spacing">
+				<number>16</number>
+			</property>
 
-   <item>
-    <layout class="QVBoxLayout" name="titleLayout">
-     <property name="spacing"><number>2</number></property>
-     <item>
-      <widget class="QLabel" name="pageTitle">
-       <property name="text"><string>Dashboard</string></property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="subtitleLabel">
-       <property name="text"><string>Welcome back to Truck Stock Management</string></property>
-      </widget>
-     </item>
-    </layout>
-   </item>
+			<item>
+				<layout class="QVBoxLayout" name="titleLayout">
+					<property name="spacing">
+						<number>2</number>
+					</property>
+					<item>
+						<widget class="QLabel" name="pageTitle">
+							<property name="text">
+								<string>Dashboard</string>
+							</property>
+						</widget>
+					</item>
+					<item>
+						<widget class="QLabel" name="subtitleLabel">
+							<property name="text">
+								<string>Welcome back to Truck Stock Management</string>
+							</property>
+						</widget>
+					</item>
+				</layout>
+			</item>
 
-   <item>
-    <layout class="QHBoxLayout" name="metricsLayout">
-     <property name="spacing"><number>14</number></property>
+			<item>
+				<layout class="QHBoxLayout" name="metricsLayout">
+					<property name="spacing">
+						<number>14</number>
+					</property>
 
-     <item>
-      <widget class="QWidget" name="metricCard1" native="true">
-       <property name="minimumSize"><size><width>0</width><height>118</height></size></property>
-       <layout class="QHBoxLayout" name="metricCardLayout1">
-        <property name="leftMargin"><number>18</number></property>
-        <property name="topMargin"><number>14</number></property>
-        <property name="rightMargin"><number>18</number></property>
-        <property name="bottomMargin"><number>14</number></property>
-        <item>
-         <layout class="QVBoxLayout" name="metricTextLayout1">
-          <item><widget class="QLabel" name="metricTitle1"><property name="text"><string>Total Items</string></property></widget></item>
-          <item><widget class="QLabel" name="metricValue1"><property name="text"><string>1,250</string></property></widget></item>
-          <item><widget class="QLabel" name="positiveLabel1"><property name="text"><string>+12.5% from last month</string></property></widget></item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QWidget" name="blueIconBox" native="true">
-          <property name="minimumSize"><size><width>54</width><height>54</height></size></property>
-          <property name="maximumSize"><size><width>54</width><height>54</height></size></property>
-          <layout class="QVBoxLayout" name="blueIconLayout">
-           <item><widget class="QLabel" name="blueIconLabel"><property name="alignment"><set>Qt::AlignCenter</set></property><property name="text"><string>▧</string></property></widget></item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
+					<item>
+						<widget class="QWidget" name="metricCard1" native="true">
+							<property name="minimumSize">
+								<size>
+									<width>0</width>
+									<height>118</height>
+								</size>
+							</property>
+							<layout class="QHBoxLayout" name="metricCardLayout1">
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+								<property name="topMargin">
+									<number>14</number>
+								</property>
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+								<property name="bottomMargin">
+									<number>14</number>
+								</property>
+								<item>
+									<layout class="QVBoxLayout" name="metricTextLayout1">
+										<item>
+											<widget class="QLabel" name="metricTitle1">
+												<property name="text">
+													<string>Total Items</string>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<widget class="QLabel" name="metricValue1">
+												<property name="text">
+													<string>1,250</string>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<widget class="QLabel" name="positiveLabel1">
+												<property name="text">
+													<string>+12.5% from last month</string>
+												</property>
+											</widget>
+										</item>
+									</layout>
+								</item>
+								<item>
+									<widget class="QWidget" name="blueIconBox" native="true">
+										<property name="minimumSize">
+											<size>
+												<width>54</width>
+												<height>54</height>
+											</size>
+										</property>
+										<property name="maximumSize">
+											<size>
+												<width>54</width>
+												<height>54</height>
+											</size>
+										</property>
+										<layout class="QVBoxLayout" name="blueIconLayout">
+											<item>
+												<widget class="QLabel" name="blueIconLabel">
+													<property name="alignment">
+														<set>Qt::AlignCenter</set>
+													</property>
+													<property name="text">
+														<string>▧</string>
+													</property>
+												</widget>
+											</item>
+										</layout>
+									</widget>
+								</item>
+							</layout>
+						</widget>
+					</item>
 
-     <item>
-      <widget class="QWidget" name="metricCard2" native="true">
-       <layout class="QHBoxLayout" name="metricCardLayout2">
-        <property name="leftMargin"><number>18</number></property>
-        <property name="topMargin"><number>14</number></property>
-        <property name="rightMargin"><number>18</number></property>
-        <property name="bottomMargin"><number>14</number></property>
-        <item>
-         <layout class="QVBoxLayout" name="metricTextLayout2">
-          <item><widget class="QLabel" name="metricTitle2"><property name="text"><string>Truck Templates</string></property></widget></item>
-          <item><widget class="QLabel" name="metricValue2"><property name="text"><string>320</string></property></widget></item>
-          <item><widget class="QLabel" name="positiveLabel2"><property name="text"><string>+8.2% from last month</string></property></widget></item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QWidget" name="blueIconBox2" native="true">
-          <property name="minimumSize"><size><width>54</width><height>54</height></size></property>
-          <property name="maximumSize"><size><width>54</width><height>54</height></size></property>
-          <layout class="QVBoxLayout" name="blueIconLayout2">
-           <item><widget class="QLabel" name="blueIconLabel2"><property name="alignment"><set>Qt::AlignCenter</set></property><property name="text"><string>▤</string></property></widget></item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
+					<item>
+						<widget class="QWidget" name="metricCard2" native="true">
+							<layout class="QHBoxLayout" name="metricCardLayout2">
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+								<property name="topMargin">
+									<number>14</number>
+								</property>
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+								<property name="bottomMargin">
+									<number>14</number>
+								</property>
+								<item>
+									<layout class="QVBoxLayout" name="metricTextLayout2">
+										<item>
+											<widget class="QLabel" name="metricTitle2">
+												<property name="text">
+													<string>Truck Templates</string>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<widget class="QLabel" name="metricValue2">
+												<property name="text">
+													<string>320</string>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<widget class="QLabel" name="positiveLabel2">
+												<property name="text">
+													<string>+8.2% from last month</string>
+												</property>
+											</widget>
+										</item>
+									</layout>
+								</item>
+								<item>
+									<widget class="QWidget" name="blueIconBox2" native="true">
+										<property name="minimumSize">
+											<size>
+												<width>54</width>
+												<height>54</height>
+											</size>
+										</property>
+										<property name="maximumSize">
+											<size>
+												<width>54</width>
+												<height>54</height>
+											</size>
+										</property>
+										<layout class="QVBoxLayout" name="blueIconLayout2">
+											<item>
+												<widget class="QLabel" name="blueIconLabel2">
+													<property name="alignment">
+														<set>Qt::AlignCenter</set>
+													</property>
+													<property name="text">
+														<string>▤</string>
+													</property>
+												</widget>
+											</item>
+										</layout>
+									</widget>
+								</item>
+							</layout>
+						</widget>
+					</item>
 
-     <item>
-      <widget class="QWidget" name="metricCard3" native="true">
-       <layout class="QHBoxLayout" name="metricCardLayout3">
-        <property name="leftMargin"><number>18</number></property>
-        <property name="topMargin"><number>14</number></property>
-        <property name="rightMargin"><number>18</number></property>
-        <property name="bottomMargin"><number>14</number></property>
-        <item>
-         <layout class="QVBoxLayout" name="metricTextLayout3">
-          <item><widget class="QLabel" name="metricTitle3"><property name="text"><string>Quantity In Hand</string></property></widget></item>
-          <item><widget class="QLabel" name="metricValue3"><property name="text"><string>2,450</string></property></widget></item>
-          <item><widget class="QLabel" name="positiveLabel3"><property name="text"><string>+15.7% from last month</string></property></widget></item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QWidget" name="greenIconBox" native="true">
-          <property name="minimumSize"><size><width>54</width><height>54</height></size></property>
-          <property name="maximumSize"><size><width>54</width><height>54</height></size></property>
-          <layout class="QVBoxLayout" name="greenIconLayout">
-           <item><widget class="QLabel" name="greenIconLabel"><property name="alignment"><set>Qt::AlignCenter</set></property><property name="text"><string>▣</string></property></widget></item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
+					<item>
+						<widget class="QWidget" name="metricCard3" native="true">
+							<layout class="QHBoxLayout" name="metricCardLayout3">
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+								<property name="topMargin">
+									<number>14</number>
+								</property>
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+								<property name="bottomMargin">
+									<number>14</number>
+								</property>
+								<item>
+									<layout class="QVBoxLayout" name="metricTextLayout3">
+										<item>
+											<widget class="QLabel" name="metricTitle3">
+												<property name="text">
+													<string>Quantity In Hand</string>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<widget class="QLabel" name="metricValue3">
+												<property name="text">
+													<string>2,450</string>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<widget class="QLabel" name="positiveLabel3">
+												<property name="text">
+													<string>+15.7% from last month</string>
+												</property>
+											</widget>
+										</item>
+									</layout>
+								</item>
+								<item>
+									<widget class="QWidget" name="greenIconBox" native="true">
+										<property name="minimumSize">
+											<size>
+												<width>54</width>
+												<height>54</height>
+											</size>
+										</property>
+										<property name="maximumSize">
+											<size>
+												<width>54</width>
+												<height>54</height>
+											</size>
+										</property>
+										<layout class="QVBoxLayout" name="greenIconLayout">
+											<item>
+												<widget class="QLabel" name="greenIconLabel">
+													<property name="alignment">
+														<set>Qt::AlignCenter</set>
+													</property>
+													<property name="text">
+														<string>▣</string>
+													</property>
+												</widget>
+											</item>
+										</layout>
+									</widget>
+								</item>
+							</layout>
+						</widget>
+					</item>
 
-     <item>
-      <widget class="QWidget" name="metricCard4" native="true">
-       <layout class="QHBoxLayout" name="metricCardLayout4">
-        <property name="leftMargin"><number>18</number></property>
-        <property name="topMargin"><number>14</number></property>
-        <property name="rightMargin"><number>18</number></property>
-        <property name="bottomMargin"><number>14</number></property>
-        <item>
-         <layout class="QVBoxLayout" name="metricTextLayout4">
-          <item><widget class="QLabel" name="metricTitle4"><property name="text"><string>To Be Received</string></property></widget></item>
-          <item><widget class="QLabel" name="metricValue4"><property name="text"><string>780</string></property></widget></item>
-          <item><widget class="QLabel" name="negativeLabel1"><property name="text"><string>-2.4% from last month</string></property></widget></item>
-         </layout>
-        </item>
-        <item>
-         <widget class="QWidget" name="orangeIconBox" native="true">
-          <property name="minimumSize"><size><width>54</width><height>54</height></size></property>
-          <property name="maximumSize"><size><width>54</width><height>54</height></size></property>
-          <layout class="QVBoxLayout" name="orangeIconLayout">
-           <item><widget class="QLabel" name="orangeIconLabel"><property name="alignment"><set>Qt::AlignCenter</set></property><property name="text"><string>▰</string></property></widget></item>
-          </layout>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
+					<item>
+						<widget class="QWidget" name="metricCard4" native="true">
+							<layout class="QHBoxLayout" name="metricCardLayout4">
+								<property name="leftMargin">
+									<number>18</number>
+								</property>
+								<property name="topMargin">
+									<number>14</number>
+								</property>
+								<property name="rightMargin">
+									<number>18</number>
+								</property>
+								<property name="bottomMargin">
+									<number>14</number>
+								</property>
+								<item>
+									<layout class="QVBoxLayout" name="metricTextLayout4">
+										<item>
+											<widget class="QLabel" name="metricTitle4">
+												<property name="text">
+													<string>To Be Received</string>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<widget class="QLabel" name="metricValue4">
+												<property name="text">
+													<string>780</string>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<widget class="QLabel" name="negativeLabel1">
+												<property name="text">
+													<string>-2.4% from last month</string>
+												</property>
+											</widget>
+										</item>
+									</layout>
+								</item>
+								<item>
+									<widget class="QWidget" name="orangeIconBox" native="true">
+										<property name="minimumSize">
+											<size>
+												<width>54</width>
+												<height>54</height>
+											</size>
+										</property>
+										<property name="maximumSize">
+											<size>
+												<width>54</width>
+												<height>54</height>
+											</size>
+										</property>
+										<layout class="QVBoxLayout" name="orangeIconLayout">
+											<item>
+												<widget class="QLabel" name="orangeIconLabel">
+													<property name="alignment">
+														<set>Qt::AlignCenter</set>
+													</property>
+													<property name="text">
+														<string>▰</string>
+													</property>
+												</widget>
+											</item>
+										</layout>
+									</widget>
+								</item>
+							</layout>
+						</widget>
+					</item>
+				</layout>
+			</item>
 
-   <item>
-    <layout class="QHBoxLayout" name="summaryLayout">
-     <property name="spacing"><number>14</number></property>
+			<item>
+				<layout class="QHBoxLayout" name="summaryLayout">
+					<property name="spacing">
+						<number>14</number>
+					</property>
 
-     <item>
-      <widget class="QWidget" name="itemSummaryCard" native="true">
-       <layout class="QVBoxLayout" name="itemSummaryLayout">
-        <property name="leftMargin"><number>16</number></property>
-        <property name="topMargin"><number>14</number></property>
-        <property name="rightMargin"><number>16</number></property>
-        <property name="bottomMargin"><number>14</number></property>
-        <item><widget class="QLabel" name="cardTitle1"><property name="text"><string>Truck Stock Summary</string></property></widget></item>
-        <item>
-         <layout class="QHBoxLayout" name="itemSummaryInnerLayout">
-          <item>
-           <widget class="QWidget" name="miniSummaryBox1" native="true">
-            <layout class="QVBoxLayout" name="miniSummaryLayout1">
-             <item><widget class="QLabel" name="summarySmallLabel1"><property name="text"><string>Quantity In Hand</string></property></widget></item>
-             <item><widget class="QLabel" name="summaryValue1"><property name="text"><string>2,450</string></property></widget></item>
-             <item><widget class="QLabel" name="summaryPositive1"><property name="text"><string>+15.7%</string></property></widget></item>
-             <item><widget class="QLabel" name="blueSparkline"><property name="text"><string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string></property></widget></item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="miniSummaryBox2" native="true">
-            <layout class="QVBoxLayout" name="miniSummaryLayout2">
-             <item><widget class="QLabel" name="summarySmallLabel2"><property name="text"><string>To Be Received</string></property></widget></item>
-             <item><widget class="QLabel" name="summaryValue2"><property name="text"><string>780</string></property></widget></item>
-             <item><widget class="QLabel" name="summaryNegative1"><property name="text"><string>-2.4%</string></property></widget></item>
-             <item><widget class="QLabel" name="orangeSparkline"><property name="text"><string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string></property></widget></item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
+					<item>
+						<widget class="QWidget" name="itemSummaryCard" native="true">
+							<layout class="QVBoxLayout" name="itemSummaryLayout">
+								<property name="leftMargin">
+									<number>16</number>
+								</property>
+								<property name="topMargin">
+									<number>14</number>
+								</property>
+								<property name="rightMargin">
+									<number>16</number>
+								</property>
+								<property name="bottomMargin">
+									<number>14</number>
+								</property>
+								<item>
+									<widget class="QLabel" name="cardTitle1">
+										<property name="text">
+											<string>Truck Stock Summary</string>
+										</property>
+									</widget>
+								</item>
+								<item>
+									<layout class="QHBoxLayout" name="itemSummaryInnerLayout">
+										<item>
+											<widget class="QWidget" name="miniSummaryBox1" native="true">
+												<layout class="QVBoxLayout" name="miniSummaryLayout1">
+													<item>
+														<widget class="QLabel" name="summarySmallLabel1">
+															<property name="text">
+																<string>Quantity In Hand</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="summaryValue1">
+															<property name="text">
+																<string>2,450</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="summaryPositive1">
+															<property name="text">
+																<string>+15.7%</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="blueSparkline">
+															<property name="text">
+																<string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
+															</property>
+														</widget>
+													</item>
+												</layout>
+											</widget>
+										</item>
+										<item>
+											<widget class="QWidget" name="miniSummaryBox2" native="true">
+												<layout class="QVBoxLayout" name="miniSummaryLayout2">
+													<item>
+														<widget class="QLabel" name="summarySmallLabel2">
+															<property name="text">
+																<string>To Be Received</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="summaryValue2">
+															<property name="text">
+																<string>780</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="summaryNegative1">
+															<property name="text">
+																<string>-2.4%</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="orangeSparkline">
+															<property name="text">
+																<string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
+															</property>
+														</widget>
+													</item>
+												</layout>
+											</widget>
+										</item>
+									</layout>
+								</item>
+							</layout>
+						</widget>
+					</item>
 
-     <item>
-      <widget class="QWidget" name="assetSummaryCard" native="true">
-       <layout class="QVBoxLayout" name="assetSummaryLayout">
-        <property name="leftMargin"><number>16</number></property>
-        <property name="topMargin"><number>14</number></property>
-        <property name="rightMargin"><number>16</number></property>
-        <property name="bottomMargin"><number>14</number></property>
-        <item><widget class="QLabel" name="cardTitle2"><property name="text"><string>Low Stock Summary</string></property></widget></item>
-        <item>
-         <layout class="QHBoxLayout" name="assetSummaryInnerLayout">
-          <item>
-           <widget class="QWidget" name="miniSummaryBox3" native="true">
-            <layout class="QVBoxLayout" name="miniSummaryLayout3">
-             <item><widget class="QLabel" name="summarySmallLabel3"><property name="text"><string>OK Items</string></property></widget></item>
-             <item><widget class="QLabel" name="summaryValue3"><property name="text"><string>200</string></property></widget></item>
-             <item><widget class="QLabel" name="summaryPositive2"><property name="text"><string>+10.3%</string></property></widget></item>
-             <item><widget class="QLabel" name="greenSparkline"><property name="text"><string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string></property></widget></item>
-            </layout>
-           </widget>
-          </item>
-          <item>
-           <widget class="QWidget" name="miniSummaryBox4" native="true">
-            <layout class="QVBoxLayout" name="miniSummaryLayout4">
-             <item><widget class="QLabel" name="summarySmallLabel4"><property name="text"><string>Low Items</string></property></widget></item>
-             <item><widget class="QLabel" name="summaryValue4"><property name="text"><string>120</string></property></widget></item>
-             <item><widget class="QLabel" name="summaryNegative2"><property name="text"><string>-6.1%</string></property></widget></item>
-             <item><widget class="QLabel" name="redSparkline"><property name="text"><string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string></property></widget></item>
-            </layout>
-           </widget>
-          </item>
-         </layout>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
+					<item>
+						<widget class="QWidget" name="assetSummaryCard" native="true">
+							<layout class="QVBoxLayout" name="assetSummaryLayout">
+								<property name="leftMargin">
+									<number>16</number>
+								</property>
+								<property name="topMargin">
+									<number>14</number>
+								</property>
+								<property name="rightMargin">
+									<number>16</number>
+								</property>
+								<property name="bottomMargin">
+									<number>14</number>
+								</property>
+								<item>
+									<widget class="QLabel" name="cardTitle2">
+										<property name="text">
+											<string>Low Stock Summary</string>
+										</property>
+									</widget>
+								</item>
+								<item>
+									<layout class="QHBoxLayout" name="assetSummaryInnerLayout">
+										<item>
+											<widget class="QWidget" name="miniSummaryBox3" native="true">
+												<layout class="QVBoxLayout" name="miniSummaryLayout3">
+													<item>
+														<widget class="QLabel" name="summarySmallLabel3">
+															<property name="text">
+																<string>OK Items</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="summaryValue3">
+															<property name="text">
+																<string>200</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="summaryPositive2">
+															<property name="text">
+																<string>+10.3%</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="greenSparkline">
+															<property name="text">
+																<string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
+															</property>
+														</widget>
+													</item>
+												</layout>
+											</widget>
+										</item>
+										<item>
+											<widget class="QWidget" name="miniSummaryBox4" native="true">
+												<layout class="QVBoxLayout" name="miniSummaryLayout4">
+													<item>
+														<widget class="QLabel" name="summarySmallLabel4">
+															<property name="text">
+																<string>Low Items</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="summaryValue4">
+															<property name="text">
+																<string>120</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="summaryNegative2">
+															<property name="text">
+																<string>-6.1%</string>
+															</property>
+														</widget>
+													</item>
+													<item>
+														<widget class="QLabel" name="redSparkline">
+															<property name="text">
+																<string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
+															</property>
+														</widget>
+													</item>
+												</layout>
+											</widget>
+										</item>
+									</layout>
+								</item>
+							</layout>
+						</widget>
+					</item>
+				</layout>
+			</item>
 
-   <item>
-    <layout class="QHBoxLayout" name="tablesLayout">
-     <property name="spacing"><number>14</number></property>
+			<item>
+				<layout class="QHBoxLayout" name="tablesLayout">
+					<property name="spacing">
+						<number>14</number>
+					</property>
 
-     <item>
-      <widget class="QWidget" name="recentItemsCard" native="true">
-       <layout class="QVBoxLayout" name="recentItemsLayout">
-        <property name="leftMargin"><number>14</number></property>
-        <property name="topMargin"><number>12</number></property>
-        <property name="rightMargin"><number>14</number></property>
-        <property name="bottomMargin"><number>12</number></property>
+					<item>
+						<widget class="QWidget" name="recentItemsCard" native="true">
+							<layout class="QVBoxLayout" name="recentItemsLayout">
+								<property name="leftMargin">
+									<number>14</number>
+								</property>
+								<property name="topMargin">
+									<number>12</number>
+								</property>
+								<property name="rightMargin">
+									<number>14</number>
+								</property>
+								<property name="bottomMargin">
+									<number>12</number>
+								</property>
 
-        <item>
-         <layout class="QHBoxLayout" name="recentItemsHeaderLayout">
-          <item><widget class="QLabel" name="cardTitle3"><property name="text"><string>Recent Trucks</string></property></widget></item>
-          <item><spacer name="recentItemsHeaderSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
-          <item><widget class="QPushButton" name="viewAllItemsButton"><property name="text"><string>View All</string></property></widget></item>
-         </layout>
-        </item>
+								<item>
+									<layout class="QHBoxLayout" name="recentItemsHeaderLayout">
+										<item>
+											<widget class="QLabel" name="cardTitle3">
+												<property name="text">
+													<string>Recent Trucks</string>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<spacer name="recentItemsHeaderSpacer">
+												<property name="orientation">
+													<enum>Qt::Horizontal</enum>
+												</property>
+											</spacer>
+										</item>
+										<item>
+											<widget class="QPushButton" name="viewAllItemsButton">
+												<property name="text">
+													<string>View All</string>
+												</property>
+											</widget>
+										</item>
+									</layout>
+								</item>
 
-        <item>
-         <widget class="QTableWidget" name="recentTrucksTable">
-          <property name="columnCount"><number>5</number></property>
-          <property name="rowCount"><number>4</number></property>
-          <column><property name="text"><string>Truck</string></property></column>
-          <column><property name="text"><string>Plate</string></property></column>
-          <column><property name="text"><string>Technician</string></property></column>
-          <column><property name="text"><string>Status</string></property></column>
-          <column><property name="text"><string>Updated</string></property></column>
+								<item>
+									<widget class="QTableWidget" name="recentTrucksTable">
+										<property name="columnCount">
+											<number>5</number>
+										</property>
+										<property name="rowCount">
+											<number>0</number>
+										</property>
+										<column>
+											<property name="text">
+												<string>Truck</string>
+											</property>
+										</column>
+										<column>
+											<property name="text">
+												<string>Plate</string>
+											</property>
+										</column>
+										<column>
+											<property name="text">
+												<string>Technician</string>
+											</property>
+										</column>
+										<column>
+											<property name="text">
+												<string>Status</string>
+											</property>
+										</column>
+										<column>
+											<property name="text">
+												<string>Updated</string>
+											</property>
+										</column>
+									</widget>
+								</item>
+							</layout>
+						</widget>
+					</item>
 
-          <item row="0" column="0"><property name="text"><string>Truck 1</string></property></item>
-          <item row="0" column="1"><property name="text"><string>ABC-123</string></property></item>
-          <item row="0" column="2"><property name="text"><string>John Smith</string></property></item>
-          <item row="0" column="3"><property name="text"><string>Active</string></property></item>
-          <item row="0" column="4"><property name="text"><string>May 22, 2024</string></property></item>
+					<item>
+						<widget class="QWidget" name="lowStockCard" native="true">
+							<layout class="QVBoxLayout" name="lowStockLayout">
+								<property name="leftMargin">
+									<number>14</number>
+								</property>
+								<property name="topMargin">
+									<number>12</number>
+								</property>
+								<property name="rightMargin">
+									<number>14</number>
+								</property>
+								<property name="bottomMargin">
+									<number>12</number>
+								</property>
 
-          <item row="1" column="0"><property name="text"><string>Truck 2</string></property></item>
-          <item row="1" column="1"><property name="text"><string>XYZ-456</string></property></item>
-          <item row="1" column="2"><property name="text"><string>Mike Johnson</string></property></item>
-          <item row="1" column="3"><property name="text"><string>Active</string></property></item>
-          <item row="1" column="4"><property name="text"><string>May 21, 2024</string></property></item>
+								<item>
+									<layout class="QHBoxLayout" name="lowStockHeaderLayout">
+										<item>
+											<widget class="QLabel" name="cardTitle4">
+												<property name="text">
+													<string>Low Stock Items</string>
+												</property>
+											</widget>
+										</item>
+										<item>
+											<spacer name="lowStockHeaderSpacer">
+												<property name="orientation">
+													<enum>Qt::Horizontal</enum>
+												</property>
+											</spacer>
+										</item>
+										<item>
+											<widget class="QPushButton" name="viewAllLowStockButton">
+												<property name="text">
+													<string>View All</string>
+												</property>
+											</widget>
+										</item>
+									</layout>
+								</item>
 
-          <item row="2" column="0"><property name="text"><string>Truck 3</string></property></item>
-          <item row="2" column="1"><property name="text"><string>DEF-789</string></property></item>
-          <item row="2" column="2"><property name="text"><string>Sarah Davis</string></property></item>
-          <item row="2" column="3"><property name="text"><string>Inactive</string></property></item>
-          <item row="2" column="4"><property name="text"><string>May 20, 2024</string></property></item>
-
-          <item row="3" column="0"><property name="text"><string>Truck 4</string></property></item>
-          <item row="3" column="1"><property name="text"><string>GHI-012</string></property></item>
-          <item row="3" column="2"><property name="text"><string>Robert Brown</string></property></item>
-          <item row="3" column="3"><property name="text"><string>Active</string></property></item>
-          <item row="3" column="4"><property name="text"><string>May 18, 2024</string></property></item>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-
-     <item>
-      <widget class="QWidget" name="lowStockCard" native="true">
-       <layout class="QVBoxLayout" name="lowStockLayout">
-        <property name="leftMargin"><number>14</number></property>
-        <property name="topMargin"><number>12</number></property>
-        <property name="rightMargin"><number>14</number></property>
-        <property name="bottomMargin"><number>12</number></property>
-
-        <item>
-         <layout class="QHBoxLayout" name="lowStockHeaderLayout">
-          <item><widget class="QLabel" name="cardTitle4"><property name="text"><string>Low Stock Items</string></property></widget></item>
-          <item><spacer name="lowStockHeaderSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item>
-          <item><widget class="QPushButton" name="viewAllLowStockButton"><property name="text"><string>View All</string></property></widget></item>
-         </layout>
-        </item>
-
-        <item>
-         <widget class="QTableWidget" name="lowStockTable">
-          <property name="columnCount"><number>4</number></property>
-          <property name="rowCount"><number>4</number></property>
-          <column><property name="text"><string>Truck</string></property></column>
-          <column><property name="text"><string>Item</string></property></column>
-          <column><property name="text"><string>Current</string></property></column>
-          <column><property name="text"><string>Minimum</string></property></column>
-
-          <item row="0" column="0"><property name="text"><string>Truck 1</string></property></item>
-          <item row="0" column="1"><property name="text"><string>Capacitor 45/5 μF</string></property></item>
-          <item row="0" column="2"><property name="text"><string>1</string></property></item>
-          <item row="0" column="3"><property name="text"><string>3</string></property></item>
-
-          <item row="1" column="0"><property name="text"><string>Truck 1</string></property></item>
-          <item row="1" column="1"><property name="text"><string>Contactor 24V</string></property></item>
-          <item row="1" column="2"><property name="text"><string>0</string></property></item>
-          <item row="1" column="3"><property name="text"><string>2</string></property></item>
-
-          <item row="2" column="0"><property name="text"><string>Truck 2</string></property></item>
-          <item row="2" column="1"><property name="text"><string>Fuses 30A</string></property></item>
-          <item row="2" column="2"><property name="text"><string>2</string></property></item>
-          <item row="2" column="3"><property name="text"><string>5</string></property></item>
-
-          <item row="3" column="0"><property name="text"><string>Truck 3</string></property></item>
-          <item row="3" column="1"><property name="text"><string>Relay 24V</string></property></item>
-          <item row="3" column="2"><property name="text"><string>1</string></property></item>
-          <item row="3" column="3"><property name="text"><string>2</string></property></item>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </item>
-    </layout>
-   </item>
-
-  </layout>
- </widget>
- <resources/>
- <connections/>
+								<item>
+									<widget class="QTableWidget" name="lowStockTable">
+										<property name="columnCount">
+											<number>4</number>
+										</property>
+										<property name="rowCount">
+											<number>0</number>
+										</property>
+										<column>
+											<property name="text">
+												<string>Truck</string>
+											</property>
+										</column>
+										<column>
+											<property name="text">
+												<string>Item</string>
+											</property>
+										</column>
+										<column>
+											<property name="text">
+												<string>Current</string>
+											</property>
+										</column>
+										<column>
+											<property name="text">
+												<string>Minimum</string>
+											</property>
+										</column>
+									</widget>
+								</item>
+							</layout>
+						</widget>
+					</item>
+				</layout>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
 </ui>

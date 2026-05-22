@@ -157,6 +157,9 @@
     <ClCompile Include="ReceiptsPage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="UploadReceiptDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -178,39 +181,6 @@
       <Filter>Header Files\services</Filter>
     </ClInclude>
     <ClInclude Include="Theme.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TruckStockDashboardPage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TrucksPage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AddEditTruckDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="StockTemplatesPage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AssignmentsPage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="AssignTemplateDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="MyTruckStockPage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UseTruckItemDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="LowStockAlertsPage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ReceiptsPage.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="UploadReceiptDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -236,17 +206,50 @@
     <QtMoc Include="DashboardWindow.h">
       <Filter>Header Files\Pages</Filter>
     </QtMoc>
-    <QtMoc Include="SidebarWidget.h">
-      <Filter>Header Files\Menu</Filter>
-    </QtMoc>
     <QtMoc Include="VerticalWidget.h">
       <Filter>Header Files\Menu</Filter>
     </QtMoc>
     <QtMoc Include="ScanPage.h">
       <Filter>Header Files\Pages</Filter>
     </QtMoc>
+    <QtMoc Include="AddEditTruckDialog.h">
+      <Filter>Header Files\Modals</Filter>
+    </QtMoc>
+    <QtMoc Include="AssignTemplateDialog.h">
+      <Filter>Header Files\Modals</Filter>
+    </QtMoc>
+    <QtMoc Include="UploadReceiptDialog.h">
+      <Filter>Header Files\Modals</Filter>
+    </QtMoc>
+    <QtMoc Include="UseTruckItemDialog.h">
+      <Filter>Header Files\Modals</Filter>
+    </QtMoc>
     <QtMoc Include="AddEditTemplateDialog.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Modals</Filter>
+    </QtMoc>
+    <QtMoc Include="AssignmentsPage.h">
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="LowStockAlertsPage.h">
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="MyTruckStockPage.h">
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="ReceiptsPage.h">
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="StockTemplatesPage.h">
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="TrucksPage.h">
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="TruckStockDashboardPage.h">
+      <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="SidebarWidget.h">
+      <Filter>Header Files\Menu</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

@@ -1,11 +1,16 @@
 #include "UseTruckItemDialog.h"
 
+#include <QMessageBox>
+
 UseTruckItemDialog::UseTruckItemDialog(QWidget* parent)
     : QDialog(parent), maxQuantity(0)
 {
     ui.setupUi(this);
     setupConnections();
     loadItems();
+
+    ui.quantityInput->setMinimum(1);
+    ui.quantityInput->setValue(1);
 }
 
 UseTruckItemDialog::~UseTruckItemDialog()
@@ -14,28 +19,50 @@ UseTruckItemDialog::~UseTruckItemDialog()
 
 void UseTruckItemDialog::setupConnections()
 {
-    connect(ui.decreaseButton, &QPushButton::clicked, this, &UseTruckItemDialog::onDecreaseClicked);
-    connect(ui.increaseButton, &QPushButton::clicked, this, &UseTruckItemDialog::onIncreaseClicked);
-    connect(ui.useItemButton, &QPushButton::clicked, this, &UseTruckItemDialog::onUseItemClicked);
-    connect(ui.cancelButton, &QPushButton::clicked, this, &UseTruckItemDialog::onCancelClicked);
-    connect(ui.itemCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), 
-        this, &UseTruckItemDialog::onItemSelected);
+    connect(ui.minusButton, &QPushButton::clicked,
+        this, &UseTruckItemDialog::onDecreaseClicked);
+
+    connect(ui.plusButton, &QPushButton::clicked,
+        this, &UseTruckItemDialog::onIncreaseClicked);
+
+    connect(ui.useButton, &QPushButton::clicked,
+        this, &UseTruckItemDialog::onUseItemClicked);
+
+    connect(ui.cancelButton, &QPushButton::clicked,
+        this, &UseTruckItemDialog::onCancelClicked);
+
+    connect(ui.itemComboBox,
+        QOverload<int>::of(&QComboBox::currentIndexChanged),
+        this,
+        &UseTruckItemDialog::onItemSelected);
 }
 
 void UseTruckItemDialog::loadItems()
 {
-    // Load items from backend
+    // Later we will load items from backend.
+    // For now this keeps the dialog safe.
 }
 
 void UseTruckItemDialog::setItem(const QString& itemName, int currentQty)
 {
     maxQuantity = currentQty;
+
     ui.currentQtyValue->setText(QString::number(currentQty));
+
+    ui.quantityInput->setMinimum(1);
+    ui.quantityInput->setMaximum(currentQty > 0 ? currentQty : 1);
+    ui.quantityInput->setValue(currentQty > 0 ? 1 : 0);
+
+    int index = ui.itemComboBox->findText(itemName);
+
+    if (index >= 0) {
+        ui.itemComboBox->setCurrentIndex(index);
+    }
 }
 
 int UseTruckItemDialog::getQuantityToUse() const
 {
-    return ui.quantityDisplay->text().toInt();
+    return ui.quantityInput->value();
 }
 
 QString UseTruckItemDialog::getNotes() const
@@ -45,33 +72,48 @@ QString UseTruckItemDialog::getNotes() const
 
 void UseTruckItemDialog::updateQuantityDisplay()
 {
-    // Update display with current quantity selection
+    if (maxQuantity > 0 && ui.quantityInput->value() > maxQuantity) {
+        ui.quantityInput->setValue(maxQuantity);
+    }
 }
 
 void UseTruckItemDialog::onDecreaseClicked()
 {
-    int current = ui.quantityDisplay->text().toInt();
+    int current = ui.quantityInput->value();
+
     if (current > 1) {
-        ui.quantityDisplay->setText(QString::number(current - 1));
+        ui.quantityInput->setValue(current - 1);
     }
 }
 
 void UseTruckItemDialog::onIncreaseClicked()
 {
-    int current = ui.quantityDisplay->text().toInt();
-    if (current < maxQuantity) {
-        ui.quantityDisplay->setText(QString::number(current + 1));
+    int current = ui.quantityInput->value();
+
+    if (maxQuantity <= 0 || current < maxQuantity) {
+        ui.quantityInput->setValue(current + 1);
     }
 }
 
 void UseTruckItemDialog::onItemSelected(int index)
 {
-    // Update current qty when item changes
+    Q_UNUSED(index);
+
+    // Later we will update current quantity from selected backend item.
 }
 
 void UseTruckItemDialog::onUseItemClicked()
 {
-    // Validate and use item
+    if (maxQuantity <= 0) {
+        QMessageBox::warning(this, "Invalid Quantity", "This item has no stock available.");
+        return;
+    }
+
+    if (ui.quantityInput->value() > maxQuantity) {
+        QMessageBox::warning(this, "Invalid Quantity", "Quantity cannot be greater than current stock.");
+        return;
+    }
+
     accept();
 }
 

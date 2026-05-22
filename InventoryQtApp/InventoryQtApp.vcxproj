@@ -114,6 +114,7 @@
     <ClCompile Include="Theme.cpp" />
     <ClCompile Include="TrucksPage.cpp" />
     <ClCompile Include="TruckStockDashboardPage.cpp" />
+    <ClCompile Include="UploadReceiptDialog.cpp" />
     <ClCompile Include="UserService.cpp" />
     <ClCompile Include="UseTruckItemDialog.cpp" />
     <ClCompile Include="VerticalWidget.cpp" />
@@ -147,33 +148,33 @@
     <QtUic Include="VerticalWidget.ui" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="LowStockAlertsPage.h" />
-    <ClInclude Include="ReceiptsPage.h" />
-    <ClInclude Include="UploadReceiptDialog.h" />
-    <ClInclude Include="UseTruckItemDialog.h" />
+    <QtMoc Include="LowStockAlertsPage.h" />
+    <QtMoc Include="ReceiptsPage.h" />
+    <QtMoc Include="UploadReceiptDialog.h" />
+    <QtMoc Include="UseTruckItemDialog.h" />
     <QtMoc Include="AddProductDialog.h" />
     <QtMoc Include="AddAssetDialog.h" />
     <QtMoc Include="AddEditTemplateDialog.h" />
-    <ClInclude Include="AddEditTruckDialog.h" />
+    <QtMoc Include="AddEditTruckDialog.h" />
     <ClInclude Include="ApiClient.h" />
     <ClInclude Include="AssetService.h" />
     <QtMoc Include="AssetsPage.h" />
-    <ClInclude Include="AssignmentsPage.h" />
-    <ClInclude Include="AssignTemplateDialog.h" />
+    <QtMoc Include="AssignmentsPage.h" />
+    <QtMoc Include="AssignTemplateDialog.h" />
     <ClInclude Include="AuthService.h" />
     <QtMoc Include="VerticalWidget.h" />
     <QtMoc Include="DashboardWindow.h" />
     <QtMoc Include="DashboardPage.h" />
     <QtMoc Include="ItemsPage.h" />
-    <ClInclude Include="MyTruckStockPage.h" />
+    <QtMoc Include="MyTruckStockPage.h" />
     <ClInclude Include="ProductService.h" />
     <QtMoc Include="SidebarWidget.h" />
     <ClInclude Include="ReportService.h" />
     <QtMoc Include="ScanPage.h" />
-    <ClInclude Include="StockTemplatesPage.h" />
+    <QtMoc Include="StockTemplatesPage.h" />
     <ClInclude Include="Theme.h" />
-    <ClInclude Include="TrucksPage.h" />
-    <ClInclude Include="TruckStockDashboardPage.h" />
+    <QtMoc Include="TrucksPage.h" />
+    <QtMoc Include="TruckStockDashboardPage.h" />
     <ClInclude Include="UserService.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

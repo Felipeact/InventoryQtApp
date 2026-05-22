@@ -1,18 +1,14 @@
-// SidebarWidget.cpp - Implementation of the navigation sidebar
 #include "SidebarWidget.h"
+
 #include <algorithm>
 
-// Constructor initializes sidebar buttons and applies permission-based visibility
 SidebarWidget::SidebarWidget(
-    const std::vector<std::string>& userPermissions,
+    const std::vector<std::string>& permissions,
     QWidget* parent
 )
-    : QWidget(parent),
-    permissions(userPermissions)
+    : QWidget(parent), permissions(permissions)
 {
     ui.setupUi(this);
-
-    applyPermissions();
 
     connect(ui.dashboardButton, &QPushButton::clicked, this, [this]() {
         setActiveButton(ui.dashboardButton);
@@ -29,6 +25,11 @@ SidebarWidget::SidebarWidget(
         emit assetsClicked();
         });
 
+    connect(ui.usersButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.usersButton);
+        emit usersClicked();
+        });
+
     connect(ui.scanInButton, &QPushButton::clicked, this, [this]() {
         setActiveButton(ui.scanInButton);
         emit scanInClicked();
@@ -39,13 +40,60 @@ SidebarWidget::SidebarWidget(
         emit scanOutClicked();
         });
 
-    connect(ui.logoutButton, &QPushButton::clicked, this, &SidebarWidget::logoutClicked);
+    connect(ui.reportsButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.reportsButton);
+        emit reportsClicked();
+        });
 
+    connect(ui.settingsButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.settingsButton);
+        emit settingsClicked();
+        });
+
+    connect(ui.truckStockDashboardButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.truckStockDashboardButton);
+        emit truckStockDashboardClicked();
+        });
+
+    connect(ui.trucksButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.trucksButton);
+        emit trucksClicked();
+        });
+
+    connect(ui.templatesButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.templatesButton);
+        emit templatesClicked();
+        });
+
+    connect(ui.assignmentsButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.assignmentsButton);
+        emit assignmentsClicked();
+        });
+
+    connect(ui.myTruckStockButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.myTruckStockButton);
+        emit myTruckStockClicked();
+        });
+
+    connect(ui.lowStockAlertsButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.lowStockAlertsButton);
+        emit lowStockAlertsClicked();
+        });
+
+    connect(ui.receiptsButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.receiptsButton);
+        emit receiptsClicked();
+        });
+
+    connect(ui.logoutButton, &QPushButton::clicked, this, [this]() {
+        emit logoutClicked();
+        });
+
+    applyPermissions();
     setActiveButton(ui.dashboardButton);
 }
 
-// Checks if the user has a specific permission
-bool SidebarWidget::hasPermission(const std::string& permission)
+bool SidebarWidget::hasPermission(const std::string& permission) const
 {
     return std::find(
         permissions.begin(),
@@ -54,59 +102,74 @@ bool SidebarWidget::hasPermission(const std::string& permission)
     ) != permissions.end();
 }
 
-// Configures button visibility based on user permissions
 void SidebarWidget::applyPermissions()
 {
-    ui.itemsButton->setVisible(hasPermission("ADD_PRODUCT"));
-    ui.assetsButton->setVisible(hasPermission("VIEW_STOCK"));
+    ui.usersButton->setVisible(hasPermission("MANAGE_USERS"));
+
+    ui.itemsButton->setVisible(
+        hasPermission("ADD_PRODUCT") ||
+        hasPermission("VIEW_STOCK")
+    );
+
+    ui.assetsButton->setVisible(
+        hasPermission("VIEW_ASSET") ||
+        hasPermission("ADD_ASSET") ||
+        hasPermission("EDIT_ASSET") ||
+        hasPermission("DELETE_ASSET")
+    );
+
     ui.scanInButton->setVisible(hasPermission("SCAN_IN"));
     ui.scanOutButton->setVisible(hasPermission("SCAN_OUT"));
-    ui.usersButton->setVisible(hasPermission("MANAGE_USERS"));
+
+    ui.truckStockDashboardButton->setVisible(
+        hasPermission("VIEW_TRUCK_STOCK") ||
+        hasPermission("VIEW_ALL_TRUCKS") ||
+        hasPermission("MANAGE_TRUCK_STOCK")
+    );
+
+    ui.trucksButton->setVisible(
+        hasPermission("VIEW_ALL_TRUCKS") ||
+        hasPermission("MANAGE_TRUCK_STOCK")
+    );
+
+    ui.templatesButton->setVisible(
+        hasPermission("MANAGE_TRUCK_STOCK")
+    );
+
+    ui.assignmentsButton->setVisible(
+        hasPermission("ASSIGN_TRUCK_STOCK")
+    );
+
+    ui.myTruckStockButton->setVisible(
+        hasPermission("VIEW_ASSIGNED_TRUCK_STOCK")
+    );
+
+    ui.lowStockAlertsButton->setVisible(
+        hasPermission("VIEW_LOW_STOCK_ALERTS")
+    );
+
+    ui.receiptsButton->setVisible(
+        hasPermission("UPLOAD_RECEIPT") ||
+        hasPermission("APPROVE_RECEIPTS")
+    );
 }
 
 void SidebarWidget::resetButtonStates()
 {
-    QString normalStyle = R"(
-        QPushButton {
-            background-color: transparent;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            text-align: left;
-            padding-left: 18px;
-            font-size: 14px;
-            font-weight: 600;
-        }
+    QList<QPushButton*> buttons = findChildren<QPushButton*>();
 
-        QPushButton:hover {
-            background-color: #132238;
+    for (QPushButton* button : buttons) {
+        if (button != ui.logoutButton) {
+            button->setChecked(false);
         }
-    )";
-
-    ui.dashboardButton->setStyleSheet(normalStyle);
-    ui.itemsButton->setStyleSheet(normalStyle);
-    ui.assetsButton->setStyleSheet(normalStyle);
-    ui.usersButton->setStyleSheet(normalStyle);
-    ui.scanInButton->setStyleSheet(normalStyle);
-    ui.scanOutButton->setStyleSheet(normalStyle);
+    }
 }
 
 void SidebarWidget::setActiveButton(QPushButton* activeButton)
 {
     resetButtonStates();
 
-    QString activeStyle = R"(
-        QPushButton {
-            background-color: #2563EB;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            text-align: left;
-            padding-left: 18px;
-            font-size: 14px;
-            font-weight: 700;
-        }
-    )";
-
-    activeButton->setStyleSheet(activeStyle);
+    if (activeButton) {
+        activeButton->setChecked(true);
+    }
 }

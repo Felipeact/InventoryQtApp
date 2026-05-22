@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
 	<class>StockTemplatesPageClass</class>
-
 	<widget class="QWidget" name="StockTemplatesPageClass">
 		<property name="geometry">
 			<rect>
@@ -11,7 +10,6 @@
 				<height>820</height>
 			</rect>
 		</property>
-
 		<property name="windowTitle">
 			<string>Stock Templates</string>
 		</property>
@@ -246,7 +244,7 @@
 									<number>4</number>
 								</property>
 								<property name="rowCount">
-									<number>4</number>
+									<number>0</number>
 								</property>
 								<property name="selectionBehavior">
 									<enum>QAbstractItemView::SelectRows</enum>
@@ -278,90 +276,6 @@
 										<string>Actions</string>
 									</property>
 								</column>
-
-								<item row="0" column="0">
-									<property name="text">
-										<string>Standard Electrical</string>
-									</property>
-								</item>
-								<item row="0" column="1">
-									<property name="text">
-										<string>Standard electrical parts</string>
-									</property>
-								</item>
-								<item row="0" column="2">
-									<property name="text">
-										<string>12</string>
-									</property>
-								</item>
-								<item row="0" column="3">
-									<property name="text">
-										<string>✎   🗑</string>
-									</property>
-								</item>
-
-								<item row="1" column="0">
-									<property name="text">
-										<string>HVAC Basic</string>
-									</property>
-								</item>
-								<item row="1" column="1">
-									<property name="text">
-										<string>Basic HVAC parts</string>
-									</property>
-								</item>
-								<item row="1" column="2">
-									<property name="text">
-										<string>15</string>
-									</property>
-								</item>
-								<item row="1" column="3">
-									<property name="text">
-										<string>✎   🗑</string>
-									</property>
-								</item>
-
-								<item row="2" column="0">
-									<property name="text">
-										<string>Plumbing Basic</string>
-									</property>
-								</item>
-								<item row="2" column="1">
-									<property name="text">
-										<string>Basic plumbing parts</string>
-									</property>
-								</item>
-								<item row="2" column="2">
-									<property name="text">
-										<string>10</string>
-									</property>
-								</item>
-								<item row="2" column="3">
-									<property name="text">
-										<string>✎   🗑</string>
-									</property>
-								</item>
-
-								<item row="3" column="0">
-									<property name="text">
-										<string>Full Stock</string>
-									</property>
-								</item>
-								<item row="3" column="1">
-									<property name="text">
-										<string>Full stock template</string>
-									</property>
-								</item>
-								<item row="3" column="2">
-									<property name="text">
-										<string>28</string>
-									</property>
-								</item>
-								<item row="3" column="3">
-									<property name="text">
-										<string>✎   🗑</string>
-									</property>
-								</item>
 							</widget>
 						</item>
 
@@ -437,10 +351,8 @@
 					</layout>
 				</widget>
 			</item>
-
 		</layout>
 	</widget>
-
 	<resources/>
 	<connections/>
 </ui>

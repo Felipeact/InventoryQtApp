@@ -15,9 +15,9 @@ AssignTemplateDialog::~AssignTemplateDialog()
 
 void AssignTemplateDialog::setupConnections()
 {
-    connect(ui.truckCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), 
+    connect(ui.truckComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), 
         this, &AssignTemplateDialog::onTruckSelected);
-    connect(ui.templateCombo, QOverload<int>::of(&QComboBox::currentIndexChanged), 
+    connect(ui.templateComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), 
         this, &AssignTemplateDialog::onTemplateSelected);
     connect(ui.assignButton, &QPushButton::clicked, this, &AssignTemplateDialog::onAssignClicked);
     connect(ui.cancelButton, &QPushButton::clicked, this, &AssignTemplateDialog::onCancelClicked);
@@ -40,12 +40,12 @@ void AssignTemplateDialog::loadTemplatePreview(const QString& templateName)
 
 QString AssignTemplateDialog::getSelectedTruck() const
 {
-    return ui.truckCombo->currentText();
+    return ui.truckComboBox->currentText();
 }
 
 QString AssignTemplateDialog::getSelectedTemplate() const
 {
-    return ui.templateCombo->currentText();
+    return ui.templateComboBox->currentText();
 }
 
 void AssignTemplateDialog::onTruckSelected(int index)
@@ -55,7 +55,7 @@ void AssignTemplateDialog::onTruckSelected(int index)
 
 void AssignTemplateDialog::onTemplateSelected(int index)
 {
-    loadTemplatePreview(ui.templateCombo->currentText());
+    loadTemplatePreview(ui.templateComboBox->currentText());
 }
 
 void AssignTemplateDialog::onAssignClicked()

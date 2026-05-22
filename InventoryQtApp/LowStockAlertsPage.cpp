@@ -4,7 +4,7 @@ LowStockAlertsPage::LowStockAlertsPage(QWidget* parent)
     : QWidget(parent)
 {
     ui.setupUi(this);
-    setupConnections();
+    //setupConnections();
     loadAlerts();
 }
 
@@ -12,10 +12,10 @@ LowStockAlertsPage::~LowStockAlertsPage()
 {
 }
 
-void LowStockAlertsPage::setupConnections()
-{
-    connect(ui.refreshButton, &QPushButton::clicked, this, &LowStockAlertsPage::onRefreshClicked);
-}
+//void LowStockAlertsPage::setupConnections()
+//{
+//    connect(ui.refreshButton, &QPushButton::clicked, this, &LowStockAlertsPage::onRefreshClicked);
+//}
 
 void LowStockAlertsPage::loadAlerts()
 {
