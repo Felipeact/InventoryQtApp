@@ -22,6 +22,7 @@
 #include "ui_DashboardWindow.h"
 #include "SidebarWidget.h"
 #include "VerticalWidget.h"
+#include <UsersPage.h>
 
 // Main dashboard window that manages navigation and displays different pages
 class DashboardWindow : public QMainWindow
@@ -63,6 +64,8 @@ private:
 	DashboardPage* dashboardPage = nullptr;   // Dashboard overview page
 	ItemsPage* itemsPage = nullptr;           // Items management page
 	AssetsPage* assetsPage = nullptr;         // Assets management page
+	UsersPage* usersPage = nullptr;
+
 	ScanPage* scanInPage = nullptr;
 	ScanPage* scanOutPage = nullptr;
 

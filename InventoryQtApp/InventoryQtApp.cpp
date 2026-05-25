@@ -3,11 +3,13 @@
 #include <Theme.h>
 #include <QMessageBox>
 
+#include "Config.h"
+
 // Constructor initializes the login window and sets up API client
 InventoryQtApp::InventoryQtApp(QWidget *parent)
     : 
 	QMainWindow(parent),
-	apiClient("https://fluffy-succotash-4wg97gqvwxq27p7v-3000.app.github.dev"),
+	apiClient(Config::API_BASE_URL),
 	authService(apiClient)
 {
     ui.setupUi(this);

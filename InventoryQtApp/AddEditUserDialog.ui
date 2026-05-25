@@ -1,0 +1,308 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ui version="4.0">
+	<class>AddEditUserDialogClass</class>
+
+	<widget class="QDialog" name="AddEditUserDialogClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>720</width>
+				<height>460</height>
+			</rect>
+		</property>
+
+		<property name="windowTitle">
+			<string>Add / Edit User</string>
+		</property>
+
+		<property name="styleSheet">
+			<string notr="true">
+				QDialog#AddEditUserDialogClass {
+				background-color: #050B14;
+				color: #FFFFFF;
+				font-family: "Segoe UI";
+				}
+
+				QLabel {
+				background: transparent;
+				color: white;
+				}
+
+				QLabel#dialogTitle {
+				font-size: 24px;
+				font-weight: 800;
+				}
+
+				QLabel#subtitleLabel {
+				color: #94A3B8;
+				font-size: 12px;
+				}
+
+				QWidget#formCard {
+				background: qlineargradient(
+				x1:0, y1:0,
+				x2:1, y2:1,
+				stop:0 #0B1626,
+				stop:1 #091322
+				);
+				border: 1px solid #1B2A40;
+				border-radius: 12px;
+				}
+
+				QLabel#fieldLabel {
+				color: #CBD5E1;
+				font-size: 12px;
+				font-weight: 600;
+				}
+
+				QLineEdit,
+				QComboBox {
+				background-color: #08111F;
+				border: 1px solid #1E3350;
+				border-radius: 8px;
+				color: white;
+				min-height: 36px;
+				padding-left: 12px;
+				font-size: 12px;
+				}
+
+				QLineEdit:focus,
+				QComboBox:focus {
+				border: 1px solid #2563EB;
+				}
+
+				QComboBox::drop-down {
+				border: none;
+				width: 24px;
+				}
+
+				QPushButton#cancelButton {
+				background-color: #08111F;
+				border: 1px solid #1E3350;
+				border-radius: 8px;
+				color: white;
+				min-height: 38px;
+				min-width: 110px;
+				font-size: 12px;
+				font-weight: 700;
+				}
+
+				QPushButton#cancelButton:hover {
+				background-color: #111C2D;
+				}
+
+				QPushButton#saveButton {
+				background-color: #2563EB;
+				border: none;
+				border-radius: 8px;
+				color: white;
+				min-height: 38px;
+				min-width: 120px;
+				font-size: 12px;
+				font-weight: 800;
+				}
+
+				QPushButton#saveButton:hover {
+				background-color: #1D4ED8;
+				}
+			</string>
+		</property>
+
+		<layout class="QVBoxLayout" name="rootLayout">
+			<property name="leftMargin">
+				<number>18</number>
+			</property>
+			<property name="topMargin">
+				<number>18</number>
+			</property>
+			<property name="rightMargin">
+				<number>18</number>
+			</property>
+			<property name="bottomMargin">
+				<number>18</number>
+			</property>
+			<property name="spacing">
+				<number>14</number>
+			</property>
+
+			<item>
+				<layout class="QVBoxLayout" name="titleLayout">
+					<item>
+						<widget class="QLabel" name="dialogTitle">
+							<property name="text">
+								<string>Add / Edit User</string>
+							</property>
+						</widget>
+					</item>
+
+					<item>
+						<widget class="QLabel" name="subtitleLabel">
+							<property name="text">
+								<string>Create or update a company user</string>
+							</property>
+						</widget>
+					</item>
+				</layout>
+			</item>
+
+			<item>
+				<widget class="QWidget" name="formCard" native="true">
+					<layout class="QGridLayout" name="formGrid">
+						<property name="leftMargin">
+							<number>18</number>
+						</property>
+						<property name="topMargin">
+							<number>18</number>
+						</property>
+						<property name="rightMargin">
+							<number>18</number>
+						</property>
+						<property name="bottomMargin">
+							<number>18</number>
+						</property>
+						<property name="horizontalSpacing">
+							<number>16</number>
+						</property>
+						<property name="verticalSpacing">
+							<number>12</number>
+						</property>
+
+						<item row="0" column="0">
+							<widget class="QLabel" name="nameLabel">
+								<property name="text">
+									<string>Name *</string>
+								</property>
+							</widget>
+						</item>
+
+						<item row="1" column="0">
+							<widget class="QLineEdit" name="nameInput">
+								<property name="placeholderText">
+									<string>Example: John Smith</string>
+								</property>
+							</widget>
+						</item>
+
+						<item row="0" column="1">
+							<widget class="QLabel" name="emailLabel">
+								<property name="text">
+									<string>Email *</string>
+								</property>
+							</widget>
+						</item>
+
+						<item row="1" column="1">
+							<widget class="QLineEdit" name="emailInput">
+								<property name="placeholderText">
+									<string>example@email.com</string>
+								</property>
+							</widget>
+						</item>
+
+						<item row="2" column="0">
+							<widget class="QLabel" name="passwordLabel">
+								<property name="text">
+									<string>Password *</string>
+								</property>
+							</widget>
+						</item>
+
+						<item row="3" column="0">
+							<widget class="QLineEdit" name="passwordInput">
+								<property name="echoMode">
+									<enum>QLineEdit::Password</enum>
+								</property>
+								<property name="placeholderText">
+									<string>Enter password</string>
+								</property>
+							</widget>
+						</item>
+
+						<item row="2" column="1">
+							<widget class="QLabel" name="roleLabel">
+								<property name="text">
+									<string>Role *</string>
+								</property>
+							</widget>
+						</item>
+
+						<item row="3" column="1">
+							<widget class="QComboBox" name="roleComboBox">
+								<item>
+									<property name="text">
+										<string>ADMIN</string>
+									</property>
+								</item>
+								<item>
+									<property name="text">
+										<string>WAREHOUSE</string>
+									</property>
+								</item>
+								<item>
+									<property name="text">
+										<string>TECHNICIAN</string>
+									</property>
+								</item>
+							</widget>
+						</item>
+
+						<item row="4" column="0">
+							<widget class="QLabel" name="statusLabel">
+								<property name="text">
+									<string>Status</string>
+								</property>
+							</widget>
+						</item>
+
+						<item row="5" column="0">
+							<widget class="QComboBox" name="statusComboBox">
+								<item>
+									<property name="text">
+										<string>Active</string>
+									</property>
+								</item>
+								<item>
+									<property name="text">
+										<string>Inactive</string>
+									</property>
+								</item>
+							</widget>
+						</item>
+
+						<item row="6" column="0" colspan="2">
+							<layout class="QHBoxLayout" name="buttonLayout">
+								<item>
+									<spacer name="buttonSpacer">
+										<property name="orientation">
+											<enum>Qt::Horizontal</enum>
+										</property>
+									</spacer>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="cancelButton">
+										<property name="text">
+											<string>Cancel</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="saveButton">
+										<property name="text">
+											<string>Save User</string>
+										</property>
+									</widget>
+								</item>
+							</layout>
+						</item>
+					</layout>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+
+	<resources/>
+	<connections/>
+</ui>

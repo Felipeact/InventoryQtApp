@@ -124,40 +124,46 @@
     <ClCompile Include="Theme.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TruckStockDashboardPage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TrucksPage.cpp">
-      <Filter>Source Files</Filter>
+    <ClCompile Include="AddEditTemplateDialog.cpp">
+      <Filter>Source Files\Modals</Filter>
     </ClCompile>
     <ClCompile Include="AddEditTruckDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="StockTemplatesPage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="AddEditTemplateDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Modals</Filter>
     </ClCompile>
     <ClCompile Include="AssignmentsPage.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Pages</Filter>
     </ClCompile>
     <ClCompile Include="AssignTemplateDialog.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="MyTruckStockPage.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UseTruckItemDialog.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Modals</Filter>
     </ClCompile>
     <ClCompile Include="LowStockAlertsPage.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="MyTruckStockPage.cpp">
+      <Filter>Source Files\Pages</Filter>
     </ClCompile>
     <ClCompile Include="ReceiptsPage.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="StockTemplatesPage.cpp">
+      <Filter>Source Files\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="TruckStockDashboardPage.cpp">
+      <Filter>Source Files\Pages</Filter>
+    </ClCompile>
+    <ClCompile Include="TrucksPage.cpp">
+      <Filter>Source Files\Pages</Filter>
     </ClCompile>
     <ClCompile Include="UploadReceiptDialog.cpp">
+      <Filter>Source Files\Modals</Filter>
+    </ClCompile>
+    <ClCompile Include="UseTruckItemDialog.cpp">
+      <Filter>Source Files\Modals</Filter>
+    </ClCompile>
+    <ClCompile Include="UsersPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AddEditUserDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -181,6 +187,15 @@
       <Filter>Header Files\services</Filter>
     </ClInclude>
     <ClInclude Include="Theme.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UsersPage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AddEditUserDialog.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -315,6 +330,12 @@
     </QtUic>
     <QtUic Include="UseTruckItemDialog.ui">
       <Filter>Form Files\Modals</Filter>
+    </QtUic>
+    <QtUic Include="UsersPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AddEditUserDialog.ui">
+      <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
 </Project>

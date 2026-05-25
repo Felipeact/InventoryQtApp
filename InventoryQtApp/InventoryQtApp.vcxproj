@@ -20,7 +20,7 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v145</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -95,6 +95,7 @@
     <ClCompile Include="AddAssetDialog.cpp" />
     <ClCompile Include="AddEditTemplateDialog.cpp" />
     <ClCompile Include="AddEditTruckDialog.cpp" />
+    <ClCompile Include="AddEditUserDialog.cpp" />
     <ClCompile Include="AddProductDialog.cpp" />
     <ClCompile Include="AssetService.cpp" />
     <ClCompile Include="AssetsPage.cpp" />
@@ -116,12 +117,14 @@
     <ClCompile Include="TruckStockDashboardPage.cpp" />
     <ClCompile Include="UploadReceiptDialog.cpp" />
     <ClCompile Include="UserService.cpp" />
+    <ClCompile Include="UsersPage.cpp" />
     <ClCompile Include="UseTruckItemDialog.cpp" />
     <ClCompile Include="VerticalWidget.cpp" />
     <QtRcc Include="InventoryQtApp.qrc" />
     <QtUic Include="AddAssetDialog.ui" />
     <QtUic Include="AddEditTemplateDialog.ui" />
     <QtUic Include="AddEditTruckDialog.ui" />
+    <QtUic Include="AddEditUserDialog.ui" />
     <QtUic Include="AddProductDialog.ui" />
     <QtUic Include="AssetsPage.ui" />
     <QtUic Include="AssignmentsPage.ui" />
@@ -144,10 +147,13 @@
     <QtUic Include="TrucksPage.ui" />
     <QtUic Include="TruckStockDashboardPage.ui" />
     <QtUic Include="UploadReceiptDialog.ui" />
+    <QtUic Include="UsersPage.ui" />
     <QtUic Include="UseTruckItemDialog.ui" />
     <QtUic Include="VerticalWidget.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AddEditUserDialog.h" />
+    <ClInclude Include="UsersPage.h" />
     <QtMoc Include="LowStockAlertsPage.h" />
     <QtMoc Include="ReceiptsPage.h" />
     <QtMoc Include="UploadReceiptDialog.h" />
@@ -167,6 +173,7 @@
     <QtMoc Include="DashboardPage.h" />
     <QtMoc Include="ItemsPage.h" />
     <QtMoc Include="MyTruckStockPage.h" />
+    <ClInclude Include="Config.h" />
     <ClInclude Include="ProductService.h" />
     <QtMoc Include="SidebarWidget.h" />
     <ClInclude Include="ReportService.h" />

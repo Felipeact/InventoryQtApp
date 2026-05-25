@@ -48,6 +48,9 @@ void DashboardWindow::setupPages()
     assetsPage = new AssetsPage(*assetService, this);
     ui.mainStack->addWidget(assetsPage);
 
+    usersPage = new UsersPage(this);
+    ui.mainStack->addWidget(usersPage);
+
     scanInPage = new ScanPage(*productService, ScanMode::ScanIn, this);
     ui.mainStack->addWidget(scanInPage);
 
@@ -75,6 +78,8 @@ void DashboardWindow::setupPages()
         dashboardPage->refreshDashboard();
         itemsPage->refreshProducts();
         });
+
+
 
     truckStockDashboardPage = new TruckStockDashboardPage(this);
     ui.mainStack->addWidget(truckStockDashboardPage);
@@ -117,6 +122,10 @@ void DashboardWindow::setupSidebar()
 
     connect(sidebar, &SidebarWidget::assetsClicked, this, [this]() {
         ui.mainStack->setCurrentWidget(assetsPage);
+        });
+
+    connect(sidebar, &SidebarWidget::usersClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(usersPage);
         });
 
     connect(sidebar, &SidebarWidget::scanInClicked, this, [this]() {
