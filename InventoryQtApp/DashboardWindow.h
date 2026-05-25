@@ -14,6 +14,7 @@
 #include <MyTruckStockPage.h>
 #include <LowStockAlertsPage.h>
 #include <ReceiptsPage.h>
+#include <TruckStockService.h>
 
 #include <QMainWindow>
 #include <vector>
@@ -36,7 +37,9 @@ public:
         const std::vector<std::string>& permissions,
 		ProductService& productService,
 		AssetService& assetService,
+		UserService& userService,	
 		ReportService& reportService,
+		TruckStockService& truckStockService,
         QWidget* parent = nullptr
     );
 
@@ -57,7 +60,10 @@ private:
 
 	ProductService* productService = nullptr; // Product service for API interactions
 	AssetService* assetService = nullptr;   // Assets service for API interactions
+	UserService* userService = nullptr;   // User service for API interactions
 	ReportService* reportService = nullptr; // Report service for API interactions
+	TruckStockService* truckStockService = nullptr;
+	
 
 
 	// Pages displayed in the main stack

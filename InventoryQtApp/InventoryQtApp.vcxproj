@@ -115,6 +115,7 @@
     <ClCompile Include="Theme.cpp" />
     <ClCompile Include="TrucksPage.cpp" />
     <ClCompile Include="TruckStockDashboardPage.cpp" />
+    <ClCompile Include="TruckStockService.cpp" />
     <ClCompile Include="UploadReceiptDialog.cpp" />
     <ClCompile Include="UserService.cpp" />
     <ClCompile Include="UsersPage.cpp" />
@@ -153,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AddEditUserDialog.h" />
+    <ClInclude Include="TruckStockService.h" />
     <ClInclude Include="UsersPage.h" />
     <QtMoc Include="LowStockAlertsPage.h" />
     <QtMoc Include="ReceiptsPage.h" />

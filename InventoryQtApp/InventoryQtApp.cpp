@@ -83,7 +83,7 @@ void InventoryQtApp::onLoginButtonClicked()
 	}
 
 		
-	dashboardWindow = new DashboardWindow(role,permissions,productService,assetService, reportService);
+	dashboardWindow = new DashboardWindow(role,permissions,productService,assetService,userService,reportService, truckStockService);
 
 	connect(dashboardWindow, &DashboardWindow::logoutRequested, this, [this]() {
 		authService.logout();

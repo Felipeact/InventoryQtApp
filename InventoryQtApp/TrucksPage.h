@@ -2,13 +2,15 @@
 
 #include <QWidget>
 #include "ui_TrucksPage.h"
+#include "TruckStockService.h"
+#include "UserService.h"
 
 class TrucksPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    TrucksPage(QWidget* parent = nullptr);
+    TrucksPage(TruckStockService* truckStockService, UserService* userService, QWidget* parent = nullptr);
     ~TrucksPage();
 
     void refreshTrucksList();
@@ -20,6 +22,10 @@ private slots:
 
 private:
     Ui::TrucksPageClass ui;
+
+    TruckStockService* truckStockService = nullptr;
+    UserService* userService = nullptr;
+    std::vector<TruckDto> currentTrucks;
 
     void setupConnections();
     void loadTrucks();

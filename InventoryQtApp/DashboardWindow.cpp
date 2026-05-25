@@ -4,13 +4,16 @@
 #include <QVBoxLayout>
 #include <QString>
 
+
 // Constructor initializes the main window with pages and navigation
 DashboardWindow::DashboardWindow(
     const std::string& role,
     const std::vector<std::string>& permissions,
     ProductService& productService,
     AssetService& assetService,
+    UserService& userService,   
     ReportService& reportService,
+    TruckStockService& truckStockService,
     QWidget* parent
 )
     : QMainWindow(parent),
@@ -18,6 +21,8 @@ DashboardWindow::DashboardWindow(
     permissions(permissions),
     productService(&productService),
     assetService(&assetService),
+    userService(&userService),  
+    truckStockService(&truckStockService),
     reportService(&reportService)
 {
     ui.setupUi(this);
@@ -48,7 +53,7 @@ void DashboardWindow::setupPages()
     assetsPage = new AssetsPage(*assetService, this);
     ui.mainStack->addWidget(assetsPage);
 
-    usersPage = new UsersPage(this);
+    usersPage = new UsersPage(userService, this);
     ui.mainStack->addWidget(usersPage);
 
     scanInPage = new ScanPage(*productService, ScanMode::ScanIn, this);
@@ -84,7 +89,7 @@ void DashboardWindow::setupPages()
     truckStockDashboardPage = new TruckStockDashboardPage(this);
     ui.mainStack->addWidget(truckStockDashboardPage);
 
-    trucksPage = new TrucksPage(this);
+    trucksPage = new TrucksPage(truckStockService, userService, this);
     ui.mainStack->addWidget(trucksPage);
 
     stockTemplatesPage = new StockTemplatesPage(this);

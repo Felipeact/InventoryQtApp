@@ -1,7 +1,12 @@
 #include "AddEditTruckDialog.h"
+#include <QMessageBox>
 
-AddEditTruckDialog::AddEditTruckDialog(QWidget* parent)
-    : QDialog(parent)
+AddEditTruckDialog::AddEditTruckDialog(
+    UserService* userService,
+    QWidget* parent
+)
+    : QDialog(parent),
+    userService(userService)
 {
     ui.setupUi(this);
     setupConnections();
@@ -20,7 +25,27 @@ void AddEditTruckDialog::setupConnections()
 
 void AddEditTruckDialog::loadTechnicianList()
 {
-    // Load technician list from backend
+    ui.technicianComboBox->clear();
+    ui.technicianComboBox->addItem("No technician", "");
+
+    if (!userService) {
+        return;
+    }
+
+    std::vector<UserDto> technicians = userService->getTechnicians();
+
+    for (const UserDto& tech : technicians) {
+        QString displayName = QString::fromStdString(tech.name);
+
+        if (displayName.trimmed().isEmpty()) {
+            displayName = QString::fromStdString(tech.email);
+        }
+
+        ui.technicianComboBox->addItem(
+            displayName,
+            QString::fromStdString(tech.id)
+        );
+    }
 }
 
 void AddEditTruckDialog::setEditMode(const QString& truckId)
@@ -44,6 +69,11 @@ QString AddEditTruckDialog::getTechnician() const
     return ui.technicianComboBox->currentText();
 }
 
+QString AddEditTruckDialog::getTechnicianId() const
+{
+    return ui.technicianComboBox->currentData().toString();
+}
+
 QString AddEditTruckDialog::getStatus() const
 {
     return ui.statusComboBox->currentText();
@@ -56,10 +86,18 @@ QString AddEditTruckDialog::getNotes() const
 
 void AddEditTruckDialog::onSaveClicked()
 {
-    // Validate and save truck
+    if (getTruckName().trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Validation Error", "Truck name is required.");
+        return;
+    }
+
+    if (getLicensePlate().trimmed().isEmpty()) {
+        QMessageBox::warning(this, "Validation Error", "License plate is required.");
+        return;
+    }
+
     accept();
 }
-
 void AddEditTruckDialog::onCancelClicked()
 {
     reject();
