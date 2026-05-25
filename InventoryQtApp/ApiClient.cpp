@@ -1,6 +1,7 @@
 // ApiClient.cpp - Implementation of HTTP client for API communication
 #include "ApiClient.h"
 #include <nlohmann/json.hpp>
+#include <iostream>
 
 using json = nlohmann::json;
 
@@ -35,6 +36,10 @@ std::string ApiClient::getRefreshToken() const
 
 cpr::Header ApiClient::authHeader() const
 {
+	if (accessToken.empty()) {
+		return cpr::Header{};
+	}
+
 	return cpr::Header{
 		{"Authorization", "Bearer " + accessToken}
 	};
@@ -52,19 +57,25 @@ void ApiClient::clearTokens()
 // Sends a GET request to the specified endpoint
 cpr::Response ApiClient::get(const std::string& endpoint)
 {
-	auto res = cpr::Get(
-		cpr::Url{ baseUrl + endpoint },
-		authHeader()
-	);
+	std::cout << "GET: " << baseUrl + endpoint << std::endl;
+    std::cout << "TOKEN EMPTY: " << (accessToken.empty() ? "YES" : "NO") << std::endl;
 
-	if (res.status_code == 401 && refreshAccessToken()) {
-		res = cpr::Get(
-			cpr::Url{ baseUrl + endpoint },
-			authHeader()
-		);
-	}
+    auto res = cpr::Get(
+        cpr::Url{ baseUrl + endpoint },
+        authHeader()
+    );
 
-	return res;
+    std::cout << "STATUS: " << res.status_code << std::endl;
+    std::cout << "BODY: " << res.text << std::endl;
+
+    if (res.status_code == 401 && refreshAccessToken()) {
+        res = cpr::Get(
+            cpr::Url{ baseUrl + endpoint },
+            authHeader()
+        );
+    }
+
+    return res;
 }
 
 // Sends a POST request with the given endpoint and JSON body
