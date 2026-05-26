@@ -70,6 +70,34 @@ struct CreateTemplateRequest
     std::vector<CreateTemplateItemRequest> items;
 };
 
+struct AssignmentTruckDto
+{
+    std::string id;
+    std::string truckNumber;
+};
+
+struct AssignmentTemplateDto
+{
+    std::string id;
+    std::string name;
+};
+
+struct CreateAssignmentRequest
+{
+    std::string truckId;
+    std::string templateId;
+};
+
+struct TruckAssignmentDto
+{
+    std::string id;
+    std::string truckNumber;
+    std::string templateName;
+    std::string assignedOn;
+    std::string assignedBy;
+    std::string status;
+};
+
 class TruckStockService
 {
 public:
@@ -84,6 +112,9 @@ public:
     std::vector<StockTemplateDto> getTemplates();
 
     bool createTemplate(const CreateTemplateRequest& request);
+
+    bool assignTemplate(const CreateAssignmentRequest& request);
+    std::vector<TruckAssignmentDto> getAssignments();
 
 private:
     ApiClient& apiClient;

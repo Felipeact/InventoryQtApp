@@ -257,3 +257,97 @@ bool TruckStockService::createTemplate(
         return false;
     }
 }
+
+bool TruckStockService::assignTemplate(
+    const CreateAssignmentRequest& request
+)
+{
+    try {
+        json body;
+
+        body["truckId"] = request.truckId;
+        body["templateId"] = request.templateId;
+
+        auto response = apiClient.post(
+            "/truck-stock/assignments",
+            body.dump()
+        );
+
+        if (response.status_code != 200 && response.status_code != 201) {
+            std::cerr << "POST /truck-stock/assignments failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::assignTemplate error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}
+
+std::vector<TruckAssignmentDto> TruckStockService::getAssignments()
+{
+    std::vector<TruckAssignmentDto> assignments;
+
+    try {
+        auto response = apiClient.get("/truck-stock/assignments");
+
+        if (response.status_code != 200) {
+            std::cerr << "GET /truck-stock/assignments failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return assignments;
+        }
+
+        json data = json::parse(response.text);
+
+        for (const auto& item : data) {
+            TruckAssignmentDto assignment;
+
+            assignment.id = item.value("id", "");
+            assignment.assignedOn = item.value("createdAt", "");
+            assignment.status = "Active";
+
+            if (item.contains("truck") && item["truck"].is_object()) {
+                assignment.truckNumber =
+                    item["truck"].value("truckNumber", "");
+            }
+
+            if (item.contains("template") && item["template"].is_object()) {
+                assignment.templateName =
+                    item["template"].value("name", "");
+            }
+
+            if (item.contains("assignedBy") && item["assignedBy"].is_object()) {
+                assignment.assignedBy =
+                    item["assignedBy"].value("name", "");
+
+                if (assignment.assignedBy.empty()) {
+                    assignment.assignedBy =
+                        item["assignedBy"].value("email", "");
+                }
+            }
+
+            assignments.push_back(assignment);
+        }
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::getAssignments error: "
+            << ex.what()
+            << std::endl;
+    }
+
+    return assignments;
+}

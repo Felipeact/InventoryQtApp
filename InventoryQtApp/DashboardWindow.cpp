@@ -95,7 +95,7 @@ void DashboardWindow::setupPages()
     stockTemplatesPage = new StockTemplatesPage(truckStockService, this);
     ui.mainStack->addWidget(stockTemplatesPage);
 
-    assignmentsPage = new AssignmentsPage(this);
+    assignmentsPage = new AssignmentsPage(truckStockService, this);
     ui.mainStack->addWidget(assignmentsPage);
 
     myTruckStockPage = new MyTruckStockPage(this);

@@ -1,7 +1,15 @@
 #include "AssignTemplateDialog.h"
 
-AssignTemplateDialog::AssignTemplateDialog(QWidget* parent)
-    : QDialog(parent)
+#include <QComboBox>
+#include <QMessageBox>
+#include <QPushButton>
+
+AssignTemplateDialog::AssignTemplateDialog(
+    TruckStockService* truckStockService,
+    QWidget* parent
+)
+    : QDialog(parent),
+    truckStockService(truckStockService)
 {
     ui.setupUi(this);
     setupConnections();
@@ -15,52 +23,66 @@ AssignTemplateDialog::~AssignTemplateDialog()
 
 void AssignTemplateDialog::setupConnections()
 {
-    connect(ui.truckComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), 
-        this, &AssignTemplateDialog::onTruckSelected);
-    connect(ui.templateComboBox, QOverload<int>::of(&QComboBox::currentIndexChanged), 
-        this, &AssignTemplateDialog::onTemplateSelected);
-    connect(ui.assignButton, &QPushButton::clicked, this, &AssignTemplateDialog::onAssignClicked);
-    connect(ui.cancelButton, &QPushButton::clicked, this, &AssignTemplateDialog::onCancelClicked);
+    connect(ui.assignButton, &QPushButton::clicked,
+        this, &AssignTemplateDialog::onAssignClicked);
+
+    connect(ui.cancelButton, &QPushButton::clicked,
+        this, &AssignTemplateDialog::onCancelClicked);
 }
 
 void AssignTemplateDialog::loadTrucks()
 {
-    // Load trucks from backend
+    ui.truckComboBox->clear();
+    ui.truckComboBox->addItem("Select Truck", "");
+
+    std::vector<TruckDto> trucks = truckStockService->getTrucks();
+
+    for (const TruckDto& truck : trucks) {
+        ui.truckComboBox->addItem(
+            QString::fromStdString(truck.truckName),
+            QString::fromStdString(truck.id)
+        );
+    }
 }
 
 void AssignTemplateDialog::loadTemplates()
 {
-    // Load templates from backend
+    ui.templateComboBox->clear();
+    ui.templateComboBox->addItem("Select Template", "");
+
+    std::vector<StockTemplateDto> templates =
+        truckStockService->getTemplates();
+
+    for (const StockTemplateDto& stockTemplate : templates) {
+        ui.templateComboBox->addItem(
+            QString::fromStdString(stockTemplate.name),
+            QString::fromStdString(stockTemplate.id)
+        );
+    }
 }
 
-void AssignTemplateDialog::loadTemplatePreview(const QString& templateName)
+QString AssignTemplateDialog::getTruckId() const
 {
-    // Load and display template preview items
+    return ui.truckComboBox->currentData().toString();
 }
 
-QString AssignTemplateDialog::getSelectedTruck() const
+QString AssignTemplateDialog::getTemplateId() const
 {
-    return ui.truckComboBox->currentText();
-}
-
-QString AssignTemplateDialog::getSelectedTemplate() const
-{
-    return ui.templateComboBox->currentText();
-}
-
-void AssignTemplateDialog::onTruckSelected(int index)
-{
-    // Update display based on selected truck
-}
-
-void AssignTemplateDialog::onTemplateSelected(int index)
-{
-    loadTemplatePreview(ui.templateComboBox->currentText());
+    return ui.templateComboBox->currentData().toString();
 }
 
 void AssignTemplateDialog::onAssignClicked()
 {
-    // Validate and assign template to truck
+    if (getTruckId().isEmpty()) {
+        QMessageBox::warning(this, "Validation Error", "Please select a truck.");
+        return;
+    }
+
+    if (getTemplateId().isEmpty()) {
+        QMessageBox::warning(this, "Validation Error", "Please select a template.");
+        return;
+    }
+
     accept();
 }
 

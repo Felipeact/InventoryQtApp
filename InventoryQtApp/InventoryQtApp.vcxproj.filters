@@ -166,6 +166,9 @@
     <ClCompile Include="AddEditUserDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TruckStockService.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -197,6 +200,12 @@
     </ClInclude>
     <ClInclude Include="AddEditUserDialog.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TruckStockService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AssignmentsPage.h">
+      <Filter>Header Files\Pages</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -241,9 +250,6 @@
     </QtMoc>
     <QtMoc Include="AddEditTemplateDialog.h">
       <Filter>Header Files\Modals</Filter>
-    </QtMoc>
-    <QtMoc Include="AssignmentsPage.h">
-      <Filter>Header Files\Pages</Filter>
     </QtMoc>
     <QtMoc Include="LowStockAlertsPage.h">
       <Filter>Header Files\Pages</Filter>
