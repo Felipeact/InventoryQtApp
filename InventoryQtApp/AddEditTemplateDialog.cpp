@@ -1,7 +1,10 @@
 #include "AddEditTemplateDialog.h"
+#include "AddEditTemplateItemDialog.h"
+
 
 #include <QMessageBox>
 #include <QPushButton>
+#include <QHBoxLayout>
 #include <QTableWidgetItem>
 
 AddEditTemplateDialog::AddEditTemplateDialog(QWidget* parent)
@@ -99,14 +102,11 @@ std::vector<CreateTemplateItemRequest> AddEditTemplateDialog::getItems() const
 
 void AddEditTemplateDialog::onAddItemClicked()
 {
-    int row = ui.templateItemsTable->rowCount();
-    ui.templateItemsTable->insertRow(row);
+    AddEditTemplateItemDialog dialog(this);
 
-    ui.templateItemsTable->setItem(row, 0, new QTableWidgetItem("New Item"));
-    ui.templateItemsTable->setItem(row, 1, new QTableWidgetItem("1"));
-    ui.templateItemsTable->setItem(row, 2, new QTableWidgetItem("0.00"));
-    ui.templateItemsTable->setItem(row, 3, new QTableWidgetItem("1"));
-    ui.templateItemsTable->setItem(row, 4, new QTableWidgetItem("Delete"));
+    if (dialog.exec() == QDialog::Accepted) {
+        addItemRow(dialog.getItem());
+    }
 }
 
 void AddEditTemplateDialog::onSaveClicked()
@@ -127,4 +127,107 @@ void AddEditTemplateDialog::onSaveClicked()
 void AddEditTemplateDialog::onCancelClicked()
 {
     reject();
+}
+void AddEditTemplateDialog::addItemRow(const CreateTemplateItemRequest& item)
+{
+    int row = ui.templateItemsTable->rowCount();
+    ui.templateItemsTable->insertRow(row);
+
+    ui.templateItemsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(item.productName)));
+    ui.templateItemsTable->setItem(row, 1, new QTableWidgetItem(QString::number(item.requiredQuantity)));
+    ui.templateItemsTable->setItem(row, 2, new QTableWidgetItem(QString::number(item.expectedPrice, 'f', 2)));
+    ui.templateItemsTable->setItem(row, 3, new QTableWidgetItem(QString::number(item.minimumQuantity)));
+
+    addItemActionButtons(row);
+}
+
+CreateTemplateItemRequest AddEditTemplateDialog::getItemFromRow(int row) const
+{
+    CreateTemplateItemRequest item;
+
+    item.productName = ui.templateItemsTable->item(row, 0)->text().toStdString();
+    item.requiredQuantity = ui.templateItemsTable->item(row, 1)->text().toInt();
+    item.expectedPrice = ui.templateItemsTable->item(row, 2)->text().toDouble();
+    item.minimumQuantity = ui.templateItemsTable->item(row, 3)->text().toInt();
+
+    return item;
+}
+
+void AddEditTemplateDialog::addItemActionButtons(int row)
+{
+    QWidget* widget = new QWidget(this);
+    QHBoxLayout* layout = new QHBoxLayout(widget);
+
+    layout->setContentsMargins(0, 0, 0, 0);
+
+    QPushButton* editButton = new QPushButton("Edit", widget);
+    QPushButton* deleteButton = new QPushButton("Delete", widget);
+
+    layout->addWidget(editButton);
+    layout->addWidget(deleteButton);
+
+    ui.templateItemsTable->setCellWidget(row, 4, widget);
+
+    connect(editButton, &QPushButton::clicked, this, [this, row]() {
+        onEditItemClicked(row);
+        });
+
+    connect(deleteButton, &QPushButton::clicked, this, [this, row]() {
+        onDeleteItemClicked(row);
+        });
+}
+
+void AddEditTemplateDialog::onEditItemClicked(int row)
+{
+    AddEditTemplateItemDialog dialog(this);
+    dialog.setItem(getItemFromRow(row));
+
+    if (dialog.exec() == QDialog::Accepted) {
+        CreateTemplateItemRequest item = dialog.getItem();
+
+        ui.templateItemsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(item.productName)));
+        ui.templateItemsTable->setItem(row, 1, new QTableWidgetItem(QString::number(item.requiredQuantity)));
+        ui.templateItemsTable->setItem(row, 2, new QTableWidgetItem(QString::number(item.expectedPrice, 'f', 2)));
+        ui.templateItemsTable->setItem(row, 3, new QTableWidgetItem(QString::number(item.minimumQuantity)));
+
+        addItemActionButtons(row);
+    }
+}
+
+void AddEditTemplateDialog::onDeleteItemClicked(int row)
+{
+    ui.templateItemsTable->removeRow(row);
+}
+
+void AddEditTemplateDialog::setTemplateData(
+    const TemplateDetailsDto& templateDetails,
+    bool readOnly
+)
+{
+    readOnlyMode = readOnly;
+
+    ui.dialogTitle->setText(
+        readOnly ? "View Template" : "Edit Template"
+    );
+
+    ui.templateNameInput->setText(
+        QString::fromStdString(templateDetails.name)
+    );
+
+    ui.tradeTypeInput->setText(
+        QString::fromStdString(templateDetails.tradeType)
+    );
+
+    ui.templateItemsTable->setRowCount(0);
+
+    for (const auto& item : templateDetails.items) {
+        addItemRow(item);
+    }
+
+    ui.templateNameInput->setReadOnly(readOnly);
+    ui.tradeTypeInput->setReadOnly(readOnly);
+    ui.descriptionInput->setReadOnly(readOnly);
+
+    ui.addItemButton->setVisible(!readOnly);
+    ui.saveButton->setVisible(!readOnly);
 }

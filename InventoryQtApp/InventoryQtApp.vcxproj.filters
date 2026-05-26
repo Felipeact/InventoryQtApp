@@ -169,6 +169,9 @@
     <ClCompile Include="TruckStockService.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="AddEditTemplateItemDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -272,6 +275,9 @@
     <QtMoc Include="SidebarWidget.h">
       <Filter>Header Files\Menu</Filter>
     </QtMoc>
+    <QtMoc Include="AddEditTemplateItemDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DashboardPage.ui">
@@ -341,6 +347,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="AddEditUserDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="AddEditTemplateItemDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

@@ -98,6 +98,14 @@ struct TruckAssignmentDto
     std::string status;
 };
 
+struct TemplateDetailsDto
+{
+    std::string id;
+    std::string name;
+    std::string tradeType;
+    std::vector<CreateTemplateItemRequest> items;
+};
+
 class TruckStockService
 {
 public:
@@ -115,6 +123,15 @@ public:
 
     bool assignTemplate(const CreateAssignmentRequest& request);
     std::vector<TruckAssignmentDto> getAssignments();
+
+    TemplateDetailsDto getTemplateById(const std::string& templateId);
+
+    bool updateTemplate(
+        const std::string& templateId,
+        const CreateTemplateRequest& request
+    );
+
+    bool deleteTemplate(const std::string& templateId);
 
 private:
     ApiClient& apiClient;

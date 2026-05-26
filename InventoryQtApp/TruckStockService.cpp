@@ -351,3 +351,135 @@ std::vector<TruckAssignmentDto> TruckStockService::getAssignments()
 
     return assignments;
 }
+
+TemplateDetailsDto TruckStockService::getTemplateById(
+    const std::string& templateId
+)
+{
+    TemplateDetailsDto templateDetails;
+
+    try {
+        auto response = apiClient.get(
+            "/truck-stock/templates/" + templateId
+        );
+
+        if (response.status_code != 200) {
+            std::cerr << "GET /truck-stock/templates/:id failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return templateDetails;
+        }
+
+        json data = json::parse(response.text);
+
+        templateDetails.id = data.value("id", "");
+        templateDetails.name = data.value("name", "");
+        templateDetails.tradeType = data.value("tradeType", "");
+
+        if (data.contains("items") && data["items"].is_array()) {
+            for (const auto& itemJson : data["items"]) {
+                CreateTemplateItemRequest item;
+
+                item.productName =
+                    itemJson.value("productName", "");
+
+                item.category =
+                    itemJson.value("category", "");
+
+                item.requiredQuantity =
+                    itemJson.value("requiredQuantity", 1);
+
+                item.minimumQuantity =
+                    itemJson.value("minimumQuantity", 1);
+
+                item.expectedPrice =
+                    itemJson.value("expectedPrice", 0.0);
+
+                item.unit =
+                    itemJson.value("unit", "");
+
+                item.notes =
+                    itemJson.value("notes", "");
+
+                templateDetails.items.push_back(item);
+            }
+        }
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::getTemplateById error: "
+            << ex.what()
+            << std::endl;
+    }
+
+    return templateDetails;
+}
+
+bool TruckStockService::updateTemplate(
+    const std::string& templateId,
+    const CreateTemplateRequest& request
+)
+{
+    try {
+        json body;
+
+        body["name"] = request.name;
+        body["tradeType"] = request.tradeType;
+
+        auto response = apiClient.put(
+            "/truck-stock/templates/" + templateId,
+            body.dump()
+        );
+
+        if (response.status_code != 200) {
+            std::cerr << "PUT /truck-stock/templates/:id failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::updateTemplate error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}
+
+bool TruckStockService::deleteTemplate(
+    const std::string& templateId
+)
+{
+    try {
+        auto response = apiClient.del(
+            "/truck-stock/templates/" + templateId
+        );
+
+        if (response.status_code != 200 && response.status_code != 204) {
+            std::cerr << "DELETE /truck-stock/templates/:id failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::deleteTemplate error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}

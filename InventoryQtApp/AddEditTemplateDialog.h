@@ -19,6 +19,8 @@ public:
     QString getTradeType() const;
     std::vector<CreateTemplateItemRequest> getItems() const;
 
+    void setTemplateData(const TemplateDetailsDto& templateDetails,bool readOnly = false);
+
 private slots:
     void onAddItemClicked();
     void onSaveClicked();
@@ -28,4 +30,13 @@ private:
     Ui::AddEditTemplateDialogClass ui;
 
     void setupConnections();
+
+    void addItemRow(const CreateTemplateItemRequest& item);
+    CreateTemplateItemRequest getItemFromRow(int row) const;
+    void addItemActionButtons(int row);
+    void onEditItemClicked(int row);
+    void onDeleteItemClicked(int row);
+
+    bool readOnlyMode = false;
+
 };

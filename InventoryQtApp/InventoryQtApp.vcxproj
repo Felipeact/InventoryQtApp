@@ -94,6 +94,7 @@
   <ItemGroup>
     <ClCompile Include="AddAssetDialog.cpp" />
     <ClCompile Include="AddEditTemplateDialog.cpp" />
+    <ClCompile Include="AddEditTemplateItemDialog.cpp" />
     <ClCompile Include="AddEditTruckDialog.cpp" />
     <ClCompile Include="AddEditUserDialog.cpp" />
     <ClCompile Include="AddProductDialog.cpp" />
@@ -124,6 +125,7 @@
     <QtRcc Include="InventoryQtApp.qrc" />
     <QtUic Include="AddAssetDialog.ui" />
     <QtUic Include="AddEditTemplateDialog.ui" />
+    <QtUic Include="AddEditTemplateItemDialog.ui" />
     <QtUic Include="AddEditTruckDialog.ui" />
     <QtUic Include="AddEditUserDialog.ui" />
     <QtUic Include="AddProductDialog.ui" />
@@ -153,6 +155,7 @@
     <QtUic Include="VerticalWidget.ui" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="AddEditTemplateItemDialog.h" />
     <ClInclude Include="AddEditUserDialog.h" />
     <ClInclude Include="TruckStockService.h" />
     <ClInclude Include="UsersPage.h" />

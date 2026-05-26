@@ -31,5 +31,10 @@ private:
     void loadTemplates();
     void refreshTemplates();
 
+    void addActionButtons(int row);
+    void onViewTemplateClicked(int row);
+    void onEditTemplateClicked(int row);
+    void onDeleteTemplateClicked(int row);
+
 
 };
