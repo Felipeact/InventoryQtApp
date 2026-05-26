@@ -32,6 +32,44 @@ struct UpdateTruckRequest
     std::string status;
 };
 
+struct TemplateItemDto
+{
+    std::string id;
+    std::string productName;
+    std::string category;
+    int requiredQuantity;
+    int minimumQuantity;
+    double expectedPrice;
+    std::string unit;
+    std::string notes;
+};
+
+struct StockTemplateDto
+{
+    std::string id;
+    std::string name;
+    std::string tradeType;
+    int itemCount;
+};
+
+struct CreateTemplateItemRequest
+{
+    std::string productName;
+    std::string category;
+    int requiredQuantity;
+    int minimumQuantity;
+    double expectedPrice;
+    std::string unit;
+    std::string notes;
+};
+
+struct CreateTemplateRequest
+{
+    std::string name;
+    std::string tradeType;
+    std::vector<CreateTemplateItemRequest> items;
+};
+
 class TruckStockService
 {
 public:
@@ -42,6 +80,10 @@ public:
     bool createTruck(const CreateTruckRequest& request);
     bool updateTruck(const std::string& truckId,const UpdateTruckRequest& request);
     bool deactivateTruck(const std::string& truckId);
+
+    std::vector<StockTemplateDto> getTemplates();
+
+    bool createTemplate(const CreateTemplateRequest& request);
 
 private:
     ApiClient& apiClient;

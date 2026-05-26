@@ -2,6 +2,7 @@
 
 #include <QDialog>
 #include "ui_AddEditTemplateDialog.h"
+#include "TruckStockService.h"
 
 class AddEditTemplateDialog : public QDialog
 {
@@ -14,6 +15,9 @@ public:
     void setEditMode(const QString& templateId);
     QString getTemplateName() const;
     QString getDescription() const;
+
+    QString getTradeType() const;
+    std::vector<CreateTemplateItemRequest> getItems() const;
 
 private slots:
     void onAddItemClicked();

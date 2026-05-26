@@ -3,12 +3,15 @@
 #include <QWidget>
 #include "ui_StockTemplatesPage.h"
 
+#include "TruckStockService.h"
+#include <vector>
+
 class StockTemplatesPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    StockTemplatesPage(QWidget* parent = nullptr);
+    StockTemplatesPage(TruckStockService* truckStockService, QWidget* parent = nullptr);
     ~StockTemplatesPage();
 
     void refreshTemplatesList();
@@ -21,6 +24,12 @@ private slots:
 private:
     Ui::StockTemplatesPageClass ui;
 
+    TruckStockService* truckStockService = nullptr;
+    std::vector<StockTemplateDto> currentTemplates;
+
     void setupConnections();
     void loadTemplates();
+    void refreshTemplates();
+
+
 };

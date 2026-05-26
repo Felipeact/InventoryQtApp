@@ -160,3 +160,100 @@ bool TruckStockService::deactivateTruck(const std::string& truckId)
         return false;
     }
 }
+
+std::vector<StockTemplateDto> TruckStockService::getTemplates()
+{
+    std::vector<StockTemplateDto> templates;
+
+    try {
+        auto response = apiClient.get("/truck-stock/templates");
+
+        if (response.status_code != 200) {
+            std::cerr << "GET /truck-stock/templates failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return templates;
+        }
+
+        json data = json::parse(response.text);
+
+        for (const auto& item : data) {
+            StockTemplateDto stockTemplate;
+
+            stockTemplate.id = item.value("id", "");
+            stockTemplate.name = item.value("name", "");
+            stockTemplate.tradeType = item.value("tradeType", "");
+
+            if (item.contains("items") && item["items"].is_array()) {
+                stockTemplate.itemCount =
+                    static_cast<int>(item["items"].size());
+            }
+            else {
+                stockTemplate.itemCount = 0;
+            }
+
+            templates.push_back(stockTemplate);
+        }
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::getTemplates error: "
+            << ex.what()
+            << std::endl;
+    }
+
+    return templates;
+}
+
+bool TruckStockService::createTemplate(
+    const CreateTemplateRequest& request
+)
+{
+    try {
+        json body;
+
+        body["name"] = request.name;
+        body["tradeType"] = request.tradeType;
+        body["items"] = json::array();
+
+        for (const auto& item : request.items) {
+            json itemJson;
+
+            itemJson["productName"] = item.productName;
+            itemJson["category"] = item.category;
+            itemJson["requiredQuantity"] = item.requiredQuantity;
+            itemJson["minimumQuantity"] = item.minimumQuantity;
+            itemJson["expectedPrice"] = item.expectedPrice;
+            itemJson["unit"] = item.unit;
+            itemJson["notes"] = item.notes;
+
+            body["items"].push_back(itemJson);
+        }
+
+        auto response = apiClient.post(
+            "/truck-stock/templates",
+            body.dump()
+        );
+
+        if (response.status_code != 200 && response.status_code != 201) {
+            std::cerr << "POST /truck-stock/templates failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::createTemplate error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}
