@@ -51,19 +51,21 @@
 				border-radius: 12px;
 				}
 
-				QLabel#sectionTitle {
+				QLabel#sectionTitle,
+				QLabel#sectionTitleItems {
 				font-size: 16px;
 				font-weight: 800;
 				}
 
-				QLabel#fieldLabel {
+				QLabel#templateNameLabel,
+				QLabel#descriptionLabel,
+				QLabel#tradeTypeLabel {
 				color: #CBD5E1;
 				font-size: 12px;
 				font-weight: 600;
 				}
 
 				QLineEdit,
-				QSpinBox,
 				QPlainTextEdit {
 				background-color: #08111F;
 				border: 1px solid #1E3350;
@@ -75,7 +77,6 @@
 				}
 
 				QLineEdit:focus,
-				QSpinBox:focus,
 				QPlainTextEdit:focus {
 				border: 1px solid #2563EB;
 				}
@@ -177,6 +178,7 @@
 							</property>
 						</widget>
 					</item>
+
 					<item>
 						<widget class="QLabel" name="backLabel">
 							<property name="text">
@@ -307,6 +309,7 @@
 												</property>
 											</widget>
 										</item>
+
 										<item>
 											<spacer name="itemsHeaderSpacer">
 												<property name="orientation">
@@ -314,6 +317,7 @@
 												</property>
 											</spacer>
 										</item>
+
 										<item>
 											<widget class="QPushButton" name="addItemButton">
 												<property name="text">
@@ -329,12 +333,19 @@
 										<property name="columnCount">
 											<number>5</number>
 										</property>
+
 										<property name="rowCount">
-											<number>4</number>
+											<number>0</number>
 										</property>
+
 										<property name="showGrid">
 											<bool>false</bool>
 										</property>
+
+										<property name="selectionBehavior">
+											<enum>QAbstractItemView::SelectRows</enum>
+										</property>
+
 										<attribute name="horizontalHeaderStretchLastSection">
 											<bool>true</bool>
 										</attribute>
@@ -344,130 +355,30 @@
 												<string>Item</string>
 											</property>
 										</column>
+
 										<column>
 											<property name="text">
 												<string>Required Qty</string>
 											</property>
 										</column>
+
 										<column>
 											<property name="text">
 												<string>Expected Price</string>
 											</property>
 										</column>
+
 										<column>
 											<property name="text">
 												<string>Minimum Qty</string>
 											</property>
 										</column>
+
 										<column>
 											<property name="text">
 												<string>Actions</string>
 											</property>
 										</column>
-
-										<item row="0" column="0">
-											<property name="text">
-												<string>Capacitor 45/5 μF</string>
-											</property>
-										</item>
-										<item row="0" column="1">
-											<property name="text">
-												<string>2</string>
-											</property>
-										</item>
-										<item row="0" column="2">
-											<property name="text">
-												<string>$18.50</string>
-											</property>
-										</item>
-										<item row="0" column="3">
-											<property name="text">
-												<string>1</string>
-											</property>
-										</item>
-										<item row="0" column="4">
-											<property name="text">
-												<string>✎ 🗑</string>
-											</property>
-										</item>
-
-										<item row="1" column="0">
-											<property name="text">
-												<string>Contactor 24V</string>
-											</property>
-										</item>
-										<item row="1" column="1">
-											<property name="text">
-												<string>2</string>
-											</property>
-										</item>
-										<item row="1" column="2">
-											<property name="text">
-												<string>$24.00</string>
-											</property>
-										</item>
-										<item row="1" column="3">
-											<property name="text">
-												<string>1</string>
-											</property>
-										</item>
-										<item row="1" column="4">
-											<property name="text">
-												<string>✎ 🗑</string>
-											</property>
-										</item>
-
-										<item row="2" column="0">
-											<property name="text">
-												<string>Fuses 30A</string>
-											</property>
-										</item>
-										<item row="2" column="1">
-											<property name="text">
-												<string>10</string>
-											</property>
-										</item>
-										<item row="2" column="2">
-											<property name="text">
-												<string>$2.00</string>
-											</property>
-										</item>
-										<item row="2" column="3">
-											<property name="text">
-												<string>5</string>
-											</property>
-										</item>
-										<item row="2" column="4">
-											<property name="text">
-												<string>✎ 🗑</string>
-											</property>
-										</item>
-
-										<item row="3" column="0">
-											<property name="text">
-												<string>Thermostat</string>
-											</property>
-										</item>
-										<item row="3" column="1">
-											<property name="text">
-												<string>1</string>
-											</property>
-										</item>
-										<item row="3" column="2">
-											<property name="text">
-												<string>$75.00</string>
-											</property>
-										</item>
-										<item row="3" column="3">
-											<property name="text">
-												<string>1</string>
-											</property>
-										</item>
-										<item row="3" column="4">
-											<property name="text">
-												<string>✎ 🗑</string>
-											</property>
-										</item>
 									</widget>
 								</item>
 							</layout>
@@ -485,6 +396,7 @@
 							</property>
 						</spacer>
 					</item>
+
 					<item>
 						<widget class="QPushButton" name="cancelButton">
 							<property name="text">
@@ -492,6 +404,7 @@
 							</property>
 						</widget>
 					</item>
+
 					<item>
 						<widget class="QPushButton" name="saveButton">
 							<property name="text">
@@ -501,7 +414,6 @@
 					</item>
 				</layout>
 			</item>
-
 		</layout>
 	</widget>
 
