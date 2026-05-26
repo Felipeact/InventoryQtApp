@@ -17,6 +17,36 @@ AddEditTruckDialog::~AddEditTruckDialog()
 {
 }
 
+void AddEditTruckDialog::setEditMode(
+    const QString& truckId,
+    const QString& truckName,
+    const QString& licensePlate,
+    const QString& technicianId,
+    const QString& status
+)
+{
+    editingTruckId = truckId;
+
+    ui.dialogTitle->setText("Edit Truck");
+
+    ui.truckNameInput->setText(truckName);
+    ui.licensePlateInput->setText(licensePlate);
+
+    int technicianIndex =
+        ui.technicianComboBox->findData(technicianId);
+
+    if (technicianIndex >= 0) {
+        ui.technicianComboBox->setCurrentIndex(technicianIndex);
+    }
+
+    int statusIndex =
+        ui.statusComboBox->findText(status);
+
+    if (statusIndex >= 0) {
+        ui.statusComboBox->setCurrentIndex(statusIndex);
+    }
+}
+
 void AddEditTruckDialog::setupConnections()
 {
     connect(ui.saveButton, &QPushButton::clicked, this, &AddEditTruckDialog::onSaveClicked);
@@ -48,11 +78,6 @@ void AddEditTruckDialog::loadTechnicianList()
     }
 }
 
-void AddEditTruckDialog::setEditMode(const QString& truckId)
-{
-    // Load truck data for editing
-    ui.dialogTitle->setText("Edit Truck");
-}
 
 QString AddEditTruckDialog::getTruckName() const
 {

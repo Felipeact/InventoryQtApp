@@ -38,9 +38,15 @@ std::vector<TruckDto> TruckStockService::getTrucks()
             truck.status = item.value("status", "");
 
             if (item.contains("technician") && item["technician"].is_object()) {
+                truck.technicianId = item["technician"].value("id", "");
                 truck.technicianName = item["technician"].value("name", "");
+
+                if (truck.technicianName.empty()) {
+                    truck.technicianName = item["technician"].value("email", "");
+                }
             }
             else {
+                truck.technicianId = "";
                 truck.technicianName = "";
             }
 
@@ -88,6 +94,69 @@ bool TruckStockService::createTruck(const CreateTruckRequest& request)
             << ex.what()
             << std::endl;
 
+        return false;
+    }
+}
+
+bool TruckStockService::updateTruck(const std::string& truckId, const UpdateTruckRequest& request)
+{
+    try {
+        json body;
+
+        body["truckNumber"] = request.truckNumber;
+        body["plateNumber"] = request.plateNumber;
+        body["technicianId"] = request.technicianId;
+        body["status"] = request.status;
+
+        auto response = apiClient.put(
+            "/truck-stock/trucks/" + truckId,
+            body.dump()
+        );
+
+        if (response.status_code != 200) {
+            std::cerr << "PUT /truck-stock/trucks failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::updateTruck error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+
+}
+
+bool TruckStockService::deactivateTruck(const std::string& truckId)
+{
+    UpdateTruckRequest request;
+
+    request.truckNumber = "";
+    request.plateNumber = "";
+    request.technicianId = "";
+    request.status = "INACTIVE";
+
+    try {
+        json body;
+        body["status"] = "INACTIVE";
+        body["technicianId"] = "";
+
+        auto response = apiClient.put(
+            "/truck-stock/trucks/" + truckId,
+            body.dump()
+        );
+
+        return response.status_code == 200;
+    }
+    catch (...) {
         return false;
     }
 }

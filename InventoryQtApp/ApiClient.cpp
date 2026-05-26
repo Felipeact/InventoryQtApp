@@ -1,64 +1,55 @@
-// ApiClient.cpp - Implementation of HTTP client for API communication
 #include "ApiClient.h"
 #include <nlohmann/json.hpp>
 #include <iostream>
 
 using json = nlohmann::json;
 
-
-// Constructor initializes the base URL for all API requests
-ApiClient::ApiClient(const std::string& baseUrl) :
-	baseUrl(baseUrl)
+ApiClient::ApiClient(const std::string& baseUrl)
+    : baseUrl(baseUrl)
 {
 }
 
-
-// Updates the authentication token for subsequent API requests
 void ApiClient::setAccessToken(const std::string& token)
 {
-	accessToken = token;
+    accessToken = token;
 }
 
 void ApiClient::setRefreshToken(const std::string& token)
 {
-	refreshToken = token;
+    refreshToken = token;
 }
 
 std::string ApiClient::getAccessToken() const
 {
-	return accessToken;
+    return accessToken;
 }
 
 std::string ApiClient::getRefreshToken() const
 {
-	return refreshToken;
+    return refreshToken;
 }
 
 cpr::Header ApiClient::authHeader() const
 {
-	if (accessToken.empty()) {
-		return cpr::Header{};
-	}
+    if (accessToken.empty()) {
+        return cpr::Header{};
+    }
 
-	return cpr::Header{
-		{"Authorization", "Bearer " + accessToken}
-	};
+    return cpr::Header{
+        {"Authorization", "Bearer " + accessToken}
+    };
 }
 
-
-// Clears the stored access and refresh tokens, effectively logging out the user
 void ApiClient::clearTokens()
 {
-	accessToken.clear();
-	refreshToken.clear();
+    accessToken.clear();
+    refreshToken.clear();
 }
 
-
-// Sends a GET request to the specified endpoint
 cpr::Response ApiClient::get(const std::string& endpoint)
 {
-	std::cout << "GET: " << baseUrl + endpoint << std::endl;
-    std::cout << "TOKEN EMPTY: " << (accessToken.empty() ? "YES" : "NO") << std::endl;
+    std::cout << "GET: " << baseUrl + endpoint << std::endl;
+    std::cout << "ACCESS TOKEN EMPTY: " << (accessToken.empty() ? "YES" : "NO") << std::endl;
 
     auto res = cpr::Get(
         cpr::Url{ baseUrl + endpoint },
@@ -78,143 +69,170 @@ cpr::Response ApiClient::get(const std::string& endpoint)
     return res;
 }
 
-// Sends a POST request with the given endpoint and JSON body
 cpr::Response ApiClient::post(const std::string& endpoint, const std::string& body)
 {
-	auto res = cpr::Post(
-		cpr::Url{ baseUrl + endpoint },
-		cpr::Header{
-			{"Content-Type", "application/json"},
-			{"Authorization", "Bearer " + accessToken}
-		},
-		cpr::Body{ body }
-	);
+    std::cout << "POST: " << baseUrl + endpoint << std::endl;
+    std::cout << "BODY SENT: " << body << std::endl;
+    std::cout << "ACCESS TOKEN EMPTY: " << (accessToken.empty() ? "YES" : "NO") << std::endl;
 
-	if (res.status_code == 401 && refreshAccessToken()) {
-		res = cpr::Post(
-			cpr::Url{ baseUrl + endpoint },
-			cpr::Header{
-				{"Content-Type", "application/json"},
-				{"Authorization", "Bearer " + accessToken}
-			},
-			cpr::Body{ body }
-		);
-	}
+    cpr::Header headers{
+        {"Content-Type", "application/json"}
+    };
 
-	return res;
+    if (
+        endpoint != "/auth/login" &&
+        endpoint != "/auth/refresh" &&
+        !accessToken.empty()
+        ) {
+        headers["Authorization"] = "Bearer " + accessToken;
+    }
+
+    auto res = cpr::Post(
+        cpr::Url{ baseUrl + endpoint },
+        headers,
+        cpr::Body{ body }
+    );
+
+    std::cout << "STATUS: " << res.status_code << std::endl;
+    std::cout << "BODY: " << res.text << std::endl;
+
+    if (
+        res.status_code == 401 &&
+        endpoint != "/auth/login" &&
+        endpoint != "/auth/refresh" &&
+        refreshAccessToken()
+        ) {
+        cpr::Header retryHeaders{
+            {"Content-Type", "application/json"},
+            {"Authorization", "Bearer " + accessToken}
+        };
+
+        res = cpr::Post(
+            cpr::Url{ baseUrl + endpoint },
+            retryHeaders,
+            cpr::Body{ body }
+        );
+    }
+
+    return res;
 }
 
 cpr::Response ApiClient::put(const std::string& endpoint, const std::string& body)
 {
-	auto res = cpr::Put(
-		cpr::Url{ baseUrl + endpoint },
-		cpr::Header{
-			{"Content-Type", "application/json"},
-			{"Authorization", "Bearer " + accessToken}
-		},
-		cpr::Body{ body }
-	);
+    std::cout << "PUT: " << baseUrl + endpoint << std::endl;
+    std::cout << "BODY SENT: " << body << std::endl;
 
-	if (res.status_code == 401 && refreshAccessToken()) {
-		res = cpr::Put(
-			cpr::Url{ baseUrl + endpoint },
-			cpr::Header{
-				{"Content-Type", "application/json"},
-				{"Authorization", "Bearer " + accessToken}
-			},
-			cpr::Body{ body }
-		);
-	}
+    auto res = cpr::Put(
+        cpr::Url{ baseUrl + endpoint },
+        cpr::Header{
+            {"Content-Type", "application/json"},
+            {"Authorization", "Bearer " + accessToken}
+        },
+        cpr::Body{ body }
+    );
 
-	return res;
+    std::cout << "STATUS: " << res.status_code << std::endl;
+    std::cout << "BODY: " << res.text << std::endl;
+
+    if (res.status_code == 401 && refreshAccessToken()) {
+        res = cpr::Put(
+            cpr::Url{ baseUrl + endpoint },
+            cpr::Header{
+                {"Content-Type", "application/json"},
+                {"Authorization", "Bearer " + accessToken}
+            },
+            cpr::Body{ body }
+        );
+    }
+
+    return res;
 }
 
 cpr::Response ApiClient::del(const std::string& endpoint)
 {
-	auto res = cpr::Delete(
-		cpr::Url{ baseUrl + endpoint },
-		authHeader()
-	);
+    std::cout << "DELETE: " << baseUrl + endpoint << std::endl;
 
-	if (res.status_code == 401 && refreshAccessToken()) {
-		res = cpr::Delete(
-			cpr::Url{ baseUrl + endpoint },
-			authHeader()
-		);
-	}
+    auto res = cpr::Delete(
+        cpr::Url{ baseUrl + endpoint },
+        authHeader()
+    );
 
-	return res;
+    std::cout << "STATUS: " << res.status_code << std::endl;
+    std::cout << "BODY: " << res.text << std::endl;
+
+    if (res.status_code == 401 && refreshAccessToken()) {
+        res = cpr::Delete(
+            cpr::Url{ baseUrl + endpoint },
+            authHeader()
+        );
+    }
+
+    return res;
 }
 
-
-
-
-// Validates the token and retrieves user role and permissions from the server
 bool ApiClient::validateToken(std::string& role, std::vector<std::string>& permissions)
 {
-	try
-	{
-		auto res = get("/auth/validate");
+    try {
+        auto res = get("/auth/validate");
 
-		if (res.status_code != 200) {
-			return false;
-		}
+        if (res.status_code != 200) {
+            return false;
+        }
 
-		auto data = json::parse(res.text);
+        auto data = json::parse(res.text);
 
-		role = data["user"]["role"].get<std::string>();
+        role = data["user"]["role"].get<std::string>();
 
-		permissions.clear();
+        permissions.clear();
 
-		if (data["user"].contains("permissions")) {
-			for (const auto& permission : data["user"]["permissions"]) {
-				permissions.push_back(permission.get<std::string>());
-			}
-		}
+        if (data["user"].contains("permissions")) {
+            for (const auto& permission : data["user"]["permissions"]) {
+                permissions.push_back(permission.get<std::string>());
+            }
+        }
 
-		return true;
-	}
-	catch (const std::exception&)
-	{
-		return false;
-	}
-	
+        return true;
+    }
+    catch (const std::exception&) {
+        return false;
+    }
 }
 
 bool ApiClient::refreshAccessToken()
 {
-	if (refreshToken.empty()) {
-		return false;
-	}
+    if (refreshToken.empty()) {
+        return false;
+    }
 
-	json body = {
-		{"refreshToken", refreshToken}
-	};
+    json body = {
+        {"refreshToken", refreshToken}
+    };
 
-	auto res = cpr::Post(
-		cpr::Url{ baseUrl + "/auth/refresh" },
-		cpr::Header{
-			{"Content-Type", "application/json"}
-		},
-		cpr::Body{ body.dump() }
-	);
+    auto res = cpr::Post(
+        cpr::Url{ baseUrl + "/auth/refresh" },
+        cpr::Header{
+            {"Content-Type", "application/json"}
+        },
+        cpr::Body{ body.dump() }
+    );
 
-	if (res.status_code != 200) {
-		return false;
-	}
+    if (res.status_code != 200) {
+        clearTokens();
+        return false;
+    }
 
-	auto data = json::parse(res.text);
+    auto data = json::parse(res.text);
 
-	if (!data.contains("accessToken")) {
-		return false;
-	}
+    if (data.contains("accessToken")) {
+        accessToken = data["accessToken"].get<std::string>();
+        return true;
+    }
 
-	accessToken = data["accessToken"].get<std::string>();
+    if (data.contains("token")) {
+        accessToken = data["token"].get<std::string>();
+        return true;
+    }
 
-	return true;
+    clearTokens();
+    return false;
 }
-
-
-
-
-

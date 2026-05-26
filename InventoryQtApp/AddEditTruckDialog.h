@@ -18,7 +18,13 @@ public:
 
     ~AddEditTruckDialog();
 
-    void setEditMode(const QString& truckId);
+    void setEditMode(
+        const QString& truckId,
+        const QString& truckName,
+        const QString& licensePlate,
+        const QString& technicianId,
+        const QString& status
+    );
 
     QString getTruckName() const;
     QString getLicensePlate() const;
@@ -34,6 +40,7 @@ private slots:
 private:
     Ui::AddEditTruckDialogClass ui;
     UserService* userService = nullptr;
+    QString editingTruckId;
 
     void setupConnections();
     void loadTechnicianList();

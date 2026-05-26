@@ -2,6 +2,8 @@
 #include "AddEditTruckDialog.h"
 
 #include <QMessageBox>
+#include <QHBoxLayout>
+#include <QPushButton>
 
 TrucksPage::TrucksPage(
     TruckStockService* truckStockService,
@@ -62,10 +64,7 @@ void TrucksPage::loadTrucks()
             new QTableWidgetItem(QString::fromStdString(truck.status))
         );
 
-        ui.trucksTable->setItem(
-            row, 4,
-            new QTableWidgetItem("Edit / Delete")
-        );
+        addActionButtons(row);
     }
 
     ui.paginationLabel->setText(
@@ -123,4 +122,115 @@ void TrucksPage::onSearchChanged(const QString& text)
 void TrucksPage::onPageChanged(int page)
 {
     // Load trucks for specified page
+}
+
+void TrucksPage::addActionButtons(int row)
+{
+    QWidget* actionWidget = new QWidget(this);
+    QHBoxLayout* layout = new QHBoxLayout(actionWidget);
+
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+
+    QPushButton* editButton = new QPushButton("Edit", actionWidget);
+    QPushButton* deleteButton = new QPushButton("Delete", actionWidget);
+
+    layout->addWidget(editButton);
+    layout->addWidget(deleteButton);
+    layout->addStretch();
+
+    ui.trucksTable->setCellWidget(row, 4, actionWidget);
+
+    connect(editButton, &QPushButton::clicked, this, [this, row]() {
+        onEditTruckClicked(row);
+        });
+
+    connect(deleteButton, &QPushButton::clicked, this, [this, row]() {
+        onDeleteTruckClicked(row);
+        });
+}
+
+void TrucksPage::onEditTruckClicked(int row)
+{
+    if (row < 0 || row >= static_cast<int>(currentTrucks.size())) {
+        return;
+    }
+
+    const TruckDto& truck = currentTrucks[row];
+
+    AddEditTruckDialog dialog(userService, this);
+
+    dialog.setEditMode(
+        QString::fromStdString(truck.id),
+        QString::fromStdString(truck.truckName),
+        QString::fromStdString(truck.licensePlate),
+        QString::fromStdString(truck.technicianId),
+        QString::fromStdString(truck.status)
+    );
+
+    if (dialog.exec() == QDialog::Accepted) {
+
+        UpdateTruckRequest request;
+
+        request.truckNumber =
+            dialog.getTruckName().toStdString();
+
+        request.plateNumber =
+            dialog.getLicensePlate().toStdString();
+
+        request.technicianId =
+            dialog.getTechnicianId().toStdString();
+
+        request.status =
+            dialog.getStatus().toStdString();
+
+        bool success =
+            truckStockService->updateTruck(truck.id, request);
+
+        if (success) {
+            QMessageBox::information(
+                this,
+                "Success",
+                "Truck updated successfully."
+            );
+
+            loadTrucks();
+        }
+        else {
+            QMessageBox::warning(
+                this,
+                "Error",
+                "Failed to update truck."
+            );
+        }
+    }
+}
+
+void TrucksPage::onDeleteTruckClicked(int row)
+{
+    if (row < 0 || row >= static_cast<int>(currentTrucks.size())) {
+        return;
+    }
+
+    const TruckDto& truck = currentTrucks[row];
+
+    auto confirm = QMessageBox::question(
+        this,
+        "Deactivate Truck",
+        "Do you want to deactivate this truck?"
+    );
+
+    if (confirm != QMessageBox::Yes) {
+        return;
+    }
+
+    bool success = truckStockService->deactivateTruck(truck.id);
+
+    if (success) {
+        QMessageBox::information(this, "Success", "Truck deactivated.");
+        loadTrucks();
+    }
+    else {
+        QMessageBox::warning(this, "Error", "Failed to deactivate truck.");
+    }
 }

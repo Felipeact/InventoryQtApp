@@ -20,6 +20,10 @@ private slots:
     void onSearchChanged(const QString& text);
     void onPageChanged(int page);
 
+    void addActionButtons(int row);
+    void onEditTruckClicked(int row);
+    void onDeleteTruckClicked(int row);
+
 private:
     Ui::TrucksPageClass ui;
 
