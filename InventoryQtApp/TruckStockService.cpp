@@ -483,3 +483,291 @@ bool TruckStockService::deleteTemplate(
         return false;
     }
 }
+
+MyTruckStockDto TruckStockService::getMyTruckStock()
+{
+    MyTruckStockDto result;
+
+    try {
+        auto response = apiClient.get("/truck-stock/my-stock");
+
+        if (response.status_code != 200) {
+            std::cerr << "GET /truck-stock/my-stock failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return result;
+        }
+
+        json data = json::parse(response.text);
+
+        result.truckId =
+            data.value("id", "");
+
+        result.truckNumber =
+            data.value("truckNumber", "");
+
+        result.plateNumber =
+            data.value("plateNumber", "");
+
+        if (data.contains("stockAssignments") &&
+            data["stockAssignments"].is_array()) {
+
+            for (const auto& assignment : data["stockAssignments"]) {
+
+                if (!assignment.contains("template")) {
+                    continue;
+                }
+
+                const auto& templateData = assignment["template"];
+
+                if (!templateData.contains("items") ||
+                    !templateData["items"].is_array()) {
+                    continue;
+                }
+
+                for (const auto& itemJson : templateData["items"]) {
+                    MyTruckStockItemDto item;
+
+                    item.id =
+                        itemJson.value("id", "");
+
+                    item.productName =
+                        itemJson.value("productName", "");
+
+                    item.category =
+                        itemJson.value("category", "");
+
+                    item.currentQuantity =
+                        itemJson.value("currentQuantity", 0);
+
+                    item.minimumQuantity =
+                        itemJson.value("minimumQuantity", 0);
+
+                    item.requiredQuantity =
+                        itemJson.value("requiredQuantity", 0);
+
+                    item.status =
+                        item.currentQuantity <= item.minimumQuantity
+                        ? "Low Stock"
+                        : "OK";
+
+                    result.items.push_back(item);
+                }
+            }
+        }
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::getMyTruckStock error: "
+            << ex.what()
+            << std::endl;
+    }
+
+    return result;
+}
+
+bool TruckStockService::useTruckItem(
+    const UseTruckItemRequest& request
+)
+{
+    try {
+        json body;
+
+        body["truckStockItemId"] = request.itemId;
+        body["quantity"] = request.quantityUsed;
+        body["notes"] = request.notes;
+
+        auto response = apiClient.post(
+            "/truck-stock/use-item",
+            body.dump()
+        );
+
+        if (response.status_code != 200 && response.status_code != 201) {
+            std::cerr << "POST /truck-stock/use-item failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::useTruckItem error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}
+
+std::vector<LowStockItemDto> TruckStockService::getLowStockItems()
+{
+    std::vector<LowStockItemDto> lowStockItems;
+
+    try {
+        auto response = apiClient.get("/truck-stock/low-stock");
+
+        if (response.status_code != 200) {
+            std::cerr << "GET /truck-stock/low-stock failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return lowStockItems;
+        }
+
+        json data = json::parse(response.text);
+
+        for (const auto& templateJson : data) {
+            std::string templateName =
+                templateJson.value("name", "");
+
+            std::string truckNumber = "";
+
+            if (templateJson.contains("assignments") &&
+                templateJson["assignments"].is_array() &&
+                !templateJson["assignments"].empty()) {
+
+                const auto& firstAssignment =
+                    templateJson["assignments"][0];
+
+                if (firstAssignment.contains("truck") &&
+                    firstAssignment["truck"].is_object()) {
+                    truckNumber =
+                        firstAssignment["truck"].value("truckNumber", "");
+                }
+            }
+
+            if (!templateJson.contains("items") ||
+                !templateJson["items"].is_array()) {
+                continue;
+            }
+
+            for (const auto& itemJson : templateJson["items"]) {
+                LowStockItemDto item;
+
+                item.templateName = templateName;
+                item.truckNumber = truckNumber;
+                item.productName =
+                    itemJson.value("productName", "");
+
+                item.currentQuantity =
+                    itemJson.value("currentQuantity", 0);
+
+                item.minimumQuantity =
+                    itemJson.value("minimumQuantity", 0);
+
+                item.status =
+                    item.currentQuantity <= 0
+                    ? "Critical"
+                    : "Warning";
+
+                lowStockItems.push_back(item);
+            }
+        }
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::getLowStockItems error: "
+            << ex.what()
+            << std::endl;
+    }
+
+    return lowStockItems;
+}
+
+std::vector<ReceiptDto> TruckStockService::getReceipts()
+{
+    std::vector<ReceiptDto> receipts;
+
+    try {
+        auto response = apiClient.get("/truck-stock/receipts");
+
+        if (response.status_code != 200) {
+            std::cerr << "GET /truck-stock/receipts failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return receipts;
+        }
+
+        json data = json::parse(response.text);
+
+        for (const auto& item : data) {
+            ReceiptDto receipt;
+
+            receipt.id = item.value("id", "");
+            receipt.totalAmount = item.value("totalAmount", 0.0);
+            receipt.status = item.value("status", "");
+            receipt.createdAt = item.value("createdAt", "");
+
+            if (item.contains("technician") && item["technician"].is_object()) {
+                receipt.technicianName =
+                    item["technician"].value("name", "");
+
+                if (receipt.technicianName.empty()) {
+                    receipt.technicianName =
+                        item["technician"].value("email", "");
+                }
+            }
+
+            if (item.contains("truck") && item["truck"].is_object()) {
+                receipt.truckNumber =
+                    item["truck"].value("truckNumber", "");
+            }
+
+            receipts.push_back(receipt);
+        }
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::getReceipts error: "
+            << ex.what()
+            << std::endl;
+    }
+
+    return receipts;
+}
+
+bool TruckStockService::createReceipt(
+    const CreateReceiptRequest& request
+)
+{
+    try {
+        json body;
+
+        body["truckId"] = request.truckId;
+        body["fileUrl"] = request.fileUrl;
+        body["totalAmount"] = request.totalAmount;
+
+        auto response = apiClient.post(
+            "/truck-stock/receipts",
+            body.dump()
+        );
+
+        if (response.status_code != 200 && response.status_code != 201) {
+            std::cerr << "POST /truck-stock/receipts failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::createReceipt error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}

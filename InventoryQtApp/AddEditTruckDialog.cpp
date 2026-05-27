@@ -56,28 +56,41 @@ void AddEditTruckDialog::setupConnections()
 void AddEditTruckDialog::loadTechnicianList()
 {
     ui.technicianComboBox->clear();
-    ui.technicianComboBox->addItem("No technician", "");
+
+    ui.technicianComboBox->addItem(
+        "No technician",
+        ""
+    );
 
     if (!userService) {
         return;
     }
 
-    std::vector<UserDto> technicians = userService->getTechnicians();
+    std::vector<UserDto> users = userService->getUsers();
 
-    for (const UserDto& tech : technicians) {
-        QString displayName = QString::fromStdString(tech.name);
+    for (const UserDto& user : users) {
+
+        if (
+            user.role != "TECHNICIAN" &&
+            user.role != "ADMIN"
+            ) {
+            continue;
+        }
+
+        QString displayName =
+            QString::fromStdString(user.name);
 
         if (displayName.trimmed().isEmpty()) {
-            displayName = QString::fromStdString(tech.email);
+            displayName =
+                QString::fromStdString(user.email);
         }
 
         ui.technicianComboBox->addItem(
             displayName,
-            QString::fromStdString(tech.id)
+            QString::fromStdString(user.id)
         );
     }
 }
-
 
 QString AddEditTruckDialog::getTruckName() const
 {

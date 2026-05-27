@@ -255,30 +255,7 @@
 
 									<widget class="QComboBox" name="truckComboBox">
 
-										<item>
-											<property name="text">
-												<string>Select Truck</string>
-											</property>
-										</item>
-
-										<item>
-											<property name="text">
-												<string>Truck 1 - ABC-123</string>
-											</property>
-										</item>
-
-										<item>
-											<property name="text">
-												<string>Truck 2 - DEF-456</string>
-											</property>
-										</item>
-
-										<item>
-											<property name="text">
-												<string>Truck 3 - GHI-789</string>
-											</property>
-										</item>
-
+					
 									</widget>
 
 								</item>
@@ -301,30 +278,6 @@
 
 									<widget class="QComboBox" name="templateComboBox">
 
-										<item>
-											<property name="text">
-												<string>Select Template</string>
-											</property>
-										</item>
-
-										<item>
-											<property name="text">
-												<string>HVAC Basic</string>
-											</property>
-										</item>
-
-										<item>
-											<property name="text">
-												<string>Electrical Standard</string>
-											</property>
-										</item>
-
-										<item>
-											<property name="text">
-												<string>Full Truck Stock</string>
-											</property>
-										</item>
-
 									</widget>
 
 								</item>
@@ -346,31 +299,6 @@
 								<item row="3" column="0">
 
 									<widget class="QComboBox" name="technicianComboBox">
-
-										<item>
-											<property name="text">
-												<string>Select Technician</string>
-											</property>
-										</item>
-
-										<item>
-											<property name="text">
-												<string>John Smith</string>
-											</property>
-										</item>
-
-										<item>
-											<property name="text">
-												<string>Mike Johnson</string>
-											</property>
-										</item>
-
-										<item>
-											<property name="text">
-												<string>Sarah Davis</string>
-											</property>
-										</item>
-
 									</widget>
 
 								</item>

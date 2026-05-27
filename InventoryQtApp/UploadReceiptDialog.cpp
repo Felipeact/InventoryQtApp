@@ -1,27 +1,32 @@
 #include "UploadReceiptDialog.h"
 
+#include <QComboBox>
+#include <QDoubleSpinBox>
 #include <QFileDialog>
 #include <QFileInfo>
 #include <QMessageBox>
-#include <QComboBox>
-#include <QDoubleSpinBox>
 #include <QPlainTextEdit>
 #include <QPushButton>
 
-UploadReceiptDialog::UploadReceiptDialog(QWidget* parent)
-    : QDialog(parent)
+UploadReceiptDialog::UploadReceiptDialog(
+    TruckStockService* truckStockService,
+    QWidget* parent
+)
+    : QDialog(parent),
+    truckStockService(truckStockService)
 {
     ui.setupUi(this);
 
     setWindowTitle("Upload Receipt");
     setModal(true);
-    resize(820, 640);
-    setMinimumSize(820, 640);
 
-    selectedFilePath.clear();
+    selectedFilePath = "";
 
     setupConnections();
     loadTrucks();
+
+    ui.summaryValue->setText("0");
+    ui.summaryValue2->setText("$0.00");
 }
 
 UploadReceiptDialog::~UploadReceiptDialog()
@@ -48,10 +53,26 @@ void UploadReceiptDialog::setupConnections()
 void UploadReceiptDialog::loadTrucks()
 {
     ui.truckComboBox->clear();
-    ui.truckComboBox->addItem("Select Truck");
-    ui.truckComboBox->addItem("Truck 1");
-    ui.truckComboBox->addItem("Truck 2");
-    ui.truckComboBox->addItem("Truck 3");
+
+    ui.truckComboBox->addItem(
+        "Select Truck",
+        ""
+    );
+
+    if (!truckStockService) {
+        return;
+    }
+
+    std::vector<TruckDto> trucks =
+        truckStockService->getTrucks();
+
+    for (const TruckDto& truck : trucks) {
+
+        ui.truckComboBox->addItem(
+            QString::fromStdString(truck.truckName),
+            QString::fromStdString(truck.id)
+        );
+    }
 }
 
 void UploadReceiptDialog::onBrowseClicked()
@@ -68,34 +89,52 @@ void UploadReceiptDialog::onBrowseClicked()
     }
 }
 
-void UploadReceiptDialog::updateFileDisplay(const QString& filePath)
+void UploadReceiptDialog::updateFileDisplay(
+    const QString& filePath
+)
 {
     selectedFilePath = filePath;
 
     QFileInfo fileInfo(filePath);
 
-    // Your current redesigned XML does not have fileNameLabel/filePathLabel/previewLabel.
-    // So for now we show the selected file in the upload text area.
-    ui.uploadText->setText(fileInfo.fileName());
-    ui.uploadSubtext->setText(filePath);
+    ui.uploadText->setText(
+        fileInfo.fileName()
+    );
+
+    ui.uploadSubtext->setText(
+        filePath
+    );
 }
 
-void UploadReceiptDialog::loadPreview(const QString& filePath)
+void UploadReceiptDialog::loadPreview(
+    const QString& filePath
+)
 {
     Q_UNUSED(filePath);
 
-    // Current XML has no previewLabel.
-    // Later we can add a real preview area if needed.
+    // Preview can be added later
 }
 
 QString UploadReceiptDialog::getSelectedTruck() const
 {
-    return ui.truckComboBox->currentText();
+    return ui.truckComboBox
+        ->currentText();
+}
+
+QString UploadReceiptDialog::getSelectedTruckId() const
+{
+    return ui.truckComboBox
+        ->currentData()
+        .toString();
 }
 
 QString UploadReceiptDialog::getTotalAmount() const
 {
-    return QString::number(ui.amountInput->value(), 'f', 2);
+    return QString::number(
+        ui.amountInput->value(),
+        'f',
+        2
+    );
 }
 
 QString UploadReceiptDialog::getFilePath() const
@@ -105,18 +144,36 @@ QString UploadReceiptDialog::getFilePath() const
 
 void UploadReceiptDialog::onUploadClicked()
 {
-    if (ui.truckComboBox->currentIndex() == 0) {
-        QMessageBox::warning(this, "Missing Truck", "Please select a truck.");
+    if (ui.truckComboBox->currentIndex() <= 0) {
+
+        QMessageBox::warning(
+            this,
+            "Missing Truck",
+            "Please select a truck."
+        );
+
         return;
     }
 
     if (selectedFilePath.isEmpty()) {
-        QMessageBox::warning(this, "Missing File", "Please select a receipt file.");
+
+        QMessageBox::warning(
+            this,
+            "Missing File",
+            "Please select a receipt file."
+        );
+
         return;
     }
 
     if (ui.amountInput->value() <= 0) {
-        QMessageBox::warning(this, "Missing Amount", "Please enter the total amount.");
+
+        QMessageBox::warning(
+            this,
+            "Missing Amount",
+            "Please enter the total amount."
+        );
+
         return;
     }
 
@@ -128,7 +185,9 @@ void UploadReceiptDialog::onCancelClicked()
     reject();
 }
 
-void UploadReceiptDialog::onTruckSelected(int index)
+void UploadReceiptDialog::onTruckSelected(
+    int index
+)
 {
     Q_UNUSED(index);
 }

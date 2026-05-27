@@ -2,18 +2,26 @@
 
 #include <QDialog>
 #include "ui_UploadReceiptDialog.h"
+#include "TruckStockService.h"
 
 class UploadReceiptDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    UploadReceiptDialog(QWidget* parent = nullptr);
+    explicit UploadReceiptDialog(
+        TruckStockService* truckStockService,
+        QWidget* parent = nullptr
+    );
+
+
     ~UploadReceiptDialog();
 
     QString getSelectedTruck() const;
     QString getTotalAmount() const;
     QString getFilePath() const;
+
+    QString getSelectedTruckId() const;
 
 private slots:
     void onBrowseClicked();
@@ -21,9 +29,13 @@ private slots:
     void onCancelClicked();
     void onTruckSelected(int index);
 
+    
+
 private:
     Ui::UploadReceiptDialogClass ui;
     QString selectedFilePath;
+
+    TruckStockService* truckStockService = nullptr;
 
     void setupConnections();
     void loadTrucks();

@@ -7,10 +7,12 @@
 
 AssignmentsPage::AssignmentsPage(
     TruckStockService* truckStockService,
+    UserService* userService,   
     QWidget* parent
 )
     : QWidget(parent),
-    truckStockService(truckStockService)
+    truckStockService(truckStockService),
+    userService(userService)    
 {
     ui.setupUi(this);
     setupConnections();
@@ -109,7 +111,11 @@ void AssignmentsPage::refreshAssignments()
 
 void AssignmentsPage::onAssignTemplateClicked()
 {
-    AssignTemplateDialog dialog(truckStockService, this);
+    AssignTemplateDialog dialog(
+        truckStockService,
+        userService,
+        this
+    );
 
     if (dialog.exec() == QDialog::Accepted) {
 

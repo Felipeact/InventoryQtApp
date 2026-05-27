@@ -95,16 +95,16 @@ void DashboardWindow::setupPages()
     stockTemplatesPage = new StockTemplatesPage(truckStockService, this);
     ui.mainStack->addWidget(stockTemplatesPage);
 
-    assignmentsPage = new AssignmentsPage(truckStockService, this);
+    assignmentsPage = new AssignmentsPage(truckStockService, userService, this);
     ui.mainStack->addWidget(assignmentsPage);
 
-    myTruckStockPage = new MyTruckStockPage(this);
+    myTruckStockPage = new MyTruckStockPage(truckStockService, this);
     ui.mainStack->addWidget(myTruckStockPage);
 
-    lowStockAlertsPage = new LowStockAlertsPage(this);
+    lowStockAlertsPage = new LowStockAlertsPage(truckStockService, this);
     ui.mainStack->addWidget(lowStockAlertsPage);
 
-    receiptsPage = new ReceiptsPage(this);
+    receiptsPage = new ReceiptsPage(truckStockService, this);
     ui.mainStack->addWidget(receiptsPage);
 }
 
@@ -158,6 +158,7 @@ void DashboardWindow::setupSidebar()
         });
 
     connect(sidebar, &SidebarWidget::myTruckStockClicked, this, [this]() {
+        myTruckStockPage->refreshStock();
         ui.mainStack->setCurrentWidget(myTruckStockPage);
         });
 

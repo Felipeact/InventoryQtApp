@@ -5,6 +5,7 @@
 
 #include "ui_AssignTemplateDialog.h"
 #include "TruckStockService.h"
+#include "UserService.h"
 
 class AssignTemplateDialog : public QDialog
 {
@@ -13,6 +14,7 @@ class AssignTemplateDialog : public QDialog
 public:
     explicit AssignTemplateDialog(
         TruckStockService* truckStockService,
+        UserService* userService,
         QWidget* parent = nullptr
     );
 
@@ -20,6 +22,9 @@ public:
 
     QString getTruckId() const;
     QString getTemplateId() const;
+    QString getTechnicianId() const;
+    QString getNotes() const;
+    QString getAssignmentDate() const;
 
 private slots:
     void onAssignClicked();
@@ -27,9 +32,13 @@ private slots:
 
 private:
     Ui::AssignTemplateDialogClass ui;
+
     TruckStockService* truckStockService = nullptr;
+    UserService* userService = nullptr;
 
     void setupConnections();
+
     void loadTrucks();
     void loadTemplates();
+    void loadTechnicians();
 };

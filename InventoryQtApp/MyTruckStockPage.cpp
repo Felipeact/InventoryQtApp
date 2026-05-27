@@ -1,14 +1,24 @@
 #include "MyTruckStockPage.h"
+#include "UseTruckItemDialog.h"
 
-#include <QComboBox>
+#include <QHeaderView>
 #include <QLineEdit>
+#include <QMessageBox>
+#include <QPushButton>
+#include <QTableWidget>
+#include <QTableWidgetItem>
+#include <QHBoxLayout>
 
-MyTruckStockPage::MyTruckStockPage(QWidget* parent)
-    : QWidget(parent)
+MyTruckStockPage::MyTruckStockPage(
+    TruckStockService* truckStockService,
+    QWidget* parent
+)
+    : QWidget(parent),
+    truckStockService(truckStockService)
 {
     ui.setupUi(this);
     setupConnections();
-    loadStock();
+ 
 }
 
 MyTruckStockPage::~MyTruckStockPage()
@@ -21,14 +31,41 @@ void MyTruckStockPage::setupConnections()
         this, &MyTruckStockPage::onSearchChanged);
 }
 
-void MyTruckStockPage::loadTrucks()
-{
-    // Not used anymore because the new UI has no truckSelector.
-}
-
 void MyTruckStockPage::loadStock()
 {
-    // Load stock items for current technician.
+    ui.truckStockTable->clearContents();
+
+    currentStock = truckStockService->getMyTruckStock();
+
+    ui.truckStockTable->setRowCount(
+        static_cast<int>(currentStock.items.size())
+    );
+
+    ui.truckStockTable->setColumnCount(6);
+
+    for (int row = 0; row < static_cast<int>(currentStock.items.size()); ++row) {
+        const MyTruckStockItemDto& item = currentStock.items[row];
+
+        ui.truckStockTable->setItem(row, 0,
+            new QTableWidgetItem(QString::fromStdString(item.productName)));
+
+        ui.truckStockTable->setItem(row, 1,
+            new QTableWidgetItem(QString::fromStdString(item.category)));
+
+        ui.truckStockTable->setItem(row, 2,
+            new QTableWidgetItem(QString::number(item.currentQuantity)));
+
+        ui.truckStockTable->setItem(row, 3,
+            new QTableWidgetItem(QString::number(item.minimumQuantity)));
+
+        ui.truckStockTable->setItem(row, 4,
+            new QTableWidgetItem(QString::fromStdString(item.status)));
+
+        addUseButton(row);
+    }
+
+    ui.truckStockTable->horizontalHeader()->setStretchLastSection(true);
+    ui.truckStockTable->verticalHeader()->setVisible(false);
 }
 
 void MyTruckStockPage::refreshStock()
@@ -36,19 +73,76 @@ void MyTruckStockPage::refreshStock()
     loadStock();
 }
 
-void MyTruckStockPage::onTruckSelected(int index)
-{
-    Q_UNUSED(index);
-    loadStock();
-}
-
 void MyTruckStockPage::onSearchChanged(const QString& text)
 {
-    Q_UNUSED(text);
-    // Filter stock items later.
+    for (int row = 0; row < ui.truckStockTable->rowCount(); ++row) {
+        bool match = false;
+
+        for (int col = 0; col < ui.truckStockTable->columnCount(); ++col) {
+            QTableWidgetItem* item = ui.truckStockTable->item(row, col);
+
+            if (item && item->text().contains(text, Qt::CaseInsensitive)) {
+                match = true;
+                break;
+            }
+        }
+
+        ui.truckStockTable->setRowHidden(row, !match);
+    }
 }
 
-void MyTruckStockPage::onUseItemClicked()
+void MyTruckStockPage::addUseButton(int row)
 {
-    // Open UseTruckItemDialog later.
+    QPushButton* useButton = new QPushButton("Use Item", this);
+
+    ui.truckStockTable->setCellWidget(row, 5, useButton);
+
+    connect(useButton, &QPushButton::clicked, this, [this, row]() {
+        onUseItemClicked(row);
+        });
+}
+
+void MyTruckStockPage::onUseItemClicked(int row)
+{
+    if (row < 0 || row >= static_cast<int>(currentStock.items.size())) {
+        return;
+    }
+
+    const MyTruckStockItemDto& item = currentStock.items[row];
+
+    UseTruckItemDialog dialog(this);
+
+    dialog.setItem(
+        QString::fromStdString(item.productName),
+        item.currentQuantity
+    );
+
+    if (dialog.exec() == QDialog::Accepted) {
+
+        UseTruckItemRequest request;
+
+        request.itemId = item.id;
+        request.quantityUsed = dialog.getQuantityToUse();
+        request.notes = dialog.getNotes().toStdString();
+
+        bool success =
+            truckStockService->useTruckItem(request);
+
+        if (success) {
+            QMessageBox::information(
+                this,
+                "Success",
+                "Item usage recorded successfully."
+            );
+
+            loadStock();
+        }
+        else {
+            QMessageBox::warning(
+                this,
+                "Error",
+                "Failed to use item. Check backend console."
+            );
+        }
+    }
 }

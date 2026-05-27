@@ -106,6 +106,60 @@ struct TemplateDetailsDto
     std::vector<CreateTemplateItemRequest> items;
 };
 
+struct MyTruckStockItemDto
+{
+    std::string id;
+    std::string productName;
+    std::string category;
+    int currentQuantity;
+    int minimumQuantity;
+    int requiredQuantity;
+    std::string status;
+};
+
+struct MyTruckStockDto
+{
+    std::string truckId;
+    std::string truckNumber;
+    std::string plateNumber;
+    std::vector<MyTruckStockItemDto> items;
+};
+
+
+struct UseTruckItemRequest
+{
+    std::string itemId;
+    int quantityUsed;
+    std::string notes;
+};
+
+struct LowStockItemDto
+{
+    std::string templateName;
+    std::string truckNumber;
+    std::string productName;
+    int currentQuantity;
+    int minimumQuantity;
+    std::string status;
+};
+
+struct ReceiptDto
+{
+    std::string id;
+    std::string technicianName;
+    std::string truckNumber;
+    double totalAmount;
+    std::string status;
+    std::string createdAt;
+};
+
+struct CreateReceiptRequest
+{
+    std::string truckId;
+    std::string fileUrl;
+    double totalAmount;
+};
+
 class TruckStockService
 {
 public:
@@ -132,6 +186,18 @@ public:
     );
 
     bool deleteTemplate(const std::string& templateId);
+
+    MyTruckStockDto getMyTruckStock();
+
+    bool useTruckItem(const UseTruckItemRequest& request);
+
+    std::vector<LowStockItemDto> getLowStockItems();
+
+    std::vector<ReceiptDto> getReceipts();
+
+    bool createReceipt(
+        const CreateReceiptRequest& request
+    );
 
 private:
     ApiClient& apiClient;
