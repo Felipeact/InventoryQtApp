@@ -158,24 +158,6 @@ void ReceiptsPage::onUploadReceiptClicked()
 }
 
 
-void ReceiptsPage::onViewReceiptClicked(const ReceiptDto& receipt)
-{
-    QString details;
-
-    details += "Receipt ID: " + QString::fromStdString(receipt.id) + "\n";
-    details += "Technician: " + QString::fromStdString(receipt.technicianName) + "\n";
-    details += "Truck: " + QString::fromStdString(receipt.truckNumber) + "\n";
-    details += "Amount: $" + QString::number(receipt.totalAmount, 'f', 2) + "\n";
-    details += "Status: " + QString::fromStdString(receipt.status) + "\n";
-    details += "Created At: " + QString::fromStdString(receipt.createdAt);
-
-    QMessageBox::information(
-        this,
-        "Receipt Details",
-        details
-    );
-}
-
 void ReceiptsPage::onSearchChanged(const QString& text)
 {
     Q_UNUSED(text);
