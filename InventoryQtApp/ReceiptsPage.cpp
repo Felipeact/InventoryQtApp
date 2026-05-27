@@ -8,6 +8,8 @@
 #include <QPushButton>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <QHBoxLayout>
+#include <QWidget>
 
 ReceiptsPage::ReceiptsPage(
     TruckStockService* truckStockService,
@@ -43,13 +45,17 @@ void ReceiptsPage::loadReceipts()
 {
     ui.receiptsTable->clearContents();
 
+    if (!truckStockService) {
+        ui.receiptsTable->setRowCount(0);
+        return;
+    }
+
     currentReceipts = truckStockService->getReceipts();
 
+    ui.receiptsTable->setColumnCount(7);
     ui.receiptsTable->setRowCount(
         static_cast<int>(currentReceipts.size())
     );
-
-    ui.receiptsTable->setColumnCount(7);
 
     for (int row = 0; row < static_cast<int>(currentReceipts.size()); ++row) {
         const ReceiptDto& receipt = currentReceipts[row];
@@ -72,12 +78,13 @@ void ReceiptsPage::loadReceipts()
         ui.receiptsTable->setItem(row, 5,
             new QTableWidgetItem(QString::fromStdString(receipt.createdAt)));
 
-        ui.receiptsTable->setItem(row, 6,
-            new QTableWidgetItem("View / Approve"));
+        addActionButtons(row, receipt);
     }
 
     ui.receiptsTable->horizontalHeader()->setStretchLastSection(true);
     ui.receiptsTable->verticalHeader()->setVisible(false);
+
+    filterReceipts();
 }
 
 void ReceiptsPage::refreshReceipts()
@@ -117,7 +124,6 @@ void ReceiptsPage::onUploadReceiptClicked()
     UploadReceiptDialog dialog(truckStockService, this);
 
     if (dialog.exec() == QDialog::Accepted) {
-
         CreateReceiptRequest request;
 
         request.truckId =
@@ -151,6 +157,25 @@ void ReceiptsPage::onUploadReceiptClicked()
     }
 }
 
+
+void ReceiptsPage::onViewReceiptClicked(const ReceiptDto& receipt)
+{
+    QString details;
+
+    details += "Receipt ID: " + QString::fromStdString(receipt.id) + "\n";
+    details += "Technician: " + QString::fromStdString(receipt.technicianName) + "\n";
+    details += "Truck: " + QString::fromStdString(receipt.truckNumber) + "\n";
+    details += "Amount: $" + QString::number(receipt.totalAmount, 'f', 2) + "\n";
+    details += "Status: " + QString::fromStdString(receipt.status) + "\n";
+    details += "Created At: " + QString::fromStdString(receipt.createdAt);
+
+    QMessageBox::information(
+        this,
+        "Receipt Details",
+        details
+    );
+}
+
 void ReceiptsPage::onSearchChanged(const QString& text)
 {
     Q_UNUSED(text);
@@ -161,4 +186,71 @@ void ReceiptsPage::onStatusFilterChanged(int index)
 {
     Q_UNUSED(index);
     filterReceipts();
+}
+
+void ReceiptsPage::addActionButtons(int row, const ReceiptDto& receipt)
+{
+    QWidget* actionWidget = new QWidget(this);
+    QHBoxLayout* layout = new QHBoxLayout(actionWidget);
+
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+
+    QPushButton* viewButton = new QPushButton("View", actionWidget);
+    QPushButton* approveButton = new QPushButton("Approve", actionWidget);
+
+    if (QString::fromStdString(receipt.status).compare("Approved", Qt::CaseInsensitive) == 0) {
+        approveButton->setEnabled(false);
+    }
+
+    layout->addWidget(viewButton);
+    layout->addWidget(approveButton);
+    layout->addStretch();
+
+    ui.receiptsTable->setCellWidget(row, 6, actionWidget);
+
+    connect(viewButton, &QPushButton::clicked, this, [this, receipt]() {
+        onViewReceiptClicked(receipt);
+        });
+
+    connect(approveButton, &QPushButton::clicked, this, [this, receipt]() {
+        onApproveReceiptClicked(receipt);
+        });
+}
+
+void ReceiptsPage::onViewReceiptClicked(const ReceiptDto& receipt)
+{
+    QString details;
+
+    details += "Receipt ID: " + QString::fromStdString(receipt.id) + "\n";
+    details += "Technician: " + QString::fromStdString(receipt.technicianName) + "\n";
+    details += "Truck: " + QString::fromStdString(receipt.truckNumber) + "\n";
+    details += "Total: $" + QString::number(receipt.totalAmount, 'f', 2) + "\n";
+    details += "Status: " + QString::fromStdString(receipt.status) + "\n";
+    details += "Date: " + QString::fromStdString(receipt.createdAt);
+
+    QMessageBox::information(this, "Receipt Details", details);
+}
+
+void ReceiptsPage::onApproveReceiptClicked(const ReceiptDto& receipt)
+{
+    auto confirm = QMessageBox::question(
+        this,
+        "Approve Receipt",
+        "Do you want to approve this receipt?"
+    );
+
+    if (confirm != QMessageBox::Yes) {
+        return;
+    }
+
+    bool success = truckStockService->approveReceipt(receipt.id);
+
+    if (success) {
+        QMessageBox::information(this, "Success", "Receipt approved successfully.");
+        loadReceipts();
+    }
+    else {
+        QMessageBox::warning(this, "Error", "Failed to approve receipt. Check backend console.");
+    }
 }

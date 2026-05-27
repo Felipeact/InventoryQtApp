@@ -771,3 +771,36 @@ bool TruckStockService::createReceipt(
         return false;
     }
 }
+
+
+bool TruckStockService::approveReceipt(const std::string& receiptId)
+{
+    try {
+        json body;
+        body["status"] = "Approved";
+
+        auto response = apiClient.put(
+            "/truck-stock/receipts/" + receiptId + "/approve",
+            body.dump()
+        );
+
+        if (response.status_code != 200) {
+            std::cerr << "PUT /truck-stock/receipts/:id/approve failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::approveReceipt error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}

@@ -33,6 +33,7 @@ DashboardPage::~DashboardPage()
 void DashboardPage::refreshDashboard()
 {
     setupItemListTable();
+    setupLowStockTable();
     setupReportCards();
 }
 

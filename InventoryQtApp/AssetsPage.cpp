@@ -1,6 +1,8 @@
 // AssetsPage.cpp - Implementation of the assets management page
 #include "AssetsPage.h"
+#include <algorithm>
 
+#include <QComboBox>
 #include <QTableWidgetItem>
 #include <QHeaderView>
 #include <QAbstractItemView>
@@ -16,6 +18,11 @@ AssetsPage::AssetsPage(AssetService& assetService, QWidget* parent)
     : QWidget(parent), assetService(assetService)
 {
     ui.setupUi(this);
+    ui.pageSizeCombo->clear();
+    ui.pageSizeCombo->addItem("5 / page");
+    ui.pageSizeCombo->addItem("10 / page");
+    ui.pageSizeCombo->addItem("20 / page");
+    ui.pageSizeCombo->setCurrentText("10 / page");
 
     setupTable();
     loadAssets();
@@ -25,6 +32,18 @@ AssetsPage::AssetsPage(AssetService& assetService, QWidget* parent)
 
     connect(ui.assetSearchInput, &QLineEdit::textChanged,
         this, &AssetsPage::filterAssets);
+
+    connect(ui.filterAssetButton, &QPushButton::clicked,
+        this, &AssetsPage::onFilterButtonClicked);
+
+    connect(ui.nextPageButton, &QPushButton::clicked,
+        this, &AssetsPage::onNextPageClicked);
+
+    connect(ui.prevPageButton, &QPushButton::clicked,
+        this, &AssetsPage::onPrevPageClicked);
+
+    connect(ui.pageSizeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+        this, &AssetsPage::onPageSizeChanged);
 }
 
 // Destructor
@@ -139,9 +158,13 @@ void AssetsPage::setupTable()
 // Populates the table with asset data and action buttons
 void AssetsPage::loadAssets()
 {
-
     currentAssets = assetService.getAssets();
-    populateTable(currentAssets);
+    filteredAssets = currentAssets;
+
+    currentPage = 1;
+
+    populateTable(getCurrentPageAssets());
+    updatePagination();
 }
 
 void AssetsPage::populateTable(const json& assets)
@@ -286,11 +309,18 @@ void AssetsPage::deleteAsset(const std::string& assetId)
 
 void AssetsPage::filterAssets(const QString& searchText)
 {
-	currentAssets = assetService.searchAssets(searchText.toStdString());
+    if (searchText.trimmed().isEmpty()) {
+        filteredAssets = currentAssets;
+    }
+    else {
+        filteredAssets = assetService.searchAssets(searchText.toStdString());
+    }
 
-    populateTable(currentAssets);
+    currentPage = 1;
+
+    populateTable(getCurrentPageAssets());
+    updatePagination();
 }
-
 // Opens the add asset dialog and adds new items to the table
 void AssetsPage::onAddAssetClicked()
 {
@@ -315,3 +345,102 @@ void AssetsPage::onAddAssetClicked()
     }
 }
 
+json AssetsPage::getCurrentPageAssets() const
+{
+    json pageAssets = json::array();
+
+    int totalItems = static_cast<int>(filteredAssets.size());
+
+    int startIndex = (currentPage - 1) * pageSize;
+    int endIndex = (std::min)(startIndex + pageSize, totalItems);
+
+    for (int i = startIndex; i < endIndex; i++) {
+        pageAssets.push_back(filteredAssets[i]);
+    }
+
+    return pageAssets;
+}
+
+void AssetsPage::updatePagination()
+{
+    int totalItems = static_cast<int>(filteredAssets.size());
+
+    int totalPages =
+        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+
+    if (currentPage > totalPages) {
+        currentPage = totalPages;
+    }
+
+    int startItem =
+        totalItems == 0 ? 0 : ((currentPage - 1) * pageSize) + 1;
+
+    int endItem =
+        (std::min)(currentPage * pageSize, totalItems);
+
+    ui.paginationLabel->setText(
+        QString("Showing %1 to %2 of %3 assets")
+        .arg(startItem)
+        .arg(endItem)
+        .arg(totalItems)
+    );
+
+    ui.activePageButton->setText(QString::number(currentPage));
+
+    ui.page2Button->setText(QString::number(currentPage + 1));
+
+    ui.prevPageButton->setEnabled(currentPage > 1);
+    ui.nextPageButton->setEnabled(currentPage < totalPages);
+
+    ui.page2Button->setVisible(currentPage < totalPages);
+}
+
+void AssetsPage::onFilterButtonClicked()
+{
+    filterAssets(ui.assetSearchInput->text());
+}
+
+void AssetsPage::onNextPageClicked()
+{
+    int totalItems = static_cast<int>(filteredAssets.size());
+
+    int totalPages =
+        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+
+    if (currentPage < totalPages) {
+        currentPage++;
+
+        populateTable(getCurrentPageAssets());
+        updatePagination();
+    }
+}
+
+void AssetsPage::onPrevPageClicked()
+{
+    if (currentPage > 1) {
+        currentPage--;
+
+        populateTable(getCurrentPageAssets());
+        updatePagination();
+    }
+}
+
+void AssetsPage::onPageSizeChanged(int index)
+{
+    QString text = ui.pageSizeCombo->itemText(index);
+
+    if (text.startsWith("5")) {
+        pageSize = 5;
+    }
+    else if (text.startsWith("20")) {
+        pageSize = 20;
+    }
+    else {
+        pageSize = 10;
+    }
+
+    currentPage = 1;
+
+    populateTable(getCurrentPageAssets());
+    updatePagination();
+}

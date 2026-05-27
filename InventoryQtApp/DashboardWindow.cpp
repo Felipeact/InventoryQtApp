@@ -86,7 +86,7 @@ void DashboardWindow::setupPages()
 
 
 
-    truckStockDashboardPage = new TruckStockDashboardPage(this);
+    truckStockDashboardPage = new TruckStockDashboardPage(truckStockService, this);
     ui.mainStack->addWidget(truckStockDashboardPage);
 
     trucksPage = new TrucksPage(truckStockService, userService, this);

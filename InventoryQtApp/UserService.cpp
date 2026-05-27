@@ -1,5 +1,7 @@
 #include "UserService.h"
+#include <algorithm>
 
+#include <QComboBox>
 
 #include <nlohmann/json.hpp>
 #include <iostream>

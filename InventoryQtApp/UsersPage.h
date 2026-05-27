@@ -3,10 +3,9 @@
 #include <QWidget>
 #include <QString>
 #include <QPushButton>
-
+#include <vector>
 
 #include "UserService.h"
-
 #include "ui_UsersPage.h"
 
 class UsersPage : public QWidget
@@ -20,19 +19,29 @@ public:
 private:
     Ui::UsersPageClass ui;
 
-	UserService* userService = nullptr;
+    UserService* userService = nullptr;
 
     std::vector<UserDto> currentUsers;
+    std::vector<UserDto> filteredUsers;
+
+    int currentPage = 1;
+    int pageSize = 10;
 
     void setupConnections();
     void loadUsers();
     void filterUsers();
+    void populateTable();
+    void updatePagination();
 
     void onAddUserClicked();
     void onSearchChanged(const QString& text);
     void onRoleFilterChanged(int index);
 
-    void addActionButtons(int row);
-    void onEditUserClicked(int row);
-    void onDeleteUserClicked(int row);
+    void onPreviousPageClicked();
+    void onNextPageClicked();
+    void onPage2Clicked();
+
+    void addActionButtons(int row, const std::string& userId);
+    void onEditUserClicked(const std::string& userId);
+    void onDeleteUserClicked(const std::string& userId);
 };

@@ -35,4 +35,8 @@ private:
     void setupConnections();
     void loadReceipts();
     void filterReceipts();
+
+    void addActionButtons(int row, const ReceiptDto& receipt);
+    void onViewReceiptClicked(const ReceiptDto& receipt);
+    void onApproveReceiptClicked(const ReceiptDto& receipt);
 };

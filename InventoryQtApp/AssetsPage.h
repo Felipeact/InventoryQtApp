@@ -26,6 +26,11 @@ private slots:
     void onAddAssetClicked();
     void filterAssets(const QString& searchText);  // Filters assets based on search input
 
+    void onFilterButtonClicked();
+    void onNextPageClicked();
+    void onPrevPageClicked();
+    void onPageSizeChanged(int index);
+
 private:
     Ui::AssetsPageClass ui;  // UI components
     AssetService& assetService;  // Reference to asset service for API interactions
@@ -38,6 +43,14 @@ private:
     void populateTable(const json& assets);
 
     void deleteAsset(const std::string& assetId);  // Deletes an asset by ID
+
+    json filteredAssets;
+
+    int currentPage = 1;
+    int pageSize = 10;
+
+    json getCurrentPageAssets() const;
+    void updatePagination();
 
 
 };

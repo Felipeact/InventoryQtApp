@@ -25,6 +25,8 @@ signals:
 
 private slots:
     void onSubmitClicked();
+    void onMinusClicked();
+    void onPlusClicked();
 
 private:
     Ui::ScanPageClass ui;
@@ -32,4 +34,5 @@ private:
     ScanMode mode;
 
     void setupPage();
+    void addRecentScan(const QString& barcode, int quantity);
 };

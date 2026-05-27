@@ -1,6 +1,8 @@
 // ItemsPage.cpp - Implementation of the items management page
 #include "ItemsPage.h"
+#include <algorithm>
 
+#include <QComboBox>
 #include <QTableWidgetItem>
 #include <QHeaderView>
 #include <QAbstractItemView>
@@ -17,6 +19,11 @@ ItemsPage::ItemsPage(ProductService& productService, QWidget* parent)
     : QWidget(parent), productService(productService)
 {
     ui.setupUi(this);
+    ui.pageSizeCombo->clear();
+    ui.pageSizeCombo->addItem("5 / page");
+    ui.pageSizeCombo->addItem("10 / page");
+    ui.pageSizeCombo->addItem("20 / page");
+    ui.pageSizeCombo->setCurrentText("10 / page");
 
     setupTable();
     loadProducts();
@@ -26,6 +33,18 @@ ItemsPage::ItemsPage(ProductService& productService, QWidget* parent)
 
     connect(ui.itemSearchInput, &QLineEdit::textChanged,
         this, &ItemsPage::filterProducts);
+
+    connect(ui.filterItemButton, &QPushButton::clicked,
+        this, &ItemsPage::onFilterButtonClicked);
+
+    connect(ui.nextPageButton, &QPushButton::clicked,
+        this, &ItemsPage::onNextPageClicked);
+
+    connect(ui.prevPageButton, &QPushButton::clicked,
+        this, &ItemsPage::onPrevPageClicked);
+
+    connect(ui.pageSizeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
+        this, &ItemsPage::onPageSizeChanged);
 }
 
 // Destructor
@@ -35,8 +54,8 @@ ItemsPage::~ItemsPage()
 
 void ItemsPage::refreshProducts()
 {
-    currentProducts = productService.getProducts();
-    populateTable(currentProducts);
+    currentProducts = productService.getProducts(true);
+    filterProducts(ui.itemSearchInput->text());
 }
 
 // Configures the items table columns, headers, styling, and behavior
@@ -181,7 +200,11 @@ void ItemsPage::setupTable()
 void ItemsPage::loadProducts()
 {
     currentProducts = productService.getProducts();
-    populateTable(currentProducts);
+    filteredProducts = currentProducts;
+    currentPage = 1;
+
+    populateTable(getCurrentPageProducts());
+    updatePagination();
 }
 
 // Populates the table with product data and action buttons
@@ -334,8 +357,16 @@ void ItemsPage::deleteProduct(const std::string& productId)
 
 void ItemsPage::filterProducts(const QString& searchText)
 {
-    currentProducts = productService.searchProducts(searchText.toStdString());
-    populateTable(currentProducts);
+    if (searchText.trimmed().isEmpty()) {
+        filteredProducts = currentProducts;
+    }
+    else {
+        filteredProducts = productService.searchProducts(searchText.toStdString());
+    }
+
+    currentPage = 1;
+    populateTable(getCurrentPageProducts());
+    updatePagination();
 }
 
 // Opens the add product dialog and adds new items to the table
@@ -356,4 +387,91 @@ void ItemsPage::onAddItemClicked()
             emit productsChanged();
         }
     }
+}
+
+json ItemsPage::getCurrentPageProducts() const
+{
+    json pageProducts = json::array();
+
+    int totalItems = static_cast<int>(filteredProducts.size());
+    int startIndex = (currentPage - 1) * pageSize;
+    int endIndex = (std::min)(startIndex + pageSize, totalItems);
+
+    for (int i = startIndex; i < endIndex; i++) {
+        pageProducts.push_back(filteredProducts[i]);
+    }
+
+    return pageProducts;
+}
+
+void ItemsPage::updatePagination()
+{
+    int totalItems = static_cast<int>(filteredProducts.size());
+    int totalPages = (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+
+    if (currentPage > totalPages) {
+        currentPage = totalPages;
+    }
+
+    int startItem = totalItems == 0 ? 0 : ((currentPage - 1) * pageSize) + 1;
+    int endItem = (std::min)(currentPage * pageSize, totalItems);
+
+    ui.paginationLabel->setText(
+        QString("Showing %1 to %2 of %3 items")
+        .arg(startItem)
+        .arg(endItem)
+        .arg(totalItems)
+    );
+
+    ui.activePageButton->setText(QString::number(currentPage));
+    ui.page2Button->setText(QString::number(currentPage + 1));
+
+    ui.prevPageButton->setEnabled(currentPage > 1);
+    ui.nextPageButton->setEnabled(currentPage < totalPages);
+    ui.page2Button->setVisible(currentPage < totalPages);
+}
+
+void ItemsPage::onFilterButtonClicked()
+{
+    filterProducts(ui.itemSearchInput->text());
+}
+
+void ItemsPage::onNextPageClicked()
+{
+    int totalItems = static_cast<int>(filteredProducts.size());
+    int totalPages = (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+
+    if (currentPage < totalPages) {
+        currentPage++;
+        populateTable(getCurrentPageProducts());
+        updatePagination();
+    }
+}
+
+void ItemsPage::onPrevPageClicked()
+{
+    if (currentPage > 1) {
+        currentPage--;
+        populateTable(getCurrentPageProducts());
+        updatePagination();
+    }
+}
+
+void ItemsPage::onPageSizeChanged(int index)
+{
+    QString text = ui.pageSizeCombo->itemText(index);
+
+    if (text.startsWith("5")) {
+        pageSize = 5;
+    }
+    else if (text.startsWith("20")) {
+        pageSize = 20;
+    }
+    else {
+        pageSize = 10;
+    }
+
+    currentPage = 1;
+    populateTable(getCurrentPageProducts());
+    updatePagination();
 }

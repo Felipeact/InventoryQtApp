@@ -199,6 +199,8 @@ public:
         const CreateReceiptRequest& request
     );
 
+    bool approveReceipt(const std::string& receiptId);
+
 private:
     ApiClient& apiClient;
 

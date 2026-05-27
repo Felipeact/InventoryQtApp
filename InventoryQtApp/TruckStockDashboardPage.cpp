@@ -4,8 +4,9 @@
 #include <QTableWidgetItem>
 #include <QHeaderView>
 
-TruckStockDashboardPage::TruckStockDashboardPage(QWidget* parent)
-    : QWidget(parent)
+TruckStockDashboardPage::TruckStockDashboardPage(TruckStockService* truckStockService, QWidget* parent)
+    : QWidget(parent),
+    truckStockService(truckStockService)
 {
     ui.setupUi(this);
     setupConnections();
@@ -22,63 +23,8 @@ void TruckStockDashboardPage::setupConnections()
 
 void TruckStockDashboardPage::loadDashboardData()
 {
-    ui.recentTrucksTable->setRowCount(4);
-    ui.recentTrucksTable->setColumnCount(5);
-
-    ui.recentTrucksTable->setHorizontalHeaderLabels(
-        QStringList() << "Truck" << "Plate" << "Technician" << "Status" << "Updated"
-    );
-
-    ui.recentTrucksTable->setItem(0, 0, new QTableWidgetItem("Truck 1"));
-    ui.recentTrucksTable->setItem(0, 1, new QTableWidgetItem("ABC-123"));
-    ui.recentTrucksTable->setItem(0, 2, new QTableWidgetItem("John Smith"));
-    ui.recentTrucksTable->setItem(0, 3, new QTableWidgetItem("Active"));
-    ui.recentTrucksTable->setItem(0, 4, new QTableWidgetItem("May 22, 2024"));
-
-    ui.recentTrucksTable->setItem(1, 0, new QTableWidgetItem("Truck 2"));
-    ui.recentTrucksTable->setItem(1, 1, new QTableWidgetItem("XYZ-456"));
-    ui.recentTrucksTable->setItem(1, 2, new QTableWidgetItem("Mike Johnson"));
-    ui.recentTrucksTable->setItem(1, 3, new QTableWidgetItem("Active"));
-    ui.recentTrucksTable->setItem(1, 4, new QTableWidgetItem("May 21, 2024"));
-
-    ui.recentTrucksTable->setItem(2, 0, new QTableWidgetItem("Truck 3"));
-    ui.recentTrucksTable->setItem(2, 1, new QTableWidgetItem("DEF-789"));
-    ui.recentTrucksTable->setItem(2, 2, new QTableWidgetItem("Sarah Davis"));
-    ui.recentTrucksTable->setItem(2, 3, new QTableWidgetItem("Inactive"));
-    ui.recentTrucksTable->setItem(2, 4, new QTableWidgetItem("May 20, 2024"));
-
-    ui.recentTrucksTable->setItem(3, 0, new QTableWidgetItem("Truck 4"));
-    ui.recentTrucksTable->setItem(3, 1, new QTableWidgetItem("GHI-012"));
-    ui.recentTrucksTable->setItem(3, 2, new QTableWidgetItem("Robert Brown"));
-    ui.recentTrucksTable->setItem(3, 3, new QTableWidgetItem("Active"));
-    ui.recentTrucksTable->setItem(3, 4, new QTableWidgetItem("May 18, 2024"));
-
-    ui.lowStockTable->setRowCount(4);
-    ui.lowStockTable->setColumnCount(4);
-
-    ui.lowStockTable->setHorizontalHeaderLabels(
-        QStringList() << "Truck" << "Item" << "Current" << "Minimum"
-    );
-
-    ui.lowStockTable->setItem(0, 0, new QTableWidgetItem("Truck 1"));
-    ui.lowStockTable->setItem(0, 1, new QTableWidgetItem("Capacitor 45/5 μF"));
-    ui.lowStockTable->setItem(0, 2, new QTableWidgetItem("1"));
-    ui.lowStockTable->setItem(0, 3, new QTableWidgetItem("3"));
-
-    ui.lowStockTable->setItem(1, 0, new QTableWidgetItem("Truck 1"));
-    ui.lowStockTable->setItem(1, 1, new QTableWidgetItem("Contactor 24V"));
-    ui.lowStockTable->setItem(1, 2, new QTableWidgetItem("0"));
-    ui.lowStockTable->setItem(1, 3, new QTableWidgetItem("2"));
-
-    ui.lowStockTable->setItem(2, 0, new QTableWidgetItem("Truck 2"));
-    ui.lowStockTable->setItem(2, 1, new QTableWidgetItem("Fuses 30A"));
-    ui.lowStockTable->setItem(2, 2, new QTableWidgetItem("2"));
-    ui.lowStockTable->setItem(2, 3, new QTableWidgetItem("5"));
-
-    ui.lowStockTable->setItem(3, 0, new QTableWidgetItem("Truck 3"));
-    ui.lowStockTable->setItem(3, 1, new QTableWidgetItem("Relay 24V"));
-    ui.lowStockTable->setItem(3, 2, new QTableWidgetItem("1"));
-    ui.lowStockTable->setItem(3, 3, new QTableWidgetItem("2"));
+    loadRecentTrucks();
+    loadLowStockItems();
 
     ui.recentTrucksTable->horizontalHeader()->setStretchLastSection(true);
     ui.lowStockTable->horizontalHeader()->setStretchLastSection(true);
@@ -90,4 +36,61 @@ void TruckStockDashboardPage::loadDashboardData()
 void TruckStockDashboardPage::refreshDashboard()
 {
     loadDashboardData();
+}
+
+void TruckStockDashboardPage::loadRecentTrucks()
+{
+    ui.recentTrucksTable->clear();
+    ui.recentTrucksTable->setColumnCount(5);
+
+    ui.recentTrucksTable->setHorizontalHeaderLabels(
+        QStringList() << "Truck" << "Plate" << "Technician" << "Status" << "Updated"
+    );
+
+    if (!truckStockService) {
+        ui.recentTrucksTable->setRowCount(0);
+        return;
+    }
+
+    std::vector<TruckDto> trucks = truckStockService->getTrucks();
+
+    ui.recentTrucksTable->setRowCount(static_cast<int>(trucks.size()));
+
+    for (int row = 0; row < static_cast<int>(trucks.size()); ++row) {
+        const TruckDto& truck = trucks[row];
+
+        ui.recentTrucksTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(truck.truckName)));
+        ui.recentTrucksTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(truck.licensePlate)));
+        ui.recentTrucksTable->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(truck.technicianName)));
+        ui.recentTrucksTable->setItem(row, 3, new QTableWidgetItem(QString::fromStdString(truck.status)));
+        ui.recentTrucksTable->setItem(row, 4, new QTableWidgetItem("-"));
+    }
+}
+
+void TruckStockDashboardPage::loadLowStockItems()
+{
+    ui.lowStockTable->clear();
+    ui.lowStockTable->setColumnCount(4);
+
+    ui.lowStockTable->setHorizontalHeaderLabels(
+        QStringList() << "Truck" << "Item" << "Current" << "Minimum"
+    );
+
+    if (!truckStockService) {
+        ui.lowStockTable->setRowCount(0);
+        return;
+    }
+
+    std::vector<LowStockItemDto> lowStockItems = truckStockService->getLowStockItems();
+
+    ui.lowStockTable->setRowCount(static_cast<int>(lowStockItems.size()));
+
+    for (int row = 0; row < static_cast<int>(lowStockItems.size()); ++row) {
+        const LowStockItemDto& item = lowStockItems[row];
+
+        ui.lowStockTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(item.truckNumber)));
+        ui.lowStockTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(item.productName)));
+        ui.lowStockTable->setItem(row, 2, new QTableWidgetItem(QString::number(item.currentQuantity)));
+        ui.lowStockTable->setItem(row, 3, new QTableWidgetItem(QString::number(item.minimumQuantity)));
+    }
 }
