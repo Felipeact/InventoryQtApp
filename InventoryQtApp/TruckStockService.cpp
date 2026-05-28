@@ -707,6 +707,7 @@ std::vector<ReceiptDto> TruckStockService::getReceipts()
             receipt.totalAmount = item.value("totalAmount", 0.0);
             receipt.status = item.value("status", "");
             receipt.createdAt = item.value("createdAt", "");
+            receipt.fileUrl = item.value("fileUrl", "");
 
             if (item.contains("technician") && item["technician"].is_object()) {
                 receipt.technicianName =
@@ -777,15 +778,15 @@ bool TruckStockService::approveReceipt(const std::string& receiptId)
 {
     try {
         json body;
-        body["status"] = "Approved";
+        body["status"] = "APPROVED";
 
-        auto response = apiClient.put(
-            "/truck-stock/receipts/" + receiptId + "/approve",
+        auto response = apiClient.patch(
+            "/truck-stock/receipts/" + receiptId + "/status",
             body.dump()
         );
 
         if (response.status_code != 200) {
-            std::cerr << "PUT /truck-stock/receipts/:id/approve failed. Status: "
+            std::cerr << "PATCH approve receipt failed. Status: "
                 << response.status_code
                 << " Body: "
                 << response.text

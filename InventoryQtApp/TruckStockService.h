@@ -151,6 +151,7 @@ struct ReceiptDto
     double totalAmount;
     std::string status;
     std::string createdAt;
+    std::string fileUrl;
 };
 
 struct CreateReceiptRequest

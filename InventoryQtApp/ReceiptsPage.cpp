@@ -1,6 +1,8 @@
 #include "ReceiptsPage.h"
 #include "UploadReceiptDialog.h"
 
+#include <algorithm>
+
 #include <QComboBox>
 #include <QHeaderView>
 #include <QLineEdit>
@@ -10,13 +12,17 @@
 #include <QTableWidgetItem>
 #include <QHBoxLayout>
 #include <QWidget>
+#include <QDesktopServices>
+#include <QUrl>
 
 ReceiptsPage::ReceiptsPage(
     TruckStockService* truckStockService,
+    const std::vector<std::string>& permissions,
     QWidget* parent
 )
     : QWidget(parent),
-    truckStockService(truckStockService)
+    truckStockService(truckStockService),
+    permissions(permissions)
 {
     ui.setupUi(this);
     setupConnections();
@@ -181,7 +187,11 @@ void ReceiptsPage::addActionButtons(int row, const ReceiptDto& receipt)
     QPushButton* viewButton = new QPushButton("View", actionWidget);
     QPushButton* approveButton = new QPushButton("Approve", actionWidget);
 
-    if (QString::fromStdString(receipt.status).compare("Approved", Qt::CaseInsensitive) == 0) {
+    if (!hasPermission("APPROVE_RECEIPTS")) {
+        approveButton->hide();
+    }
+
+    if (QString::fromStdString(receipt.status).compare("APPROVED", Qt::CaseInsensitive) == 0) {
         approveButton->setEnabled(false);
     }
 
@@ -202,14 +212,26 @@ void ReceiptsPage::addActionButtons(int row, const ReceiptDto& receipt)
 
 void ReceiptsPage::onViewReceiptClicked(const ReceiptDto& receipt)
 {
+    if (!receipt.fileUrl.empty()) {
+        QString fileUrl = QString::fromStdString(receipt.fileUrl);
+
+        if (fileUrl.startsWith("http://") || fileUrl.startsWith("https://")) {
+            QDesktopServices::openUrl(QUrl(fileUrl));
+            return;
+        }
+
+        QDesktopServices::openUrl(QUrl::fromLocalFile(fileUrl));
+        return;
+    }
+
     QString details;
 
     details += "Receipt ID: " + QString::fromStdString(receipt.id) + "\n";
     details += "Technician: " + QString::fromStdString(receipt.technicianName) + "\n";
     details += "Truck: " + QString::fromStdString(receipt.truckNumber) + "\n";
-    details += "Total: $" + QString::number(receipt.totalAmount, 'f', 2) + "\n";
+    details += "Amount: $" + QString::number(receipt.totalAmount, 'f', 2) + "\n";
     details += "Status: " + QString::fromStdString(receipt.status) + "\n";
-    details += "Date: " + QString::fromStdString(receipt.createdAt);
+    details += "Created At: " + QString::fromStdString(receipt.createdAt);
 
     QMessageBox::information(this, "Receipt Details", details);
 }
@@ -229,10 +251,28 @@ void ReceiptsPage::onApproveReceiptClicked(const ReceiptDto& receipt)
     bool success = truckStockService->approveReceipt(receipt.id);
 
     if (success) {
-        QMessageBox::information(this, "Success", "Receipt approved successfully.");
+        QMessageBox::information(
+            this,
+            "Success",
+            "Receipt approved successfully."
+        );
+
         loadReceipts();
     }
     else {
-        QMessageBox::warning(this, "Error", "Failed to approve receipt. Check backend console.");
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Failed to approve receipt. Check backend console."
+        );
     }
+}
+
+bool ReceiptsPage::hasPermission(const std::string& permission) const
+{
+    return std::find(
+        permissions.begin(),
+        permissions.end(),
+        permission
+    ) != permissions.end();
 }

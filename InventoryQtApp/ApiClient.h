@@ -30,6 +30,7 @@ public:
 	cpr::Response get(const std::string& endpoint); // Makes a GET request to the specified endpoint
 	cpr::Response post(const std::string& endpoint, const std::string& body); // Makes a POST request to the specified endpoint
 	cpr::Response put(const std::string& endpoint, const std::string& body); // Makes a PUT request to the specified endpoint
+	cpr::Response patch(const std::string& endpoint, const std::string& body);
 	cpr::Response del(const std::string& endpoint);  // Makes a DELETE request to the specified endpoint
 
 	// Validates the current token and retrieves user role and permissions

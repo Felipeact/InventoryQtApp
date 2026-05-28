@@ -104,7 +104,7 @@ void DashboardWindow::setupPages()
     lowStockAlertsPage = new LowStockAlertsPage(truckStockService, this);
     ui.mainStack->addWidget(lowStockAlertsPage);
 
-    receiptsPage = new ReceiptsPage(truckStockService, this);
+    receiptsPage = new ReceiptsPage(truckStockService, permissions, this);
     ui.mainStack->addWidget(receiptsPage);
 }
 

@@ -6,6 +6,7 @@
 
 #include "ui_ReceiptsPage.h"
 #include "TruckStockService.h"
+#include <string>
 
 class ReceiptsPage : public QWidget
 {
@@ -14,6 +15,7 @@ class ReceiptsPage : public QWidget
 public:
     explicit ReceiptsPage(
         TruckStockService* truckStockService,
+        const std::vector<std::string>& permissions,
         QWidget* parent = nullptr
     );
 
@@ -31,6 +33,7 @@ private:
 
     TruckStockService* truckStockService = nullptr;
     std::vector<ReceiptDto> currentReceipts;
+    std::vector<std::string> permissions;
 
     void setupConnections();
     void loadReceipts();
@@ -39,4 +42,6 @@ private:
     void addActionButtons(int row, const ReceiptDto& receipt);
     void onViewReceiptClicked(const ReceiptDto& receipt);
     void onApproveReceiptClicked(const ReceiptDto& receipt);
+
+    bool hasPermission(const std::string& permission) const;
 };

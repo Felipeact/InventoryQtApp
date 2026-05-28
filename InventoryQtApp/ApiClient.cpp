@@ -148,6 +148,37 @@ cpr::Response ApiClient::put(const std::string& endpoint, const std::string& bod
     return res;
 }
 
+cpr::Response ApiClient::patch(const std::string& endpoint, const std::string& body)
+{
+    std::cout << "PATCH: " << baseUrl + endpoint << std::endl;
+    std::cout << "BODY SENT: " << body << std::endl;
+
+    auto res = cpr::Patch(
+        cpr::Url{ baseUrl + endpoint },
+        cpr::Header{
+            {"Content-Type", "application/json"},
+            {"Authorization", "Bearer " + accessToken}
+        },
+        cpr::Body{ body }
+    );
+
+    std::cout << "STATUS: " << res.status_code << std::endl;
+    std::cout << "BODY: " << res.text << std::endl;
+
+    if (res.status_code == 401 && refreshAccessToken()) {
+        res = cpr::Patch(
+            cpr::Url{ baseUrl + endpoint },
+            cpr::Header{
+                {"Content-Type", "application/json"},
+                {"Authorization", "Bearer " + accessToken}
+            },
+            cpr::Body{ body }
+        );
+    }
+
+    return res;
+}
+
 cpr::Response ApiClient::del(const std::string& endpoint)
 {
     std::cout << "DELETE: " << baseUrl + endpoint << std::endl;
