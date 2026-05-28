@@ -4,10 +4,11 @@
 
 struct LoginResult
 {
-	bool success; // Indicates if login was successful
-	std::string accessToken; // Authentication token returned on successful login
-	std::string refreshToken; // Refresh token returned on successful login	
-	std::string errorMessage; // Error message in case of failed login
+	bool success = false;
+	std::string accessToken;
+	std::string refreshToken;
+	std::string userName;
+	std::string errorMessage;
 };
 
 class ApiClient;
