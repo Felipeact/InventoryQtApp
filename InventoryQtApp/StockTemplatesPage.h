@@ -1,10 +1,11 @@
 #pragma once
 
 #include <QWidget>
-#include "ui_StockTemplatesPage.h"
-
-#include "TruckStockService.h"
+#include <QString>
 #include <vector>
+
+#include "ui_StockTemplatesPage.h"
+#include "TruckStockService.h"
 
 class StockTemplatesPage : public QWidget
 {
@@ -19,22 +20,30 @@ public:
 private slots:
     void onNewTemplateClicked();
     void onSearchChanged(const QString& text);
-    void onPageChanged(int page);
+
+    void onPreviousPageClicked();
+    void onNextPageClicked();
+    void onPage2Clicked();
 
 private:
     Ui::StockTemplatesPageClass ui;
 
     TruckStockService* truckStockService = nullptr;
+
     std::vector<StockTemplateDto> currentTemplates;
+    std::vector<StockTemplateDto> filteredTemplates;
+
+    int currentPage = 1;
+    int pageSize = 10;
 
     void setupConnections();
     void loadTemplates();
-    void refreshTemplates();
+    void filterTemplates();
+    void populateTable();
+    void updatePagination();
 
-    void addActionButtons(int row);
-    void onViewTemplateClicked(int row);
-    void onEditTemplateClicked(int row);
-    void onDeleteTemplateClicked(int row);
-
-
+    void addActionButtons(int row, const std::string& templateId);
+    void onViewTemplateClicked(const std::string& templateId);
+    void onEditTemplateClicked(const std::string& templateId);
+    void onDeleteTemplateClicked(const std::string& templateId);
 };

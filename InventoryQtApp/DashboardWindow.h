@@ -35,6 +35,7 @@ public:
     DashboardWindow(
         const std::string& role,
         const std::vector<std::string>& permissions,
+		const std::string& userName,
 		ProductService& productService,
 		AssetService& assetService,
 		UserService& userService,	
@@ -54,6 +55,7 @@ private:
 
 	std::string role;                      // User's role
 	std::vector<std::string> permissions;  // User's permissions
+	std::string userName;
 
 	SidebarWidget* sidebar = nullptr;           // Left navigation sidebar
 	VerticalWidget* verticalbar = nullptr;        // Top user info bar

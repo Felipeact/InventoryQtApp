@@ -170,7 +170,7 @@
     <ClInclude Include="ApiClient.h" />
     <ClInclude Include="AssetService.h" />
     <QtMoc Include="AssetsPage.h" />
-    <ClInclude Include="AssignmentsPage.h" />
+    <QtMoc Include="AssignmentsPage.h" />
     <QtMoc Include="AssignTemplateDialog.h" />
     <ClInclude Include="AuthService.h" />
     <QtMoc Include="VerticalWidget.h" />

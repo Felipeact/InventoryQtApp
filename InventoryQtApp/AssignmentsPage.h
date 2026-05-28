@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QWidget>
-#include <QString>
+#include <vector>
 
 #include "ui_AssignmentsPage.h"
 #include "TruckStockService.h"
@@ -9,6 +9,8 @@
 
 class AssignmentsPage : public QWidget
 {
+    Q_OBJECT
+
 public:
     explicit AssignmentsPage(
         TruckStockService* truckStockService,
@@ -20,14 +22,26 @@ public:
 
     void refreshAssignments();
 
+private slots:
+    void onAssignTemplateClicked();
+
+    void onPreviousPageClicked();
+    void onNextPageClicked();
+    void onPage2Clicked();
+
 private:
     Ui::AssignmentsPageClass ui;
+
     TruckStockService* truckStockService = nullptr;
     UserService* userService = nullptr;
 
+    std::vector<TruckAssignmentDto> currentAssignments;
+
+    int currentPage = 1;
+    int pageSize = 10;
+
     void setupConnections();
     void loadAssignments();
-
-    void onAssignTemplateClicked();
-    void onPageChanged(int page);
+    void populateTable();
+    void updatePagination();
 };

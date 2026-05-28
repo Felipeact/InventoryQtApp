@@ -2,22 +2,27 @@
 #pragma once
 
 #include <QWidget>
+
 #include "ui_ScanPage.h"
 #include "ProductService.h"
 
 enum class ScanMode
 {
-    ScanIn,   // Mode for scanning items into inventory
-    ScanOut   // Mode for scanning items out of inventory
+    ScanIn,
+    ScanOut
 };
 
-// Widget for scanning items with barcode input and quantity selection
 class ScanPage : public QWidget
 {
     Q_OBJECT
 
 public:
-    ScanPage(ProductService& productService, ScanMode mode, QWidget* parent = nullptr);
+    ScanPage(
+        ProductService& productService,
+        ScanMode mode,
+        QWidget* parent = nullptr
+    );
+
     ~ScanPage();
 
 signals:
@@ -30,9 +35,15 @@ private slots:
 
 private:
     Ui::ScanPageClass ui;
+
     ProductService& productService;
     ScanMode mode;
 
     void setupPage();
-    void addRecentScan(const QString& barcode, int quantity);
+
+    void addRecentScan(
+        const QString& barcode,
+        const QString& productName,
+        int quantity
+    );
 };

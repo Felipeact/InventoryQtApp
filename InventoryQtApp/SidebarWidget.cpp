@@ -152,6 +152,17 @@ void SidebarWidget::applyPermissions()
         hasPermission("UPLOAD_RECEIPT") ||
         hasPermission("APPROVE_RECEIPTS")
     );
+    
+
+    ui.reportsButton->setVisible(
+        hasPermission("VIEW_REPORTS") ||
+        hasPermission("MANAGE_USERS")
+    );
+
+    ui.settingsButton->setVisible(
+        hasPermission("MANAGE_SETTINGS") ||
+        hasPermission("MANAGE_USERS")
+    );
 }
 
 void SidebarWidget::resetButtonStates()

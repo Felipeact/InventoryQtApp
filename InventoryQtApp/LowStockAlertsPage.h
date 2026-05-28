@@ -26,13 +26,27 @@ private slots:
     void onStatusFilterChanged(int index);
     void onExportClicked();
 
+    void onPreviousPageClicked();
+    void onNextPageClicked();
+    void onPage2Clicked();
+
 private:
     Ui::LowStockAlertsPageClass ui;
 
     TruckStockService* truckStockService = nullptr;
+
     std::vector<LowStockItemDto> currentAlerts;
+    std::vector<LowStockItemDto> filteredAlerts;
+
+    int currentPage = 1;
+    int pageSize = 10;
 
     void setupConnections();
     void loadAlerts();
     void filterAlerts();
+    void populateTable();
+    void updateMetrics();
+    void updatePagination();
+
+    QString escapeCsv(const QString& value) const;
 };

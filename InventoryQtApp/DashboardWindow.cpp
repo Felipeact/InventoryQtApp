@@ -4,14 +4,14 @@
 #include <QVBoxLayout>
 #include <QString>
 
-
 // Constructor initializes the main window with pages and navigation
 DashboardWindow::DashboardWindow(
     const std::string& role,
     const std::vector<std::string>& permissions,
+    const std::string& userName,
     ProductService& productService,
     AssetService& assetService,
-    UserService& userService,   
+    UserService& userService,
     ReportService& reportService,
     TruckStockService& truckStockService,
     QWidget* parent
@@ -19,9 +19,10 @@ DashboardWindow::DashboardWindow(
     : QMainWindow(parent),
     role(role),
     permissions(permissions),
+    userName(userName),
     productService(&productService),
     assetService(&assetService),
-    userService(&userService),  
+    userService(&userService),
     truckStockService(&truckStockService),
     reportService(&reportService)
 {
@@ -83,8 +84,6 @@ void DashboardWindow::setupPages()
         dashboardPage->refreshDashboard();
         itemsPage->refreshProducts();
         });
-
-
 
     truckStockDashboardPage = new TruckStockDashboardPage(truckStockService, this);
     ui.mainStack->addWidget(truckStockDashboardPage);
@@ -178,7 +177,7 @@ void DashboardWindow::setupSidebar()
 
 void DashboardWindow::setupVerticalbar()
 {
-    verticalbar = new VerticalWidget(role, "Felipe", this);
+    verticalbar = new VerticalWidget(role, userName, this);
 
     QVBoxLayout* layout = new QVBoxLayout(ui.verticalContainer);
     layout->setContentsMargins(0, 0, 0, 0);

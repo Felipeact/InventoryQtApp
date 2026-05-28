@@ -207,9 +207,6 @@
     <ClInclude Include="TruckStockService.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AssignmentsPage.h">
-      <Filter>Header Files\Pages</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="DashboardPage.h">
@@ -277,6 +274,9 @@
     </QtMoc>
     <QtMoc Include="AddEditTemplateItemDialog.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AssignmentsPage.h">
+      <Filter>Header Files\Pages</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
