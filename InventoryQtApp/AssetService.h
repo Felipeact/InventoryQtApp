@@ -3,6 +3,8 @@
 #include "ApiClient.h"
 #include <nlohmann/json.hpp>
 #include <string>
+#include <QtGlobal>
+
 using json = nlohmann::json;
 
 

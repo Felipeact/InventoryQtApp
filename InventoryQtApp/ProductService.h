@@ -24,6 +24,7 @@ public:
 	bool deleteProduct(const std::string& productId);
 
     json searchProducts(const std::string& searchText);
+    std::string getProductNameByBarcode(const std::string& barcode);
 
     bool scanIn(const std::string& barcode, int quantity);
 	bool scanOut(const std::string& barcode, int quantity);

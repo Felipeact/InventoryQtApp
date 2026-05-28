@@ -76,6 +76,8 @@ void InventoryQtApp::onLoginButtonClicked()
 	std::string role;
 	std::vector<std::string> permissions;
 
+
+
 	if (!apiClient.validateToken(role, permissions)) {
 		ui.statusLabel->setText("Token validation failed.");
 		QMessageBox::warning(this, "Error", "Token validation failed.");
@@ -83,7 +85,7 @@ void InventoryQtApp::onLoginButtonClicked()
 	}
 
 		
-	dashboardWindow = new DashboardWindow(role,permissions,productService,assetService,userService,reportService, truckStockService);
+	dashboardWindow = new DashboardWindow(role,permissions, productService,assetService,userService,reportService, truckStockService);
 
 	connect(dashboardWindow, &DashboardWindow::logoutRequested, this, [this]() {
 		authService.logout();

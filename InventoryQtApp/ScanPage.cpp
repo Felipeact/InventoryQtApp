@@ -82,11 +82,9 @@ void ScanPage::onSubmitClicked()
 
     ui.statusLabel->setText("Stock updated successfully.");
 
-    addRecentScan(
-        barcode,
-        barcode,
-        quantity
-    );
+    QString productName =QString::fromStdString(productService.getProductNameByBarcode(barcode.toStdString()));
+
+    addRecentScan(barcode, productName, quantity);
 
     ui.barcodeInput->clear();
     ui.quantityInput->setValue(1);

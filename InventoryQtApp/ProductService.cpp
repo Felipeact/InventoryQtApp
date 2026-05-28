@@ -1,13 +1,18 @@
-// ProductService.cpp - Implementation of product service (TODO: implementation pending)
 #include "ProductService.h"
+
 #include <iostream>
+#include <QtGlobal>
 
 ProductService::ProductService(ApiClient& apiClient)
     : api(apiClient)
 {
 }
 
-bool ProductService::createProduct(const std::string& name, const std::string& barcode, int quantity)
+bool ProductService::createProduct(
+    const std::string& name,
+    const std::string& barcode,
+    int quantity
+)
 {
     json body = {
         {"name", name},
@@ -18,7 +23,7 @@ bool ProductService::createProduct(const std::string& name, const std::string& b
     auto res = api.post("/products", body.dump());
 
     if (res.status_code != 200 && res.status_code != 201) {
-        std::cout << res.text << std::endl;
+        std::cout << "Create product failed: " << res.text << std::endl;
         return false;
     }
 
@@ -27,38 +32,54 @@ bool ProductService::createProduct(const std::string& name, const std::string& b
 
 json ProductService::getProducts(bool forceRefresh)
 {
+    Q_UNUSED(forceRefresh);
+
     auto res = api.get("/products?page=1&limit=100");
 
     if (res.status_code != 200) {
+        std::cout << "Get products failed: " << res.text << std::endl;
         return json::array();
     }
 
-    auto response = json::parse(res.text);
+    try {
+        auto response = json::parse(res.text);
 
-    if (response.contains("data")) {
-        return response["data"];
+        if (response.contains("data") && response["data"].is_array()) {
+            return response["data"];
+        }
+
+        if (response.is_array()) {
+            return response;
+        }
+    }
+    catch (const std::exception& ex) {
+        std::cout << "Parse products failed: " << ex.what() << std::endl;
     }
 
     return json::array();
 }
 
-bool ProductService::updateProduct(const std::string& productId, const std::string& name, const std::string& barcode, int quantity)
+bool ProductService::updateProduct(
+    const std::string& productId,
+    const std::string& name,
+    const std::string& barcode,
+    int quantity
+)
 {
     json body = {
-         {"name", name},
-         {"barcode", barcode},
-         {"quantity", quantity}
+        {"name", name},
+        {"barcode", barcode},
+        {"quantity", quantity}
     };
 
     auto res = api.put("/products/" + productId, body.dump());
 
     if (res.status_code != 200) {
-        std::cout << res.text << std::endl;
+        std::cout << "Update product failed: " << res.text << std::endl;
         return false;
     }
 
     return true;
-
 }
 
 bool ProductService::deleteProduct(const std::string& productId)
@@ -66,7 +87,7 @@ bool ProductService::deleteProduct(const std::string& productId)
     auto res = api.del("/products/" + productId);
 
     if (res.status_code != 200) {
-        std::cout << res.text << std::endl;
+        std::cout << "Delete product failed: " << res.text << std::endl;
         return false;
     }
 
@@ -82,38 +103,72 @@ json ProductService::searchProducts(const std::string& searchText)
     }
 
     auto res = api.get(endpoint);
+
     if (res.status_code != 200) {
+        std::cout << "Search products failed: " << res.text << std::endl;
         return json::array();
     }
 
-    auto response = json::parse(res.text);
+    try {
+        auto response = json::parse(res.text);
 
-    if (response.contains("data"))
-    {
-        return response["data"];
+        if (response.contains("data") && response["data"].is_array()) {
+            return response["data"];
+        }
+
+        if (response.is_array()) {
+            return response;
+        }
+    }
+    catch (const std::exception& ex) {
+        std::cout << "Parse search products failed: " << ex.what() << std::endl;
     }
 
     return json::array();
 }
 
-bool ProductService::scanIn(const std::string& barcode, int quantity)
+std::string ProductService::getProductNameByBarcode(
+    const std::string& barcode
+)
 {
-    
+    json products = searchProducts(barcode);
+
+    for (const auto& product : products) {
+        std::string productBarcode =
+            product.value("barcode", "");
+
+        if (productBarcode == barcode) {
+            return product.value("name", barcode);
+        }
+    }
+
+    return barcode;
+}
+
+bool ProductService::scanIn(
+    const std::string& barcode,
+    int quantity
+)
+{
     json body = {
         {"barcode", barcode},
         {"quantity", quantity}
-	};
+    };
 
     auto res = api.post("/products/scan-in", body.dump());
 
     if (res.status_code != 200) {
+        std::cout << "Scan in failed: " << res.text << std::endl;
         return false;
     }
 
-    return res.status_code == 200;
+    return true;
 }
 
-bool ProductService::scanOut(const std::string& barcode, int quantity)
+bool ProductService::scanOut(
+    const std::string& barcode,
+    int quantity
+)
 {
     json body = {
         {"barcode", barcode},
@@ -123,11 +178,11 @@ bool ProductService::scanOut(const std::string& barcode, int quantity)
     auto res = api.post("/products/scan-out", body.dump());
 
     if (res.status_code != 200) {
+        std::cout << "Scan out failed: " << res.text << std::endl;
         return false;
     }
 
-   
-    return res.status_code == 200;
+    return true;
 }
 
 json ProductService::getLowStockProducts()
@@ -135,8 +190,24 @@ json ProductService::getLowStockProducts()
     auto res = api.get("/products/low-stock");
 
     if (res.status_code != 200) {
+        std::cout << "Get low stock products failed: " << res.text << std::endl;
         return json::array();
     }
 
-    return json::parse(res.text);
+    try {
+        auto response = json::parse(res.text);
+
+        if (response.contains("data") && response["data"].is_array()) {
+            return response["data"];
+        }
+
+        if (response.is_array()) {
+            return response;
+        }
+    }
+    catch (const std::exception& ex) {
+        std::cout << "Parse low stock products failed: " << ex.what() << std::endl;
+    }
+
+    return json::array();
 }
