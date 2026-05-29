@@ -63,6 +63,13 @@ void UsersPage::refreshUsers()
     loadUsers();
 }
 
+void UsersPage::setLoggedInUserName(
+    const std::string& userName
+)
+{
+    loggedInUserName = userName;
+}
+
 void UsersPage::filterUsers()
 {
     QString searchText = ui.searchInput->text().trimmed();
@@ -310,6 +317,11 @@ void UsersPage::onEditUserClicked(const std::string& userId)
 
         if (success) {
             QMessageBox::information(this, "Success", "User updated successfully.");
+
+            if (user.name == loggedInUserName) {
+                emit loggedInUserUpdated(request.name);
+            }
+
             loadUsers();
         }
         else {

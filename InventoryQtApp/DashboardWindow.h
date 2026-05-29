@@ -47,6 +47,8 @@ public:
     // Destructor
     ~DashboardWindow();
 
+	void updateLoggedInUserInfo(const std::string& newUserName);
+
 signals:
 	void logoutRequested();
 

@@ -10,17 +10,30 @@
 
 class UsersPage : public QWidget
 {
+
+    Q_OBJECT
+
 public:
     explicit UsersPage(UserService* userService, QWidget* parent = nullptr);
     ~UsersPage();
 
     void refreshUsers();
 
+    void setLoggedInUserName(
+        const std::string& userName
+    );
+
+signals:
+    void loggedInUserUpdated(
+        const std::string& newUserName
+    );
+
 private:
     Ui::UsersPageClass ui;
 
     UserService* userService = nullptr;
 
+    std::string loggedInUserName;
     std::vector<UserDto> currentUsers;
     std::vector<UserDto> filteredUsers;
 

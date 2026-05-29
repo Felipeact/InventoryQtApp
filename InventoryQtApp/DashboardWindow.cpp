@@ -43,6 +43,21 @@ DashboardWindow::~DashboardWindow()
 {
 }
 
+void DashboardWindow::updateLoggedInUserInfo(
+    const std::string& newUserName
+)
+{
+    userName = newUserName;
+
+    if (verticalbar) {
+        verticalbar->setUserInfo(role, userName);
+    }
+
+    if (sidebar) {
+        sidebar->setUserInfo(role, userName);
+    }
+}
+
 void DashboardWindow::setupPages()
 {
     dashboardPage = new DashboardPage(*productService, *reportService, this);
@@ -56,6 +71,15 @@ void DashboardWindow::setupPages()
 
     usersPage = new UsersPage(userService, this);
     ui.mainStack->addWidget(usersPage);
+
+    usersPage->setLoggedInUserName(userName);
+
+    connect(
+        usersPage,
+        &UsersPage::loggedInUserUpdated,
+        this,
+        &DashboardWindow::updateLoggedInUserInfo
+    );
 
     scanInPage = new ScanPage(*productService, ScanMode::ScanIn, this);
     ui.mainStack->addWidget(scanInPage);

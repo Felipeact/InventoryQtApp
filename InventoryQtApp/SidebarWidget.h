@@ -14,7 +14,7 @@ class SidebarWidget : public QWidget
 public:
     explicit SidebarWidget(const std::vector<std::string>& permissions, const std::string& role, const std::string& userName, QWidget* parent = nullptr);
 
-
+    void setUserInfo(const std::string& role,const std::string& userName);
     
 
 signals:

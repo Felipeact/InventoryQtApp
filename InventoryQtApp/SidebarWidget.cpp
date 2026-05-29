@@ -16,8 +16,7 @@ SidebarWidget::SidebarWidget(
     userName(userName)
 {
     ui.setupUi(this);
-    ui.userNameLabel->setText(QString::fromStdString(userName));
-    ui.userRoleLabel->setText(QString::fromStdString(role));
+    setUserInfo(role, userName);
 
     connect(ui.dashboardButton, &QPushButton::clicked, this, [this]() {
         setActiveButton(ui.dashboardButton);
@@ -194,4 +193,18 @@ void SidebarWidget::setActiveButton(QPushButton* activeButton)
     if (activeButton) {
         activeButton->setChecked(true);
     }
+}
+
+void SidebarWidget::setUserInfo(const std::string& role, const std::string& userName)
+{
+    this->role = role;
+    this->userName = userName;
+
+    ui.userNameLabel->setText(
+        QString::fromStdString(userName)
+    );
+
+    ui.userRoleLabel->setText(
+        QString::fromStdString(role)
+    );
 }

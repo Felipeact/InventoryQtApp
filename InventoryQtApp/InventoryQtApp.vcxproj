@@ -158,7 +158,7 @@
     <QtMoc Include="AddEditTemplateItemDialog.h" />
     <ClInclude Include="AddEditUserDialog.h" />
     <ClInclude Include="TruckStockService.h" />
-    <ClInclude Include="UsersPage.h" />
+    <QtMoc Include="UsersPage.h" />
     <QtMoc Include="LowStockAlertsPage.h" />
     <QtMoc Include="ReceiptsPage.h" />
     <QtMoc Include="UploadReceiptDialog.h" />

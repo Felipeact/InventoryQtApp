@@ -41,10 +41,23 @@ LoginResult AuthService::login( const std::string& email, const std::string& pas
         result.accessToken = data["accessToken"].get<std::string>();
         result.refreshToken = data["refreshToken"].get<std::string>();
 
-        if (data.contains("user") && data["user"].contains("name")) {
-            result.userName = data["user"]["name"].get<std::string>();
+        if (data.contains("user")) {
+            auto user = data["user"];
+
+            if (user.contains("name") && !user["name"].is_null()) {
+                result.userName = user["name"].get<std::string>();
+            }
+            else if (user.contains("fullName") && !user["fullName"].is_null()) {
+                result.userName = user["fullName"].get<std::string>();
+            }
+            else if (user.contains("email") && !user["email"].is_null()) {
+                result.userName = user["email"].get<std::string>();
+            }
+            else {
+                result.userName = email;
+            }
         }
-        else if (data.contains("name")) {
+        else if (data.contains("name") && !data["name"].is_null()) {
             result.userName = data["name"].get<std::string>();
         }
         else {
