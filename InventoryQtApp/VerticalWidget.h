@@ -16,6 +16,8 @@ public:
 	// Destructor
 	~VerticalWidget();
 
+	void setUserInfo(const std::string& role, const std::string& userName);
+
 private:
 	Ui::VerticalWidget ui;  // UI components
 

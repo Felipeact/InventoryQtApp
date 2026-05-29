@@ -109,7 +109,7 @@ void DashboardWindow::setupPages()
 
 void DashboardWindow::setupSidebar()
 {
-    sidebar = new SidebarWidget(permissions, this);
+    sidebar = new SidebarWidget(permissions,role, userName, this);
 
     QVBoxLayout* layout = new QVBoxLayout(ui.sidebarContainer);
     layout->setContentsMargins(0, 0, 0, 0);

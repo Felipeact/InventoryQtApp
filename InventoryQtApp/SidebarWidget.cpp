@@ -1,14 +1,23 @@
 #include "SidebarWidget.h"
 
 #include <algorithm>
+#include <QString>
+
 
 SidebarWidget::SidebarWidget(
     const std::vector<std::string>& permissions,
+    const std::string& role,
+    const std::string& userName,
     QWidget* parent
 )
-    : QWidget(parent), permissions(permissions)
+    : QWidget(parent),
+    permissions(permissions),
+    role(role),
+    userName(userName)
 {
     ui.setupUi(this);
+    ui.userNameLabel->setText(QString::fromStdString(userName));
+    ui.userRoleLabel->setText(QString::fromStdString(role));
 
     connect(ui.dashboardButton, &QPushButton::clicked, this, [this]() {
         setActiveButton(ui.dashboardButton);
@@ -92,6 +101,8 @@ SidebarWidget::SidebarWidget(
     applyPermissions();
     setActiveButton(ui.dashboardButton);
 }
+
+
 
 bool SidebarWidget::hasPermission(const std::string& permission) const
 {

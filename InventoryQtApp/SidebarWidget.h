@@ -12,10 +12,10 @@ class SidebarWidget : public QWidget
     Q_OBJECT
 
 public:
-    explicit SidebarWidget(
-        const std::vector<std::string>& permissions,
-        QWidget* parent = nullptr
-    );
+    explicit SidebarWidget(const std::vector<std::string>& permissions, const std::string& role, const std::string& userName, QWidget* parent = nullptr);
+
+
+    
 
 signals:
     void dashboardClicked();
@@ -40,6 +40,8 @@ signals:
 private:
     Ui::SidebarWidgetClass ui;
     std::vector<std::string> permissions;
+    std::string role;
+    std::string userName;
 
     bool hasPermission(const std::string& permission) const;
     void applyPermissions();
