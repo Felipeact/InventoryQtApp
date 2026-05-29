@@ -169,12 +169,20 @@
 
 				QLabel#recentCodeLabel,
 				QLabel#recentNameLabel,
-				QLabel#recentDateLabel {
+				QLabel#recentDateLabel,
+				QLabel#recentCodeLabel_2,
+				QLabel#recentNameLabel_2,
+				QLabel#recentDateLabel_2,
+				QLabel#recentCodeLabel_3,
+				QLabel#recentNameLabel_3,
+				QLabel#recentDateLabel_3 {
 				color: #CBD5E1;
 				font-size: 11px;
 				}
 
-				QLabel#recentQtyLabel {
+				QLabel#recentQtyLabel,
+				QLabel#recentQtyLabel_2,
+				QLabel#recentQtyLabel_3 {
 				color: #22C55E;
 				font-size: 11px;
 				font-weight: 800;
@@ -223,7 +231,6 @@
 								<property name="spacing">
 									<number>3</number>
 								</property>
-
 								<item>
 									<widget class="QLabel" name="pageTitleLabel">
 										<property name="text">
@@ -231,7 +238,6 @@
 										</property>
 									</widget>
 								</item>
-
 								<item>
 									<widget class="QLabel" name="breadcrumbLabel">
 										<property name="text">
@@ -288,7 +294,6 @@
 											<property name="spacing">
 												<number>0</number>
 											</property>
-
 											<item>
 												<widget class="QLineEdit" name="barcodeInput">
 													<property name="placeholderText">
@@ -296,7 +301,6 @@
 													</property>
 												</widget>
 											</item>
-
 											<item>
 												<widget class="QLabel" name="barcodeIconLabel">
 													<property name="minimumSize">
@@ -444,28 +448,28 @@
 											<item row="0" column="0">
 												<widget class="QLabel" name="recentCodeLabel">
 													<property name="text">
-														<string>LPD-001234</string>
+														<string>-</string>
 													</property>
 												</widget>
 											</item>
 											<item row="0" column="1">
 												<widget class="QLabel" name="recentNameLabel">
 													<property name="text">
-														<string>Laptop Dell XPS 15</string>
+														<string>No scan yet</string>
 													</property>
 												</widget>
 											</item>
 											<item row="0" column="2">
 												<widget class="QLabel" name="recentQtyLabel">
 													<property name="text">
-														<string>+5</string>
+														<string>-</string>
 													</property>
 												</widget>
 											</item>
 											<item row="0" column="3">
 												<widget class="QLabel" name="recentDateLabel">
 													<property name="text">
-														<string>May 22, 2024 10:30 AM</string>
+														<string>-</string>
 													</property>
 												</widget>
 											</item>
@@ -473,28 +477,28 @@
 											<item row="1" column="0">
 												<widget class="QLabel" name="recentCodeLabel_2">
 													<property name="text">
-														<string>MSE-000567</string>
+														<string>-</string>
 													</property>
 												</widget>
 											</item>
 											<item row="1" column="1">
 												<widget class="QLabel" name="recentNameLabel_2">
 													<property name="text">
-														<string>Wireless Mouse</string>
+														<string>-</string>
 													</property>
 												</widget>
 											</item>
 											<item row="1" column="2">
 												<widget class="QLabel" name="recentQtyLabel_2">
 													<property name="text">
-														<string>+10</string>
+														<string>-</string>
 													</property>
 												</widget>
 											</item>
 											<item row="1" column="3">
 												<widget class="QLabel" name="recentDateLabel_2">
 													<property name="text">
-														<string>May 22, 2024 10:25 AM</string>
+														<string>-</string>
 													</property>
 												</widget>
 											</item>
@@ -502,28 +506,28 @@
 											<item row="2" column="0">
 												<widget class="QLabel" name="recentCodeLabel_3">
 													<property name="text">
-														<string>KEY-000890</string>
+														<string>-</string>
 													</property>
 												</widget>
 											</item>
 											<item row="2" column="1">
 												<widget class="QLabel" name="recentNameLabel_3">
 													<property name="text">
-														<string>Mechanical Keyboard</string>
+														<string>-</string>
 													</property>
 												</widget>
 											</item>
 											<item row="2" column="2">
 												<widget class="QLabel" name="recentQtyLabel_3">
 													<property name="text">
-														<string>+3</string>
+														<string>-</string>
 													</property>
 												</widget>
 											</item>
 											<item row="2" column="3">
 												<widget class="QLabel" name="recentDateLabel_3">
 													<property name="text">
-														<string>May 22, 2024 10:20 AM</string>
+														<string>-</string>
 													</property>
 												</widget>
 											</item>
@@ -543,7 +547,6 @@
 								</property>
 							</spacer>
 						</item>
-
 					</layout>
 				</widget>
 			</item>

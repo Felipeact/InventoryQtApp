@@ -1,5 +1,4 @@
-﻿// ScanPage.h - Page for scan in/out operations
-#pragma once
+﻿#pragma once
 
 #include <QWidget>
 
