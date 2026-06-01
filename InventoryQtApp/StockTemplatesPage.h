@@ -6,12 +6,15 @@
 
 #include "ui_StockTemplatesPage.h"
 #include "TruckStockService.h"
+#include "Theme.h"
 
 class StockTemplatesPage : public QWidget
 {
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     StockTemplatesPage(TruckStockService* truckStockService, QWidget* parent = nullptr);
     ~StockTemplatesPage();
 

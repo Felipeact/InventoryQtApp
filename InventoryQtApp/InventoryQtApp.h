@@ -12,15 +12,18 @@
 #include "UserService.h"
 #include "ReportService.h"
 #include "TruckStockService.h"
+#include "Theme.h"
 
 // Main login window of the inventory management application
 class InventoryQtApp : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
+
+	void applyTheme(Theme::AppTheme theme);
 	// Constructor
-	InventoryQtApp(QWidget *parent = nullptr);
+	InventoryQtApp(QWidget* parent = nullptr);
 	// Destructor
 	~InventoryQtApp();
 
@@ -41,9 +44,9 @@ private:
 
 	DashboardWindow* dashboardWindow = nullptr;  // Main dashboard window after login	
 
-	
 
 
- 
+
+
 };
 

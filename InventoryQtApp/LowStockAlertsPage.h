@@ -6,12 +6,15 @@
 
 #include "ui_LowStockAlertsPage.h"
 #include "TruckStockService.h"
+#include "Theme.h"
 
 class LowStockAlertsPage : public QWidget
 {
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     explicit LowStockAlertsPage(
         TruckStockService* truckStockService,
         QWidget* parent = nullptr

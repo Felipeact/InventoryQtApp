@@ -18,172 +18,7 @@
 		</property>
 
 		<property name="styleSheet">
-			<string notr="true">
-
-				QWidget {
-				background-color: #050B14;
-				color: white;
-				font-family: "Segoe UI";
-				}
-
-				/* PAGE */
-
-				QWidget#pageContainer {
-				background-color: transparent;
-				}
-
-				/* TITLE */
-
-				QLabel#pageTitle {
-				font-size: 24px;
-				font-weight: 700;
-				color: white;
-				}
-
-				QLabel#breadcrumbLabel {
-				font-size: 12px;
-				color: #94A3B8;
-				}
-
-				/* TOOLBAR */
-
-				QWidget#toolbarContainer {
-				background-color: #091426;
-				border: 1px solid #1A2A40;
-				border-radius: 14px;
-				}
-
-				/* SEARCH */
-
-				QWidget#searchContainer {
-				background-color: #111C2D;
-				border: 1px solid #22324A;
-				border-radius: 10px;
-				}
-
-				QLineEdit#itemSearchInput {
-				border: none;
-				background: transparent;
-				color: white;
-				padding-left: 12px;
-				font-size: 13px;
-				}
-
-				QPushButton#itemSearchButton {
-				border: none;
-				background: transparent;
-				color: #CBD5E1;
-				padding-right: 10px;
-				font-size: 13px;
-				}
-
-				/* BUTTONS */
-
-				QPushButton#addItemButton {
-				background-color: #2563EB;
-				color: white;
-				border: none;
-				border-radius: 10px;
-				padding: 10px 22px;
-				font-size: 13px;
-				font-weight: 600;
-				}
-
-				QPushButton#addItemButton:hover {
-				background-color: #3B82F6;
-				}
-
-				QPushButton#filterItemButton {
-				background-color: #111C2D;
-				border: 1px solid #22324A;
-				color: white;
-				border-radius: 10px;
-				padding: 10px 18px;
-				font-size: 13px;
-				}
-
-				/* TABLE CARD */
-
-				QWidget#tableCard {
-				background-color: #091426;
-				border: 1px solid #1A2A40;
-				border-radius: 14px;
-				}
-
-				/* TABLE */
-
-				QTableWidget#itemsTable {
-				background-color: transparent;
-				border: none;
-				color: white;
-				gridline-color: transparent;
-				outline: none;
-				font-size: 13px;
-				}
-
-				QHeaderView::section {
-				background-color: #0C1728;
-				color: #94A3B8;
-				border: none;
-				border-bottom: 1px solid #1F2E45;
-				padding-left: 12px;
-				height: 42px;
-				font-size: 12px;
-				font-weight: 600;
-				}
-
-				QTableWidget::item {
-				border-bottom: 1px solid #132238;
-				padding-left: 12px;
-				height: 44px;
-				}
-
-				QTableWidget::item:selected {
-				background-color: #132238;
-				}
-
-				/* PAGINATION */
-
-				QLabel#paginationLabel {
-				color: #94A3B8;
-				font-size: 12px;
-				}
-
-				QPushButton#prevPageButton,
-				QPushButton#page2Button,
-				QPushButton#nextPageButton {
-				background-color: #111C2D;
-				border: 1px solid #22324A;
-				border-radius: 8px;
-				color: white;
-				min-width: 32px;
-				min-height: 32px;
-				}
-
-				QPushButton#prevPageButton:hover,
-				QPushButton#page2Button:hover,
-				QPushButton#nextPageButton:hover {
-				background-color: #1D4ED8;
-				}
-
-				QPushButton#activePageButton {
-				background-color: #2563EB;
-				border: none;
-				border-radius: 8px;
-				color: white;
-				min-width: 32px;
-				min-height: 32px;
-				}
-
-				QComboBox#pageSizeCombo {
-				background-color: #111C2D;
-				border: 1px solid #22324A;
-				border-radius: 8px;
-				color: white;
-				padding: 6px 10px;
-				}
-
-			</string>
+			<string notr="true"/>
 		</property>
 
 		<layout class="QVBoxLayout" name="rootLayout">
@@ -401,18 +236,7 @@
 									<item>
 										<widget class="QWidget" name="paginationContainer" native="true">
 											<property name="styleSheet">
-												<string notr="true">
-													QWidget#paginationContainer {
-													background-color: transparent;
-													border: none;
-													}
-
-													QLabel#paginationLabel {
-													background-color: transparent;
-													border: none;
-													color: #94A3B8;
-													}
-												</string>
+												<string notr="true"/>
 											</property>
 
 											<layout class="QHBoxLayout" name="paginationLayout">
@@ -420,11 +244,7 @@
 												<item>
 													<widget class="QLabel" name="paginationLabel">
 														<property name="styleSheet">
-															<string notr="true">
-																background-color: transparent;
-																border: none;
-																color: #94A3B8;
-															</string>
+															<string notr="true"/>
 														</property>
 														<property name="text">
 															<string>Showing 1 to 5 of 25 items</string>

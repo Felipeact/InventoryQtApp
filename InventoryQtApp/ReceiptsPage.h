@@ -7,12 +7,15 @@
 #include "ui_ReceiptsPage.h"
 #include "TruckStockService.h"
 #include <string>
+#include "Theme.h"
 
 class ReceiptsPage : public QWidget
 {
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     explicit ReceiptsPage(
         TruckStockService* truckStockService,
         const std::vector<std::string>& permissions,

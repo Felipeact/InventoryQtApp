@@ -25,28 +25,31 @@
 #include "SidebarWidget.h"
 #include "VerticalWidget.h"
 #include <UsersPage.h>
+#include "Theme.h"
 
 // Main dashboard window that manages navigation and displays different pages
 class DashboardWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    // Constructor that initializes the dashboard with user role and permissions
-    DashboardWindow(
-        const std::string& role,
-        const std::vector<std::string>& permissions,
+
+	void applyTheme(Theme::AppTheme theme);
+	// Constructor that initializes the dashboard with user role and permissions
+	DashboardWindow(
+		const std::string& role,
+		const std::vector<std::string>& permissions,
 		const std::string& userName,
 		ProductService& productService,
 		AssetService& assetService,
-		UserService& userService,	
+		UserService& userService,
 		ReportService& reportService,
 		TruckStockService& truckStockService,
-        QWidget* parent = nullptr
-    );
+		QWidget* parent = nullptr
+	);
 
-    // Destructor
-    ~DashboardWindow();
+	// Destructor
+	~DashboardWindow();
 
 	void updateLoggedInUserInfo(const std::string& newUserName);
 
@@ -68,7 +71,7 @@ private:
 	UserService* userService = nullptr;   // User service for API interactions
 	ReportService* reportService = nullptr; // Report service for API interactions
 	TruckStockService* truckStockService = nullptr;
-	
+
 
 
 	// Pages displayed in the main stack
@@ -88,7 +91,7 @@ private:
 	MyTruckStockPage* myTruckStockPage = nullptr;
 	LowStockAlertsPage* lowStockAlertsPage = nullptr;
 	ReceiptsPage* receiptsPage = nullptr;
-	
+
 
 	// Initialization methods
 	void setupSidebar();       // Configures the sidebar navigation

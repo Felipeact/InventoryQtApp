@@ -6,12 +6,15 @@
 #include "ui_AssignmentsPage.h"
 #include "TruckStockService.h"
 #include "UserService.h"
+#include "Theme.h"
 
 class AssignmentsPage : public QWidget
 {
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     explicit AssignmentsPage(
         TruckStockService* truckStockService,
         UserService* userService,

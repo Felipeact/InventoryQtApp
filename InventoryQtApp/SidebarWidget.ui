@@ -26,75 +26,7 @@
 		</property>
 
 		<property name="styleSheet">
-			<string notr="true">
-				QWidget#SidebarWidgetClass {
-				background-color: #07111F;
-				border-right: 1px solid #1E2B3D;
-				font-family: "Segoe UI";
-				}
-
-				QLabel {
-				color: white;
-				background: transparent;
-				}
-
-				QLabel#logoLabel {
-				font-size: 16px;
-				font-weight: 800;
-				color: white;
-				}
-
-				QLabel#sectionLabel,
-				QLabel#sectionLabel2 {
-				color: #64748B;
-				font-size: 10px;
-				font-weight: 800;
-				padding-left: 6px;
-				}
-
-				QPushButton {
-				background-color: transparent;
-				color: #D8E4F5;
-				border: none;
-				border-radius: 8px;
-				padding: 9px 10px;
-				text-align: left;
-				font-weight: 600;
-				font-size: 12px;
-				min-height: 34px;
-				}
-
-				QPushButton:hover {
-				background-color: #132238;
-				color: white;
-				}
-
-				QPushButton:checked {
-				background-color: #1D4ED8;
-				color: white;
-				}
-
-				QPushButton#logoutButton {
-				color: #FF6B6B;
-				}
-
-				QPushButton#logoutButton:hover {
-				background-color: #351A1F;
-				}
-
-				QFrame#userCard {
-				background-color: #0B1627;
-				border: 1px solid #1E2B3D;
-				border-radius: 10px;
-				}
-
-				QFrame#lineDivider,
-				QFrame#lineDivider2 {
-				background-color: #1E2B3D;
-				border: none;
-				max-height: 1px;
-				}
-			</string>
+			<string notr="true"/>
 		</property>
 
 		<layout class="QVBoxLayout" name="mainLayout">
@@ -364,11 +296,7 @@
 									</size>
 								</property>
 								<property name="styleSheet">
-									<string notr="true">
-										background-color: #1D4ED8;
-										border-radius: 14px;
-										font-weight: 700;
-									</string>
+									<string notr="true"/>
 								</property>
 								<property name="text">
 									<string>A</string>
@@ -388,7 +316,7 @@
 								<item>
 									<widget class="QLabel" name="userNameLabel">
 										<property name="styleSheet">
-											<string notr="true">font-weight: 700; font-size: 12px;</string>
+											<string notr="true"/>
 										</property>
 										<property name="text">
 											<string>Admin</string>
@@ -399,7 +327,7 @@
 								<item>
 									<widget class="QLabel" name="userRoleLabel">
 										<property name="styleSheet">
-											<string notr="true">color: #94A3B8; font-size: 10px;</string>
+											<string notr="true"/>
 										</property>
 										<property name="text">
 											<string>Administrator</string>

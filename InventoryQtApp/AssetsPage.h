@@ -5,6 +5,7 @@
 #include "ui_AssetsPage.h"
 #include "AddAssetDialog.h"
 #include "AssetService.h"
+#include "Theme.h"
 
 // Page widget that displays and manages assets
 class AssetsPage : public QWidget
@@ -12,6 +13,8 @@ class AssetsPage : public QWidget
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     // Constructor
     AssetsPage(AssetService& assetService, QWidget* parent = nullptr);
     // Destructor

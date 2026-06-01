@@ -5,6 +5,7 @@
 #include "ui_ItemsPage.h"
 #include "AddProductDialog.h"
 #include "ProductService.h"
+#include "Theme.h"
 
 // Page widget that displays and manages inventory items
 class ItemsPage : public QWidget
@@ -12,6 +13,8 @@ class ItemsPage : public QWidget
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     // Constructor
     ItemsPage(ProductService& productService, QWidget* parent = nullptr);
     // Destructor
@@ -20,8 +23,8 @@ public:
     void refreshProducts();
 
 signals:
-	void productsChanged();  // Signal emitted when products are added/updated/deleted
-    
+    void productsChanged();  // Signal emitted when products are added/updated/deleted
+
 
 private:
     Ui::ItemsPageClass ui;
@@ -48,5 +51,5 @@ private slots:
     void onPrevPageClicked();
     void onPageSizeChanged(int index);
 
-	
+
 };

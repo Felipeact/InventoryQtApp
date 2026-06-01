@@ -4,6 +4,7 @@
 
 #include "ui_ScanPage.h"
 #include "ProductService.h"
+#include "Theme.h"
 
 enum class ScanMode
 {
@@ -16,6 +17,8 @@ class ScanPage : public QWidget
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     ScanPage(
         ProductService& productService,
         ScanMode mode,

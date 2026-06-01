@@ -1,4 +1,3 @@
-// VerticalWidget.cpp - Implementation of the user information bar
 #include "VerticalWidget.h"
 
 VerticalWidget::VerticalWidget(
@@ -11,6 +10,8 @@ VerticalWidget::VerticalWidget(
     username(userName)
 {
     ui.setupUi(this);
+
+    applyTheme(Theme::AppTheme::Dark);
     setUserInfo(userRole, userName);
 }
 
@@ -28,5 +29,20 @@ void VerticalWidget::setUserInfo(
 
     ui.welcomeLabel->setText(
         "Hello " + QString::fromStdString(userName)
+    );
+
+    if (!userName.empty()) {
+        ui.avatarLabel->setText(
+            QString::fromStdString(userName.substr(0, 1)).toUpper()
+        );
+    }
+}
+
+void VerticalWidget::applyTheme(
+    Theme::AppTheme theme
+)
+{
+    setStyleSheet(
+        Theme::verticalBarStyle(theme)
     );
 }

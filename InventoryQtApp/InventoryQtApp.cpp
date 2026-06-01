@@ -15,7 +15,6 @@ InventoryQtApp::InventoryQtApp(QWidget *parent)
     ui.setupUi(this);
 
 	this->setWindowTitle("Inventory Management System - Login");
-	Theme::applyLogin(this);
 	this->resize(420, 320);
 	this->setMaximumSize(420, 320);
 

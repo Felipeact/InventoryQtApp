@@ -14,39 +14,7 @@
 			<string>Inventory Dashboard</string>
 		</property>
 		<property name="styleSheet">
-			<string notr="true">
-				QMainWindow#DashboardWindowClass {
-				background-color: #050B14;
-				}
-
-				QWidget#centralWidget {
-				background-color: #050B14;
-				}
-
-				QWidget#sidebarContainer {
-				background-color: #07111F;
-				border: 1px solid #16263B;
-				border-radius: 12px;
-				}
-
-				QWidget#mainAreaContainer {
-				background-color: #050B14;
-				}
-
-				QWidget#verticalContainer {
-				background-color: transparent;
-				}
-
-				QStackedWidget#mainStack {
-				background-color: transparent;
-				border: none;
-				}
-
-				QStatusBar {
-				background-color: #050B14;
-				color: #94A3B8;
-				}
-			</string>
+			<string notr="true"/>
 		</property>
 
 		<widget class="QWidget" name="centralWidget">

@@ -3,12 +3,15 @@
 #include <QDialog>
 #include "ui_UploadReceiptDialog.h"
 #include "TruckStockService.h"
+#include "Theme.h"
 
 class UploadReceiptDialog : public QDialog
 {
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     explicit UploadReceiptDialog(
         TruckStockService* truckStockService,
         QWidget* parent = nullptr
@@ -29,7 +32,7 @@ private slots:
     void onCancelClicked();
     void onTruckSelected(int index);
 
-    
+
 
 private:
     Ui::UploadReceiptDialogClass ui;

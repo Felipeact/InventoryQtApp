@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "ui_AddProductDialog.h"
+#include "Theme.h"
 
 // Dialog window for collecting product information when adding new items
 class AddProductDialog : public QDialog
@@ -10,8 +11,10 @@ class AddProductDialog : public QDialog
 	Q_OBJECT
 
 public:
+
+	void applyTheme(Theme::AppTheme theme);
 	// Constructor
-	AddProductDialog(QWidget *parent = nullptr);
+	AddProductDialog(QWidget* parent = nullptr);
 	// Destructor
 	~AddProductDialog();
 
@@ -20,8 +23,8 @@ public:
 	QString getBarcode() const;      // Returns trimmed barcode
 	int getQuantity() const;         // Returns product quantity
 
-	void setProductData( const QString& name, const QString& barcode, int quantity);
-	void setViewMode(const QString& name,const QString& barcode,int quantity);
+	void setProductData(const QString& name, const QString& barcode, int quantity);
+	void setViewMode(const QString& name, const QString& barcode, int quantity);
 
 private slots:
 	// Slot handlers for button clicks
@@ -32,6 +35,6 @@ private slots:
 private:
 	Ui::AddProductDialogClass ui;
 
-	
+
 };
 

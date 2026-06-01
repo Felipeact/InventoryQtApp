@@ -1,436 +1,270 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AssetsPageClass</class>
- <widget class="QWidget" name="AssetsPageClass">
-  <property name="geometry">
-   <rect>
-    <x>0</x>
-    <y>0</y>
-    <width>1280</width>
-    <height>820</height>
-   </rect>
-  </property>
-  <property name="windowTitle">
-   <string>Assets</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true">
-				QWidget {
-				background-color: #050B14;
-				color: white;
-				font-family: &quot;Segoe UI&quot;;
-				}
-
-				QWidget#pageContainer {
-				background-color: transparent;
-				}
-
-				QLabel#pageTitle {
-				font-size: 24px;
-				font-weight: 700;
-				color: white;
-				}
-
-				QLabel#breadcrumbLabel {
-				font-size: 12px;
-				color: #94A3B8;
-				}
-
-				QWidget#toolbarContainer {
-				background-color: #091426;
-				border: 1px solid #1A2A40;
-				border-radius: 14px;
-				}
-
-				QWidget#searchContainer {
-				background-color: #111C2D;
-				border: 1px solid #22324A;
-				border-radius: 10px;
-				}
-
-				QLineEdit#assetSearchInput {
-				border: none;
-				background: transparent;
-				color: white;
-				padding-left: 12px;
-				font-size: 13px;
-				}
-
-				QPushButton#assetSearchButton {
-				border: none;
-				background: transparent;
-				color: #CBD5E1;
-				padding-right: 10px;
-				font-size: 13px;
-				}
-
-				QPushButton#addAssetButton {
-				background-color: #2563EB;
-				color: white;
-				border: none;
-				border-radius: 10px;
-				padding: 10px 22px;
-				font-size: 13px;
-				font-weight: 600;
-				}
-
-				QPushButton#addAssetButton:hover {
-				background-color: #3B82F6;
-				}
-
-				QPushButton#filterAssetButton {
-				background-color: #111C2D;
-				border: 1px solid #22324A;
-				color: white;
-				border-radius: 10px;
-				padding: 10px 18px;
-				font-size: 13px;
-				}
-
-				QWidget#tableCard {
-				background-color: #091426;
-				border: 1px solid #1A2A40;
-				border-radius: 14px;
-				}
-
-				QTableWidget#assetsTable {
-				background-color: transparent;
-				border: none;
-				color: white;
-				gridline-color: transparent;
-				outline: none;
-				font-size: 13px;
-				}
-
-				QHeaderView::section {
-				background-color: #0C1728;
-				color: #94A3B8;
-				border: none;
-				border-bottom: 1px solid #1F2E45;
-				padding-left: 12px;
-				height: 42px;
-				font-size: 12px;
-				font-weight: 600;
-				}
-
-				QTableWidget::item {
-				border-bottom: 1px solid #132238;
-				padding-left: 12px;
-				height: 44px;
-				}
-
-				QTableWidget::item:selected {
-				background-color: #132238;
-				}
-
-				QWidget#paginationContainer {
-				background-color: transparent;
-				border: none;
-				}
-
-				QLabel#paginationLabel {
-				background-color: transparent;
-				border: none;
-				color: #94A3B8;
-				font-size: 12px;
-				}
-
-				QPushButton#prevPageButton,
-				QPushButton#page2Button,
-				QPushButton#nextPageButton {
-				background-color: #111C2D;
-				border: 1px solid #22324A;
-				border-radius: 8px;
-				color: white;
-				min-width: 32px;
-				min-height: 32px;
-				}
-
-				QPushButton#prevPageButton:hover,
-				QPushButton#page2Button:hover,
-				QPushButton#nextPageButton:hover {
-				background-color: #1A2940;
-				border: 1px solid #2D4B73;
-				}
-
-				QPushButton#activePageButton {
-				background-color: #2563EB;
-				border: none;
-				border-radius: 8px;
-				color: white;
-				min-width: 32px;
-				min-height: 32px;
-				}
-
-				QComboBox#pageSizeCombo {
-				background-color: #111C2D;
-				border: 1px solid #22324A;
-				border-radius: 8px;
-				color: white;
-				padding: 6px 10px;
-				}
-			</string>
-  </property>
-  <layout class="QVBoxLayout" name="rootLayout">
-   <property name="spacing">
-    <number>12</number>
-   </property>
-   <property name="leftMargin">
-    <number>14</number>
-   </property>
-   <property name="topMargin">
-    <number>14</number>
-   </property>
-   <property name="rightMargin">
-    <number>14</number>
-   </property>
-   <property name="bottomMargin">
-    <number>14</number>
-   </property>
-   <item>
-    <widget class="QWidget" name="pageContainer" native="true">
-     <layout class="QVBoxLayout" name="pageLayout">
-      <property name="spacing">
-       <number>12</number>
-      </property>
-      <item>
-       <layout class="QVBoxLayout" name="titleLayout">
-        <item>
-         <widget class="QLabel" name="pageTitle">
-          <property name="text">
-           <string>Assets</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLabel" name="breadcrumbLabel">
-          <property name="text">
-           <string>Dashboard  &gt;  Assets</string>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <widget class="QWidget" name="toolbarContainer" native="true">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>72</height>
-         </size>
-        </property>
-        <layout class="QHBoxLayout" name="toolbarLayout">
-         <property name="spacing">
-          <number>12</number>
-         </property>
-         <property name="leftMargin">
-          <number>14</number>
-         </property>
-         <property name="topMargin">
-          <number>12</number>
-         </property>
-         <property name="rightMargin">
-          <number>14</number>
-         </property>
-         <property name="bottomMargin">
-          <number>12</number>
-         </property>
-         <item>
-          <widget class="QWidget" name="searchContainer" native="true">
-           <property name="minimumSize">
-            <size>
-             <width>340</width>
-             <height>44</height>
-            </size>
-           </property>
-           <layout class="QHBoxLayout" name="searchLayout">
-            <property name="leftMargin">
-             <number>8</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>8</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLineEdit" name="assetSearchInput">
-              <property name="placeholderText">
-               <string>Search assets by name, type, serial code...</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="assetSearchButton">
-              <property name="text">
-               <string>Search</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-         <item>
-          <spacer name="toolbarSpacer">
-           <property name="orientation">
-            <enum>Qt::Orientation::Horizontal</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>0</width>
-             <height>0</height>
-            </size>
-           </property>
-          </spacer>
-         </item>
-         <item>
-          <widget class="QPushButton" name="addAssetButton">
-           <property name="text">
-            <string>+ Add Asset</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="filterAssetButton">
-           <property name="text">
-            <string>Filter</string>
-           </property>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-      <item>
-       <widget class="QWidget" name="tableCard" native="true">
-        <layout class="QVBoxLayout" name="tableCardLayout">
-         <property name="spacing">
-          <number>10</number>
-         </property>
-         <property name="leftMargin">
-          <number>12</number>
-         </property>
-         <property name="topMargin">
-          <number>12</number>
-         </property>
-         <property name="rightMargin">
-          <number>12</number>
-         </property>
-         <property name="bottomMargin">
-          <number>8</number>
-         </property>
-         <item>
-          <widget class="QTableWidget" name="assetsTable">
-           <property name="frameShape">
-            <enum>QFrame::Shape::NoFrame</enum>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QWidget" name="paginationContainer" native="true">
-           <property name="styleSheet">
-            <string notr="true">
-													QWidget#paginationContainer {
-													background-color: transparent;
-													border: none;
-													}
-
-													QLabel#paginationLabel {
-													background-color: transparent;
-													border: none;
-													color: #94A3B8;
-													}
-												</string>
-           </property>
-           <layout class="QHBoxLayout" name="paginationLayout">
-            <property name="spacing">
-             <number>8</number>
-            </property>
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item>
-             <widget class="QLabel" name="paginationLabel">
-              <property name="styleSheet">
-               <string notr="true">background-color: transparent; border: none; color: #94A3B8;</string>
-              </property>
-              <property name="text">
-               <string>Showing 1 to 5 of 25 assets</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <spacer name="paginationSpacer">
-              <property name="orientation">
-               <enum>Qt::Orientation::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
-               <size>
-                <width>0</width>
-                <height>0</height>
-               </size>
-              </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="prevPageButton">
-              <property name="text">
-               <string>&lt;</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="activePageButton">
-              <property name="text">
-               <string>1</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="page2Button">
-              <property name="text">
-               <string>2</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QPushButton" name="nextPageButton">
-              <property name="text">
-               <string>&gt;</string>
-              </property>
-             </widget>
-            </item>
-            <item>
-             <widget class="QComboBox" name="pageSizeCombo">
-              <item>
-               <property name="text">
-                <string>10 / page</string>
-               </property>
-              </item>
-             </widget>
-            </item>
-           </layout>
-          </widget>
-         </item>
-        </layout>
-       </widget>
-      </item>
-     </layout>
-    </widget>
-   </item>
-  </layout>
- </widget>
- <resources/>
- <connections/>
+	<class>AssetsPageClass</class>
+	<widget class="QWidget" name="AssetsPageClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>1280</width>
+				<height>820</height>
+			</rect>
+		</property>
+		<property name="windowTitle">
+			<string>Assets</string>
+		</property>
+		<property name="styleSheet">
+			<string notr="true"/>
+		</property>
+		<layout class="QVBoxLayout" name="rootLayout">
+			<property name="spacing">
+				<number>12</number>
+			</property>
+			<property name="leftMargin">
+				<number>14</number>
+			</property>
+			<property name="topMargin">
+				<number>14</number>
+			</property>
+			<property name="rightMargin">
+				<number>14</number>
+			</property>
+			<property name="bottomMargin">
+				<number>14</number>
+			</property>
+			<item>
+				<widget class="QWidget" name="pageContainer" native="true">
+					<layout class="QVBoxLayout" name="pageLayout">
+						<property name="spacing">
+							<number>12</number>
+						</property>
+						<item>
+							<layout class="QVBoxLayout" name="titleLayout">
+								<item>
+									<widget class="QLabel" name="pageTitle">
+										<property name="text">
+											<string>Assets</string>
+										</property>
+									</widget>
+								</item>
+								<item>
+									<widget class="QLabel" name="breadcrumbLabel">
+										<property name="text">
+											<string>Dashboard  &gt;  Assets</string>
+										</property>
+									</widget>
+								</item>
+							</layout>
+						</item>
+						<item>
+							<widget class="QWidget" name="toolbarContainer" native="true">
+								<property name="minimumSize">
+									<size>
+										<width>0</width>
+										<height>72</height>
+									</size>
+								</property>
+								<layout class="QHBoxLayout" name="toolbarLayout">
+									<property name="spacing">
+										<number>12</number>
+									</property>
+									<property name="leftMargin">
+										<number>14</number>
+									</property>
+									<property name="topMargin">
+										<number>12</number>
+									</property>
+									<property name="rightMargin">
+										<number>14</number>
+									</property>
+									<property name="bottomMargin">
+										<number>12</number>
+									</property>
+									<item>
+										<widget class="QWidget" name="searchContainer" native="true">
+											<property name="minimumSize">
+												<size>
+													<width>340</width>
+													<height>44</height>
+												</size>
+											</property>
+											<layout class="QHBoxLayout" name="searchLayout">
+												<property name="leftMargin">
+													<number>8</number>
+												</property>
+												<property name="topMargin">
+													<number>0</number>
+												</property>
+												<property name="rightMargin">
+													<number>8</number>
+												</property>
+												<property name="bottomMargin">
+													<number>0</number>
+												</property>
+												<item>
+													<widget class="QLineEdit" name="assetSearchInput">
+														<property name="placeholderText">
+															<string>Search assets by name, type, serial code...</string>
+														</property>
+													</widget>
+												</item>
+												<item>
+													<widget class="QPushButton" name="assetSearchButton">
+														<property name="text">
+															<string>Search</string>
+														</property>
+													</widget>
+												</item>
+											</layout>
+										</widget>
+									</item>
+									<item>
+										<spacer name="toolbarSpacer">
+											<property name="orientation">
+												<enum>Qt::Orientation::Horizontal</enum>
+											</property>
+											<property name="sizeHint" stdset="0">
+												<size>
+													<width>0</width>
+													<height>0</height>
+												</size>
+											</property>
+										</spacer>
+									</item>
+									<item>
+										<widget class="QPushButton" name="addAssetButton">
+											<property name="text">
+												<string>+ Add Asset</string>
+											</property>
+										</widget>
+									</item>
+									<item>
+										<widget class="QPushButton" name="filterAssetButton">
+											<property name="text">
+												<string>Filter</string>
+											</property>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+						<item>
+							<widget class="QWidget" name="tableCard" native="true">
+								<layout class="QVBoxLayout" name="tableCardLayout">
+									<property name="spacing">
+										<number>10</number>
+									</property>
+									<property name="leftMargin">
+										<number>12</number>
+									</property>
+									<property name="topMargin">
+										<number>12</number>
+									</property>
+									<property name="rightMargin">
+										<number>12</number>
+									</property>
+									<property name="bottomMargin">
+										<number>8</number>
+									</property>
+									<item>
+										<widget class="QTableWidget" name="assetsTable">
+											<property name="frameShape">
+												<enum>QFrame::Shape::NoFrame</enum>
+											</property>
+										</widget>
+									</item>
+									<item>
+										<widget class="QWidget" name="paginationContainer" native="true">
+											<property name="styleSheet">
+												<string notr="true"/>
+											</property>
+											<layout class="QHBoxLayout" name="paginationLayout">
+												<property name="spacing">
+													<number>8</number>
+												</property>
+												<property name="leftMargin">
+													<number>0</number>
+												</property>
+												<property name="topMargin">
+													<number>0</number>
+												</property>
+												<property name="rightMargin">
+													<number>0</number>
+												</property>
+												<property name="bottomMargin">
+													<number>0</number>
+												</property>
+												<item>
+													<widget class="QLabel" name="paginationLabel">
+														<property name="styleSheet">
+															<string notr="true"/>
+														</property>
+														<property name="text">
+															<string>Showing 1 to 5 of 25 assets</string>
+														</property>
+													</widget>
+												</item>
+												<item>
+													<spacer name="paginationSpacer">
+														<property name="orientation">
+															<enum>Qt::Orientation::Horizontal</enum>
+														</property>
+														<property name="sizeHint" stdset="0">
+															<size>
+																<width>0</width>
+																<height>0</height>
+															</size>
+														</property>
+													</spacer>
+												</item>
+												<item>
+													<widget class="QPushButton" name="prevPageButton">
+														<property name="text">
+															<string>&lt;</string>
+														</property>
+													</widget>
+												</item>
+												<item>
+													<widget class="QPushButton" name="activePageButton">
+														<property name="text">
+															<string>1</string>
+														</property>
+													</widget>
+												</item>
+												<item>
+													<widget class="QPushButton" name="page2Button">
+														<property name="text">
+															<string>2</string>
+														</property>
+													</widget>
+												</item>
+												<item>
+													<widget class="QPushButton" name="nextPageButton">
+														<property name="text">
+															<string>&gt;</string>
+														</property>
+													</widget>
+												</item>
+												<item>
+													<widget class="QComboBox" name="pageSizeCombo">
+														<item>
+															<property name="text">
+																<string>10 / page</string>
+															</property>
+														</item>
+													</widget>
+												</item>
+											</layout>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+					</layout>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
 </ui>

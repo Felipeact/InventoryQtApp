@@ -16,6 +16,7 @@ SidebarWidget::SidebarWidget(
     userName(userName)
 {
     ui.setupUi(this);
+    applyTheme(Theme::AppTheme::Dark);
     setUserInfo(role, userName);
 
     connect(ui.dashboardButton, &QPushButton::clicked, this, [this]() {
@@ -206,5 +207,12 @@ void SidebarWidget::setUserInfo(const std::string& role, const std::string& user
 
     ui.userRoleLabel->setText(
         QString::fromStdString(role)
+    );
+}
+
+void SidebarWidget::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::sidebarStyle(theme)
     );
 }

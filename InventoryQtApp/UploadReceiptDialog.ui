@@ -18,158 +18,7 @@
 		</property>
 
 		<property name="styleSheet">
-			<string notr="true">
-
-				QDialog#UploadReceiptDialogClass {
-				background-color: #050B14;
-				color: #FFFFFF;
-				font-family: "Segoe UI";
-				}
-
-				QLabel {
-				background: transparent;
-				color: white;
-				}
-
-				QLabel#dialogTitle {
-				font-size: 24px;
-				font-weight: 800;
-				}
-
-				QLabel#backLabel {
-				color: #3B82F6;
-				font-size: 12px;
-				}
-
-				QWidget#formCard,
-				QWidget#uploadArea,
-				QWidget#summaryCard {
-				background: qlineargradient(
-				x1:0, y1:0,
-				x2:1, y2:1,
-				stop:0 #0B1626,
-				stop:1 #091322
-				);
-				border: 1px solid #1B2A40;
-				border-radius: 12px;
-				}
-
-				QWidget#uploadArea {
-				border: 2px dashed #2563EB;
-				}
-
-				QLabel#sectionTitle {
-				font-size: 16px;
-				font-weight: 800;
-				}
-
-				QLabel#fieldLabel {
-				color: #CBD5E1;
-				font-size: 12px;
-				font-weight: 600;
-				}
-
-				QLabel#uploadIcon {
-				font-size: 42px;
-				color: #3B82F6;
-				}
-
-				QLabel#uploadText {
-				font-size: 15px;
-				font-weight: 700;
-				}
-
-				QLabel#uploadSubtext {
-				color: #94A3B8;
-				font-size: 11px;
-				}
-
-				QLineEdit,
-				QComboBox,
-				QDoubleSpinBox,
-				QPlainTextEdit {
-				background-color: #08111F;
-				border: 1px solid #1E3350;
-				border-radius: 8px;
-				color: white;
-				padding: 8px 12px;
-				min-height: 36px;
-				font-size: 12px;
-				}
-
-				QLineEdit:focus,
-				QComboBox:focus,
-				QDoubleSpinBox:focus,
-				QPlainTextEdit:focus {
-				border: 1px solid #2563EB;
-				}
-
-				QComboBox::drop-down {
-				border: none;
-				width: 24px;
-				}
-
-				QPlainTextEdit {
-				min-height: 90px;
-				}
-
-				QPushButton#browseButton {
-				background-color: #2563EB;
-				border: none;
-				border-radius: 8px;
-				color: white;
-				min-height: 38px;
-				min-width: 150px;
-				font-size: 12px;
-				font-weight: 700;
-				}
-
-				QPushButton#browseButton:hover {
-				background-color: #1D4ED8;
-				}
-
-				QPushButton#cancelButton {
-				background-color: #08111F;
-				border: 1px solid #1E3350;
-				border-radius: 8px;
-				color: white;
-				min-height: 38px;
-				min-width: 120px;
-				font-size: 12px;
-				font-weight: 700;
-				}
-
-				QPushButton#cancelButton:hover {
-				background-color: #111C2D;
-				}
-
-				QPushButton#uploadButton {
-				background-color: #2563EB;
-				border: none;
-				border-radius: 8px;
-				color: white;
-				min-height: 38px;
-				min-width: 140px;
-				font-size: 12px;
-				font-weight: 800;
-				}
-
-				QPushButton#uploadButton:hover {
-				background-color: #1D4ED8;
-				}
-
-				QLabel#summaryValue {
-				color: white;
-				font-size: 24px;
-				font-weight: 800;
-				}
-
-				QLabel#summaryLabel {
-				color: #94A3B8;
-				font-size: 11px;
-				}
-
-			</string>
+			<string notr="true"/>
 		</property>
 
 		<layout class="QVBoxLayout" name="rootLayout">
@@ -611,11 +460,7 @@
 													</property>
 
 													<property name="styleSheet">
-														<string notr="true">
-															font-size: 24px;
-															font-weight: 800;
-															color: white;
-														</string>
+														<string notr="true"/>
 													</property>
 
 												</widget>
@@ -631,10 +476,7 @@
 													</property>
 
 													<property name="styleSheet">
-														<string notr="true">
-															color: #94A3B8;
-															font-size: 11px;
-														</string>
+														<string notr="true"/>
 													</property>
 
 												</widget>

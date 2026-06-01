@@ -5,12 +5,15 @@
 
 #include "ui_MyTruckStockPage.h"
 #include "TruckStockService.h"
+#include "Theme.h"
 
 class MyTruckStockPage : public QWidget
 {
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     explicit MyTruckStockPage(
         TruckStockService* truckStockService,
         QWidget* parent = nullptr
@@ -34,5 +37,5 @@ private:
     void setupConnections();
     void loadStock();
 
-    
+
 };

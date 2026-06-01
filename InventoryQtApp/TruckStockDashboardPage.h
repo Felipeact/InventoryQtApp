@@ -3,12 +3,15 @@
 #include <QWidget>
 #include "ui_TruckStockDashboardPage.h"
 #include "TruckStockService.h"
+#include "Theme.h"
 
 class TruckStockDashboardPage : public QWidget
 {
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     explicit TruckStockDashboardPage(TruckStockService* truckStockService, QWidget* parent = nullptr);
     ~TruckStockDashboardPage();
 

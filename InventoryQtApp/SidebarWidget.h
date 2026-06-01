@@ -6,16 +6,19 @@
 #include <string>
 
 #include "ui_SidebarWidget.h"
+#include "Theme.h"
 
 class SidebarWidget : public QWidget
 {
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     explicit SidebarWidget(const std::vector<std::string>& permissions, const std::string& role, const std::string& userName, QWidget* parent = nullptr);
 
-    void setUserInfo(const std::string& role,const std::string& userName);
-    
+    void setUserInfo(const std::string& role, const std::string& userName);
+
 
 signals:
     void dashboardClicked();

@@ -5,12 +5,14 @@
 
 #include "ui_AddEditTruckDialog.h"
 #include "UserService.h"
+#include "Theme.h"
 
 class AddEditTruckDialog : public QDialog
 {
     Q_OBJECT
 
 public:
+
     explicit AddEditTruckDialog(
         UserService* userService,
         QWidget* parent = nullptr
@@ -18,6 +20,7 @@ public:
 
     ~AddEditTruckDialog();
 
+    void applyTheme(Theme::AppTheme theme);
     void setEditMode(
         const QString& truckId,
         const QString& truckName,

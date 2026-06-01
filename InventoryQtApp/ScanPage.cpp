@@ -14,6 +14,8 @@ ScanPage::ScanPage(
 {
     ui.setupUi(this);
 
+    applyTheme(Theme::AppTheme::Dark);
+
     setupPage();
 
     connect(ui.submitButton, &QPushButton::clicked,
@@ -28,6 +30,15 @@ ScanPage::ScanPage(
 
 ScanPage::~ScanPage()
 {
+}
+
+void ScanPage::applyTheme(
+    Theme::AppTheme theme
+)
+{
+    setStyleSheet(
+        Theme::scanPageStyle(theme)
+    );
 }
 
 void ScanPage::setupPage()

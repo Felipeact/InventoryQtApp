@@ -4,12 +4,15 @@
 #include <QString>
 
 #include "ui_UseTruckItemDialog.h"
+#include "Theme.h"
 
 class UseTruckItemDialog : public QDialog
 {
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     explicit UseTruckItemDialog(QWidget* parent = nullptr);
     ~UseTruckItemDialog();
 

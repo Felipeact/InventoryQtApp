@@ -16,7 +16,9 @@ SettingsPage::SettingsPage(
 {
     ui.setupUi(this);
 
+    applyTheme(Theme::AppTheme::Dark);
     setUserInfo(role, userName);
+    setCurrentTheme(currentTheme);
 
     connect(
         ui.saveProfileButton,
@@ -56,9 +58,39 @@ void SettingsPage::setUserInfo(
     ui.roleValueLabel->setText(QString::fromStdString(role));
 }
 
+void SettingsPage::setCurrentTheme(
+    const QString& themeName
+)
+{
+    currentTheme = themeName;
+
+    int index = ui.themeCombo->findText(themeName);
+
+    if (index >= 0) {
+        ui.themeCombo->setCurrentIndex(index);
+    }
+
+    if (themeName == "Light") {
+        applyTheme(Theme::AppTheme::Light);
+    }
+    else {
+        applyTheme(Theme::AppTheme::Dark);
+    }
+}
+
+void SettingsPage::applyTheme(
+    Theme::AppTheme theme
+)
+{
+    setStyleSheet(
+        Theme::settingsPageStyle(theme)
+    );
+}
+
 void SettingsPage::onSaveProfileClicked()
 {
-    QString newName = ui.nameInput->text().trimmed();
+    QString newName =
+        ui.nameInput->text().trimmed();
 
     if (newName.isEmpty()) {
         QMessageBox::warning(
@@ -82,7 +114,17 @@ void SettingsPage::onSaveProfileClicked()
 
 void SettingsPage::onApplyThemeClicked()
 {
-    QString selectedTheme = ui.themeCombo->currentText();
+    QString selectedTheme =
+        ui.themeCombo->currentText();
+
+    currentTheme = selectedTheme;
+
+    if (selectedTheme == "Light") {
+        applyTheme(Theme::AppTheme::Light);
+    }
+    else {
+        applyTheme(Theme::AppTheme::Dark);
+    }
 
     emit themeChanged(selectedTheme);
 

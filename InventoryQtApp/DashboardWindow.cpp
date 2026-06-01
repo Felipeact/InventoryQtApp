@@ -1,10 +1,12 @@
 // DashboardWindow.cpp - Implementation of the main dashboard window
 #include "DashboardWindow.h"
 
+#include "Theme.h"
+
 #include <QVBoxLayout>
 #include <QString>
+#include <QSettings>
 
-// Constructor initializes the main window with pages and navigation
 DashboardWindow::DashboardWindow(
     const std::string& role,
     const std::vector<std::string>& permissions,
@@ -55,6 +57,10 @@ void DashboardWindow::updateLoggedInUserInfo(
 
     if (sidebar) {
         sidebar->setUserInfo(role, userName);
+    }
+
+    if (settingsPage) {
+        settingsPage->setUserInfo(role, userName);
     }
 }
 
@@ -121,6 +127,43 @@ void DashboardWindow::setupPages()
 
     connect(
         settingsPage,
+        &SettingsPage::themeChanged,
+        this,
+        [this](const QString& themeName) {
+            QSettings settings("InventorySystem", "InventoryQtApp");
+            settings.setValue("appearance/theme", themeName);
+
+            Theme::AppTheme appTheme =
+                themeName == "Light"
+                ? Theme::AppTheme::Light
+                : Theme::AppTheme::Dark;
+
+            Theme::applyTheme(appTheme);
+
+            if (settingsPage) {
+                settingsPage->applyTheme(appTheme);
+            }
+
+            if (verticalbar) {
+                verticalbar->applyTheme(appTheme);
+            }
+
+            if (settingsPage) {
+                settingsPage->applyTheme(appTheme);
+            }
+
+            if (scanInPage) {
+                scanInPage->applyTheme(appTheme);
+            }
+
+            if (scanOutPage) {
+                scanOutPage->applyTheme(appTheme);
+            }
+        }
+    );
+
+    connect(
+        settingsPage,
         &SettingsPage::logoutRequested,
         this,
         [this]() {
@@ -149,11 +192,43 @@ void DashboardWindow::setupPages()
 
     receiptsPage = new ReceiptsPage(truckStockService, permissions, this);
     ui.mainStack->addWidget(receiptsPage);
+
+    QSettings settings("InventorySystem", "InventoryQtApp");
+
+    QString savedTheme =
+        settings.value("appearance/theme", "Dark").toString();
+
+    Theme::AppTheme appTheme =
+        savedTheme == "Light"
+        ? Theme::AppTheme::Light
+        : Theme::AppTheme::Dark;
+
+    Theme::applyTheme(appTheme);
+
+    if (settingsPage) {
+        settingsPage->applyTheme(appTheme);
+    }
+
+    if (sidebar) {
+        sidebar->applyTheme(appTheme);
+    }
+
+    if (verticalbar) {
+        verticalbar->applyTheme(appTheme);
+    }
+
+    if (scanInPage) {
+        scanInPage->applyTheme(appTheme);
+    }
+
+    if (scanOutPage) {
+        scanOutPage->applyTheme(appTheme);
+    }
 }
 
 void DashboardWindow::setupSidebar()
 {
-    sidebar = new SidebarWidget(permissions,role, userName, this);
+    sidebar = new SidebarWidget(permissions, role, userName, this);
 
     QVBoxLayout* layout = new QVBoxLayout(ui.sidebarContainer);
     layout->setContentsMargins(0, 0, 0, 0);
@@ -221,6 +296,18 @@ void DashboardWindow::setupSidebar()
         emit logoutRequested();
         this->close();
         });
+
+    QSettings settings("InventorySystem", "InventoryQtApp");
+
+    QString savedTheme =
+        settings.value("appearance/theme", "Dark").toString();
+
+    Theme::AppTheme appTheme =
+        savedTheme == "Light"
+        ? Theme::AppTheme::Light
+        : Theme::AppTheme::Dark;
+
+    sidebar->applyTheme(appTheme);
 }
 
 void DashboardWindow::setupVerticalbar()
@@ -231,4 +318,16 @@ void DashboardWindow::setupVerticalbar()
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(verticalbar);
+
+    QSettings settings("InventorySystem", "InventoryQtApp");
+
+    QString savedTheme =
+        settings.value("appearance/theme", "Dark").toString();
+
+    Theme::AppTheme appTheme =
+        savedTheme == "Light"
+        ? Theme::AppTheme::Light
+        : Theme::AppTheme::Dark;
+
+    verticalbar->applyTheme(appTheme);
 }

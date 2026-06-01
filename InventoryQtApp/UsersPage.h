@@ -7,6 +7,7 @@
 
 #include "UserService.h"
 #include "ui_UsersPage.h"
+#include "Theme.h"
 
 class UsersPage : public QWidget
 {
@@ -14,6 +15,8 @@ class UsersPage : public QWidget
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     explicit UsersPage(UserService* userService, QWidget* parent = nullptr);
     ~UsersPage();
 

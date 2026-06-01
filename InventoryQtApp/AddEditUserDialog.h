@@ -4,10 +4,13 @@
 #include <QString>
 
 #include "ui_AddEditUserDialog.h"
+#include "Theme.h"
 
 class AddEditUserDialog : public QDialog
 {
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     explicit AddEditUserDialog(QWidget* parent = nullptr);
     ~AddEditUserDialog();
 

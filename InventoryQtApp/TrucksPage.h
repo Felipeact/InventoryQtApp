@@ -7,12 +7,15 @@
 #include "ui_TrucksPage.h"
 #include "TruckStockService.h"
 #include "UserService.h"
+#include "Theme.h"
 
 class TrucksPage : public QWidget
 {
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     TrucksPage(
         TruckStockService* truckStockService,
         UserService* userService,

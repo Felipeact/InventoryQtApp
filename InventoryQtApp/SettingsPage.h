@@ -5,12 +5,15 @@
 #include <string>
 
 #include "ui_SettingsPage.h"
+#include "Theme.h"
 
 class SettingsPage : public QWidget
 {
     Q_OBJECT
 
 public:
+
+    void applyTheme(Theme::AppTheme theme);
     explicit SettingsPage(
         const std::string& role,
         const std::string& userName,

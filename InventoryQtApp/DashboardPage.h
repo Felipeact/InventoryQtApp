@@ -5,6 +5,7 @@
 #include "ui_DashboardPage.h"
 #include "ProductService.h"
 #include "ReportService.h"
+#include "Theme.h"
 
 // Dashboard widget that displays a summary of inventory items
 class DashboardPage : public QWidget
@@ -12,8 +13,10 @@ class DashboardPage : public QWidget
 	Q_OBJECT
 
 public:
+
+	void applyTheme(Theme::AppTheme theme);
 	// Constructor
-	DashboardPage(ProductService& productService, ReportService& reportService, QWidget *parent = nullptr);
+	DashboardPage(ProductService& productService, ReportService& reportService, QWidget* parent = nullptr);
 	// Destructor
 	~DashboardPage();
 
