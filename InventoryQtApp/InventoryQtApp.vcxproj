@@ -111,6 +111,7 @@
     <ClCompile Include="ReceiptsPage.cpp" />
     <ClCompile Include="ReportService.cpp" />
     <ClCompile Include="ScanPage.cpp" />
+    <ClCompile Include="SettingsPage.cpp" />
     <ClCompile Include="SidebarWidget.cpp" />
     <ClCompile Include="StockTemplatesPage.cpp" />
     <ClCompile Include="Theme.cpp" />
@@ -145,6 +146,7 @@
     <QtUic Include="MyTruckStockPage.ui" />
     <QtUic Include="ReceiptsPage.ui" />
     <QtUic Include="ScanPage.ui" />
+    <QtUic Include="SettingsPage.ui" />
     <QtUic Include="SidebarWidget.ui" />
     <QtUic Include="StockTemplatesPage.ui" />
     <QtUic Include="TrucksPage.ui" />
@@ -157,6 +159,7 @@
   <ItemGroup>
     <QtMoc Include="AddEditTemplateItemDialog.h" />
     <ClInclude Include="AddEditUserDialog.h" />
+    <QtMoc Include="SettingsPage.h" />
     <ClInclude Include="TruckStockService.h" />
     <QtMoc Include="UsersPage.h" />
     <QtMoc Include="LowStockAlertsPage.h" />

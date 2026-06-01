@@ -15,6 +15,7 @@
 #include <LowStockAlertsPage.h>
 #include <ReceiptsPage.h>
 #include <TruckStockService.h>
+#include <SettingsPage.h>
 
 #include <QMainWindow>
 #include <vector>
@@ -78,6 +79,7 @@ private:
 
 	ScanPage* scanInPage = nullptr;
 	ScanPage* scanOutPage = nullptr;
+	SettingsPage* settingsPage = nullptr;
 
 	TruckStockDashboardPage* truckStockDashboardPage = nullptr;
 	TrucksPage* trucksPage = nullptr;

@@ -172,6 +172,9 @@
     <ClCompile Include="AddEditTemplateItemDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SettingsPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -278,6 +281,9 @@
     <QtMoc Include="UsersPage.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="SettingsPage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DashboardPage.ui">
@@ -350,6 +356,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="AddEditTemplateItemDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="SettingsPage.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

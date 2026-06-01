@@ -109,6 +109,26 @@ void DashboardWindow::setupPages()
         itemsPage->refreshProducts();
         });
 
+    settingsPage = new SettingsPage(role, userName, this);
+    ui.mainStack->addWidget(settingsPage);
+
+    connect(
+        settingsPage,
+        &SettingsPage::userNameChanged,
+        this,
+        &DashboardWindow::updateLoggedInUserInfo
+    );
+
+    connect(
+        settingsPage,
+        &SettingsPage::logoutRequested,
+        this,
+        [this]() {
+            emit logoutRequested();
+            this->close();
+        }
+    );
+
     truckStockDashboardPage = new TruckStockDashboardPage(truckStockService, this);
     ui.mainStack->addWidget(truckStockDashboardPage);
 
@@ -162,6 +182,10 @@ void DashboardWindow::setupSidebar()
 
     connect(sidebar, &SidebarWidget::scanOutClicked, this, [this]() {
         ui.mainStack->setCurrentWidget(scanOutPage);
+        });
+
+    connect(sidebar, &SidebarWidget::settingsClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(settingsPage);
         });
 
     connect(sidebar, &SidebarWidget::truckStockDashboardClicked, this, [this]() {

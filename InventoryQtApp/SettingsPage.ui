@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>SettingsPageClass</class>
+	<widget class="QWidget" name="SettingsPageClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>900</width>
+				<height>650</height>
+			</rect>
+		</property>
+
+		<property name="styleSheet">
+			<string notr="true">
+				QWidget#SettingsPageClass {
+				background-color: #050B14;
+				color: #FFFFFF;
+				font-family: "Segoe UI";
+				}
+
+				QLabel {
+				color: #FFFFFF;
+				background: transparent;
+				}
+
+				QLineEdit,
+				QComboBox {
+				background-color: #0B1626;
+				border: 1px solid #263A57;
+				border-radius: 6px;
+				color: #FFFFFF;
+				padding: 8px 10px;
+				min-height: 34px;
+				}
+
+				QComboBox::drop-down {
+				border: none;
+				width: 28px;
+				}
+
+				QPushButton {
+				background-color: #2563EB;
+				border: none;
+				border-radius: 6px;
+				color: #FFFFFF;
+				padding: 10px 14px;
+				font-weight: 700;
+				}
+
+				QPushButton:hover {
+				background-color: #3B82F6;
+				}
+
+				QPushButton#logoutButton {
+				background-color: #DC2626;
+				}
+
+				QPushButton#logoutButton:hover {
+				background-color: #EF4444;
+				}
+
+				QWidget#profileCard,
+				QWidget#appearanceCard,
+				QWidget#sessionCard {
+				background-color: #0B1626;
+				border: 1px solid #263A57;
+				border-radius: 12px;
+				}
+
+				QLabel#titleLabel {
+				font-size: 22px;
+				font-weight: 800;
+				}
+
+				QLabel#subtitleLabel {
+				color: #94A3B8;
+				font-size: 13px;
+				}
+
+				QLabel#profileTitleLabel,
+				QLabel#appearanceTitleLabel,
+				QLabel#sessionTitleLabel {
+				font-size: 16px;
+				font-weight: 800;
+				}
+
+				QLabel#nameLabel,
+				QLabel#roleLabel,
+				QLabel#themeLabel {
+				color: #CBD5E1;
+				font-weight: 700;
+				}
+
+				QLabel#roleValueLabel {
+				color: #93C5FD;
+				font-weight: 700;
+				}
+			</string>
+		</property>
+
+		<layout class="QVBoxLayout" name="mainLayout">
+			<property name="leftMargin">
+				<number>28</number>
+			</property>
+			<property name="topMargin">
+				<number>28</number>
+			</property>
+			<property name="rightMargin">
+				<number>28</number>
+			</property>
+			<property name="bottomMargin">
+				<number>28</number>
+			</property>
+			<property name="spacing">
+				<number>18</number>
+			</property>
+
+			<item>
+				<widget class="QLabel" name="titleLabel">
+					<property name="text">
+						<string>Settings</string>
+					</property>
+				</widget>
+			</item>
+
+			<item>
+				<widget class="QLabel" name="subtitleLabel">
+					<property name="text">
+						<string>Manage your profile, appearance, and session.</string>
+					</property>
+				</widget>
+			</item>
+
+			<item>
+				<widget class="QWidget" name="profileCard" native="true">
+					<layout class="QVBoxLayout" name="profileLayout">
+						<property name="leftMargin">
+							<number>24</number>
+						</property>
+						<property name="topMargin">
+							<number>24</number>
+						</property>
+						<property name="rightMargin">
+							<number>24</number>
+						</property>
+						<property name="bottomMargin">
+							<number>24</number>
+						</property>
+						<property name="spacing">
+							<number>12</number>
+						</property>
+
+						<item>
+							<widget class="QLabel" name="profileTitleLabel">
+								<property name="text">
+									<string>Profile</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QLabel" name="nameLabel">
+								<property name="text">
+									<string>Display Name</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QLineEdit" name="nameInput">
+								<property name="placeholderText">
+									<string>Enter display name</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QLabel" name="roleLabel">
+								<property name="text">
+									<string>Role</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QLabel" name="roleValueLabel">
+								<property name="text">
+									<string>-</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QPushButton" name="saveProfileButton">
+								<property name="text">
+									<string>Save Profile</string>
+								</property>
+							</widget>
+						</item>
+					</layout>
+				</widget>
+			</item>
+
+			<item>
+				<widget class="QWidget" name="appearanceCard" native="true">
+					<layout class="QVBoxLayout" name="appearanceLayout">
+						<property name="leftMargin">
+							<number>24</number>
+						</property>
+						<property name="topMargin">
+							<number>24</number>
+						</property>
+						<property name="rightMargin">
+							<number>24</number>
+						</property>
+						<property name="bottomMargin">
+							<number>24</number>
+						</property>
+						<property name="spacing">
+							<number>12</number>
+						</property>
+
+						<item>
+							<widget class="QLabel" name="appearanceTitleLabel">
+								<property name="text">
+									<string>Appearance</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QLabel" name="themeLabel">
+								<property name="text">
+									<string>Theme</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QComboBox" name="themeCombo">
+								<item>
+									<property name="text">
+										<string>Dark</string>
+									</property>
+								</item>
+								<item>
+									<property name="text">
+										<string>Light</string>
+									</property>
+								</item>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QPushButton" name="applyThemeButton">
+								<property name="text">
+									<string>Apply Theme</string>
+								</property>
+							</widget>
+						</item>
+					</layout>
+				</widget>
+			</item>
+
+			<item>
+				<widget class="QWidget" name="sessionCard" native="true">
+					<layout class="QVBoxLayout" name="sessionLayout">
+						<property name="leftMargin">
+							<number>24</number>
+						</property>
+						<property name="topMargin">
+							<number>24</number>
+						</property>
+						<property name="rightMargin">
+							<number>24</number>
+						</property>
+						<property name="bottomMargin">
+							<number>24</number>
+						</property>
+						<property name="spacing">
+							<number>12</number>
+						</property>
+
+						<item>
+							<widget class="QLabel" name="sessionTitleLabel">
+								<property name="text">
+									<string>Session</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QPushButton" name="logoutButton">
+								<property name="text">
+									<string>Logout</string>
+								</property>
+							</widget>
+						</item>
+					</layout>
+				</widget>
+			</item>
+
+			<item>
+				<spacer name="verticalSpacer">
+					<property name="orientation">
+						<enum>Qt::Vertical</enum>
+					</property>
+					<property name="sizeHint" stdset="0">
+						<size>
+							<width>20</width>
+							<height>40</height>
+						</size>
+					</property>
+				</spacer>
+			</item>
+		</layout>
+	</widget>
+	<resources/>
+	<connections/>
+</ui>
