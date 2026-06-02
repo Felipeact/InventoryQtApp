@@ -1,7 +1,6 @@
 // InventoryQtApp.cpp - Implementation of the login window
 #include "InventoryQtApp.h"
 #include "Theme.h"
-#include <Theme.h>
 #include <QMessageBox>
 
 #include "Config.h"

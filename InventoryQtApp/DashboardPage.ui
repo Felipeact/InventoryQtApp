@@ -54,7 +54,7 @@
 										<item>
 											<widget class="QLabel" name="totalItemsTitle">
 												<property name="styleSheet">
-													<string>color:#CBD5E1;font-size:12px;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>Total Items</string>
@@ -64,7 +64,7 @@
 										<item>
 											<widget class="QLabel" name="totalItemsValue">
 												<property name="styleSheet">
-													<string>font-size:28px;font-weight:700;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>1,250</string>
@@ -74,7 +74,7 @@
 										<item>
 											<widget class="QLabel" name="totalItemsChange">
 												<property name="styleSheet">
-													<string>color:#22C55E;font-size:11px;font-weight:600;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>+12.5% from last month</string>
@@ -98,7 +98,7 @@
 											</size>
 										</property>
 										<property name="styleSheet">
-											<string>background-color:#123A78;color:#3B82F6;border-radius:10px;font-size:24px;</string>
+											<string notr="true"/>
 										</property>
 										<property name="text">
 											<string>◇</string>
@@ -131,7 +131,7 @@
 										<item>
 											<widget class="QLabel" name="totalAssetsTitle">
 												<property name="styleSheet">
-													<string>color:#CBD5E1;font-size:12px;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>Total Assets</string>
@@ -141,7 +141,7 @@
 										<item>
 											<widget class="QLabel" name="totalAssetsValue">
 												<property name="styleSheet">
-													<string>font-size:28px;font-weight:700;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>320</string>
@@ -151,7 +151,7 @@
 										<item>
 											<widget class="QLabel" name="totalAssetsChange">
 												<property name="styleSheet">
-													<string>color:#22C55E;font-size:11px;font-weight:600;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>+8.2% from last month</string>
@@ -175,7 +175,7 @@
 											</size>
 										</property>
 										<property name="styleSheet">
-											<string>background-color:#123A78;color:#3B82F6;border-radius:10px;font-size:24px;</string>
+											<string notr="true"/>
 										</property>
 										<property name="text">
 											<string>▭</string>
@@ -208,7 +208,7 @@
 										<item>
 											<widget class="QLabel" name="quantityTitle">
 												<property name="styleSheet">
-													<string>color:#CBD5E1;font-size:12px;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>Quantity in Hand</string>
@@ -218,7 +218,7 @@
 										<item>
 											<widget class="QLabel" name="quantityInHandValue">
 												<property name="styleSheet">
-													<string>font-size:28px;font-weight:700;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>2,450</string>
@@ -228,7 +228,7 @@
 										<item>
 											<widget class="QLabel" name="quantityChange">
 												<property name="styleSheet">
-													<string>color:#22C55E;font-size:11px;font-weight:600;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>+15.7% from last month</string>
@@ -252,7 +252,7 @@
 											</size>
 										</property>
 										<property name="styleSheet">
-											<string>background-color:#14532D;color:#22C55E;border-radius:10px;font-size:22px;</string>
+											<string notr="true"/>
 										</property>
 										<property name="text">
 											<string>▣</string>
@@ -285,7 +285,7 @@
 										<item>
 											<widget class="QLabel" name="receivedTitle">
 												<property name="styleSheet">
-													<string>color:#CBD5E1;font-size:12px;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>To Be Received</string>
@@ -295,7 +295,7 @@
 										<item>
 											<widget class="QLabel" name="toBeReceivedValue">
 												<property name="styleSheet">
-													<string>font-size:28px;font-weight:700;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>780</string>
@@ -305,7 +305,7 @@
 										<item>
 											<widget class="QLabel" name="receivedChange">
 												<property name="styleSheet">
-													<string>color:#EF4444;font-size:11px;font-weight:600;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>-2.4% from last month</string>
@@ -329,7 +329,7 @@
 											</size>
 										</property>
 										<property name="styleSheet">
-											<string>background-color:#7C3A03;color:#F59E0B;border-radius:10px;font-size:24px;</string>
+											<string notr="true"/>
 										</property>
 										<property name="text">
 											<string>▱</string>
@@ -367,7 +367,7 @@
 								<item>
 									<widget class="QLabel" name="itemSummaryTitle">
 										<property name="styleSheet">
-											<string>font-size:18px;font-weight:700;</string>
+											<string notr="true"/>
 										</property>
 										<property name="text">
 											<string>Item Summary</string>
@@ -382,7 +382,7 @@
 													<item>
 														<widget class="QLabel" name="itemLeftLabel">
 															<property name="styleSheet">
-																<string>color:#CBD5E1;font-size:12px;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>Quantity in Hand</string>
@@ -392,7 +392,7 @@
 													<item>
 														<widget class="QLabel" name="itemQuantityValue">
 															<property name="styleSheet">
-																<string>font-size:26px;font-weight:700;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>2,450</string>
@@ -402,7 +402,7 @@
 													<item>
 														<widget class="QLabel" name="itemChartBlue">
 															<property name="styleSheet">
-																<string>color:#3B82F6;font-size:22px;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>╲▁▂▁▃▂▃▅▆▇</string>
@@ -418,7 +418,7 @@
 													<item>
 														<widget class="QLabel" name="itemRightLabel">
 															<property name="styleSheet">
-																<string>color:#CBD5E1;font-size:12px;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>To Be Received</string>
@@ -428,7 +428,7 @@
 													<item>
 														<widget class="QLabel" name="itemReceivedValue">
 															<property name="styleSheet">
-																<string>font-size:26px;font-weight:700;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>780</string>
@@ -438,7 +438,7 @@
 													<item>
 														<widget class="QLabel" name="itemChartOrange">
 															<property name="styleSheet">
-																<string>color:#F97316;font-size:22px;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>▆▅▃▅▃▂▃▁▂▃</string>
@@ -471,7 +471,7 @@
 								<item>
 									<widget class="QLabel" name="assetSummaryTitle">
 										<property name="styleSheet">
-											<string>font-size:18px;font-weight:700;</string>
+											<string notr="true"/>
 										</property>
 										<property name="text">
 											<string>Asset Summary</string>
@@ -486,7 +486,7 @@
 													<item>
 														<widget class="QLabel" name="assetActiveLabel">
 															<property name="styleSheet">
-																<string>color:#CBD5E1;font-size:12px;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>Active Assets</string>
@@ -496,7 +496,7 @@
 													<item>
 														<widget class="QLabel" name="assetActiveValue">
 															<property name="styleSheet">
-																<string>font-size:26px;font-weight:700;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>200</string>
@@ -506,7 +506,7 @@
 													<item>
 														<widget class="QLabel" name="assetChartGreen">
 															<property name="styleSheet">
-																<string>color:#22C55E;font-size:22px;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>▆▅▃▅▃▂▃▅▆▇</string>
@@ -522,7 +522,7 @@
 													<item>
 														<widget class="QLabel" name="assetInactiveLabel">
 															<property name="styleSheet">
-																<string>color:#CBD5E1;font-size:12px;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>Inactive Assets</string>
@@ -532,7 +532,7 @@
 													<item>
 														<widget class="QLabel" name="assetInactiveValue">
 															<property name="styleSheet">
-																<string>font-size:26px;font-weight:700;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>120</string>
@@ -542,7 +542,7 @@
 													<item>
 														<widget class="QLabel" name="assetChartRed">
 															<property name="styleSheet">
-																<string>color:#EF4444;font-size:22px;</string>
+																<string notr="true"/>
 															</property>
 															<property name="text">
 																<string>▆▅▃▅▃▂▁▂▃▃</string>
@@ -584,7 +584,7 @@
 										<item>
 											<widget class="QLabel" name="recentTitle">
 												<property name="styleSheet">
-													<string>font-size:16px;font-weight:700;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>Recent Items</string>
@@ -639,7 +639,7 @@
 										<item>
 											<widget class="QLabel" name="lowStockTitle">
 												<property name="styleSheet">
-													<string>font-size:16px;font-weight:700;</string>
+													<string notr="true"/>
 												</property>
 												<property name="text">
 													<string>Low Stock Items</string>

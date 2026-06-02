@@ -1,6 +1,7 @@
 // ItemsPage.cpp - Implementation of the items management page
 #include "ItemsPage.h"
 #include "Theme.h"
+
 #include <algorithm>
 
 #include <QComboBox>
@@ -9,17 +10,22 @@
 #include <QAbstractItemView>
 #include <QPushButton>
 #include <QHBoxLayout>
-#include <QScrollBar>
 #include <QWidget>
 #include <QFrame>
 #include <QMessageBox>
 #include <QLineEdit>
 
-// Constructor initializes the items page with table setup and data
-ItemsPage::ItemsPage(ProductService& productService, QWidget* parent)
-    : QWidget(parent), productService(productService)
+ItemsPage::ItemsPage(
+    ProductService& productService,
+    QWidget* parent
+)
+    : QWidget(parent),
+    productService(productService)
 {
     ui.setupUi(this);
+
+    applyTheme(Theme::AppTheme::Dark);
+
     ui.pageSizeCombo->clear();
     ui.pageSizeCombo->addItem("5 / page");
     ui.pageSizeCombo->addItem("10 / page");
@@ -29,26 +35,49 @@ ItemsPage::ItemsPage(ProductService& productService, QWidget* parent)
     setupTable();
     loadProducts();
 
-    connect(ui.addItemButton, &QPushButton::clicked,
-        this, &ItemsPage::onAddItemClicked);
+    connect(
+        ui.addItemButton,
+        &QPushButton::clicked,
+        this,
+        &ItemsPage::onAddItemClicked
+    );
 
-    connect(ui.itemSearchInput, &QLineEdit::textChanged,
-        this, &ItemsPage::filterProducts);
+    connect(
+        ui.itemSearchInput,
+        &QLineEdit::textChanged,
+        this,
+        &ItemsPage::filterProducts
+    );
 
-    connect(ui.filterItemButton, &QPushButton::clicked,
-        this, &ItemsPage::onFilterButtonClicked);
+    connect(
+        ui.filterItemButton,
+        &QPushButton::clicked,
+        this,
+        &ItemsPage::onFilterButtonClicked
+    );
 
-    connect(ui.nextPageButton, &QPushButton::clicked,
-        this, &ItemsPage::onNextPageClicked);
+    connect(
+        ui.nextPageButton,
+        &QPushButton::clicked,
+        this,
+        &ItemsPage::onNextPageClicked
+    );
 
-    connect(ui.prevPageButton, &QPushButton::clicked,
-        this, &ItemsPage::onPrevPageClicked);
+    connect(
+        ui.prevPageButton,
+        &QPushButton::clicked,
+        this,
+        &ItemsPage::onPrevPageClicked
+    );
 
-    connect(ui.pageSizeCombo, QOverload<int>::of(&QComboBox::currentIndexChanged),
-        this, &ItemsPage::onPageSizeChanged);
+    connect(
+        ui.pageSizeCombo,
+        QOverload<int>::of(&QComboBox::currentIndexChanged),
+        this,
+        &ItemsPage::onPageSizeChanged
+    );
 }
 
-// Destructor
 ItemsPage::~ItemsPage()
 {
 }
@@ -59,7 +88,6 @@ void ItemsPage::refreshProducts()
     filterProducts(ui.itemSearchInput->text());
 }
 
-// Configures the items table columns, headers, styling, and behavior
 void ItemsPage::setupTable()
 {
     ui.itemsTable->setColumnCount(9);
@@ -88,7 +116,9 @@ void ItemsPage::setupTable()
     ui.itemsTable->viewport()->setAutoFillBackground(false);
 
     ui.itemsTable->horizontalHeader()->setHighlightSections(false);
-    ui.itemsTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
+    ui.itemsTable->horizontalHeader()->setDefaultAlignment(
+        Qt::AlignLeft | Qt::AlignVCenter
+    );
     ui.itemsTable->horizontalHeader()->setFixedHeight(48);
 
     ui.itemsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -99,105 +129,8 @@ void ItemsPage::setupTable()
 
     ui.itemsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui.itemsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    ui.itemsTable->setStyleSheet(R"(
-        QTableWidget {
-            background-color: transparent;
-            border: none;
-            color: white;
-            gridline-color: transparent;
-            outline: none;
-        }
-
-        QTableWidget::item {
-            background-color: transparent;
-            border-bottom: 1px solid #132238;
-            padding-left: 12px;
-        }
-
-        QTableWidget::item:selected {
-            background-color: #132238;
-        }
-
-        QHeaderView::section {
-            background-color: #0C1728;
-            color: #94A3B8;
-            border: none;
-            border-bottom: 1px solid #1F2E45;
-            padding-left: 12px;
-            height: 42px;
-            font-size: 12px;
-            font-weight: 600;
-        }
-    )");
-
-    const QString premiumScrollBarStyle = R"(
-        QScrollBar:vertical {
-            background: transparent;
-            width: 6px;
-            margin: 4px 0 4px 0;
-        }
-
-        QScrollBar::handle:vertical {
-            background: rgba(140, 140, 140, 0.35);
-            border-radius: 3px;
-            min-height: 30px;
-        }
-
-        QScrollBar::handle:vertical:hover {
-            background: rgba(180, 180, 180, 0.65);
-        }
-
-        QScrollBar::handle:vertical:pressed {
-            background: rgba(200, 200, 200, 0.9);
-        }
-
-        QScrollBar::add-line:vertical,
-        QScrollBar::sub-line:vertical {
-            height: 0;
-        }
-
-        QScrollBar::add-page:vertical,
-        QScrollBar::sub-page:vertical {
-            background: transparent;
-        }
-
-        QScrollBar:horizontal {
-            background: transparent;
-            height: 6px;
-            margin: 0 4px 0 4px;
-        }
-
-        QScrollBar::handle:horizontal {
-            background: rgba(140, 140, 140, 0.35);
-            border-radius: 3px;
-            min-width: 30px;
-        }
-
-        QScrollBar::handle:horizontal:hover {
-            background: rgba(180, 180, 180, 0.65);
-        }
-
-        QScrollBar::handle:horizontal:pressed {
-            background: rgba(200, 200, 200, 0.9);
-        }
-
-        QScrollBar::add-line:horizontal,
-        QScrollBar::sub-line:horizontal {
-            width: 0;
-        }
-
-        QScrollBar::add-page:horizontal,
-        QScrollBar::sub-page:horizontal {
-            background: transparent;
-        }
-    )";
-
-    ui.itemsTable->verticalScrollBar()->setStyleSheet(premiumScrollBarStyle);
-    ui.itemsTable->horizontalScrollBar()->setStyleSheet(premiumScrollBarStyle);
 }
 
-// Loads products from backend
 void ItemsPage::loadProducts()
 {
     currentProducts = productService.getProducts();
@@ -208,7 +141,6 @@ void ItemsPage::loadProducts()
     updatePagination();
 }
 
-// Populates the table with product data and action buttons
 void ItemsPage::populateTable(const json& products)
 {
     ui.itemsTable->clearContents();
@@ -227,18 +159,56 @@ void ItemsPage::populateTable(const json& products)
             quantity = product["inventory"].value("quantity", 0);
         }
 
-        ui.itemsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(name)));
-        ui.itemsTable->setItem(row, 1, new QTableWidgetItem("Image"));
-        ui.itemsTable->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(barcode)));
-        ui.itemsTable->setItem(row, 3, new QTableWidgetItem("Product"));
-        ui.itemsTable->setItem(row, 4, new QTableWidgetItem("Main Store"));
-        ui.itemsTable->setItem(row, 5, new QTableWidgetItem(QString::number(quantity) + " pcs"));
-        ui.itemsTable->setItem(row, 6, new QTableWidgetItem("HQ"));
-        ui.itemsTable->setItem(row, 7, new QTableWidgetItem("Activated"));
+        ui.itemsTable->setItem(
+            row,
+            0,
+            new QTableWidgetItem(QString::fromStdString(name))
+        );
+
+        ui.itemsTable->setItem(
+            row,
+            1,
+            new QTableWidgetItem("Image")
+        );
+
+        ui.itemsTable->setItem(
+            row,
+            2,
+            new QTableWidgetItem(QString::fromStdString(barcode))
+        );
+
+        ui.itemsTable->setItem(
+            row,
+            3,
+            new QTableWidgetItem("Product")
+        );
+
+        ui.itemsTable->setItem(
+            row,
+            4,
+            new QTableWidgetItem("Main Store")
+        );
+
+        ui.itemsTable->setItem(
+            row,
+            5,
+            new QTableWidgetItem(QString::number(quantity) + " pcs")
+        );
+
+        ui.itemsTable->setItem(
+            row,
+            6,
+            new QTableWidgetItem("HQ")
+        );
+
+        ui.itemsTable->setItem(
+            row,
+            7,
+            new QTableWidgetItem("Activated")
+        );
 
         QWidget* actionWidget = new QWidget();
         actionWidget->setObjectName("actionContainer");
-        actionWidget->setStyleSheet("background-color: transparent; border: none;");
 
         QHBoxLayout* actionLayout = new QHBoxLayout(actionWidget);
         actionLayout->setContentsMargins(0, 0, 0, 0);
@@ -248,25 +218,24 @@ void ItemsPage::populateTable(const json& products)
         QPushButton* viewButton = new QPushButton("👁");
         viewButton->setObjectName("viewButton");
 
-
         QPushButton* editButton = new QPushButton("✎");
         editButton->setObjectName("editButton");
-        ;
 
         QPushButton* deleteButton = new QPushButton("🗑");
         deleteButton->setObjectName("deleteButton");
-
 
         connect(viewButton, &QPushButton::clicked, this, [this, product]() {
             std::string name = product.value("name", "");
             std::string barcode = product.value("barcode", "");
 
             int quantity = 0;
+
             if (product.contains("inventory") && !product["inventory"].is_null()) {
                 quantity = product["inventory"].value("quantity", 0);
             }
 
             AddProductDialog dialog(this);
+
             dialog.setViewMode(
                 QString::fromStdString(name),
                 QString::fromStdString(barcode),
@@ -287,6 +256,7 @@ void ItemsPage::populateTable(const json& products)
             }
 
             AddProductDialog dialog(this);
+
             dialog.setProductData(
                 QString::fromStdString(name),
                 QString::fromStdString(barcode),
@@ -326,6 +296,7 @@ void ItemsPage::populateTable(const json& products)
             if (success) {
                 currentProducts = productService.getProducts(true);
                 filterProducts(ui.itemSearchInput->text());
+
                 emit productsChanged();
 
                 QMessageBox::information(
@@ -362,15 +333,17 @@ void ItemsPage::filterProducts(const QString& searchText)
         filteredProducts = currentProducts;
     }
     else {
-        filteredProducts = productService.searchProducts(searchText.toStdString());
+        filteredProducts = productService.searchProducts(
+            searchText.toStdString()
+        );
     }
 
     currentPage = 1;
+
     populateTable(getCurrentPageProducts());
     updatePagination();
 }
 
-// Opens the add product dialog and adds new items to the table
 void ItemsPage::onAddItemClicked()
 {
     AddProductDialog dialog(this);
@@ -385,6 +358,7 @@ void ItemsPage::onAddItemClicked()
         if (success) {
             currentProducts = productService.getProducts(true);
             filterProducts(ui.itemSearchInput->text());
+
             emit productsChanged();
         }
     }
@@ -414,8 +388,13 @@ void ItemsPage::updatePagination()
         currentPage = totalPages;
     }
 
-    int startItem = totalItems == 0 ? 0 : ((currentPage - 1) * pageSize) + 1;
-    int endItem = (std::min)(currentPage * pageSize, totalItems);
+    int startItem =
+        totalItems == 0
+        ? 0
+        : ((currentPage - 1) * pageSize) + 1;
+
+    int endItem =
+        (std::min)(currentPage * pageSize, totalItems);
 
     ui.paginationLabel->setText(
         QString("Showing %1 to %2 of %3 items")
@@ -444,6 +423,7 @@ void ItemsPage::onNextPageClicked()
 
     if (currentPage < totalPages) {
         currentPage++;
+
         populateTable(getCurrentPageProducts());
         updatePagination();
     }
@@ -453,6 +433,7 @@ void ItemsPage::onPrevPageClicked()
 {
     if (currentPage > 1) {
         currentPage--;
+
         populateTable(getCurrentPageProducts());
         updatePagination();
     }
@@ -473,6 +454,7 @@ void ItemsPage::onPageSizeChanged(int index)
     }
 
     currentPage = 1;
+
     populateTable(getCurrentPageProducts());
     updatePagination();
 }
@@ -480,7 +462,6 @@ void ItemsPage::onPageSizeChanged(int index)
 void ItemsPage::applyTheme(Theme::AppTheme theme)
 {
     setStyleSheet(
-        Theme::dataPageStyle(theme)
+        Theme::itemsPageStyle(theme)
     );
 }
-
