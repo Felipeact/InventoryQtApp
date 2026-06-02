@@ -1,4 +1,5 @@
 #include "AddEditTemplateDialog.h"
+#include "Theme.h"
 #include "AddEditTemplateItemDialog.h"
 
 
@@ -231,3 +232,11 @@ void AddEditTemplateDialog::setTemplateData(
     ui.addItemButton->setVisible(!readOnly);
     ui.saveButton->setVisible(!readOnly);
 }
+
+void AddEditTemplateDialog::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dialogStyle(theme)
+    );
+}
+

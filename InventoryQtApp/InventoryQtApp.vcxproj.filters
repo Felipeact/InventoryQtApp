@@ -221,9 +221,6 @@
     <QtMoc Include="AssetsPage.h">
       <Filter>Header Files\Pages</Filter>
     </QtMoc>
-    <QtMoc Include="AddAssetDialog.h">
-      <Filter>Header Files\Modals</Filter>
-    </QtMoc>
     <QtMoc Include="AddProductDialog.h">
       <Filter>Header Files\Modals</Filter>
     </QtMoc>
@@ -283,6 +280,9 @@
     </QtMoc>
     <QtMoc Include="SettingsPage.h">
       <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AddAssetDialog.h">
+      <Filter>Header Files\Modals</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>

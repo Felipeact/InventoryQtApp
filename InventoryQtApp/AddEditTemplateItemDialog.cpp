@@ -1,4 +1,5 @@
 #include "AddEditTemplateItemDialog.h"
+#include "Theme.h"
 
 #include <QMessageBox>
 #include <QPushButton>
@@ -114,3 +115,11 @@ void AddEditTemplateItemDialog::onCancelClicked()
 {
     reject();
 }
+
+void AddEditTemplateItemDialog::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dialogStyle(theme)
+    );
+}
+

@@ -1,4 +1,5 @@
 #include "TrucksPage.h"
+#include "Theme.h"
 #include "AddEditTruckDialog.h"
 
 #include <QMessageBox>
@@ -382,3 +383,11 @@ void TrucksPage::onDeleteTruckClicked(const std::string& truckId)
         );
     }
 }
+
+void TrucksPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::truckPageStyle(theme)
+    );
+}
+

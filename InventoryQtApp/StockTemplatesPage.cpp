@@ -1,4 +1,5 @@
 #include "StockTemplatesPage.h"
+#include "Theme.h"
 #include "AddEditTemplateDialog.h"
 
 #include <QHeaderView>
@@ -417,3 +418,11 @@ void StockTemplatesPage::onPage2Clicked()
         updatePagination();
     }
 }
+
+void StockTemplatesPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::truckPageStyle(theme)
+    );
+}
+

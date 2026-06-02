@@ -1,4 +1,5 @@
 #include "MyTruckStockPage.h"
+#include "Theme.h"
 #include "UseTruckItemDialog.h"
 
 #include <QHeaderView>
@@ -18,7 +19,7 @@ MyTruckStockPage::MyTruckStockPage(
 {
     ui.setupUi(this);
     setupConnections();
- 
+
 }
 
 MyTruckStockPage::~MyTruckStockPage()
@@ -146,3 +147,11 @@ void MyTruckStockPage::onUseItemClicked(int row)
         }
     }
 }
+
+void MyTruckStockPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::truckPageStyle(theme)
+    );
+}
+

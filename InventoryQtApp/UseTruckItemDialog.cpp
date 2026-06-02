@@ -1,4 +1,5 @@
 #include "UseTruckItemDialog.h"
+#include "Theme.h"
 
 #include <QMessageBox>
 #include <QPushButton>
@@ -110,3 +111,11 @@ void UseTruckItemDialog::onCancelClicked()
 {
     reject();
 }
+
+void UseTruckItemDialog::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dialogStyle(theme)
+    );
+}
+

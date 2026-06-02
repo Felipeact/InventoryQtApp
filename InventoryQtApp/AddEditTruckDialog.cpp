@@ -1,4 +1,5 @@
 #include "AddEditTruckDialog.h"
+#include "Theme.h"
 #include <QMessageBox>
 
 AddEditTruckDialog::AddEditTruckDialog(
@@ -140,3 +141,11 @@ void AddEditTruckDialog::onCancelClicked()
 {
     reject();
 }
+
+void AddEditTruckDialog::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dialogStyle(theme)
+    );
+}
+

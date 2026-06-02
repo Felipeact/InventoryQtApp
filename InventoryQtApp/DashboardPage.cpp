@@ -1,5 +1,6 @@
 // DashboardPage.cpp - Implementation of the dashboard overview page
 #include "DashboardPage.h"
+#include "Theme.h"
 
 #include <QHeaderView>
 #include <QTableWidgetItem>
@@ -14,8 +15,8 @@ DashboardPage::DashboardPage(
     QWidget* parent
 )
     : QWidget(parent),
-      productService(productService),
-      reportService(reportService)
+    productService(productService),
+    reportService(reportService)
 {
     ui.setupUi(this);
 
@@ -23,7 +24,7 @@ DashboardPage::DashboardPage(
 
     connect(ui.viewAllItemsButton, &QPushButton::clicked, this, [this]() {
         emit viewAllItemsRequested();
-    });
+        });
 }
 
 DashboardPage::~DashboardPage()
@@ -196,3 +197,11 @@ void DashboardPage::setupReportCards()
     // Optional: show low stock count somewhere if you add a QLabel later.
     // ui.lowStockCountValue->setText(QString::number(lowStockCount));
 }
+
+void DashboardPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dashboardPageStyle(theme)
+    );
+}
+

@@ -1,4 +1,5 @@
 #include "AssignTemplateDialog.h"
+#include "Theme.h"
 
 #include <QComboBox>
 #include <QDate>
@@ -207,3 +208,11 @@ void AssignTemplateDialog::onCancelClicked()
 {
     reject();
 }
+
+void AssignTemplateDialog::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dialogStyle(theme)
+    );
+}
+

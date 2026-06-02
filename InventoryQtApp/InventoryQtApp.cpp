@@ -1,20 +1,22 @@
 // InventoryQtApp.cpp - Implementation of the login window
 #include "InventoryQtApp.h"
+#include "Theme.h"
 #include <Theme.h>
 #include <QMessageBox>
 
 #include "Config.h"
 
 // Constructor initializes the login window and sets up API client
-InventoryQtApp::InventoryQtApp(QWidget *parent)
-    : 
+InventoryQtApp::InventoryQtApp(QWidget* parent)
+	:
 	QMainWindow(parent),
 	apiClient(Config::API_BASE_URL),
 	authService(apiClient)
 {
-    ui.setupUi(this);
+	ui.setupUi(this);
 
 	this->setWindowTitle("Inventory Management System - Login");
+	Theme::applyLogin(this);
 	this->resize(420, 320);
 	this->setMaximumSize(420, 320);
 
@@ -28,7 +30,7 @@ InventoryQtApp::InventoryQtApp(QWidget *parent)
 	ui.passwordInput->setEchoMode(QLineEdit::EchoMode::Password);
 	ui.statusLabel->setText("");
 
-	
+
 
 	connect(
 		ui.loginButton, &QPushButton::clicked,
@@ -38,7 +40,8 @@ InventoryQtApp::InventoryQtApp(QWidget *parent)
 
 // Destructor
 InventoryQtApp::~InventoryQtApp()
-{}
+{
+}
 
 // Processes login by validating credentials and opening the dashboard
 void InventoryQtApp::onLoginButtonClicked()
@@ -65,7 +68,7 @@ void InventoryQtApp::onLoginButtonClicked()
 
 	if (!loginResult.success) {
 		ui.statusLabel->setText("Login failed: " + QString::fromStdString(loginResult.errorMessage));
-		
+
 		return;
 	}
 
@@ -83,8 +86,8 @@ void InventoryQtApp::onLoginButtonClicked()
 		return;
 	}
 
-		
-	dashboardWindow = new DashboardWindow(role,permissions, loginResult.userName, productService,assetService,userService,reportService, truckStockService);
+
+	dashboardWindow = new DashboardWindow(role, permissions, loginResult.userName, productService, assetService, userService, reportService, truckStockService);
 
 	connect(dashboardWindow, &DashboardWindow::logoutRequested, this, [this]() {
 		authService.logout();
@@ -94,5 +97,12 @@ void InventoryQtApp::onLoginButtonClicked()
 
 	dashboardWindow->showMaximized();
 	this->hide();
+}
+
+void InventoryQtApp::applyTheme(Theme::AppTheme theme)
+{
+	setStyleSheet(
+		Theme::dataPageStyle(theme)
+	);
 }
 

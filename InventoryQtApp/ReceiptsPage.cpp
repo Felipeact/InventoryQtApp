@@ -1,4 +1,5 @@
 #include "ReceiptsPage.h"
+#include "Theme.h"
 #include "UploadReceiptDialog.h"
 
 #include <algorithm>
@@ -276,3 +277,11 @@ bool ReceiptsPage::hasPermission(const std::string& permission) const
         permission
     ) != permissions.end();
 }
+
+void ReceiptsPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::truckPageStyle(theme)
+    );
+}
+

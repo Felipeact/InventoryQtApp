@@ -1,8 +1,9 @@
 // AddProductDialog.cpp - Implementation of the product addition dialog
 #include "AddProductDialog.h"
+#include "Theme.h"
 
 // Constructor: initializes the dialog UI and connects signals
-AddProductDialog::AddProductDialog(QWidget *parent)
+AddProductDialog::AddProductDialog(QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -18,7 +19,7 @@ AddProductDialog::AddProductDialog(QWidget *parent)
 	ui.quantityInput->setMaximum(999999);
 
 	connect(ui.saveButton, &QPushButton::clicked,
-		this, &AddProductDialog::onSaveButtonClicked	);
+		this, &AddProductDialog::onSaveButtonClicked);
 
 	connect(ui.cancelButton, &QPushButton::clicked,
 		this, &AddProductDialog::onCancelButtonClicked);
@@ -30,7 +31,8 @@ AddProductDialog::AddProductDialog(QWidget *parent)
 
 // Destructor
 AddProductDialog::~AddProductDialog()
-{}
+{
+}
 
 // Retrieves the product name from the input field
 QString AddProductDialog::getProductName() const
@@ -105,3 +107,11 @@ void AddProductDialog::setViewMode(const QString& name, const QString& barcode, 
 
 	setWindowTitle("Product Details");
 }
+
+void AddProductDialog::applyTheme(Theme::AppTheme theme)
+{
+	setStyleSheet(
+		Theme::dialogStyle(theme)
+	);
+}
+

@@ -1,4 +1,5 @@
 #include "SidebarWidget.h"
+#include "Theme.h"
 
 #include <algorithm>
 #include <QString>
@@ -16,7 +17,6 @@ SidebarWidget::SidebarWidget(
     userName(userName)
 {
     ui.setupUi(this);
-    applyTheme(Theme::AppTheme::Dark);
     setUserInfo(role, userName);
 
     connect(ui.dashboardButton, &QPushButton::clicked, this, [this]() {
@@ -163,7 +163,7 @@ void SidebarWidget::applyPermissions()
         hasPermission("UPLOAD_RECEIPT") ||
         hasPermission("APPROVE_RECEIPTS")
     );
-    
+
 
     ui.reportsButton->setVisible(
         hasPermission("VIEW_REPORTS") ||
@@ -216,3 +216,4 @@ void SidebarWidget::applyTheme(Theme::AppTheme theme)
         Theme::sidebarStyle(theme)
     );
 }
+

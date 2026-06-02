@@ -1,4 +1,5 @@
 #include "AddEditUserDialog.h"
+#include "Theme.h"
 
 #include <QMessageBox>
 #include <QPushButton>
@@ -107,3 +108,11 @@ void AddEditUserDialog::onCancelClicked()
 {
     reject();
 }
+
+void AddEditUserDialog::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dialogStyle(theme)
+    );
+}
+

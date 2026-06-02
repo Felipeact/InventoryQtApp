@@ -1,5 +1,6 @@
 // ItemsPage.cpp - Implementation of the items management page
 #include "ItemsPage.h"
+#include "Theme.h"
 #include <algorithm>
 
 #include <QComboBox>
@@ -246,7 +247,7 @@ void ItemsPage::populateTable(const json& products)
 
         QPushButton* viewButton = new QPushButton("👁");
         viewButton->setObjectName("viewButton");
-        
+
 
         QPushButton* editButton = new QPushButton("✎");
         editButton->setObjectName("editButton");
@@ -254,7 +255,7 @@ void ItemsPage::populateTable(const json& products)
 
         QPushButton* deleteButton = new QPushButton("🗑");
         deleteButton->setObjectName("deleteButton");
-        
+
 
         connect(viewButton, &QPushButton::clicked, this, [this, product]() {
             std::string name = product.value("name", "");
@@ -475,3 +476,11 @@ void ItemsPage::onPageSizeChanged(int index)
     populateTable(getCurrentPageProducts());
     updatePagination();
 }
+
+void ItemsPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dataPageStyle(theme)
+    );
+}
+

@@ -1,6 +1,7 @@
 ﻿#include "ScanPage.h"
 
 #include <QDateTime>
+#include "Theme.h"
 #include <QPushButton>
 
 ScanPage::ScanPage(
@@ -13,8 +14,6 @@ ScanPage::ScanPage(
     mode(mode)
 {
     ui.setupUi(this);
-
-    applyTheme(Theme::AppTheme::Dark);
 
     setupPage();
 
@@ -30,15 +29,6 @@ ScanPage::ScanPage(
 
 ScanPage::~ScanPage()
 {
-}
-
-void ScanPage::applyTheme(
-    Theme::AppTheme theme
-)
-{
-    setStyleSheet(
-        Theme::scanPageStyle(theme)
-    );
 }
 
 void ScanPage::setupPage()
@@ -169,3 +159,11 @@ void ScanPage::addRecentScan(
     ui.recentQtyLabel->setText(sign + QString::number(quantity));
     ui.recentDateLabel->setText(date);
 }
+
+void ScanPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::scanPageStyle(theme)
+    );
+}
+

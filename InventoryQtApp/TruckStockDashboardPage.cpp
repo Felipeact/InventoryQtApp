@@ -1,4 +1,5 @@
 #include "TruckStockDashboardPage.h"
+#include "Theme.h"
 
 #include <QTableWidget>
 #include <QTableWidgetItem>
@@ -94,3 +95,11 @@ void TruckStockDashboardPage::loadLowStockItems()
         ui.lowStockTable->setItem(row, 3, new QTableWidgetItem(QString::number(item.minimumQuantity)));
     }
 }
+
+void TruckStockDashboardPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::truckPageStyle(theme)
+    );
+}
+

@@ -1,4 +1,5 @@
 #include "LowStockAlertsPage.h"
+#include "Theme.h"
 
 #include <QComboBox>
 #include <QFile>
@@ -309,3 +310,11 @@ void LowStockAlertsPage::onExportClicked()
         "Low stock alerts exported successfully."
     );
 }
+
+void LowStockAlertsPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::truckPageStyle(theme)
+    );
+}
+

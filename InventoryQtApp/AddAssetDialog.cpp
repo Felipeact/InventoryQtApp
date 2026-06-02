@@ -1,8 +1,9 @@
 // AddAssetDialog.cpp - Implementation of the asset addition dialog
 #include "AddAssetDialog.h"
+#include "Theme.h"
 
 // Constructor: initializes the dialog UI and connects signals
-AddAssetDialog::AddAssetDialog(QWidget *parent)
+AddAssetDialog::AddAssetDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
@@ -26,7 +27,8 @@ AddAssetDialog::AddAssetDialog(QWidget *parent)
 
 // Destructor
 AddAssetDialog::~AddAssetDialog()
-{}
+{
+}
 
 // Retrieves the asset name from the input field
 QString AddAssetDialog::getAssetName() const
@@ -123,5 +125,12 @@ void AddAssetDialog::setViewMode(const QString& name, const QString& type, const
     ui.cancelButton->setText("Close");
 
     setWindowTitle("Asset Details");
+}
+
+void AddAssetDialog::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dialogStyle(theme)
+    );
 }
 

@@ -1,5 +1,6 @@
 // AssetsPage.cpp - Implementation of the assets management page
 #include "AssetsPage.h"
+#include "Theme.h"
 #include <algorithm>
 
 #include <QComboBox>
@@ -444,3 +445,11 @@ void AssetsPage::onPageSizeChanged(int index)
     populateTable(getCurrentPageAssets());
     updatePagination();
 }
+
+void AssetsPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dataPageStyle(theme)
+    );
+}
+

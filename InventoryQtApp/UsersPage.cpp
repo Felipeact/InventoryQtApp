@@ -1,4 +1,5 @@
 #include "UsersPage.h"
+#include "Theme.h"
 
 #include <QComboBox>
 #include <QHeaderView>
@@ -367,3 +368,11 @@ void UsersPage::onDeleteUserClicked(const std::string& userId)
         QMessageBox::warning(this, "Error", "Failed to delete user.");
     }
 }
+
+void UsersPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dataPageStyle(theme)
+    );
+}
+

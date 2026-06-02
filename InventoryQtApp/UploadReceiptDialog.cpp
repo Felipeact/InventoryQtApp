@@ -1,4 +1,5 @@
 #include "UploadReceiptDialog.h"
+#include "Theme.h"
 
 #include <QComboBox>
 #include <QDoubleSpinBox>
@@ -191,3 +192,11 @@ void UploadReceiptDialog::onTruckSelected(
 {
     Q_UNUSED(index);
 }
+
+void UploadReceiptDialog::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::dialogStyle(theme)
+    );
+}
+

@@ -1,4 +1,5 @@
 #include "AssignmentsPage.h"
+#include "Theme.h"
 #include "AssignTemplateDialog.h"
 
 #include <QHeaderView>
@@ -263,3 +264,11 @@ void AssignmentsPage::onPage2Clicked()
         updatePagination();
     }
 }
+
+void AssignmentsPage::applyTheme(Theme::AppTheme theme)
+{
+    setStyleSheet(
+        Theme::truckPageStyle(theme)
+    );
+}
+
