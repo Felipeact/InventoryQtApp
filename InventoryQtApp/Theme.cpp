@@ -19,7 +19,7 @@ void Theme::applyLogin(QWidget* widget)
         return;
     }
 
-    widget->setStyleSheet(darkStyleSheet());
+    widget->setStyleSheet(loginStyle());
 }
 
 void Theme::applyTheme(AppTheme theme)
@@ -177,6 +177,80 @@ QHeaderView::section {
 QFrame {
     background: transparent;
 }
+)";
+}
+
+QString Theme::loginStyle()
+{
+    return R"(
+
+QMainWindow {
+    background-color: #050B14;
+}
+
+QWidget {
+    background-color: #050B14;
+    color: #FFFFFF;
+    font-family: "Segoe UI";
+}
+
+QLabel {
+    color: #FFFFFF;
+    background: transparent;
+}
+
+QLineEdit {
+    background-color: #0B1626;
+    border: 1px solid #263A57;
+    border-radius: 8px;
+    color: #FFFFFF;
+    padding: 8px 12px;
+    min-height: 36px;
+}
+
+QLineEdit:focus {
+    border: 1px solid #3B82F6;
+}
+
+QPushButton {
+    background-color: #2563EB;
+    border: none;
+    border-radius: 8px;
+    color: #FFFFFF;
+    padding: 10px 14px;
+    font-weight: 700;
+    min-height: 38px;
+}
+
+QPushButton:hover {
+    background-color: #3B82F6;
+}
+
+QPushButton:pressed {
+    background-color: #1D4ED8;
+}
+
+QCheckBox {
+    color: #CBD5E1;
+}
+
+QPushButton#forgotPasswordButton {
+    background: transparent;
+    border: none;
+    color: #60A5FA;
+    padding: 0px;
+    text-align: left;
+}
+
+QPushButton#forgotPasswordButton:hover {
+    color: #93C5FD;
+}
+
+QLabel#statusLabel {
+    color: #FACC15;
+    font-weight: 700;
+}
+
 )";
 }
 

@@ -23,6 +23,7 @@ public:
     static QString darkStyleSheet();
     static QString lightStyleSheet();
 
+    static QString loginStyle();
     static QString sidebarStyle(AppTheme theme);
     static QString verticalBarStyle(AppTheme theme);
     static QString settingsPageStyle(AppTheme theme);
