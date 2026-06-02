@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
 	<class>UsersPageClass</class>
 
@@ -22,207 +22,160 @@
 
 		<layout class="QVBoxLayout" name="rootLayout">
 			<property name="leftMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="topMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="rightMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="bottomMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="spacing">
-				<number>16</number>
+				<number>12</number>
 			</property>
 
 			<item>
-				<layout class="QVBoxLayout" name="titleLayout">
-					<item>
-						<widget class="QLabel" name="pageTitle">
-							<property name="text">
-								<string>Users</string>
-							</property>
-						</widget>
-					</item>
-
-					<item>
-						<widget class="QLabel" name="subtitleLabel">
-							<property name="text">
-								<string>Manage company users, roles, and permissions</string>
-							</property>
-						</widget>
-					</item>
-				</layout>
-			</item>
-
-			<item>
-				<widget class="QWidget" name="toolbarCard" native="true">
-					<layout class="QHBoxLayout" name="toolbarLayout">
-						<property name="leftMargin">
-							<number>14</number>
-						</property>
-						<property name="topMargin">
-							<number>12</number>
-						</property>
-						<property name="rightMargin">
-							<number>14</number>
-						</property>
-						<property name="bottomMargin">
-							<number>12</number>
-						</property>
+				<widget class="QWidget" name="pageContainer" native="true">
+					<layout class="QVBoxLayout" name="pageLayout">
 						<property name="spacing">
 							<number>12</number>
 						</property>
 
 						<item>
-							<widget class="QLineEdit" name="searchInput">
-								<property name="minimumWidth">
-									<number>320</number>
-								</property>
-								<property name="placeholderText">
-									<string>Search users...</string>
-								</property>
-							</widget>
-						</item>
-
-						<item>
-							<widget class="QComboBox" name="roleFilter">
+							<layout class="QVBoxLayout" name="titleLayout">
 								<item>
-									<property name="text">
-										<string>All Roles</string>
-									</property>
+									<widget class="QLabel" name="pageTitle">
+										<property name="text">
+											<string>Users</string>
+										</property>
+									</widget>
 								</item>
+
 								<item>
-									<property name="text">
-										<string>ADMIN</string>
-									</property>
+									<widget class="QLabel" name="breadcrumbLabel">
+										<property name="text">
+											<string>Dashboard  &gt;  Users</string>
+										</property>
+									</widget>
 								</item>
-								<item>
-									<property name="text">
-										<string>WAREHOUSE</string>
-									</property>
-								</item>
-								<item>
-									<property name="text">
-										<string>TECHNICIAN</string>
-									</property>
-								</item>
-							</widget>
+							</layout>
 						</item>
 
 						<item>
-							<spacer name="toolbarSpacer">
-								<property name="orientation">
-									<enum>Qt::Horizontal</enum>
+							<widget class="QWidget" name="toolbarContainer" native="true">
+								<property name="minimumSize">
+									<size>
+										<width>0</width>
+										<height>72</height>
+									</size>
 								</property>
-							</spacer>
-						</item>
 
-						<item>
-							<widget class="QPushButton" name="addUserButton">
-								<property name="text">
-									<string>+ Add User</string>
-								</property>
-							</widget>
-						</item>
-					</layout>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QWidget" name="tableCard" native="true">
-					<layout class="QVBoxLayout" name="tableLayout">
-						<property name="leftMargin">
-							<number>14</number>
-						</property>
-						<property name="topMargin">
-							<number>14</number>
-						</property>
-						<property name="rightMargin">
-							<number>14</number>
-						</property>
-						<property name="bottomMargin">
-							<number>14</number>
-						</property>
-						<property name="spacing">
-							<number>14</number>
-						</property>
-
-						<item>
-							<widget class="QTableWidget" name="usersTable">
-								<property name="columnCount">
-									<number>6</number>
-								</property>
-								<property name="rowCount">
-									<number>0</number>
-								</property>
-								<property name="selectionBehavior">
-									<enum>QAbstractItemView::SelectRows</enum>
-								</property>
-								<property name="showGrid">
-									<bool>false</bool>
-								</property>
-								<attribute name="horizontalHeaderStretchLastSection">
-									<bool>true</bool>
-								</attribute>
-
-								<column>
-									<property name="text">
-										<string>Name</string>
+								<layout class="QHBoxLayout" name="toolbarLayout">
+									<property name="leftMargin">
+										<number>14</number>
 									</property>
-								</column>
-
-								<column>
-									<property name="text">
-										<string>Email</string>
+									<property name="topMargin">
+										<number>12</number>
 									</property>
-								</column>
-
-								<column>
-									<property name="text">
-										<string>Role</string>
+									<property name="rightMargin">
+										<number>14</number>
 									</property>
-								</column>
-
-								<column>
-									<property name="text">
-										<string>Status</string>
+									<property name="bottomMargin">
+										<number>12</number>
 									</property>
-								</column>
-
-								<column>
-									<property name="text">
-										<string>Created</string>
-									</property>
-								</column>
-
-								<column>
-									<property name="text">
-										<string>Actions</string>
-									</property>
-								</column>
-							</widget>
-						</item>
-
-						<item>
-							<widget class="QWidget" name="paginationContainer" native="true">
-								<layout class="QHBoxLayout" name="paginationLayout">
 									<property name="spacing">
-										<number>8</number>
+										<number>12</number>
 									</property>
 
 									<item>
-										<widget class="QLabel" name="paginationLabel">
-											<property name="text">
-												<string>Showing 0 users</string>
+										<widget class="QWidget" name="searchContainer" native="true">
+											<property name="minimumSize">
+												<size>
+													<width>340</width>
+													<height>44</height>
+												</size>
 											</property>
+											<property name="maximumSize">
+												<size>
+													<width>520</width>
+													<height>44</height>
+												</size>
+											</property>
+
+											<layout class="QHBoxLayout" name="searchLayout">
+												<property name="leftMargin">
+													<number>0</number>
+												</property>
+												<property name="topMargin">
+													<number>0</number>
+												</property>
+												<property name="rightMargin">
+													<number>0</number>
+												</property>
+												<property name="bottomMargin">
+													<number>0</number>
+												</property>
+												<property name="spacing">
+													<number>8</number>
+												</property>
+
+												<item>
+													<widget class="QLineEdit" name="searchInput">
+														<property name="placeholderText">
+															<string>Search users...</string>
+														</property>
+													</widget>
+												</item>
+											</layout>
 										</widget>
 									</item>
 
 									<item>
-										<spacer name="paginationSpacer">
+										<widget class="QComboBox" name="roleFilter">
+											<property name="minimumSize">
+												<size>
+													<width>160</width>
+													<height>38</height>
+												</size>
+											</property>
+											<property name="maximumSize">
+												<size>
+													<width>180</width>
+													<height>38</height>
+												</size>
+											</property>
+
+											<item>
+												<property name="text">
+													<string>All Roles</string>
+												</property>
+											</item>
+
+											<item>
+												<property name="text">
+													<string>ADMIN</string>
+												</property>
+											</item>
+
+											<item>
+												<property name="text">
+													<string>WAREHOUSE</string>
+												</property>
+											</item>
+
+											<item>
+												<property name="text">
+													<string>TECHNICIAN</string>
+												</property>
+											</item>
+										</widget>
+									</item>
+
+									<item>
+										<spacer name="toolbarSpacer">
 											<property name="orientation">
 												<enum>Qt::Horizontal</enum>
 											</property>
@@ -230,38 +183,190 @@
 									</item>
 
 									<item>
-										<widget class="QPushButton" name="pageButton">
+										<widget class="QPushButton" name="addUserButton">
 											<property name="text">
-												<string>&lt;</string>
-											</property>
-										</widget>
-									</item>
-
-									<item>
-										<widget class="QPushButton" name="activePageButton">
-											<property name="text">
-												<string>1</string>
-											</property>
-										</widget>
-									</item>
-
-									<item>
-										<widget class="QPushButton" name="pageButton2">
-											<property name="text">
-												<string>2</string>
-											</property>
-										</widget>
-									</item>
-
-									<item>
-										<widget class="QPushButton" name="pageButton3">
-											<property name="text">
-												<string>&gt;</string>
+												<string>+ Add User</string>
 											</property>
 										</widget>
 									</item>
 								</layout>
 							</widget>
+						</item>
+
+						<item>
+							<widget class="QWidget" name="tableCard" native="true">
+								<property name="maximumSize">
+									<size>
+										<width>16777215</width>
+										<height>430</height>
+									</size>
+								</property>
+
+								<layout class="QVBoxLayout" name="tableLayout">
+									<property name="leftMargin">
+										<number>12</number>
+									</property>
+									<property name="topMargin">
+										<number>12</number>
+									</property>
+									<property name="rightMargin">
+										<number>12</number>
+									</property>
+									<property name="bottomMargin">
+										<number>12</number>
+									</property>
+									<property name="spacing">
+										<number>10</number>
+									</property>
+
+									<item>
+										<widget class="QTableWidget" name="usersTable">
+											<property name="minimumSize">
+												<size>
+													<width>0</width>
+													<height>280</height>
+												</size>
+											</property>
+											<property name="columnCount">
+												<number>6</number>
+											</property>
+											<property name="rowCount">
+												<number>0</number>
+											</property>
+											<property name="selectionBehavior">
+												<enum>QAbstractItemView::SelectRows</enum>
+											</property>
+											<property name="showGrid">
+												<bool>false</bool>
+											</property>
+											<attribute name="horizontalHeaderStretchLastSection">
+												<bool>true</bool>
+											</attribute>
+
+											<column>
+												<property name="text">
+													<string>Name</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Email</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Role</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Status</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Created</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Actions</string>
+												</property>
+											</column>
+										</widget>
+									</item>
+
+									<item>
+										<widget class="QWidget" name="paginationContainer" native="true">
+											<property name="styleSheet">
+												<string notr="true"/>
+											</property>
+
+											<layout class="QHBoxLayout" name="paginationLayout">
+												<property name="leftMargin">
+													<number>0</number>
+												</property>
+												<property name="topMargin">
+													<number>0</number>
+												</property>
+												<property name="rightMargin">
+													<number>0</number>
+												</property>
+												<property name="bottomMargin">
+													<number>0</number>
+												</property>
+												<property name="spacing">
+													<number>8</number>
+												</property>
+
+												<item>
+													<widget class="QLabel" name="paginationLabel">
+														<property name="text">
+															<string>Showing 0 to 0 of 0 users</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<spacer name="paginationSpacer">
+														<property name="orientation">
+															<enum>Qt::Horizontal</enum>
+														</property>
+													</spacer>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="pageButton">
+														<property name="text">
+															<string>&lt;</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="activePageButton">
+														<property name="text">
+															<string>1</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="pageButton2">
+														<property name="text">
+															<string>2</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="pageButton3">
+														<property name="text">
+															<string>&gt;</string>
+														</property>
+													</widget>
+												</item>
+											</layout>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+
+						<item>
+							<spacer name="bottomSpacer">
+								<property name="orientation">
+									<enum>Qt::Vertical</enum>
+								</property>
+								<property name="sizeType">
+									<enum>QSizePolicy::Expanding</enum>
+								</property>
+							</spacer>
 						</item>
 					</layout>
 				</widget>

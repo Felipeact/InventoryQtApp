@@ -8,11 +8,18 @@
 
 class AddEditUserDialog : public QDialog
 {
-public:
+    Q_OBJECT
 
-    void applyTheme(Theme::AppTheme theme);
-    explicit AddEditUserDialog(QWidget* parent = nullptr);
+public:
+    explicit AddEditUserDialog(
+        QWidget* parent = nullptr
+    );
+
     ~AddEditUserDialog();
+
+    void applyTheme(
+        Theme::AppTheme theme
+    );
 
     QString getName() const;
     QString getEmail() const;
@@ -27,8 +34,12 @@ public:
         const QString& status
     );
 
+    void setViewMode();
+
 private:
     Ui::AddEditUserDialogClass ui;
+
+    bool viewMode = false;
 
     void setupConnections();
     bool validateForm();

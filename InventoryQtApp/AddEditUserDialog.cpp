@@ -6,10 +6,15 @@
 #include <QLineEdit>
 #include <QComboBox>
 
-AddEditUserDialog::AddEditUserDialog(QWidget* parent)
+AddEditUserDialog::AddEditUserDialog(
+    QWidget* parent
+)
     : QDialog(parent)
 {
     ui.setupUi(this);
+
+    applyTheme(Theme::AppTheme::Dark);
+
     setupConnections();
 }
 
@@ -19,11 +24,19 @@ AddEditUserDialog::~AddEditUserDialog()
 
 void AddEditUserDialog::setupConnections()
 {
-    connect(ui.saveButton, &QPushButton::clicked,
-        this, &AddEditUserDialog::onSaveClicked);
+    connect(
+        ui.saveButton,
+        &QPushButton::clicked,
+        this,
+        &AddEditUserDialog::onSaveClicked
+    );
 
-    connect(ui.cancelButton, &QPushButton::clicked,
-        this, &AddEditUserDialog::onCancelClicked);
+    connect(
+        ui.cancelButton,
+        &QPushButton::clicked,
+        this,
+        &AddEditUserDialog::onCancelClicked
+    );
 }
 
 QString AddEditUserDialog::getName() const
@@ -61,34 +74,77 @@ void AddEditUserDialog::setUser(
     ui.nameInput->setText(name);
     ui.emailInput->setText(email);
 
-    int roleIndex = ui.roleComboBox->findText(role);
+    int roleIndex =
+        ui.roleComboBox->findText(role);
+
     if (roleIndex >= 0) {
         ui.roleComboBox->setCurrentIndex(roleIndex);
     }
 
-    int statusIndex = ui.statusComboBox->findText(status);
+    int statusIndex =
+        ui.statusComboBox->findText(status);
+
     if (statusIndex >= 0) {
         ui.statusComboBox->setCurrentIndex(statusIndex);
     }
 
     ui.passwordInput->clear();
-    ui.passwordInput->setPlaceholderText("Leave blank to keep current password");
+    ui.passwordInput->setPlaceholderText(
+        "Leave blank to keep current password"
+    );
+}
+
+void AddEditUserDialog::setViewMode()
+{
+    viewMode = true;
+
+    setWindowTitle("View User");
+
+    ui.nameInput->setReadOnly(true);
+    ui.emailInput->setReadOnly(true);
+    ui.passwordInput->setReadOnly(true);
+
+    ui.roleComboBox->setEnabled(false);
+    ui.statusComboBox->setEnabled(false);
+
+    ui.passwordInput->clear();
+    ui.passwordInput->setPlaceholderText("");
+
+    ui.saveButton->hide();
+
+    ui.cancelButton->setText("Close");
 }
 
 bool AddEditUserDialog::validateForm()
 {
+    if (viewMode) {
+        return true;
+    }
+
     if (getName().isEmpty()) {
-        QMessageBox::warning(this, "Validation Error", "Name is required.");
+        QMessageBox::warning(
+            this,
+            "Validation Error",
+            "Name is required."
+        );
         return false;
     }
 
     if (getEmail().isEmpty()) {
-        QMessageBox::warning(this, "Validation Error", "Email is required.");
+        QMessageBox::warning(
+            this,
+            "Validation Error",
+            "Email is required."
+        );
         return false;
     }
 
     if (!getEmail().contains("@")) {
-        QMessageBox::warning(this, "Validation Error", "Please enter a valid email.");
+        QMessageBox::warning(
+            this,
+            "Validation Error",
+            "Please enter a valid email."
+        );
         return false;
     }
 
@@ -109,10 +165,11 @@ void AddEditUserDialog::onCancelClicked()
     reject();
 }
 
-void AddEditUserDialog::applyTheme(Theme::AppTheme theme)
+void AddEditUserDialog::applyTheme(
+    Theme::AppTheme theme
+)
 {
     setStyleSheet(
         Theme::dialogStyle(theme)
     );
 }
-

@@ -1,23 +1,33 @@
 #include "UsersPage.h"
 #include "Theme.h"
 
+#include <algorithm>
+
+#include <QAbstractItemView>
 #include <QComboBox>
 #include <QHeaderView>
+#include <QHBoxLayout>
 #include <QLineEdit>
+#include <QMessageBox>
 #include <QPushButton>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-#include <QHBoxLayout>
 #include <QWidget>
-#include <QMessageBox>
-#include <algorithm>
 
 #include "AddEditUserDialog.h"
 
-UsersPage::UsersPage(UserService* userService, QWidget* parent)
-    : QWidget(parent), userService(userService)
+UsersPage::UsersPage(
+    UserService* userService,
+    QWidget* parent
+)
+    : QWidget(parent),
+    userService(userService)
 {
     ui.setupUi(this);
+
+    applyTheme(Theme::AppTheme::Dark);
+
+    setupTable();
     setupConnections();
     loadUsers();
 }
@@ -28,25 +38,87 @@ UsersPage::~UsersPage()
 
 void UsersPage::setupConnections()
 {
-    connect(ui.addUserButton, &QPushButton::clicked,
-        this, &UsersPage::onAddUserClicked);
+    connect(
+        ui.addUserButton,
+        &QPushButton::clicked,
+        this,
+        &UsersPage::onAddUserClicked
+    );
 
-    connect(ui.searchInput, &QLineEdit::textChanged,
-        this, &UsersPage::onSearchChanged);
+    connect(
+        ui.searchInput,
+        &QLineEdit::textChanged,
+        this,
+        &UsersPage::onSearchChanged
+    );
 
-    connect(ui.roleFilter,
+    connect(
+        ui.roleFilter,
         QOverload<int>::of(&QComboBox::currentIndexChanged),
         this,
-        &UsersPage::onRoleFilterChanged);
+        &UsersPage::onRoleFilterChanged
+    );
 
-    connect(ui.pageButton, &QPushButton::clicked,
-        this, &UsersPage::onPreviousPageClicked);
+    connect(
+        ui.pageButton,
+        &QPushButton::clicked,
+        this,
+        &UsersPage::onPreviousPageClicked
+    );
 
-    connect(ui.pageButton3, &QPushButton::clicked,
-        this, &UsersPage::onNextPageClicked);
+    connect(
+        ui.pageButton3,
+        &QPushButton::clicked,
+        this,
+        &UsersPage::onNextPageClicked
+    );
 
-    connect(ui.pageButton2, &QPushButton::clicked,
-        this, &UsersPage::onPage2Clicked);
+    connect(
+        ui.pageButton2,
+        &QPushButton::clicked,
+        this,
+        &UsersPage::onPage2Clicked
+    );
+}
+
+void UsersPage::setupTable()
+{
+    ui.usersTable->setColumnCount(6);
+
+    ui.usersTable->setHorizontalHeaderLabels(
+        QStringList()
+        << "Name"
+        << "Email"
+        << "Role"
+        << "Status"
+        << "Created"
+        << "Actions"
+    );
+
+    ui.usersTable->verticalHeader()->setVisible(false);
+    ui.usersTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui.usersTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui.usersTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui.usersTable->setShowGrid(false);
+    ui.usersTable->setFrameShape(QFrame::NoFrame);
+    ui.usersTable->setFocusPolicy(Qt::NoFocus);
+    ui.usersTable->setAlternatingRowColors(false);
+    ui.usersTable->viewport()->setAutoFillBackground(false);
+
+    ui.usersTable->horizontalHeader()->setHighlightSections(false);
+    ui.usersTable->horizontalHeader()->setDefaultAlignment(
+        Qt::AlignLeft | Qt::AlignVCenter
+    );
+
+    ui.usersTable->horizontalHeader()->setFixedHeight(48);
+    ui.usersTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui.usersTable->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
+
+    ui.usersTable->setColumnWidth(5, 130);
+    ui.usersTable->verticalHeader()->setDefaultSectionSize(52);
+
+    ui.usersTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui.usersTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void UsersPage::loadUsers()
@@ -56,6 +128,7 @@ void UsersPage::loadUsers()
     }
 
     currentUsers = userService->getUsers();
+
     filterUsers();
 }
 
@@ -73,16 +146,26 @@ void UsersPage::setLoggedInUserName(
 
 void UsersPage::filterUsers()
 {
-    QString searchText = ui.searchInput->text().trimmed();
-    QString selectedRole = ui.roleFilter->currentText();
+    QString searchText =
+        ui.searchInput->text().trimmed();
+
+    QString selectedRole =
+        ui.roleFilter->currentText();
 
     filteredUsers.clear();
 
     for (const UserDto& user : currentUsers) {
-        QString name = QString::fromStdString(user.name);
-        QString email = QString::fromStdString(user.email);
-        QString role = QString::fromStdString(user.role);
-        QString status = QString::fromStdString(user.status);
+        QString name =
+            QString::fromStdString(user.name);
+
+        QString email =
+            QString::fromStdString(user.email);
+
+        QString role =
+            QString::fromStdString(user.role);
+
+        QString status =
+            QString::fromStdString(user.status);
 
         bool matchesSearch =
             searchText.isEmpty() ||
@@ -101,6 +184,7 @@ void UsersPage::filterUsers()
     }
 
     currentPage = 1;
+
     populateTable();
     updatePagination();
 }
@@ -109,16 +193,23 @@ void UsersPage::populateTable()
 {
     ui.usersTable->clearContents();
 
-    int totalItems = static_cast<int>(filteredUsers.size());
-    int startIndex = (currentPage - 1) * pageSize;
-    int endIndex = (std::min)(startIndex + pageSize, totalItems);
+    int totalItems =
+        static_cast<int>(filteredUsers.size());
 
-    int rowCount = endIndex - startIndex;
+    int startIndex =
+        (currentPage - 1) * pageSize;
+
+    int endIndex =
+        (std::min)(startIndex + pageSize, totalItems);
+
+    int rowCount =
+        endIndex - startIndex;
 
     ui.usersTable->setRowCount(rowCount);
 
-    for (int row = 0; row < rowCount; ++row) {
-        const UserDto& user = filteredUsers[startIndex + row];
+    for (int row = 0; row < rowCount; row++) {
+        const UserDto& user =
+            filteredUsers[startIndex + row];
 
         QTableWidgetItem* nameItem =
             new QTableWidgetItem(QString::fromStdString(user.name));
@@ -131,22 +222,26 @@ void UsersPage::populateTable()
         ui.usersTable->setItem(row, 0, nameItem);
 
         ui.usersTable->setItem(
-            row, 1,
+            row,
+            1,
             new QTableWidgetItem(QString::fromStdString(user.email))
         );
 
         ui.usersTable->setItem(
-            row, 2,
+            row,
+            2,
             new QTableWidgetItem(QString::fromStdString(user.role))
         );
 
         ui.usersTable->setItem(
-            row, 3,
+            row,
+            3,
             new QTableWidgetItem(QString::fromStdString(user.status))
         );
 
         ui.usersTable->setItem(
-            row, 4,
+            row,
+            4,
             new QTableWidgetItem(QString::fromStdString(user.createdAt))
         );
 
@@ -156,15 +251,23 @@ void UsersPage::populateTable()
 
 void UsersPage::updatePagination()
 {
-    int totalItems = static_cast<int>(filteredUsers.size());
-    int totalPages = (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+    int totalItems =
+        static_cast<int>(filteredUsers.size());
+
+    int totalPages =
+        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
 
     if (currentPage > totalPages) {
         currentPage = totalPages;
     }
 
-    int startItem = totalItems == 0 ? 0 : ((currentPage - 1) * pageSize) + 1;
-    int endItem = (std::min)(currentPage * pageSize, totalItems);
+    int startItem =
+        totalItems == 0
+        ? 0
+        : ((currentPage - 1) * pageSize) + 1;
+
+    int endItem =
+        (std::min)(currentPage * pageSize, totalItems);
 
     ui.paginationLabel->setText(
         QString("Showing %1 to %2 of %3 users")
@@ -188,33 +291,58 @@ void UsersPage::onAddUserClicked()
     if (dialog.exec() == QDialog::Accepted) {
         CreateUserRequest request;
 
-        request.name = dialog.getName().toStdString();
-        request.email = dialog.getEmail().toStdString();
-        request.password = dialog.getPassword().toStdString();
-        request.role = dialog.getRole().toStdString();
-        request.status = dialog.getStatus().toStdString();
+        request.name =
+            dialog.getName().toStdString();
 
-        bool success = userService->createUser(request);
+        request.email =
+            dialog.getEmail().toStdString();
+
+        request.password =
+            dialog.getPassword().toStdString();
+
+        request.role =
+            dialog.getRole().toStdString();
+
+        request.status =
+            dialog.getStatus().toStdString();
+
+        bool success =
+            userService->createUser(request);
 
         if (success) {
-            QMessageBox::information(this, "Success", "User created successfully.");
+            QMessageBox::information(
+                this,
+                "Success",
+                "User created successfully."
+            );
+
             loadUsers();
         }
         else {
-            QMessageBox::warning(this, "Error", "Failed to create user. Check the backend console.");
+            QMessageBox::warning(
+                this,
+                "Error",
+                "Failed to create user. Check the backend console."
+            );
         }
     }
 }
 
-void UsersPage::onSearchChanged(const QString& text)
+void UsersPage::onSearchChanged(
+    const QString& text
+)
 {
     Q_UNUSED(text);
+
     filterUsers();
 }
 
-void UsersPage::onRoleFilterChanged(int index)
+void UsersPage::onRoleFilterChanged(
+    int index
+)
 {
     Q_UNUSED(index);
+
     filterUsers();
 }
 
@@ -222,6 +350,7 @@ void UsersPage::onPreviousPageClicked()
 {
     if (currentPage > 1) {
         currentPage--;
+
         populateTable();
         updatePagination();
     }
@@ -229,11 +358,15 @@ void UsersPage::onPreviousPageClicked()
 
 void UsersPage::onNextPageClicked()
 {
-    int totalItems = static_cast<int>(filteredUsers.size());
-    int totalPages = (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+    int totalItems =
+        static_cast<int>(filteredUsers.size());
+
+    int totalPages =
+        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
 
     if (currentPage < totalPages) {
         currentPage++;
+
         populateTable();
         updatePagination();
     }
@@ -241,35 +374,61 @@ void UsersPage::onNextPageClicked()
 
 void UsersPage::onPage2Clicked()
 {
-    int totalItems = static_cast<int>(filteredUsers.size());
-    int totalPages = (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+    int totalItems =
+        static_cast<int>(filteredUsers.size());
+
+    int totalPages =
+        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
 
     if (currentPage + 1 <= totalPages) {
         currentPage++;
+
         populateTable();
         updatePagination();
     }
 }
 
-void UsersPage::addActionButtons(int row, const std::string& userId)
+void UsersPage::addActionButtons(
+    int row,
+    const std::string& userId
+)
 {
-    QWidget* actionWidget = new QWidget(this);
-    QHBoxLayout* layout = new QHBoxLayout(actionWidget);
+    QWidget* actionWidget =
+        new QWidget(this);
+
+    actionWidget->setObjectName("actionContainer");
+
+    QHBoxLayout* layout =
+        new QHBoxLayout(actionWidget);
 
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(6);
+    layout->setAlignment(Qt::AlignCenter);
 
-    QPushButton* editButton = new QPushButton("Edit", actionWidget);
-    QPushButton* deleteButton = new QPushButton("Delete", actionWidget);
+    QPushButton* viewButton =
+        new QPushButton("👁", actionWidget);
 
-    editButton->setMinimumHeight(28);
-    deleteButton->setMinimumHeight(28);
+    viewButton->setObjectName("viewButton");
 
+    QPushButton* editButton =
+        new QPushButton("✎", actionWidget);
+
+    editButton->setObjectName("editButton");
+
+    QPushButton* deleteButton =
+        new QPushButton("🗑", actionWidget);
+
+    deleteButton->setObjectName("deleteButton");
+
+    layout->addWidget(viewButton);
     layout->addWidget(editButton);
     layout->addWidget(deleteButton);
-    layout->addStretch();
 
     ui.usersTable->setCellWidget(row, 5, actionWidget);
+
+    connect(viewButton, &QPushButton::clicked, this, [this, userId]() {
+        onViewUserClicked(userId);
+        });
 
     connect(editButton, &QPushButton::clicked, this, [this, userId]() {
         onEditUserClicked(userId);
@@ -280,21 +439,59 @@ void UsersPage::addActionButtons(int row, const std::string& userId)
         });
 }
 
-void UsersPage::onEditUserClicked(const std::string& userId)
+void UsersPage::onViewUserClicked(
+    const std::string& userId
+)
 {
-    auto it = std::find_if(
-        currentUsers.begin(),
-        currentUsers.end(),
-        [&userId](const UserDto& user) {
-            return user.id == userId;
-        }
-    );
+    auto it =
+        std::find_if(
+            currentUsers.begin(),
+            currentUsers.end(),
+            [&userId](const UserDto& user) {
+                return user.id == userId;
+            }
+        );
 
     if (it == currentUsers.end()) {
         return;
     }
 
-    const UserDto& user = *it;
+    const UserDto& user =
+        *it;
+
+    AddEditUserDialog dialog(this);
+
+    dialog.setUser(
+        QString::fromStdString(user.name),
+        QString::fromStdString(user.email),
+        QString::fromStdString(user.role),
+        QString::fromStdString(user.status)
+    );
+
+    dialog.setViewMode();
+
+    dialog.exec();
+}
+
+void UsersPage::onEditUserClicked(
+    const std::string& userId
+)
+{
+    auto it =
+        std::find_if(
+            currentUsers.begin(),
+            currentUsers.end(),
+            [&userId](const UserDto& user) {
+                return user.id == userId;
+            }
+        );
+
+    if (it == currentUsers.end()) {
+        return;
+    }
+
+    const UserDto& user =
+        *it;
 
     AddEditUserDialog dialog(this);
 
@@ -308,16 +505,30 @@ void UsersPage::onEditUserClicked(const std::string& userId)
     if (dialog.exec() == QDialog::Accepted) {
         UpdateUserRequest request;
 
-        request.name = dialog.getName().toStdString();
-        request.email = dialog.getEmail().toStdString();
-        request.password = dialog.getPassword().toStdString();
-        request.role = dialog.getRole().toStdString();
-        request.status = dialog.getStatus().toStdString();
+        request.name =
+            dialog.getName().toStdString();
 
-        bool success = userService->updateUser(user.id, request);
+        request.email =
+            dialog.getEmail().toStdString();
+
+        request.password =
+            dialog.getPassword().toStdString();
+
+        request.role =
+            dialog.getRole().toStdString();
+
+        request.status =
+            dialog.getStatus().toStdString();
+
+        bool success =
+            userService->updateUser(user.id, request);
 
         if (success) {
-            QMessageBox::information(this, "Success", "User updated successfully.");
+            QMessageBox::information(
+                this,
+                "Success",
+                "User updated successfully."
+            );
 
             if (user.name == loggedInUserName) {
                 emit loggedInUserUpdated(request.name);
@@ -326,53 +537,73 @@ void UsersPage::onEditUserClicked(const std::string& userId)
             loadUsers();
         }
         else {
-            QMessageBox::warning(this, "Error", "Failed to update user.");
+            QMessageBox::warning(
+                this,
+                "Error",
+                "Failed to update user."
+            );
         }
     }
 }
 
-void UsersPage::onDeleteUserClicked(const std::string& userId)
+void UsersPage::onDeleteUserClicked(
+    const std::string& userId
+)
 {
-    auto it = std::find_if(
-        currentUsers.begin(),
-        currentUsers.end(),
-        [&userId](const UserDto& user) {
-            return user.id == userId;
-        }
-    );
+    auto it =
+        std::find_if(
+            currentUsers.begin(),
+            currentUsers.end(),
+            [&userId](const UserDto& user) {
+                return user.id == userId;
+            }
+        );
 
     if (it == currentUsers.end()) {
         return;
     }
 
-    const UserDto& user = *it;
+    const UserDto& user =
+        *it;
 
     QMessageBox::StandardButton confirm =
         QMessageBox::question(
             this,
             "Delete User",
-            "Are you sure you want to delete this user?"
+            "Are you sure you want to delete this user?",
+            QMessageBox::Yes | QMessageBox::No
         );
 
     if (confirm != QMessageBox::Yes) {
         return;
     }
 
-    bool success = userService->deleteUser(user.id);
+    bool success =
+        userService->deleteUser(user.id);
 
     if (success) {
-        QMessageBox::information(this, "Success", "User deleted successfully.");
+        QMessageBox::information(
+            this,
+            "Success",
+            "User deleted successfully."
+        );
+
         loadUsers();
     }
     else {
-        QMessageBox::warning(this, "Error", "Failed to delete user.");
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Failed to delete user."
+        );
     }
 }
 
-void UsersPage::applyTheme(Theme::AppTheme theme)
+void UsersPage::applyTheme(
+    Theme::AppTheme theme
+)
 {
     setStyleSheet(
-        Theme::dataPageStyle(theme)
+        Theme::usersPageStyle(theme)
     );
 }
-

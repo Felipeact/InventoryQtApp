@@ -201,9 +201,6 @@
     <ClInclude Include="Config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="AddEditUserDialog.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="TruckStockService.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -283,6 +280,9 @@
     </QtMoc>
     <QtMoc Include="AddAssetDialog.h">
       <Filter>Header Files\Modals</Filter>
+    </QtMoc>
+    <QtMoc Include="AddEditUserDialog.h">
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
