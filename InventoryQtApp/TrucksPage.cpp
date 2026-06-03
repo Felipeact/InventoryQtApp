@@ -2,13 +2,18 @@
 #include "Theme.h"
 #include "AddEditTruckDialog.h"
 
-#include <QMessageBox>
+#include <algorithm>
+
+#include <QAbstractItemView>
+#include <QFrame>
+#include <QHeaderView>
 #include <QHBoxLayout>
-#include <QPushButton>
 #include <QLineEdit>
+#include <QMessageBox>
+#include <QPushButton>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-#include <algorithm>
+#include <QWidget>
 
 TrucksPage::TrucksPage(
     TruckStockService* truckStockService,
@@ -20,6 +25,10 @@ TrucksPage::TrucksPage(
     userService(userService)
 {
     ui.setupUi(this);
+
+    applyTheme(Theme::AppTheme::Dark);
+
+    setupTable();
     setupConnections();
     loadTrucks();
 }
@@ -30,20 +39,79 @@ TrucksPage::~TrucksPage()
 
 void TrucksPage::setupConnections()
 {
-    connect(ui.addTruckButton, &QPushButton::clicked,
-        this, &TrucksPage::onAddTruckClicked);
+    connect(
+        ui.addTruckButton,
+        &QPushButton::clicked,
+        this,
+        &TrucksPage::onAddTruckClicked
+    );
 
-    connect(ui.searchInput, &QLineEdit::textChanged,
-        this, &TrucksPage::onSearchChanged);
+    connect(
+        ui.searchInput,
+        &QLineEdit::textChanged,
+        this,
+        &TrucksPage::onSearchChanged
+    );
 
-    connect(ui.pageButton, &QPushButton::clicked,
-        this, &TrucksPage::onPreviousPageClicked);
+    connect(
+        ui.pageButton,
+        &QPushButton::clicked,
+        this,
+        &TrucksPage::onPreviousPageClicked
+    );
 
-    connect(ui.pageButton_3, &QPushButton::clicked,
-        this, &TrucksPage::onNextPageClicked);
+    connect(
+        ui.pageButton_3,
+        &QPushButton::clicked,
+        this,
+        &TrucksPage::onNextPageClicked
+    );
 
-    connect(ui.pageButton_2, &QPushButton::clicked,
-        this, &TrucksPage::onPage2Clicked);
+    connect(
+        ui.pageButton_2,
+        &QPushButton::clicked,
+        this,
+        &TrucksPage::onPage2Clicked
+    );
+}
+
+void TrucksPage::setupTable()
+{
+    ui.trucksTable->setColumnCount(5);
+
+    ui.trucksTable->setHorizontalHeaderLabels(
+        QStringList()
+        << "Truck Name"
+        << "License Plate"
+        << "Technician"
+        << "Status"
+        << "Actions"
+    );
+
+    ui.trucksTable->verticalHeader()->setVisible(false);
+    ui.trucksTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui.trucksTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui.trucksTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui.trucksTable->setShowGrid(false);
+    ui.trucksTable->setFrameShape(QFrame::NoFrame);
+    ui.trucksTable->setFocusPolicy(Qt::NoFocus);
+    ui.trucksTable->setAlternatingRowColors(false);
+    ui.trucksTable->viewport()->setAutoFillBackground(false);
+
+    ui.trucksTable->horizontalHeader()->setHighlightSections(false);
+    ui.trucksTable->horizontalHeader()->setDefaultAlignment(
+        Qt::AlignLeft | Qt::AlignVCenter
+    );
+
+    ui.trucksTable->horizontalHeader()->setFixedHeight(48);
+    ui.trucksTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui.trucksTable->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
+
+    ui.trucksTable->setColumnWidth(4, 130);
+    ui.trucksTable->verticalHeader()->setDefaultSectionSize(52);
+
+    ui.trucksTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui.trucksTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void TrucksPage::loadTrucks()
@@ -64,15 +132,23 @@ void TrucksPage::refreshTrucksList()
 
 void TrucksPage::filterTrucks()
 {
-    QString searchText = ui.searchInput->text().trimmed();
+    QString searchText =
+        ui.searchInput->text().trimmed();
 
     filteredTrucks.clear();
 
     for (const TruckDto& truck : currentTrucks) {
-        QString truckName = QString::fromStdString(truck.truckName);
-        QString licensePlate = QString::fromStdString(truck.licensePlate);
-        QString technicianName = QString::fromStdString(truck.technicianName);
-        QString status = QString::fromStdString(truck.status);
+        QString truckName =
+            QString::fromStdString(truck.truckName);
+
+        QString licensePlate =
+            QString::fromStdString(truck.licensePlate);
+
+        QString technicianName =
+            QString::fromStdString(truck.technicianName);
+
+        QString status =
+            QString::fromStdString(truck.status);
 
         bool matchesSearch =
             searchText.isEmpty() ||
@@ -95,19 +171,24 @@ void TrucksPage::filterTrucks()
 void TrucksPage::populateTable()
 {
     ui.trucksTable->clearContents();
-    ui.trucksTable->setColumnCount(5);
 
-    int totalItems = static_cast<int>(filteredTrucks.size());
+    int totalItems =
+        static_cast<int>(filteredTrucks.size());
 
-    int startIndex = (currentPage - 1) * pageSize;
-    int endIndex = (std::min)(startIndex + pageSize, totalItems);
+    int startIndex =
+        (currentPage - 1) * pageSize;
 
-    int rowCount = endIndex - startIndex;
+    int endIndex =
+        (std::min)(startIndex + pageSize, totalItems);
+
+    int rowCount =
+        endIndex - startIndex;
 
     ui.trucksTable->setRowCount(rowCount);
 
-    for (int row = 0; row < rowCount; ++row) {
-        const TruckDto& truck = filteredTrucks[startIndex + row];
+    for (int row = 0; row < rowCount; row++) {
+        const TruckDto& truck =
+            filteredTrucks[startIndex + row];
 
         QTableWidgetItem* truckItem =
             new QTableWidgetItem(QString::fromStdString(truck.truckName));
@@ -143,7 +224,8 @@ void TrucksPage::populateTable()
 
 void TrucksPage::updatePagination()
 {
-    int totalItems = static_cast<int>(filteredTrucks.size());
+    int totalItems =
+        static_cast<int>(filteredTrucks.size());
 
     int totalPages =
         (std::max)(1, (totalItems + pageSize - 1) / pageSize);
@@ -182,12 +264,20 @@ void TrucksPage::onAddTruckClicked()
     if (dialog.exec() == QDialog::Accepted) {
         CreateTruckRequest request;
 
-        request.truckNumber = dialog.getTruckName().toStdString();
-        request.plateNumber = dialog.getLicensePlate().toStdString();
-        request.technicianId = dialog.getTechnicianId().toStdString();
-        request.status = dialog.getStatus().toStdString();
+        request.truckNumber =
+            dialog.getTruckName().toStdString();
 
-        bool success = truckStockService->createTruck(request);
+        request.plateNumber =
+            dialog.getLicensePlate().toStdString();
+
+        request.technicianId =
+            dialog.getTechnicianId().toStdString();
+
+        request.status =
+            dialog.getStatus().toStdString();
+
+        bool success =
+            truckStockService->createTruck(request);
 
         if (success) {
             QMessageBox::information(
@@ -208,7 +298,9 @@ void TrucksPage::onAddTruckClicked()
     }
 }
 
-void TrucksPage::onSearchChanged(const QString& text)
+void TrucksPage::onSearchChanged(
+    const QString& text
+)
 {
     Q_UNUSED(text);
 
@@ -227,7 +319,8 @@ void TrucksPage::onPreviousPageClicked()
 
 void TrucksPage::onNextPageClicked()
 {
-    int totalItems = static_cast<int>(filteredTrucks.size());
+    int totalItems =
+        static_cast<int>(filteredTrucks.size());
 
     int totalPages =
         (std::max)(1, (totalItems + pageSize - 1) / pageSize);
@@ -242,7 +335,8 @@ void TrucksPage::onNextPageClicked()
 
 void TrucksPage::onPage2Clicked()
 {
-    int totalItems = static_cast<int>(filteredTrucks.size());
+    int totalItems =
+        static_cast<int>(filteredTrucks.size());
 
     int totalPages =
         (std::max)(1, (totalItems + pageSize - 1) / pageSize);
@@ -255,22 +349,47 @@ void TrucksPage::onPage2Clicked()
     }
 }
 
-void TrucksPage::addActionButtons(int row, const std::string& truckId)
+void TrucksPage::addActionButtons(
+    int row,
+    const std::string& truckId
+)
 {
-    QWidget* actionWidget = new QWidget(this);
-    QHBoxLayout* layout = new QHBoxLayout(actionWidget);
+    QWidget* actionWidget =
+        new QWidget(this);
+
+    actionWidget->setObjectName("actionContainer");
+
+    QHBoxLayout* layout =
+        new QHBoxLayout(actionWidget);
 
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(6);
+    layout->setAlignment(Qt::AlignCenter);
 
-    QPushButton* editButton = new QPushButton("Edit", actionWidget);
-    QPushButton* deleteButton = new QPushButton("Delete", actionWidget);
+    QPushButton* viewButton =
+        new QPushButton("👁", actionWidget);
 
+    viewButton->setObjectName("viewButton");
+
+    QPushButton* editButton =
+        new QPushButton("✎", actionWidget);
+
+    editButton->setObjectName("editButton");
+
+    QPushButton* deleteButton =
+        new QPushButton("🗑", actionWidget);
+
+    deleteButton->setObjectName("deleteButton");
+
+    layout->addWidget(viewButton);
     layout->addWidget(editButton);
     layout->addWidget(deleteButton);
-    layout->addStretch();
 
     ui.trucksTable->setCellWidget(row, 4, actionWidget);
+
+    connect(viewButton, &QPushButton::clicked, this, [this, truckId]() {
+        onViewTruckClicked(truckId);
+        });
 
     connect(editButton, &QPushButton::clicked, this, [this, truckId]() {
         onEditTruckClicked(truckId);
@@ -281,21 +400,55 @@ void TrucksPage::addActionButtons(int row, const std::string& truckId)
         });
 }
 
-void TrucksPage::onEditTruckClicked(const std::string& truckId)
+void TrucksPage::onViewTruckClicked(
+    const std::string& truckId
+)
 {
-    auto it = std::find_if(
-        currentTrucks.begin(),
-        currentTrucks.end(),
-        [&truckId](const TruckDto& truck) {
-            return truck.id == truckId;
-        }
-    );
+    auto it =
+        std::find_if(
+            currentTrucks.begin(),
+            currentTrucks.end(),
+            [&truckId](const TruckDto& truck) {
+                return truck.id == truckId;
+            }
+        );
 
     if (it == currentTrucks.end()) {
         return;
     }
 
-    const TruckDto& truck = *it;
+    const TruckDto& truck =
+        *it;
+
+    QMessageBox::information(
+        this,
+        "Truck Details",
+        "Truck Name: " + QString::fromStdString(truck.truckName) +
+        "\nLicense Plate: " + QString::fromStdString(truck.licensePlate) +
+        "\nTechnician: " + QString::fromStdString(truck.technicianName) +
+        "\nStatus: " + QString::fromStdString(truck.status)
+    );
+}
+
+void TrucksPage::onEditTruckClicked(
+    const std::string& truckId
+)
+{
+    auto it =
+        std::find_if(
+            currentTrucks.begin(),
+            currentTrucks.end(),
+            [&truckId](const TruckDto& truck) {
+                return truck.id == truckId;
+            }
+        );
+
+    if (it == currentTrucks.end()) {
+        return;
+    }
+
+    const TruckDto& truck =
+        *it;
 
     AddEditTruckDialog dialog(userService, this);
 
@@ -310,10 +463,17 @@ void TrucksPage::onEditTruckClicked(const std::string& truckId)
     if (dialog.exec() == QDialog::Accepted) {
         UpdateTruckRequest request;
 
-        request.truckNumber = dialog.getTruckName().toStdString();
-        request.plateNumber = dialog.getLicensePlate().toStdString();
-        request.technicianId = dialog.getTechnicianId().toStdString();
-        request.status = dialog.getStatus().toStdString();
+        request.truckNumber =
+            dialog.getTruckName().toStdString();
+
+        request.plateNumber =
+            dialog.getLicensePlate().toStdString();
+
+        request.technicianId =
+            dialog.getTechnicianId().toStdString();
+
+        request.status =
+            dialog.getStatus().toStdString();
 
         bool success =
             truckStockService->updateTruck(truck.id, request);
@@ -337,27 +497,33 @@ void TrucksPage::onEditTruckClicked(const std::string& truckId)
     }
 }
 
-void TrucksPage::onDeleteTruckClicked(const std::string& truckId)
+void TrucksPage::onDeleteTruckClicked(
+    const std::string& truckId
+)
 {
-    auto it = std::find_if(
-        currentTrucks.begin(),
-        currentTrucks.end(),
-        [&truckId](const TruckDto& truck) {
-            return truck.id == truckId;
-        }
-    );
+    auto it =
+        std::find_if(
+            currentTrucks.begin(),
+            currentTrucks.end(),
+            [&truckId](const TruckDto& truck) {
+                return truck.id == truckId;
+            }
+        );
 
     if (it == currentTrucks.end()) {
         return;
     }
 
-    const TruckDto& truck = *it;
+    const TruckDto& truck =
+        *it;
 
-    auto confirm = QMessageBox::question(
-        this,
-        "Deactivate Truck",
-        "Do you want to deactivate this truck?"
-    );
+    QMessageBox::StandardButton confirm =
+        QMessageBox::question(
+            this,
+            "Deactivate Truck",
+            "Do you want to deactivate this truck?",
+            QMessageBox::Yes | QMessageBox::No
+        );
 
     if (confirm != QMessageBox::Yes) {
         return;
@@ -384,10 +550,11 @@ void TrucksPage::onDeleteTruckClicked(const std::string& truckId)
     }
 }
 
-void TrucksPage::applyTheme(Theme::AppTheme theme)
+void TrucksPage::applyTheme(
+    Theme::AppTheme theme
+)
 {
     setStyleSheet(
-        Theme::truckPageStyle(theme)
+        Theme::trucksPageStyle(theme)
     );
 }
-

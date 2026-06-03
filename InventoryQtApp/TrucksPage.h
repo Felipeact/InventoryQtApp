@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QString>
 #include <vector>
+#include <string>
 
 #include "ui_TrucksPage.h"
 #include "TruckStockService.h"
@@ -14,9 +15,7 @@ class TrucksPage : public QWidget
     Q_OBJECT
 
 public:
-
-    void applyTheme(Theme::AppTheme theme);
-    TrucksPage(
+    explicit TrucksPage(
         TruckStockService* truckStockService,
         UserService* userService,
         QWidget* parent = nullptr
@@ -25,6 +24,10 @@ public:
     ~TrucksPage();
 
     void refreshTrucksList();
+
+    void applyTheme(
+        Theme::AppTheme theme
+    );
 
 private slots:
     void onAddTruckClicked();
@@ -47,13 +50,27 @@ private:
     int pageSize = 10;
 
     void setupConnections();
-    void loadTrucks();
+    void setupTable();
 
+    void loadTrucks();
     void filterTrucks();
     void populateTable();
     void updatePagination();
 
-    void addActionButtons(int row, const std::string& truckId);
-    void onEditTruckClicked(const std::string& truckId);
-    void onDeleteTruckClicked(const std::string& truckId);
+    void addActionButtons(
+        int row,
+        const std::string& truckId
+    );
+
+    void onViewTruckClicked(
+        const std::string& truckId
+    );
+
+    void onEditTruckClicked(
+        const std::string& truckId
+    );
+
+    void onDeleteTruckClicked(
+        const std::string& truckId
+    );
 };
