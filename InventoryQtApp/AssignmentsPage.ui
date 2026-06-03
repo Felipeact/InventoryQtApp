@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
 	<class>AssignmentsPageClass</class>
+
 	<widget class="QWidget" name="AssignmentsPageClass">
 		<property name="geometry">
 			<rect>
@@ -10,6 +11,7 @@
 				<height>820</height>
 			</rect>
 		</property>
+
 		<property name="windowTitle">
 			<string>Assignments</string>
 		</property>
@@ -20,166 +22,76 @@
 
 		<layout class="QVBoxLayout" name="rootLayout">
 			<property name="leftMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="topMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="rightMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="bottomMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="spacing">
-				<number>16</number>
+				<number>12</number>
 			</property>
 
 			<item>
-				<widget class="QLabel" name="pageTitle">
-					<property name="text">
-						<string>Assignments</string>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QWidget" name="toolbarCard" native="true">
-					<layout class="QHBoxLayout" name="toolbarLayout">
-						<property name="leftMargin">
-							<number>14</number>
-						</property>
-						<property name="topMargin">
-							<number>12</number>
-						</property>
-						<property name="rightMargin">
-							<number>14</number>
-						</property>
-						<property name="bottomMargin">
-							<number>12</number>
-						</property>
+				<widget class="QWidget" name="pageContainer" native="true">
+					<layout class="QVBoxLayout" name="pageLayout">
 						<property name="spacing">
 							<number>12</number>
 						</property>
 
 						<item>
-							<spacer name="toolbarSpacer">
-								<property name="orientation">
-									<enum>Qt::Horizontal</enum>
-								</property>
-							</spacer>
+							<layout class="QVBoxLayout" name="titleLayout">
+								<item>
+									<widget class="QLabel" name="pageTitle">
+										<property name="text">
+											<string>Assignments</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QLabel" name="breadcrumbLabel">
+										<property name="text">
+											<string>Truck Stock  &gt;  Assignments</string>
+										</property>
+									</widget>
+								</item>
+							</layout>
 						</item>
 
 						<item>
-							<widget class="QPushButton" name="assignTemplateButton">
-								<property name="text">
-									<string>+ Assign Template</string>
+							<widget class="QWidget" name="toolbarContainer" native="true">
+								<property name="minimumSize">
+									<size>
+										<width>0</width>
+										<height>72</height>
+									</size>
 								</property>
-							</widget>
-						</item>
-					</layout>
-				</widget>
-			</item>
 
-			<item>
-				<widget class="QWidget" name="tableCard" native="true">
-					<layout class="QVBoxLayout" name="tableCardLayout">
-						<property name="leftMargin">
-							<number>14</number>
-						</property>
-						<property name="topMargin">
-							<number>14</number>
-						</property>
-						<property name="rightMargin">
-							<number>14</number>
-						</property>
-						<property name="bottomMargin">
-							<number>14</number>
-						</property>
-						<property name="spacing">
-							<number>14</number>
-						</property>
-
-						<item>
-							<widget class="QTableWidget" name="assignmentsTable">
-								<property name="columnCount">
-									<number>6</number>
-								</property>
-								<property name="rowCount">
-									<number>0</number>
-								</property>
-								<property name="selectionBehavior">
-									<enum>QAbstractItemView::SelectRows</enum>
-								</property>
-								<property name="showGrid">
-									<bool>false</bool>
-								</property>
-								<attribute name="horizontalHeaderStretchLastSection">
-									<bool>true</bool>
-								</attribute>
-
-								<column>
-									<property name="text">
-										<string>Truck</string>
-									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Template</string>
-									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Assigned On</string>
-									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Assigned By</string>
-									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Status</string>
-									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Actions</string>
-									</property>
-								</column>
-							</widget>
-						</item>
-
-						<item>
-							<widget class="QWidget" name="paginationContainer" native="true">
-								<layout class="QHBoxLayout" name="paginationLayout">
+								<layout class="QHBoxLayout" name="toolbarLayout">
 									<property name="leftMargin">
-										<number>0</number>
+										<number>14</number>
 									</property>
 									<property name="topMargin">
-										<number>0</number>
+										<number>12</number>
 									</property>
 									<property name="rightMargin">
-										<number>0</number>
+										<number>14</number>
 									</property>
 									<property name="bottomMargin">
-										<number>0</number>
+										<number>12</number>
 									</property>
 									<property name="spacing">
-										<number>8</number>
+										<number>12</number>
 									</property>
 
 									<item>
-										<widget class="QLabel" name="paginationLabel">
-											<property name="text">
-												<string>Showing 1 to 4 of 12 assignments</string>
-											</property>
-										</widget>
-									</item>
-
-									<item>
-										<spacer name="paginationSpacer">
+										<spacer name="toolbarSpacer">
 											<property name="orientation">
 												<enum>Qt::Horizontal</enum>
 											</property>
@@ -187,30 +99,9 @@
 									</item>
 
 									<item>
-										<widget class="QPushButton" name="pageButton">
+										<widget class="QPushButton" name="assignTemplateButton">
 											<property name="text">
-												<string>&lt;</string>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<widget class="QPushButton" name="activePageButton">
-											<property name="text">
-												<string>1</string>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<widget class="QPushButton" name="pageButton_2">
-											<property name="text">
-												<string>2</string>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<widget class="QPushButton" name="pageButton_3">
-											<property name="text">
-												<string>&gt;</string>
+												<string>+ Assign Template</string>
 											</property>
 										</widget>
 									</item>
@@ -218,11 +109,181 @@
 							</widget>
 						</item>
 
+						<item>
+							<widget class="QWidget" name="tableCard" native="true">
+								<property name="maximumSize">
+									<size>
+										<width>16777215</width>
+										<height>600</height>
+									</size>
+								</property>
+
+								<layout class="QVBoxLayout" name="tableCardLayout">
+									<property name="leftMargin">
+										<number>12</number>
+									</property>
+									<property name="topMargin">
+										<number>12</number>
+									</property>
+									<property name="rightMargin">
+										<number>12</number>
+									</property>
+									<property name="bottomMargin">
+										<number>12</number>
+									</property>
+									<property name="spacing">
+										<number>10</number>
+									</property>
+
+									<item>
+										<widget class="QTableWidget" name="assignmentsTable">
+											<property name="minimumSize">
+												<size>
+													<width>0</width>
+													<height>440</height>
+												</size>
+											</property>
+											<property name="columnCount">
+												<number>5</number>
+											</property>
+											<property name="rowCount">
+												<number>0</number>
+											</property>
+											<property name="selectionBehavior">
+												<enum>QAbstractItemView::SelectRows</enum>
+											</property>
+											<property name="showGrid">
+												<bool>false</bool>
+											</property>
+											<attribute name="horizontalHeaderStretchLastSection">
+												<bool>true</bool>
+											</attribute>
+
+											<column>
+												<property name="text">
+													<string>Truck</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Template</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Assigned By</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Assigned On</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Status</string>
+												</property>
+											</column>
+										</widget>
+									</item>
+
+									<item>
+										<widget class="QWidget" name="paginationContainer" native="true">
+											<property name="styleSheet">
+												<string notr="true"/>
+											</property>
+
+											<layout class="QHBoxLayout" name="paginationLayout">
+												<property name="leftMargin">
+													<number>0</number>
+												</property>
+												<property name="topMargin">
+													<number>0</number>
+												</property>
+												<property name="rightMargin">
+													<number>0</number>
+												</property>
+												<property name="bottomMargin">
+													<number>0</number>
+												</property>
+												<property name="spacing">
+													<number>8</number>
+												</property>
+
+												<item>
+													<widget class="QLabel" name="paginationLabel">
+														<property name="text">
+															<string>Showing 0 to 0 of 0 assignments</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<spacer name="paginationSpacer">
+														<property name="orientation">
+															<enum>Qt::Horizontal</enum>
+														</property>
+													</spacer>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="pageButton">
+														<property name="text">
+															<string>&lt;</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="activePageButton">
+														<property name="text">
+															<string>1</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="pageButton_2">
+														<property name="text">
+															<string>2</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="pageButton_3">
+														<property name="text">
+															<string>&gt;</string>
+														</property>
+													</widget>
+												</item>
+											</layout>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+
+						<item>
+							<spacer name="bottomSpacer">
+								<property name="orientation">
+									<enum>Qt::Vertical</enum>
+								</property>
+								<property name="sizeType">
+									<enum>QSizePolicy::Expanding</enum>
+								</property>
+							</spacer>
+						</item>
 					</layout>
 				</widget>
 			</item>
 		</layout>
 	</widget>
+
 	<resources/>
 	<connections/>
 </ui>

@@ -1833,7 +1833,117 @@ QPushButton#activePageButton {
 )";
 }
 
-QString Theme::assignmentsPageStyle(AppTheme theme) { return truckPageStyle(theme); }
+QString Theme::assignmentsPageStyle(AppTheme theme)
+{
+    if (theme == AppTheme::Light) {
+        return dataPageStyle(theme) + R"(
+
+QWidget#AssignmentsPageClass {
+    background-color: #F4F7FB;
+}
+
+QWidget#pageContainer,
+QWidget#toolbarContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+}
+
+QLabel#pageTitle {
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel {
+    color: #64748B;
+    font-size: 12px;
+}
+
+QPushButton#assignTemplateButton {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+}
+
+QWidget#paginationContainer {
+    background-color: #FFFFFF;
+    border: none;
+}
+
+QLabel#paginationLabel {
+    background-color: transparent;
+    color: #475569;
+}
+
+QPushButton#activePageButton {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+}
+
+)";
+    }
+
+    return dataPageStyle(theme) + R"(
+
+QWidget#AssignmentsPageClass {
+    background-color: #050B14;
+}
+
+QWidget#pageContainer,
+QWidget#toolbarContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard {
+    background-color: #0B1626;
+    border: 1px solid #263A57;
+    border-radius: 12px;
+}
+
+QLabel#pageTitle {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel {
+    color: #94A3B8;
+    font-size: 12px;
+}
+
+QPushButton#assignTemplateButton {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+}
+
+QWidget#paginationContainer {
+    background-color: #0B1626;
+    border: none;
+}
+
+QLabel#paginationLabel {
+    background-color: transparent;
+    color: #CBD5E1;
+}
+
+QPushButton#activePageButton {
+    background-color: #1D4ED8;
+    color: #FFFFFF;
+    border: none;
+}
+
+)";
+}
+
 QString Theme::myTruckStockPageStyle(AppTheme theme) { return truckPageStyle(theme); }
 QString Theme::lowStockAlertsPageStyle(AppTheme theme) { return truckPageStyle(theme); }
 QString Theme::receiptsPageStyle(AppTheme theme) { return truckPageStyle(theme); }

@@ -13,8 +13,6 @@ class AssignmentsPage : public QWidget
     Q_OBJECT
 
 public:
-
-    void applyTheme(Theme::AppTheme theme);
     explicit AssignmentsPage(
         TruckStockService* truckStockService,
         UserService* userService,
@@ -24,6 +22,10 @@ public:
     ~AssignmentsPage();
 
     void refreshAssignments();
+
+    void applyTheme(
+        Theme::AppTheme theme
+    );
 
 private slots:
     void onAssignTemplateClicked();
@@ -44,6 +46,8 @@ private:
     int pageSize = 10;
 
     void setupConnections();
+    void setupTable();
+
     void loadAssignments();
     void populateTable();
     void updatePagination();

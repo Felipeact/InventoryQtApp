@@ -2,12 +2,15 @@
 #include "Theme.h"
 #include "AssignTemplateDialog.h"
 
+#include <algorithm>
+
+#include <QAbstractItemView>
+#include <QFrame>
 #include <QHeaderView>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-#include <algorithm>
 
 AssignmentsPage::AssignmentsPage(
     TruckStockService* truckStockService,
@@ -20,6 +23,9 @@ AssignmentsPage::AssignmentsPage(
 {
     ui.setupUi(this);
 
+    applyTheme(Theme::AppTheme::Dark);
+
+    setupTable();
     setupConnections();
     loadAssignments();
 }
@@ -30,27 +36,80 @@ AssignmentsPage::~AssignmentsPage()
 
 void AssignmentsPage::setupConnections()
 {
-    connect(ui.assignTemplateButton, &QPushButton::clicked,
-        this, &AssignmentsPage::onAssignTemplateClicked);
+    connect(
+        ui.assignTemplateButton,
+        &QPushButton::clicked,
+        this,
+        &AssignmentsPage::onAssignTemplateClicked
+    );
 
-    connect(ui.pageButton, &QPushButton::clicked,
-        this, &AssignmentsPage::onPreviousPageClicked);
+    connect(
+        ui.pageButton,
+        &QPushButton::clicked,
+        this,
+        &AssignmentsPage::onPreviousPageClicked
+    );
 
-    connect(ui.pageButton_3, &QPushButton::clicked,
-        this, &AssignmentsPage::onNextPageClicked);
+    connect(
+        ui.pageButton_3,
+        &QPushButton::clicked,
+        this,
+        &AssignmentsPage::onNextPageClicked
+    );
 
-    connect(ui.pageButton_2, &QPushButton::clicked,
-        this, &AssignmentsPage::onPage2Clicked);
+    connect(
+        ui.pageButton_2,
+        &QPushButton::clicked,
+        this,
+        &AssignmentsPage::onPage2Clicked
+    );
+}
+
+void AssignmentsPage::setupTable()
+{
+    ui.assignmentsTable->setColumnCount(5);
+
+    ui.assignmentsTable->setHorizontalHeaderLabels(
+        QStringList()
+        << "Truck"
+        << "Template"
+        << "Assigned By"
+        << "Assigned On"
+        << "Status"
+    );
+
+    ui.assignmentsTable->verticalHeader()->setVisible(false);
+    ui.assignmentsTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui.assignmentsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui.assignmentsTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui.assignmentsTable->setShowGrid(false);
+    ui.assignmentsTable->setFrameShape(QFrame::NoFrame);
+    ui.assignmentsTable->setFocusPolicy(Qt::NoFocus);
+    ui.assignmentsTable->setAlternatingRowColors(false);
+    ui.assignmentsTable->viewport()->setAutoFillBackground(false);
+
+    ui.assignmentsTable->horizontalHeader()->setHighlightSections(false);
+    ui.assignmentsTable->horizontalHeader()->setDefaultAlignment(
+        Qt::AlignLeft | Qt::AlignVCenter
+    );
+
+    ui.assignmentsTable->horizontalHeader()->setFixedHeight(48);
+    ui.assignmentsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    ui.assignmentsTable->verticalHeader()->setDefaultSectionSize(52);
+
+    ui.assignmentsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui.assignmentsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void AssignmentsPage::loadAssignments()
 {
-    ui.assignmentsTable->clearContents();
-
     if (!truckStockService) {
         currentAssignments.clear();
+
         populateTable();
         updatePagination();
+
         return;
     }
 
@@ -61,9 +120,6 @@ void AssignmentsPage::loadAssignments()
 
     populateTable();
     updatePagination();
-
-    ui.assignmentsTable->horizontalHeader()->setStretchLastSection(true);
-    ui.assignmentsTable->verticalHeader()->setVisible(false);
 }
 
 void AssignmentsPage::refreshAssignments()
@@ -74,7 +130,6 @@ void AssignmentsPage::refreshAssignments()
 void AssignmentsPage::populateTable()
 {
     ui.assignmentsTable->clearContents();
-    ui.assignmentsTable->setColumnCount(5);
 
     int totalItems =
         static_cast<int>(currentAssignments.size());
@@ -90,7 +145,7 @@ void AssignmentsPage::populateTable()
 
     ui.assignmentsTable->setRowCount(rowCount);
 
-    for (int row = 0; row < rowCount; ++row) {
+    for (int row = 0; row < rowCount; row++) {
         const TruckAssignmentDto& assignment =
             currentAssignments[startIndex + row];
 
@@ -265,10 +320,11 @@ void AssignmentsPage::onPage2Clicked()
     }
 }
 
-void AssignmentsPage::applyTheme(Theme::AppTheme theme)
+void AssignmentsPage::applyTheme(
+    Theme::AppTheme theme
+)
 {
     setStyleSheet(
-        Theme::truckPageStyle(theme)
+        Theme::assignmentsPageStyle(theme)
     );
 }
-
