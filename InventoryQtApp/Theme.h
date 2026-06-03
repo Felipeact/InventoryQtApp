@@ -35,7 +35,7 @@ public:
     static QString assetsPageStyle(AppTheme theme);
     static QString usersPageStyle(AppTheme theme);
 
-    static QString truckDashboardStyle(AppTheme theme);
+    static QString truckStockDashboardPageStyle(AppTheme theme);
     static QString trucksPageStyle(AppTheme theme);
     static QString templatesPageStyle(AppTheme theme);
     static QString assignmentsPageStyle(AppTheme theme);

@@ -1565,7 +1565,442 @@ QPushButton#activePageButton {
 )";
 }
 
-QString Theme::truckDashboardStyle(AppTheme theme) { return truckPageStyle(theme); }
+QString Theme::truckStockDashboardPageStyle(AppTheme theme)
+{
+    if (theme == AppTheme::Light) {
+        return R"(
+
+* {
+    font-family: "Segoe UI";
+    font-size: 13px;
+}
+
+QWidget#TruckStockDashboardPageClass {
+    background-color: #F4F7FB;
+    color: #111827;
+}
+
+QLabel {
+    background-color: transparent;
+    border: none;
+    color: #111827;
+}
+
+QLabel#pageTitle {
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#subtitleLabel {
+    color: #64748B;
+    font-size: 12px;
+}
+
+QWidget#metricCard1,
+QWidget#metricCard2,
+QWidget#metricCard3,
+QWidget#metricCard4,
+QWidget#itemSummaryCard,
+QWidget#assetSummaryCard,
+QWidget#recentItemsCard,
+QWidget#lowStockCard {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+}
+
+QWidget#miniSummaryBox1,
+QWidget#miniSummaryBox2,
+QWidget#miniSummaryBox3,
+QWidget#miniSummaryBox4 {
+    background-color: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+}
+
+QWidget#metricCard1 QLabel,
+QWidget#metricCard2 QLabel,
+QWidget#metricCard3 QLabel,
+QWidget#metricCard4 QLabel,
+QWidget#itemSummaryCard QLabel,
+QWidget#assetSummaryCard QLabel,
+QWidget#recentItemsCard QLabel,
+QWidget#lowStockCard QLabel,
+QWidget#miniSummaryBox1 QLabel,
+QWidget#miniSummaryBox2 QLabel,
+QWidget#miniSummaryBox3 QLabel,
+QWidget#miniSummaryBox4 QLabel {
+    background-color: transparent;
+    border: none;
+}
+
+QLabel#metricTitle1,
+QLabel#metricTitle2,
+QLabel#metricTitle3,
+QLabel#metricTitle4,
+QLabel#summarySmallLabel1,
+QLabel#summarySmallLabel2,
+QLabel#summarySmallLabel3,
+QLabel#summarySmallLabel4 {
+    color: #64748B;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QLabel#metricValue1,
+QLabel#metricValue2,
+QLabel#metricValue3,
+QLabel#metricValue4,
+QLabel#summaryValue1,
+QLabel#summaryValue2,
+QLabel#summaryValue3,
+QLabel#summaryValue4 {
+    color: #111827;
+    font-size: 26px;
+    font-weight: 900;
+}
+
+QLabel#positiveLabel1,
+QLabel#positiveLabel2,
+QLabel#positiveLabel3,
+QLabel#summaryPositive1,
+QLabel#summaryPositive2 {
+    color: #16A34A;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QLabel#negativeLabel1,
+QLabel#summaryNegative1,
+QLabel#summaryNegative2 {
+    color: #DC2626;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QLabel#cardTitle1,
+QLabel#cardTitle2,
+QLabel#cardTitle3,
+QLabel#cardTitle4 {
+    color: #111827;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+QWidget#blueIconBox,
+QWidget#blueIconBox2 {
+    background-color: #DBEAFE;
+    border: none;
+    border-radius: 10px;
+}
+
+QWidget#greenIconBox {
+    background-color: #DCFCE7;
+    border: none;
+    border-radius: 10px;
+}
+
+QWidget#orangeIconBox {
+    background-color: #FFEDD5;
+    border: none;
+    border-radius: 10px;
+}
+
+QLabel#blueIconLabel,
+QLabel#blueIconLabel2 {
+    color: #2563EB;
+    font-size: 22px;
+}
+
+QLabel#greenIconLabel {
+    color: #16A34A;
+    font-size: 22px;
+}
+
+QLabel#orangeIconLabel {
+    color: #EA580C;
+    font-size: 22px;
+}
+
+QLabel#blueSparkline {
+    color: #2563EB;
+    font-size: 18px;
+}
+
+QLabel#orangeSparkline {
+    color: #EA580C;
+    font-size: 18px;
+}
+
+QLabel#greenSparkline {
+    color: #16A34A;
+    font-size: 18px;
+}
+
+QLabel#redSparkline {
+    color: #DC2626;
+    font-size: 18px;
+}
+
+QPushButton#viewAllItemsButton,
+QPushButton#viewAllLowStockButton {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    color: #2563EB;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-weight: 700;
+}
+
+QPushButton#viewAllItemsButton:hover,
+QPushButton#viewAllLowStockButton:hover {
+    background-color: #DBEAFE;
+}
+
+QTableWidget {
+    background-color: transparent;
+    border: none;
+    color: #111827;
+    gridline-color: transparent;
+    outline: none;
+}
+
+QTableWidget::item {
+    background-color: transparent;
+    border-bottom: 1px solid #E2E8F0;
+    padding-left: 8px;
+}
+
+QHeaderView::section {
+    background-color: transparent;
+    color: #64748B;
+    border: none;
+    border-bottom: 1px solid #E2E8F0;
+    padding-left: 8px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+)";
+    }
+
+    return R"(
+
+* {
+    font-family: "Segoe UI";
+    font-size: 13px;
+}
+
+QWidget#TruckStockDashboardPageClass {
+    background-color: #050B14;
+    color: #FFFFFF;
+}
+
+QLabel {
+    background-color: transparent;
+    border: none;
+    color: #FFFFFF;
+}
+
+QLabel#pageTitle {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#subtitleLabel {
+    color: #94A3B8;
+    font-size: 12px;
+}
+
+QWidget#metricCard1,
+QWidget#metricCard2,
+QWidget#metricCard3,
+QWidget#metricCard4,
+QWidget#itemSummaryCard,
+QWidget#assetSummaryCard,
+QWidget#recentItemsCard,
+QWidget#lowStockCard {
+    background-color: #0B1626;
+    border: 1px solid #263A57;
+    border-radius: 12px;
+}
+
+QWidget#miniSummaryBox1,
+QWidget#miniSummaryBox2,
+QWidget#miniSummaryBox3,
+QWidget#miniSummaryBox4 {
+    background-color: #0B1626;
+    border: 1px solid #1F2E45;
+    border-radius: 10px;
+}
+
+QWidget#metricCard1 QLabel,
+QWidget#metricCard2 QLabel,
+QWidget#metricCard3 QLabel,
+QWidget#metricCard4 QLabel,
+QWidget#itemSummaryCard QLabel,
+QWidget#assetSummaryCard QLabel,
+QWidget#recentItemsCard QLabel,
+QWidget#lowStockCard QLabel,
+QWidget#miniSummaryBox1 QLabel,
+QWidget#miniSummaryBox2 QLabel,
+QWidget#miniSummaryBox3 QLabel,
+QWidget#miniSummaryBox4 QLabel {
+    background-color: transparent;
+    border: none;
+}
+
+QLabel#metricTitle1,
+QLabel#metricTitle2,
+QLabel#metricTitle3,
+QLabel#metricTitle4,
+QLabel#summarySmallLabel1,
+QLabel#summarySmallLabel2,
+QLabel#summarySmallLabel3,
+QLabel#summarySmallLabel4 {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QLabel#metricValue1,
+QLabel#metricValue2,
+QLabel#metricValue3,
+QLabel#metricValue4,
+QLabel#summaryValue1,
+QLabel#summaryValue2,
+QLabel#summaryValue3,
+QLabel#summaryValue4 {
+    color: #FFFFFF;
+    font-size: 26px;
+    font-weight: 900;
+}
+
+QLabel#positiveLabel1,
+QLabel#positiveLabel2,
+QLabel#positiveLabel3,
+QLabel#summaryPositive1,
+QLabel#summaryPositive2 {
+    color: #22C55E;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QLabel#negativeLabel1,
+QLabel#summaryNegative1,
+QLabel#summaryNegative2 {
+    color: #F87171;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QLabel#cardTitle1,
+QLabel#cardTitle2,
+QLabel#cardTitle3,
+QLabel#cardTitle4 {
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 800;
+}
+
+QWidget#blueIconBox,
+QWidget#blueIconBox2 {
+    background-color: #1E3A8A;
+    border: none;
+    border-radius: 10px;
+}
+
+QWidget#greenIconBox {
+    background-color: #14532D;
+    border: none;
+    border-radius: 10px;
+}
+
+QWidget#orangeIconBox {
+    background-color: #7C2D12;
+    border: none;
+    border-radius: 10px;
+}
+
+QLabel#blueIconLabel,
+QLabel#blueIconLabel2 {
+    color: #93C5FD;
+    font-size: 22px;
+}
+
+QLabel#greenIconLabel {
+    color: #86EFAC;
+    font-size: 22px;
+}
+
+QLabel#orangeIconLabel {
+    color: #FDBA74;
+    font-size: 22px;
+}
+
+QLabel#blueSparkline {
+    color: #3B82F6;
+    font-size: 18px;
+}
+
+QLabel#orangeSparkline {
+    color: #F97316;
+    font-size: 18px;
+}
+
+QLabel#greenSparkline {
+    color: #22C55E;
+    font-size: 18px;
+}
+
+QLabel#redSparkline {
+    color: #EF4444;
+    font-size: 18px;
+}
+
+QPushButton#viewAllItemsButton,
+QPushButton#viewAllLowStockButton {
+    background-color: #0B1626;
+    border: 1px solid #263A57;
+    color: #60A5FA;
+    border-radius: 8px;
+    padding: 5px 10px;
+    font-weight: 700;
+}
+
+QPushButton#viewAllItemsButton:hover,
+QPushButton#viewAllLowStockButton:hover {
+    background-color: #172033;
+}
+
+QTableWidget {
+    background-color: transparent;
+    border: none;
+    color: #FFFFFF;
+    gridline-color: transparent;
+    outline: none;
+}
+
+QTableWidget::item {
+    background-color: transparent;
+    border-bottom: 1px solid #132238;
+    padding-left: 8px;
+}
+
+QHeaderView::section {
+    background-color: transparent;
+    color: #94A3B8;
+    border: none;
+    border-bottom: 1px solid #1F2E45;
+    padding-left: 8px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+)";
+}
 
 QString Theme::trucksPageStyle(AppTheme theme)
 {
@@ -2312,7 +2747,148 @@ QPushButton#activePageButton {
 )";
 }
 
-QString Theme::receiptsPageStyle(AppTheme theme) { return truckPageStyle(theme); }
+QString Theme::receiptsPageStyle(AppTheme theme)
+{
+    if (theme == AppTheme::Light) {
+        return dataPageStyle(theme) + R"(
+
+QWidget#ReceiptsPageClass {
+    background-color: #F4F7FB;
+}
+
+QWidget#pageContainer,
+QWidget#toolbarContainer,
+QWidget#searchContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+}
+
+QLabel#pageTitle {
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel {
+    color: #64748B;
+    font-size: 12px;
+}
+
+QLineEdit#searchInput,
+QComboBox#statusFilter {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    color: #111827;
+    padding: 0px 12px;
+    min-height: 38px;
+    max-height: 38px;
+}
+
+QPushButton#uploadButton {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+}
+
+QPushButton#approveButton {
+    background-color: #DCFCE7;
+    border: 1px solid #86EFAC;
+    color: #16A34A;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-weight: 800;
+}
+
+QPushButton#approveButton:hover {
+    background-color: #16A34A;
+    color: #FFFFFF;
+}
+
+QPushButton#approveButton:disabled {
+    background-color: #E5E7EB;
+    border: 1px solid #D1D5DB;
+    color: #9CA3AF;
+}
+
+)";
+    }
+
+    return dataPageStyle(theme) + R"(
+
+QWidget#ReceiptsPageClass {
+    background-color: #050B14;
+}
+
+QWidget#pageContainer,
+QWidget#toolbarContainer,
+QWidget#searchContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard {
+    background-color: #0B1626;
+    border: 1px solid #263A57;
+    border-radius: 12px;
+}
+
+QLabel#pageTitle {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel {
+    color: #94A3B8;
+    font-size: 12px;
+}
+
+QLineEdit#searchInput,
+QComboBox#statusFilter {
+    background-color: #050B14;
+    border: 1px solid #263A57;
+    border-radius: 8px;
+    color: #CBD5E1;
+    padding: 0px 12px;
+    min-height: 38px;
+    max-height: 38px;
+}
+
+QPushButton#uploadButton {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+}
+
+QPushButton#approveButton {
+    background-color: #052E16;
+    border: 1px solid #166534;
+    color: #22C55E;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-weight: 800;
+}
+
+QPushButton#approveButton:hover {
+    background-color: #16A34A;
+    color: #FFFFFF;
+}
+
+QPushButton#approveButton:disabled {
+    background-color: #111827;
+    border: 1px solid #374151;
+    color: #6B7280;
+}
+
+)";
+}
 
 QString Theme::dataPageStyle(AppTheme theme)
 {
