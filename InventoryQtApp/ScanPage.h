@@ -17,15 +17,17 @@ class ScanPage : public QWidget
     Q_OBJECT
 
 public:
-
-    void applyTheme(Theme::AppTheme theme);
-    ScanPage(
+    explicit ScanPage(
         ProductService& productService,
         ScanMode mode,
         QWidget* parent = nullptr
     );
 
     ~ScanPage();
+
+    void applyTheme(
+        Theme::AppTheme theme
+    );
 
 signals:
     void stockChanged();

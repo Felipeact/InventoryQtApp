@@ -1,7 +1,6 @@
 ﻿#include "ScanPage.h"
 
 #include <QDateTime>
-#include "Theme.h"
 #include <QPushButton>
 
 ScanPage::ScanPage(
@@ -15,16 +14,30 @@ ScanPage::ScanPage(
 {
     ui.setupUi(this);
 
+    applyTheme(Theme::AppTheme::Dark);
+
     setupPage();
 
-    connect(ui.submitButton, &QPushButton::clicked,
-        this, &ScanPage::onSubmitClicked);
+    connect(
+        ui.submitButton,
+        &QPushButton::clicked,
+        this,
+        &ScanPage::onSubmitClicked
+    );
 
-    connect(ui.minusButton, &QPushButton::clicked,
-        this, &ScanPage::onMinusClicked);
+    connect(
+        ui.minusButton,
+        &QPushButton::clicked,
+        this,
+        &ScanPage::onMinusClicked
+    );
 
-    connect(ui.plusButton, &QPushButton::clicked,
-        this, &ScanPage::onPlusClicked);
+    connect(
+        ui.plusButton,
+        &QPushButton::clicked,
+        this,
+        &ScanPage::onPlusClicked
+    );
 }
 
 ScanPage::~ScanPage()
@@ -37,25 +50,29 @@ void ScanPage::setupPage()
 
     ui.quantityInput->setMinimum(1);
     ui.quantityInput->setMaximum(999999);
+    ui.quantityInput->setValue(1);
 
     if (mode == ScanMode::ScanIn) {
-        ui.titleLabel->setText("Scan In");
+        ui.titleLabel->setText("Scan Item");
         ui.pageTitleLabel->setText("Scan In");
         ui.breadcrumbLabel->setText("Dashboard  >  Scan In");
-        ui.submitButton->setText("Add Stock");
+        ui.submitButton->setText("⟳  Add Stock");
     }
     else {
-        ui.titleLabel->setText("Scan Out");
+        ui.titleLabel->setText("Scan Item");
         ui.pageTitleLabel->setText("Scan Out");
         ui.breadcrumbLabel->setText("Dashboard  >  Scan Out");
-        ui.submitButton->setText("Remove Stock");
+        ui.submitButton->setText("⟳  Remove Stock");
     }
 }
 
 void ScanPage::onSubmitClicked()
 {
-    QString barcode = ui.barcodeInput->text().trimmed();
-    int quantity = ui.quantityInput->value();
+    QString barcode =
+        ui.barcodeInput->text().trimmed();
+
+    int quantity =
+        ui.quantityInput->value();
 
     if (barcode.isEmpty()) {
         ui.statusLabel->setText("Barcode is required.");
@@ -89,6 +106,10 @@ void ScanPage::onSubmitClicked()
             )
         );
 
+    if (productName.trimmed().isEmpty()) {
+        productName = "Unknown Product";
+    }
+
     ui.statusLabel->setText("Stock updated successfully.");
 
     addRecentScan(
@@ -105,7 +126,8 @@ void ScanPage::onSubmitClicked()
 
 void ScanPage::onMinusClicked()
 {
-    int value = ui.quantityInput->value();
+    int value =
+        ui.quantityInput->value();
 
     if (value > ui.quantityInput->minimum()) {
         ui.quantityInput->setValue(value - 1);
@@ -114,7 +136,8 @@ void ScanPage::onMinusClicked()
 
 void ScanPage::onPlusClicked()
 {
-    int value = ui.quantityInput->value();
+    int value =
+        ui.quantityInput->value();
 
     if (value < ui.quantityInput->maximum()) {
         ui.quantityInput->setValue(value + 1);
@@ -127,7 +150,8 @@ void ScanPage::addRecentScan(
     int quantity
 )
 {
-    QString sign = mode == ScanMode::ScanIn ? "+" : "-";
+    QString sign =
+        mode == ScanMode::ScanIn ? "+" : "-";
 
     QString date =
         QDateTime::currentDateTime()
@@ -160,10 +184,11 @@ void ScanPage::addRecentScan(
     ui.recentDateLabel->setText(date);
 }
 
-void ScanPage::applyTheme(Theme::AppTheme theme)
+void ScanPage::applyTheme(
+    Theme::AppTheme theme
+)
 {
     setStyleSheet(
         Theme::scanPageStyle(theme)
     );
 }
-
