@@ -3177,58 +3177,243 @@ QString Theme::dialogStyle(AppTheme theme)
 {
     if (theme == AppTheme::Light) {
         return R"(
-QDialog, QWidget {
-    background-color: #F4F7FB;
+
+QDialog {
+    background-color: transparent;
     color: #111827;
+    font-family: "Segoe UI";
+    font-size: 13px;
 }
 
-QFrame, QWidget#dialogCard, QWidget#formCard, QWidget#card {
+QWidget#dialogCard {
+    background-color: #FFFFFF;
+    border: none;
+}
+
+QWidget#headerContainer {
+    background-color: #2563EB;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    min-height: 48px;
+    max-height: 48px;
+}
+
+QWidget#formContainer,
+QWidget#footerContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QLabel {
+    background-color: transparent;
+    border: none;
+    color: #111827;
+    font-weight: 600;
+}
+
+QLabel#titleLabel {
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+QLabel#statusLabel {
+    color: #DC2626;
+    font-weight: 700;
+}
+
+QLineEdit,
+QComboBox,
+QSpinBox,
+QTextEdit,
+QPlainTextEdit {
     background-color: #FFFFFF;
     border: 1px solid #CBD5E1;
-    border-radius: 12px;
+    border-radius: 6px;
+    color: #111827;
+    padding: 4px 10px;
+    min-height: 28px;
+    max-height: 32px;
 }
 
-QLabel { color: #111827; }
+QLineEdit:focus,
+QComboBox:focus,
+QSpinBox:focus,
+QTextEdit:focus,
+QPlainTextEdit:focus {
+    border: 1px solid #2563EB;
+}
 
-QPushButton#saveButton, QPushButton#submitButton, QPushButton#addButton {
+QPushButton {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 6px;
+    color: #111827;
+    padding: 6px 16px;
+    font-weight: 600;
+    min-width: 100px;
+    min-height: 34px;
+    max-height: 34px;
+}
+
+QPushButton:hover {
+    background-color: #F1F5F9;
+}
+
+QPushButton#saveButton {
     background-color: #2563EB;
-    color: #FFFFFF;
     border: none;
+    color: #FFFFFF;
+}
+
+QPushButton#saveButton:hover {
+    background-color: #1D4ED8;
 }
 
 QPushButton#cancelButton {
     background-color: #FFFFFF;
-    color: #111827;
     border: 1px solid #CBD5E1;
+    color: #111827;
 }
+
+QPushButton#closeButton {
+    background-color: transparent;
+    border: none;
+    color: #FFFFFF;
+    min-width: 28px;
+    max-width: 28px;
+    min-height: 28px;
+    max-height: 28px;
+    padding: 0px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+QPushButton#closeButton:hover {
+    background-color: rgba(255, 255, 255, 0.18);
+}
+
 )";
     }
 
     return R"(
-QDialog, QWidget {
-    background-color: #050B14;
+
+QDialog {
+    background-color: transparent;
     color: #FFFFFF;
+    font-family: "Segoe UI";
+    font-size: 13px;
 }
 
-QFrame, QWidget#dialogCard, QWidget#formCard, QWidget#card {
+QWidget#dialogCard {
     background-color: #0B1626;
     border: 1px solid #263A57;
     border-radius: 12px;
 }
 
-QLabel { color: #FFFFFF; }
+QWidget#headerContainer {
+    background-color: #1D4ED8;
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    min-height: 48px;
+    max-height: 48px;
+}
 
-QPushButton#saveButton, QPushButton#submitButton, QPushButton#addButton {
-    background-color: #2563EB;
-    color: #FFFFFF;
+QWidget#formContainer,
+QWidget#footerContainer {
+    background-color: transparent;
     border: none;
+}
+
+QLabel {
+    background-color: transparent;
+    border: none;
+    color: #FFFFFF;
+    font-weight: 600;
+}
+
+QLabel#titleLabel {
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+QLabel#statusLabel {
+    color: #F87171;
+    font-weight: 700;
+}
+
+QLineEdit,
+QComboBox,
+QSpinBox,
+QTextEdit,
+QPlainTextEdit {
+    background-color: #050B14;
+    border: 1px solid #263A57;
+    border-radius: 6px;
+    color: #FFFFFF;
+    padding: 4px 10px;
+    min-height: 28px;
+    max-height: 32px;
+}
+
+QLineEdit:focus,
+QComboBox:focus,
+QSpinBox:focus,
+QTextEdit:focus,
+QPlainTextEdit:focus {
+    border: 1px solid #3B82F6;
+}
+
+QPushButton {
+    background-color: #0B1626;
+    border: 1px solid #263A57;
+    border-radius: 6px;
+    color: #FFFFFF;
+    padding: 6px 16px;
+    font-weight: 600;
+    min-width: 100px;
+    min-height: 34px;
+    max-height: 34px;
+}
+
+QPushButton:hover {
+    background-color: #172033;
+}
+
+QPushButton#saveButton {
+    background-color: #2563EB;
+    border: none;
+    color: #FFFFFF;
+}
+
+QPushButton#saveButton:hover {
+    background-color: #1D4ED8;
 }
 
 QPushButton#cancelButton {
     background-color: #0B1626;
-    color: #FFFFFF;
     border: 1px solid #263A57;
+    color: #FFFFFF;
 }
+
+QPushButton#closeButton {
+    background-color: transparent;
+    border: none;
+    color: #FFFFFF;
+    min-width: 28px;
+    max-width: 28px;
+    min-height: 28px;
+    max-height: 28px;
+    padding: 0px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+QPushButton#closeButton:hover {
+    background-color: rgba(255, 255, 255, 0.14);
+}
+
 )";
 }
 

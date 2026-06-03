@@ -1,117 +1,153 @@
-// AddProductDialog.cpp - Implementation of the product addition dialog
 #include "AddProductDialog.h"
-#include "Theme.h"
 
-// Constructor: initializes the dialog UI and connects signals
+#include <QPushButton>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QComboBox>
+
 AddProductDialog::AddProductDialog(QWidget* parent)
-	: QDialog(parent)
+    : QDialog(parent)
 {
-	ui.setupUi(this);
+    ui.setupUi(this);
 
-	setWindowTitle("Add New Item");
-	setModal(true);
-	resize(520, 420);
-	setMinimumSize(520, 420);
+    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
 
-	ui.statusLabel->setText("");
+    applyTheme(Theme::AppTheme::Dark);
 
-	ui.quantityInput->setMinimum(0);
-	ui.quantityInput->setMaximum(999999);
+    setWindowTitle("Add New Item");
+    setModal(true);
 
-	connect(ui.saveButton, &QPushButton::clicked,
-		this, &AddProductDialog::onSaveButtonClicked);
+    resize(700, 380);
+    setMinimumSize(700, 380);
+    setMaximumSize(700, 380);
 
-	connect(ui.cancelButton, &QPushButton::clicked,
-		this, &AddProductDialog::onCancelButtonClicked);
+    ui.statusLabel->setText("");
 
-	connect(ui.closeButton, &QPushButton::clicked,
-		this, &AddProductDialog::onCloseButtonClicked);
+    ui.quantityInput->setMinimum(0);
+    ui.quantityInput->setMaximum(999999);
 
+    connect(
+        ui.saveButton,
+        &QPushButton::clicked,
+        this,
+        &AddProductDialog::onSaveButtonClicked
+    );
+
+    connect(
+        ui.cancelButton,
+        &QPushButton::clicked,
+        this,
+        &AddProductDialog::onCancelButtonClicked
+    );
+
+    connect(
+        ui.closeButton,
+        &QPushButton::clicked,
+        this,
+        &AddProductDialog::onCloseButtonClicked
+    );
 }
 
-// Destructor
 AddProductDialog::~AddProductDialog()
 {
 }
 
-// Retrieves the product name from the input field
 QString AddProductDialog::getProductName() const
 {
-	return ui.productNameInput->text().trimmed();
+    return ui.productNameInput->text().trimmed();
 }
 
-// Retrieves the barcode from the input field
 QString AddProductDialog::getBarcode() const
 {
-	return ui.barcodeInput->text().trimmed();
+    return ui.barcodeInput->text().trimmed();
 }
 
-// Retrieves the quantity from the spin box
 int AddProductDialog::getQuantity() const
 {
-	return ui.quantityInput->value();
+    return ui.quantityInput->value();
 }
 
-// Validates product data and accepts the dialog if valid
 void AddProductDialog::onSaveButtonClicked()
 {
-	if (getProductName().isEmpty()) {
-		ui.statusLabel->setText("Product name is required.");
-		return;
-	}
+    if (viewMode) {
+        reject();
+        return;
+    }
 
-	if (getBarcode().isEmpty()) {
-		ui.statusLabel->setText("Barcode is required.");
-		return;
-	}
+    if (getProductName().isEmpty()) {
+        ui.statusLabel->setText("Product name is required.");
+        return;
+    }
 
-	accept();
+    if (getBarcode().isEmpty()) {
+        ui.statusLabel->setText("Barcode is required.");
+        return;
+    }
+
+    accept();
 }
 
-// Rejects the dialog without saving
 void AddProductDialog::onCancelButtonClicked()
 {
-	reject();
+    reject();
 }
 
-// Closes the dialog by rejecting it
 void AddProductDialog::onCloseButtonClicked()
 {
-	reject();
+    reject();
 }
 
-void AddProductDialog::setProductData(const QString& name, const QString& barcode, int quantity)
+void AddProductDialog::setProductData(
+    const QString& name,
+    const QString& barcode,
+    int quantity
+)
 {
-	ui.productNameInput->setText(name);
-	ui.barcodeInput->setText(barcode);
-	ui.quantityInput->setValue(quantity);
+    viewMode = false;
 
-	setWindowTitle("Edit Product");
-	ui.titleLabel->setText("Edit Product");
-	ui.saveButton->setText("Save");
+    ui.productNameInput->setText(name);
+    ui.barcodeInput->setText(barcode);
+    ui.quantityInput->setValue(quantity);
+
+    ui.productNameInput->setReadOnly(false);
+    ui.barcodeInput->setReadOnly(false);
+    ui.quantityInput->setEnabled(true);
+
+    ui.titleLabel->setText("Edit Product");
+    ui.saveButton->setText("Save");
+    ui.saveButton->show();
+    ui.cancelButton->setText("Cancel");
+
+    setWindowTitle("Edit Product");
 }
 
-void AddProductDialog::setViewMode(const QString& name, const QString& barcode, int quantity)
+void AddProductDialog::setViewMode(
+    const QString& name,
+    const QString& barcode,
+    int quantity
+)
 {
-	ui.productNameInput->setText(name);
-	ui.barcodeInput->setText(barcode);
-	ui.quantityInput->setValue(quantity);
+    viewMode = true;
 
-	ui.productNameInput->setReadOnly(true);
-	ui.barcodeInput->setReadOnly(true);
-	ui.quantityInput->setEnabled(false);
+    ui.productNameInput->setText(name);
+    ui.barcodeInput->setText(barcode);
+    ui.quantityInput->setValue(quantity);
 
-	ui.titleLabel->setText("Product Details");
-	ui.saveButton->hide();
-	ui.cancelButton->setText("Close");
+    ui.productNameInput->setReadOnly(true);
+    ui.barcodeInput->setReadOnly(true);
+    ui.quantityInput->setEnabled(false);
 
-	setWindowTitle("Product Details");
+    ui.titleLabel->setText("Product Details");
+    ui.saveButton->hide();
+    ui.cancelButton->setText("Close");
+
+    setWindowTitle("Product Details");
 }
 
 void AddProductDialog::applyTheme(Theme::AppTheme theme)
 {
-	setStyleSheet(
-		Theme::dialogStyle(theme)
-	);
+    setStyleSheet(
+        Theme::dialogStyle(theme)
+    );
 }
-

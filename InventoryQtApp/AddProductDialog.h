@@ -1,40 +1,43 @@
-// AddProductDialog.h - Dialog for adding new products to the inventory
 #pragma once
 
 #include <QDialog>
+#include <QString>
+
 #include "ui_AddProductDialog.h"
 #include "Theme.h"
 
-// Dialog window for collecting product information when adding new items
 class AddProductDialog : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
+    explicit AddProductDialog(QWidget* parent = nullptr);
+    ~AddProductDialog();
 
-	void applyTheme(Theme::AppTheme theme);
-	// Constructor
-	AddProductDialog(QWidget* parent = nullptr);
-	// Destructor
-	~AddProductDialog();
+    void applyTheme(Theme::AppTheme theme);
 
-	// Getters for product information
-	QString getProductName() const;  // Returns trimmed product name
-	QString getBarcode() const;      // Returns trimmed barcode
-	int getQuantity() const;         // Returns product quantity
+    QString getProductName() const;
+    QString getBarcode() const;
+    int getQuantity() const;
 
-	void setProductData(const QString& name, const QString& barcode, int quantity);
-	void setViewMode(const QString& name, const QString& barcode, int quantity);
+    void setProductData(
+        const QString& name,
+        const QString& barcode,
+        int quantity
+    );
+
+    void setViewMode(
+        const QString& name,
+        const QString& barcode,
+        int quantity
+    );
 
 private slots:
-	// Slot handlers for button clicks
-	void onSaveButtonClicked();   // Validates input and accepts dialog
-	void onCancelButtonClicked(); // Rejects dialog without saving
-	void onCloseButtonClicked();  // Closes dialog
+    void onSaveButtonClicked();
+    void onCancelButtonClicked();
+    void onCloseButtonClicked();
 
 private:
-	Ui::AddProductDialogClass ui;
-
-
+    Ui::AddProductDialogClass ui;
+    bool viewMode = false;
 };
-
