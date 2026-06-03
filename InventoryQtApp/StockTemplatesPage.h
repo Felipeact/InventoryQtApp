@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QString>
 #include <vector>
+#include <string>
 
 #include "ui_StockTemplatesPage.h"
 #include "TruckStockService.h"
@@ -13,12 +14,18 @@ class StockTemplatesPage : public QWidget
     Q_OBJECT
 
 public:
+    explicit StockTemplatesPage(
+        TruckStockService* truckStockService,
+        QWidget* parent = nullptr
+    );
 
-    void applyTheme(Theme::AppTheme theme);
-    StockTemplatesPage(TruckStockService* truckStockService, QWidget* parent = nullptr);
     ~StockTemplatesPage();
 
     void refreshTemplatesList();
+
+    void applyTheme(
+        Theme::AppTheme theme
+    );
 
 private slots:
     void onNewTemplateClicked();
@@ -40,13 +47,27 @@ private:
     int pageSize = 10;
 
     void setupConnections();
+    void setupTable();
+
     void loadTemplates();
     void filterTemplates();
     void populateTable();
     void updatePagination();
 
-    void addActionButtons(int row, const std::string& templateId);
-    void onViewTemplateClicked(const std::string& templateId);
-    void onEditTemplateClicked(const std::string& templateId);
-    void onDeleteTemplateClicked(const std::string& templateId);
+    void addActionButtons(
+        int row,
+        const std::string& templateId
+    );
+
+    void onViewTemplateClicked(
+        const std::string& templateId
+    );
+
+    void onEditTemplateClicked(
+        const std::string& templateId
+    );
+
+    void onDeleteTemplateClicked(
+        const std::string& templateId
+    );
 };

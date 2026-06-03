@@ -2,15 +2,18 @@
 #include "Theme.h"
 #include "AddEditTemplateDialog.h"
 
+#include <algorithm>
+
+#include <QAbstractItemView>
+#include <QFrame>
 #include <QHeaderView>
+#include <QHBoxLayout>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-#include <QHBoxLayout>
 #include <QWidget>
-#include <algorithm>
 
 StockTemplatesPage::StockTemplatesPage(
     TruckStockService* truckStockService,
@@ -20,6 +23,10 @@ StockTemplatesPage::StockTemplatesPage(
     truckStockService(truckStockService)
 {
     ui.setupUi(this);
+
+    applyTheme(Theme::AppTheme::Dark);
+
+    setupTable();
     setupConnections();
     loadTemplates();
 }
@@ -30,20 +37,78 @@ StockTemplatesPage::~StockTemplatesPage()
 
 void StockTemplatesPage::setupConnections()
 {
-    connect(ui.newTemplateButton, &QPushButton::clicked,
-        this, &StockTemplatesPage::onNewTemplateClicked);
+    connect(
+        ui.newTemplateButton,
+        &QPushButton::clicked,
+        this,
+        &StockTemplatesPage::onNewTemplateClicked
+    );
 
-    connect(ui.searchInput, &QLineEdit::textChanged,
-        this, &StockTemplatesPage::onSearchChanged);
+    connect(
+        ui.searchInput,
+        &QLineEdit::textChanged,
+        this,
+        &StockTemplatesPage::onSearchChanged
+    );
 
-    connect(ui.pageButton, &QPushButton::clicked,
-        this, &StockTemplatesPage::onPreviousPageClicked);
+    connect(
+        ui.pageButton,
+        &QPushButton::clicked,
+        this,
+        &StockTemplatesPage::onPreviousPageClicked
+    );
 
-    connect(ui.pageButton_3, &QPushButton::clicked,
-        this, &StockTemplatesPage::onNextPageClicked);
+    connect(
+        ui.pageButton_3,
+        &QPushButton::clicked,
+        this,
+        &StockTemplatesPage::onNextPageClicked
+    );
 
-    connect(ui.pageButton_2, &QPushButton::clicked,
-        this, &StockTemplatesPage::onPage2Clicked);
+    connect(
+        ui.pageButton_2,
+        &QPushButton::clicked,
+        this,
+        &StockTemplatesPage::onPage2Clicked
+    );
+}
+
+void StockTemplatesPage::setupTable()
+{
+    ui.templatesTable->setColumnCount(4);
+
+    ui.templatesTable->setHorizontalHeaderLabels(
+        QStringList()
+        << "Template Name"
+        << "Trade Type"
+        << "Items"
+        << "Actions"
+    );
+
+    ui.templatesTable->verticalHeader()->setVisible(false);
+    ui.templatesTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui.templatesTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui.templatesTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui.templatesTable->setShowGrid(false);
+    ui.templatesTable->setFrameShape(QFrame::NoFrame);
+    ui.templatesTable->setFocusPolicy(Qt::NoFocus);
+    ui.templatesTable->setAlternatingRowColors(false);
+    ui.templatesTable->viewport()->setAutoFillBackground(false);
+
+    ui.templatesTable->horizontalHeader()->setHighlightSections(false);
+    ui.templatesTable->horizontalHeader()->setDefaultAlignment(
+        Qt::AlignLeft | Qt::AlignVCenter
+    );
+
+    ui.templatesTable->horizontalHeader()->setFixedHeight(48);
+    ui.templatesTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui.templatesTable->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
+
+    ui.templatesTable->setColumnWidth(3, 130);
+    ui.templatesTable->verticalHeader()->setDefaultSectionSize(52);
+
+    ui.templatesTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui.templatesTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void StockTemplatesPage::loadTemplates()
@@ -52,15 +117,10 @@ void StockTemplatesPage::loadTemplates()
         return;
     }
 
-    ui.templatesTable->clearContents();
-
-    currentTemplates = truckStockService->getTemplates();
+    currentTemplates =
+        truckStockService->getTemplates();
 
     filterTemplates();
-
-    ui.templatesTable->horizontalHeader()->setStretchLastSection(true);
-    ui.templatesTable->verticalHeader()->setVisible(false);
-    ui.templatesTable->setColumnWidth(3, 260);
 }
 
 void StockTemplatesPage::refreshTemplatesList()
@@ -75,9 +135,14 @@ void StockTemplatesPage::onNewTemplateClicked()
     if (dialog.exec() == QDialog::Accepted) {
         CreateTemplateRequest request;
 
-        request.name = dialog.getTemplateName().toStdString();
-        request.tradeType = dialog.getTradeType().toStdString();
-        request.items = dialog.getItems();
+        request.name =
+            dialog.getTemplateName().toStdString();
+
+        request.tradeType =
+            dialog.getTradeType().toStdString();
+
+        request.items =
+            dialog.getItems();
 
         bool success =
             truckStockService->createTemplate(request);
@@ -101,15 +166,19 @@ void StockTemplatesPage::onNewTemplateClicked()
     }
 }
 
-void StockTemplatesPage::onSearchChanged(const QString& text)
+void StockTemplatesPage::onSearchChanged(
+    const QString& text
+)
 {
     Q_UNUSED(text);
+
     filterTemplates();
 }
 
 void StockTemplatesPage::filterTemplates()
 {
-    QString searchText = ui.searchInput->text().trimmed();
+    QString searchText =
+        ui.searchInput->text().trimmed();
 
     filteredTemplates.clear();
 
@@ -143,7 +212,6 @@ void StockTemplatesPage::filterTemplates()
 void StockTemplatesPage::populateTable()
 {
     ui.templatesTable->clearContents();
-    ui.templatesTable->setColumnCount(4);
 
     int totalItems =
         static_cast<int>(filteredTemplates.size());
@@ -159,7 +227,7 @@ void StockTemplatesPage::populateTable()
 
     ui.templatesTable->setRowCount(rowCount);
 
-    for (int row = 0; row < rowCount; ++row) {
+    for (int row = 0; row < rowCount; row++) {
         const StockTemplateDto& stockTemplate =
             filteredTemplates[startIndex + row];
 
@@ -187,7 +255,10 @@ void StockTemplatesPage::populateTable()
             )
         );
 
-        addActionButtons(row, stockTemplate.id);
+        addActionButtons(
+            row,
+            stockTemplate.id
+        );
     }
 }
 
@@ -196,25 +267,36 @@ void StockTemplatesPage::addActionButtons(
     const std::string& templateId
 )
 {
-    QWidget* actionWidget = new QWidget(this);
-    QHBoxLayout* layout = new QHBoxLayout(actionWidget);
+    QWidget* actionWidget =
+        new QWidget(this);
+
+    actionWidget->setObjectName("actionContainer");
+
+    QHBoxLayout* layout =
+        new QHBoxLayout(actionWidget);
 
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(6);
+    layout->setAlignment(Qt::AlignCenter);
 
     QPushButton* viewButton =
-        new QPushButton("View", actionWidget);
+        new QPushButton("👁", actionWidget);
+
+    viewButton->setObjectName("viewButton");
 
     QPushButton* editButton =
-        new QPushButton("Edit", actionWidget);
+        new QPushButton("✎", actionWidget);
+
+    editButton->setObjectName("editButton");
 
     QPushButton* deleteButton =
-        new QPushButton("Delete", actionWidget);
+        new QPushButton("🗑", actionWidget);
+
+    deleteButton->setObjectName("deleteButton");
 
     layout->addWidget(viewButton);
     layout->addWidget(editButton);
     layout->addWidget(deleteButton);
-    layout->addStretch();
 
     ui.templatesTable->setCellWidget(row, 3, actionWidget);
 
@@ -240,7 +322,10 @@ void StockTemplatesPage::onViewTemplateClicked(
 
     AddEditTemplateDialog dialog(this);
 
-    dialog.setTemplateData(details, true);
+    dialog.setTemplateData(
+        details,
+        true
+    );
 
     dialog.exec();
 }
@@ -254,7 +339,10 @@ void StockTemplatesPage::onEditTemplateClicked(
 
     AddEditTemplateDialog dialog(this);
 
-    dialog.setTemplateData(details, false);
+    dialog.setTemplateData(
+        details,
+        false
+    );
 
     if (dialog.exec() == QDialog::Accepted) {
         CreateTemplateRequest request;
@@ -301,7 +389,8 @@ void StockTemplatesPage::onDeleteTemplateClicked(
         QMessageBox::question(
             this,
             "Delete Template",
-            "Are you sure you want to delete this template?"
+            "Are you sure you want to delete this template?",
+            QMessageBox::Yes | QMessageBox::No
         );
 
     if (confirm != QMessageBox::Yes) {
@@ -419,10 +508,11 @@ void StockTemplatesPage::onPage2Clicked()
     }
 }
 
-void StockTemplatesPage::applyTheme(Theme::AppTheme theme)
+void StockTemplatesPage::applyTheme(
+    Theme::AppTheme theme
+)
 {
     setStyleSheet(
-        Theme::truckPageStyle(theme)
+        Theme::templatesPageStyle(theme)
     );
 }
-
