@@ -1,113 +1,154 @@
-// AddAssetDialog.cpp - Implementation of the asset addition dialog
 #include "AddAssetDialog.h"
-#include "Theme.h"
 
-// Constructor: initializes the dialog UI and connects signals
+#include <QPushButton>
+#include <QLineEdit>
+#include <QComboBox>
+
 AddAssetDialog::AddAssetDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
 
+    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+
+    applyTheme(Theme::AppTheme::Dark);
+
     setWindowTitle("Add New Asset");
     setModal(true);
-    resize(520, 480);
-    setMinimumSize(520, 480);
 
-    ui.statusLabel->setText("");
+    resize(700, 420);
+    setMinimumSize(700, 420);
+    setMaximumSize(700, 420);
 
-    connect(ui.saveButton, &QPushButton::clicked,
-        this, &AddAssetDialog::onSaveButtonClicked);
+    ui.errorLabel->setText("");
 
-    connect(ui.cancelButton, &QPushButton::clicked,
-        this, &AddAssetDialog::onCancelButtonClicked);
+    connect(
+        ui.saveButton,
+        &QPushButton::clicked,
+        this,
+        &AddAssetDialog::onSaveButtonClicked
+    );
 
-    connect(ui.closeButton, &QPushButton::clicked,
-        this, &AddAssetDialog::onCloseButtonClicked);
+    connect(
+        ui.cancelButton,
+        &QPushButton::clicked,
+        this,
+        &AddAssetDialog::onCancelButtonClicked
+    );
+
+    connect(
+        ui.closeButton,
+        &QPushButton::clicked,
+        this,
+        &AddAssetDialog::onCloseButtonClicked
+    );
 }
 
-// Destructor
 AddAssetDialog::~AddAssetDialog()
 {
 }
 
-// Retrieves the asset name from the input field
 QString AddAssetDialog::getAssetName() const
 {
     return ui.assetNameInput->text().trimmed();
 }
 
-// Retrieves the asset type from the input field
 QString AddAssetDialog::getAssetType() const
 {
     return ui.assetTypeInput->currentText().trimmed();
 }
 
-// Retrieves the serial code from the input field
 QString AddAssetDialog::getSerialCode() const
 {
     return ui.serialCodeInput->text().trimmed();
 }
 
-// Retrieves the status from the combo box
 QString AddAssetDialog::getStatus() const
 {
-    return ui.statusComboBox->currentText();
+    return ui.statusComboBox->currentText().trimmed();
 }
 
-// Retrieves the description from the text edit
 QString AddAssetDialog::getDescription() const
 {
     return ui.descriptionInput->text().trimmed();
 }
 
-// Validates asset data and accepts the dialog if valid
 void AddAssetDialog::onSaveButtonClicked()
 {
-    if (getAssetName().isEmpty()) {
-        ui.statusLabel->setText("Asset name is required.");
+    if (viewMode) {
+        reject();
         return;
     }
 
-    if (getAssetType().isEmpty()) {
-        ui.statusLabel->setText("Asset type is required.");
+    if (getAssetName().isEmpty()) {
+        ui.errorLabel->setText("Asset name is required.");
+        return;
+    }
+
+    if (getAssetType().isEmpty() || getAssetType() == "Select asset type") {
+        ui.errorLabel->setText("Asset type is required.");
         return;
     }
 
     if (getSerialCode().isEmpty()) {
-        ui.statusLabel->setText("Serial code is required.");
+        ui.errorLabel->setText("Serial code is required.");
         return;
     }
 
     accept();
 }
 
-// Rejects the dialog without saving
 void AddAssetDialog::onCancelButtonClicked()
 {
     reject();
 }
 
-// Closes the dialog by rejecting it
 void AddAssetDialog::onCloseButtonClicked()
 {
     reject();
 }
 
-void AddAssetDialog::setAssetData(const QString& name, const QString& type, const QString& serialCode, const QString& status, const QString& description)
+void AddAssetDialog::setAssetData(
+    const QString& name,
+    const QString& type,
+    const QString& serialCode,
+    const QString& status,
+    const QString& description
+)
 {
+    viewMode = false;
+
     ui.assetNameInput->setText(name);
     ui.assetTypeInput->setCurrentText(type);
     ui.serialCodeInput->setText(serialCode);
     ui.statusComboBox->setCurrentText(status);
     ui.descriptionInput->setText(description);
 
-    setWindowTitle("Edit Asset");
+    ui.assetNameInput->setReadOnly(false);
+    ui.assetTypeInput->setEnabled(true);
+    ui.serialCodeInput->setReadOnly(false);
+    ui.statusComboBox->setEnabled(true);
+    ui.descriptionInput->setReadOnly(false);
+
     ui.titleLabel->setText("Edit Asset");
     ui.saveButton->setText("Save");
+    ui.saveButton->show();
+    ui.cancelButton->setText("Cancel");
+
+    setWindowTitle("Edit Asset");
 }
 
-void AddAssetDialog::setViewMode(const QString& name, const QString& type, const QString& serialCode, const QString& status, const QString& description)
+void AddAssetDialog::setViewMode(
+    const QString& name,
+    const QString& type,
+    const QString& serialCode,
+    const QString& status,
+    const QString& description
+)
 {
+    viewMode = true;
+
     ui.assetNameInput->setText(name);
     ui.assetTypeInput->setCurrentText(type);
     ui.serialCodeInput->setText(serialCode);
@@ -115,7 +156,7 @@ void AddAssetDialog::setViewMode(const QString& name, const QString& type, const
     ui.descriptionInput->setText(description);
 
     ui.assetNameInput->setReadOnly(true);
-    ui.assetTypeInput->setEnabled(true);
+    ui.assetTypeInput->setEnabled(false);
     ui.serialCodeInput->setReadOnly(true);
     ui.statusComboBox->setEnabled(false);
     ui.descriptionInput->setReadOnly(true);
@@ -133,4 +174,3 @@ void AddAssetDialog::applyTheme(Theme::AppTheme theme)
         Theme::dialogStyle(theme)
     );
 }
-

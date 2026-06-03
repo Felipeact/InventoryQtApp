@@ -18,9 +18,9 @@ AddProductDialog::AddProductDialog(QWidget* parent)
     setWindowTitle("Add New Item");
     setModal(true);
 
-    resize(700, 380);
-    setMinimumSize(700, 380);
-    setMaximumSize(700, 380);
+    resize(700, 420);
+    setMinimumSize(700, 420);
+    setMaximumSize(700, 420);
 
     ui.statusLabel->setText("");
 

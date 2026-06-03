@@ -3188,6 +3188,7 @@ QDialog {
 QWidget#dialogCard {
     background-color: #FFFFFF;
     border: none;
+    border-radius: 12px;
 }
 
 QWidget#headerContainer {
@@ -3251,9 +3252,9 @@ QPushButton {
     color: #111827;
     padding: 6px 16px;
     font-weight: 600;
-    min-width: 100px;
-    min-height: 34px;
-    max-height: 34px;
+    min-width: 110px;
+    min-height: 36px;
+    max-height: 36px;
 }
 
 QPushButton:hover {
@@ -3307,7 +3308,7 @@ QDialog {
 
 QWidget#dialogCard {
     background-color: #0B1626;
-    border: 1px solid #263A57;
+    border: none;
     border-radius: 12px;
 }
 
@@ -3372,9 +3373,9 @@ QPushButton {
     color: #FFFFFF;
     padding: 6px 16px;
     font-weight: 600;
-    min-width: 100px;
-    min-height: 34px;
-    max-height: 34px;
+    min-width: 110px;
+    min-height: 36px;
+    max-height: 36px;
 }
 
 QPushButton:hover {
