@@ -1,19 +1,28 @@
 #include "AddEditUserDialog.h"
-#include "Theme.h"
 
 #include <QMessageBox>
 #include <QPushButton>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QMouseEvent>
 
-AddEditUserDialog::AddEditUserDialog(
-    QWidget* parent
-)
+AddEditUserDialog::AddEditUserDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
 
+    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+
+    setModal(true);
+
+    resize(700, 420);
+    setMinimumSize(700, 420);
+    setMaximumSize(700, 420);
+
     applyTheme(Theme::AppTheme::Dark);
+
+    ui.errorLabel->setText("");
 
     setupConnections();
 }
@@ -36,6 +45,13 @@ void AddEditUserDialog::setupConnections()
         &QPushButton::clicked,
         this,
         &AddEditUserDialog::onCancelClicked
+    );
+
+    connect(
+        ui.closeButton,
+        &QPushButton::clicked,
+        this,
+        &AddEditUserDialog::onCloseClicked
     );
 }
 
@@ -71,34 +87,43 @@ void AddEditUserDialog::setUser(
     const QString& status
 )
 {
+    viewMode = false;
+
     ui.nameInput->setText(name);
     ui.emailInput->setText(email);
 
-    int roleIndex =
-        ui.roleComboBox->findText(role);
-
+    int roleIndex = ui.roleComboBox->findText(role);
     if (roleIndex >= 0) {
         ui.roleComboBox->setCurrentIndex(roleIndex);
     }
 
-    int statusIndex =
-        ui.statusComboBox->findText(status);
-
+    int statusIndex = ui.statusComboBox->findText(status);
     if (statusIndex >= 0) {
         ui.statusComboBox->setCurrentIndex(statusIndex);
     }
 
     ui.passwordInput->clear();
-    ui.passwordInput->setPlaceholderText(
-        "Leave blank to keep current password"
-    );
+    ui.passwordInput->setPlaceholderText("Leave blank to keep current password");
+
+    ui.nameInput->setReadOnly(false);
+    ui.emailInput->setReadOnly(false);
+    ui.passwordInput->setReadOnly(false);
+    ui.roleComboBox->setEnabled(true);
+    ui.statusComboBox->setEnabled(true);
+
+    ui.titleLabel->setText("Edit User");
+    ui.saveButton->setText("Save");
+    ui.saveButton->show();
+    ui.cancelButton->setText("Cancel");
+
+    setWindowTitle("Edit User");
 }
 
 void AddEditUserDialog::setViewMode()
 {
     viewMode = true;
 
-    setWindowTitle("View User");
+    setWindowTitle("User Details");
 
     ui.nameInput->setReadOnly(true);
     ui.emailInput->setReadOnly(true);
@@ -110,41 +135,31 @@ void AddEditUserDialog::setViewMode()
     ui.passwordInput->clear();
     ui.passwordInput->setPlaceholderText("");
 
+    ui.titleLabel->setText("User Details");
     ui.saveButton->hide();
-
     ui.cancelButton->setText("Close");
 }
 
 bool AddEditUserDialog::validateForm()
 {
+    ui.errorLabel->setText("");
+
     if (viewMode) {
         return true;
     }
 
     if (getName().isEmpty()) {
-        QMessageBox::warning(
-            this,
-            "Validation Error",
-            "Name is required."
-        );
+        ui.errorLabel->setText("Name is required.");
         return false;
     }
 
     if (getEmail().isEmpty()) {
-        QMessageBox::warning(
-            this,
-            "Validation Error",
-            "Email is required."
-        );
+        ui.errorLabel->setText("Email is required.");
         return false;
     }
 
     if (!getEmail().contains("@")) {
-        QMessageBox::warning(
-            this,
-            "Validation Error",
-            "Please enter a valid email."
-        );
+        ui.errorLabel->setText("Please enter a valid email.");
         return false;
     }
 
@@ -165,11 +180,37 @@ void AddEditUserDialog::onCancelClicked()
     reject();
 }
 
-void AddEditUserDialog::applyTheme(
-    Theme::AppTheme theme
-)
+void AddEditUserDialog::onCloseClicked()
+{
+    reject();
+}
+
+void AddEditUserDialog::applyTheme(Theme::AppTheme theme)
 {
     setStyleSheet(
         Theme::dialogStyle(theme)
     );
+}
+
+void AddEditUserDialog::mousePressEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton) {
+        dragPosition =
+            event->globalPosition().toPoint()
+            - frameGeometry().topLeft();
+
+        event->accept();
+    }
+}
+
+void AddEditUserDialog::mouseMoveEvent(QMouseEvent* event)
+{
+    if (event->buttons() & Qt::LeftButton) {
+        move(
+            event->globalPosition().toPoint()
+            - dragPosition
+        );
+
+        event->accept();
+    }
 }

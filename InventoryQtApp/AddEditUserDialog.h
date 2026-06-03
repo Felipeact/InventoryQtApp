@@ -2,24 +2,22 @@
 
 #include <QDialog>
 #include <QString>
+#include <QPoint>
 
 #include "ui_AddEditUserDialog.h"
 #include "Theme.h"
+
+class QMouseEvent;
 
 class AddEditUserDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    explicit AddEditUserDialog(
-        QWidget* parent = nullptr
-    );
-
+    explicit AddEditUserDialog(QWidget* parent = nullptr);
     ~AddEditUserDialog();
 
-    void applyTheme(
-        Theme::AppTheme theme
-    );
+    void applyTheme(Theme::AppTheme theme);
 
     QString getName() const;
     QString getEmail() const;
@@ -36,14 +34,21 @@ public:
 
     void setViewMode();
 
+protected:
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+
 private:
     Ui::AddEditUserDialogClass ui;
 
     bool viewMode = false;
+    QPoint dragPosition;
 
     void setupConnections();
     bool validateForm();
 
+private slots:
     void onSaveClicked();
     void onCancelClicked();
+    void onCloseClicked();
 };

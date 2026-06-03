@@ -1,9 +1,8 @@
 #include "AssignTemplateDialog.h"
-#include "Theme.h"
 
 #include <QComboBox>
 #include <QDate>
-#include <QMessageBox>
+#include <QMouseEvent>
 #include <QPushButton>
 
 AssignTemplateDialog::AssignTemplateDialog(
@@ -16,6 +15,19 @@ AssignTemplateDialog::AssignTemplateDialog(
     userService(userService)
 {
     ui.setupUi(this);
+
+    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+
+    setModal(true);
+
+    resize(760, 500);
+    setMinimumSize(760, 500);
+    setMaximumSize(760, 500);
+
+    applyTheme(Theme::AppTheme::Dark);
+
+    ui.errorLabel->setText("");
 
     ui.assignmentDateEdit->setDate(
         QDate::currentDate()
@@ -47,6 +59,13 @@ void AssignTemplateDialog::setupConnections()
         this,
         &AssignTemplateDialog::onCancelClicked
     );
+
+    connect(
+        ui.closeButton,
+        &QPushButton::clicked,
+        this,
+        &AssignTemplateDialog::onCloseClicked
+    );
 }
 
 void AssignTemplateDialog::loadTrucks()
@@ -66,7 +85,6 @@ void AssignTemplateDialog::loadTrucks()
         truckStockService->getTrucks();
 
     for (const TruckDto& truck : trucks) {
-
         ui.truckComboBox->addItem(
             QString::fromStdString(truck.truckName),
             QString::fromStdString(truck.id)
@@ -91,7 +109,6 @@ void AssignTemplateDialog::loadTemplates()
         truckStockService->getTemplates();
 
     for (const StockTemplateDto& stockTemplate : templates) {
-
         ui.templateComboBox->addItem(
             QString::fromStdString(stockTemplate.name),
             QString::fromStdString(stockTemplate.id)
@@ -116,7 +133,6 @@ void AssignTemplateDialog::loadTechnicians()
         userService->getUsers();
 
     for (const UserDto& user : users) {
-
         if (
             user.role != "TECHNICIAN" &&
             user.role != "ADMIN"
@@ -124,8 +140,16 @@ void AssignTemplateDialog::loadTechnicians()
             continue;
         }
 
+        QString displayName =
+            QString::fromStdString(user.name);
+
+        if (displayName.trimmed().isEmpty()) {
+            displayName =
+                QString::fromStdString(user.email);
+        }
+
         ui.technicianComboBox->addItem(
-            QString::fromStdString(user.name),
+            displayName,
             QString::fromStdString(user.id)
         );
     }
@@ -168,36 +192,20 @@ QString AssignTemplateDialog::getAssignmentDate() const
 
 void AssignTemplateDialog::onAssignClicked()
 {
+    ui.errorLabel->setText("");
+
     if (getTruckId().isEmpty()) {
-
-        QMessageBox::warning(
-            this,
-            "Validation Error",
-            "Please select a truck."
-        );
-
+        ui.errorLabel->setText("Please select a truck.");
         return;
     }
 
     if (getTemplateId().isEmpty()) {
-
-        QMessageBox::warning(
-            this,
-            "Validation Error",
-            "Please select a template."
-        );
-
+        ui.errorLabel->setText("Please select a template.");
         return;
     }
 
     if (getTechnicianId().isEmpty()) {
-
-        QMessageBox::warning(
-            this,
-            "Validation Error",
-            "Please select a technician."
-        );
-
+        ui.errorLabel->setText("Please select a technician.");
         return;
     }
 
@@ -209,6 +217,11 @@ void AssignTemplateDialog::onCancelClicked()
     reject();
 }
 
+void AssignTemplateDialog::onCloseClicked()
+{
+    reject();
+}
+
 void AssignTemplateDialog::applyTheme(Theme::AppTheme theme)
 {
     setStyleSheet(
@@ -216,3 +229,25 @@ void AssignTemplateDialog::applyTheme(Theme::AppTheme theme)
     );
 }
 
+void AssignTemplateDialog::mousePressEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton) {
+        dragPosition =
+            event->globalPosition().toPoint()
+            - frameGeometry().topLeft();
+
+        event->accept();
+    }
+}
+
+void AssignTemplateDialog::mouseMoveEvent(QMouseEvent* event)
+{
+    if (event->buttons() & Qt::LeftButton) {
+        move(
+            event->globalPosition().toPoint()
+            - dragPosition
+        );
+
+        event->accept();
+    }
+}

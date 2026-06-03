@@ -3415,6 +3415,23 @@ QPushButton#closeButton:hover {
     background-color: rgba(255, 255, 255, 0.14);
 }
 
+QWidget#leftCard,
+QWidget#rightCard {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#quantityCard {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#uploadArea,
+QWidget#summaryCard {
+    background-color: transparent;
+    border: none;
+}
+
 )";
 }
 

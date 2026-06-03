@@ -1,17 +1,35 @@
 #include "AddEditTemplateDialog.h"
-#include "Theme.h"
 #include "AddEditTemplateItemDialog.h"
 
-
-#include <QMessageBox>
-#include <QPushButton>
+#include <QAbstractItemView>
+#include <QFrame>
+#include <QHeaderView>
 #include <QHBoxLayout>
+#include <QMessageBox>
+#include <QMouseEvent>
+#include <QPushButton>
 #include <QTableWidgetItem>
+#include <QWidget>
 
 AddEditTemplateDialog::AddEditTemplateDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
+
+    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+
+    setModal(true);
+
+    resize(920, 620);
+    setMinimumSize(920, 620);
+    setMaximumSize(920, 620);
+
+    applyTheme(Theme::AppTheme::Dark);
+
+    ui.errorLabel->setText("");
+
+    setupTable();
     setupConnections();
 
     ui.templateItemsTable->setRowCount(0);
@@ -23,21 +41,84 @@ AddEditTemplateDialog::~AddEditTemplateDialog()
 
 void AddEditTemplateDialog::setupConnections()
 {
-    connect(ui.addItemButton, &QPushButton::clicked,
-        this, &AddEditTemplateDialog::onAddItemClicked);
+    connect(
+        ui.addItemButton,
+        &QPushButton::clicked,
+        this,
+        &AddEditTemplateDialog::onAddItemClicked
+    );
 
-    connect(ui.saveButton, &QPushButton::clicked,
-        this, &AddEditTemplateDialog::onSaveClicked);
+    connect(
+        ui.saveButton,
+        &QPushButton::clicked,
+        this,
+        &AddEditTemplateDialog::onSaveClicked
+    );
 
-    connect(ui.cancelButton, &QPushButton::clicked,
-        this, &AddEditTemplateDialog::onCancelClicked);
+    connect(
+        ui.cancelButton,
+        &QPushButton::clicked,
+        this,
+        &AddEditTemplateDialog::onCancelClicked
+    );
+
+    connect(
+        ui.closeButton,
+        &QPushButton::clicked,
+        this,
+        &AddEditTemplateDialog::onCloseClicked
+    );
+}
+
+void AddEditTemplateDialog::setupTable()
+{
+    ui.templateItemsTable->setColumnCount(5);
+
+    ui.templateItemsTable->setHorizontalHeaderLabels(
+        QStringList()
+        << "Item"
+        << "Required Qty"
+        << "Expected Price"
+        << "Minimum Qty"
+        << "Actions"
+    );
+
+    ui.templateItemsTable->verticalHeader()->setVisible(false);
+    ui.templateItemsTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui.templateItemsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui.templateItemsTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui.templateItemsTable->setShowGrid(false);
+    ui.templateItemsTable->setFrameShape(QFrame::NoFrame);
+    ui.templateItemsTable->setFocusPolicy(Qt::NoFocus);
+    ui.templateItemsTable->setAlternatingRowColors(false);
+    ui.templateItemsTable->viewport()->setAutoFillBackground(false);
+
+    ui.templateItemsTable->horizontalHeader()->setHighlightSections(false);
+    ui.templateItemsTable->horizontalHeader()->setDefaultAlignment(
+        Qt::AlignLeft | Qt::AlignVCenter
+    );
+
+    ui.templateItemsTable->horizontalHeader()->setFixedHeight(42);
+    ui.templateItemsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui.templateItemsTable->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
+
+    ui.templateItemsTable->setColumnWidth(4, 130);
+    ui.templateItemsTable->verticalHeader()->setDefaultSectionSize(44);
+
+    ui.templateItemsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui.templateItemsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void AddEditTemplateDialog::setEditMode(const QString& templateId)
 {
     Q_UNUSED(templateId);
 
-    ui.dialogTitle->setText("Edit Template");
+    readOnlyMode = false;
+
+    ui.titleLabel->setText("Edit Template");
+    setWindowTitle("Edit Template");
+
+    ui.saveButton->setText("Save Template");
 }
 
 QString AddEditTemplateDialog::getTemplateName() const
@@ -59,8 +140,9 @@ std::vector<CreateTemplateItemRequest> AddEditTemplateDialog::getItems() const
 {
     std::vector<CreateTemplateItemRequest> items;
 
-    for (int row = 0; row < ui.templateItemsTable->rowCount(); ++row) {
-        QTableWidgetItem* nameItem = ui.templateItemsTable->item(row, 0);
+    for (int row = 0; row < ui.templateItemsTable->rowCount(); row++) {
+        QTableWidgetItem* nameItem =
+            ui.templateItemsTable->item(row, 0);
 
         if (!nameItem || nameItem->text().trimmed().isEmpty()) {
             continue;
@@ -68,7 +150,8 @@ std::vector<CreateTemplateItemRequest> AddEditTemplateDialog::getItems() const
 
         CreateTemplateItemRequest item;
 
-        item.productName = nameItem->text().trimmed().toStdString();
+        item.productName =
+            nameItem->text().trimmed().toStdString();
 
         item.category = "";
 
@@ -85,7 +168,8 @@ std::vector<CreateTemplateItemRequest> AddEditTemplateDialog::getItems() const
         priceText.replace("$", "");
         priceText = priceText.trimmed();
 
-        item.expectedPrice = priceText.toDouble();
+        item.expectedPrice =
+            priceText.toDouble();
 
         item.minimumQuantity =
             ui.templateItemsTable->item(row, 3)
@@ -93,7 +177,8 @@ std::vector<CreateTemplateItemRequest> AddEditTemplateDialog::getItems() const
             : 1;
 
         item.unit = "";
-        item.notes = getDescription().toStdString();
+        item.notes =
+            getDescription().toStdString();
 
         items.push_back(item);
     }
@@ -103,6 +188,10 @@ std::vector<CreateTemplateItemRequest> AddEditTemplateDialog::getItems() const
 
 void AddEditTemplateDialog::onAddItemClicked()
 {
+    if (readOnlyMode) {
+        return;
+    }
+
     AddEditTemplateItemDialog dialog(this);
 
     if (dialog.exec() == QDialog::Accepted) {
@@ -112,13 +201,20 @@ void AddEditTemplateDialog::onAddItemClicked()
 
 void AddEditTemplateDialog::onSaveClicked()
 {
+    ui.errorLabel->setText("");
+
+    if (readOnlyMode) {
+        reject();
+        return;
+    }
+
     if (getTemplateName().isEmpty()) {
-        QMessageBox::warning(this, "Validation Error", "Template name is required.");
+        ui.errorLabel->setText("Template name is required.");
         return;
     }
 
     if (getItems().empty()) {
-        QMessageBox::warning(this, "Validation Error", "Add at least one item.");
+        ui.errorLabel->setText("Add at least one item.");
         return;
     }
 
@@ -129,45 +225,124 @@ void AddEditTemplateDialog::onCancelClicked()
 {
     reject();
 }
-void AddEditTemplateDialog::addItemRow(const CreateTemplateItemRequest& item)
+
+void AddEditTemplateDialog::onCloseClicked()
 {
-    int row = ui.templateItemsTable->rowCount();
+    reject();
+}
+
+void AddEditTemplateDialog::addItemRow(
+    const CreateTemplateItemRequest& item
+)
+{
+    int row =
+        ui.templateItemsTable->rowCount();
+
     ui.templateItemsTable->insertRow(row);
 
-    ui.templateItemsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(item.productName)));
-    ui.templateItemsTable->setItem(row, 1, new QTableWidgetItem(QString::number(item.requiredQuantity)));
-    ui.templateItemsTable->setItem(row, 2, new QTableWidgetItem(QString::number(item.expectedPrice, 'f', 2)));
-    ui.templateItemsTable->setItem(row, 3, new QTableWidgetItem(QString::number(item.minimumQuantity)));
+    ui.templateItemsTable->setItem(
+        row,
+        0,
+        new QTableWidgetItem(QString::fromStdString(item.productName))
+    );
+
+    ui.templateItemsTable->setItem(
+        row,
+        1,
+        new QTableWidgetItem(QString::number(item.requiredQuantity))
+    );
+
+    ui.templateItemsTable->setItem(
+        row,
+        2,
+        new QTableWidgetItem("$" + QString::number(item.expectedPrice, 'f', 2))
+    );
+
+    ui.templateItemsTable->setItem(
+        row,
+        3,
+        new QTableWidgetItem(QString::number(item.minimumQuantity))
+    );
 
     addItemActionButtons(row);
 }
 
-CreateTemplateItemRequest AddEditTemplateDialog::getItemFromRow(int row) const
+CreateTemplateItemRequest AddEditTemplateDialog::getItemFromRow(
+    int row
+) const
 {
     CreateTemplateItemRequest item;
 
-    item.productName = ui.templateItemsTable->item(row, 0)->text().toStdString();
-    item.requiredQuantity = ui.templateItemsTable->item(row, 1)->text().toInt();
-    item.expectedPrice = ui.templateItemsTable->item(row, 2)->text().toDouble();
-    item.minimumQuantity = ui.templateItemsTable->item(row, 3)->text().toInt();
+    if (row < 0 || row >= ui.templateItemsTable->rowCount()) {
+        return item;
+    }
+
+    item.productName =
+        ui.templateItemsTable->item(row, 0)
+        ? ui.templateItemsTable->item(row, 0)->text().toStdString()
+        : "";
+
+    item.requiredQuantity =
+        ui.templateItemsTable->item(row, 1)
+        ? ui.templateItemsTable->item(row, 1)->text().toInt()
+        : 1;
+
+    QString priceText =
+        ui.templateItemsTable->item(row, 2)
+        ? ui.templateItemsTable->item(row, 2)->text()
+        : "0";
+
+    priceText.replace("$", "");
+    priceText = priceText.trimmed();
+
+    item.expectedPrice =
+        priceText.toDouble();
+
+    item.minimumQuantity =
+        ui.templateItemsTable->item(row, 3)
+        ? ui.templateItemsTable->item(row, 3)->text().toInt()
+        : 1;
 
     return item;
 }
 
-void AddEditTemplateDialog::addItemActionButtons(int row)
+void AddEditTemplateDialog::addItemActionButtons(
+    int row
+)
 {
-    QWidget* widget = new QWidget(this);
-    QHBoxLayout* layout = new QHBoxLayout(widget);
+    QWidget* actionWidget =
+        new QWidget(this);
+
+    actionWidget->setObjectName("actionContainer");
+
+    QHBoxLayout* layout =
+        new QHBoxLayout(actionWidget);
 
     layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+    layout->setAlignment(Qt::AlignCenter);
 
-    QPushButton* editButton = new QPushButton("Edit", widget);
-    QPushButton* deleteButton = new QPushButton("Delete", widget);
+    QPushButton* editButton =
+        new QPushButton("✎", actionWidget);
+
+    editButton->setObjectName("editButton");
+
+    QPushButton* deleteButton =
+        new QPushButton("🗑", actionWidget);
+
+    deleteButton->setObjectName("deleteButton");
 
     layout->addWidget(editButton);
     layout->addWidget(deleteButton);
 
-    ui.templateItemsTable->setCellWidget(row, 4, widget);
+    ui.templateItemsTable->setCellWidget(
+        row,
+        4,
+        actionWidget
+    );
+
+    editButton->setVisible(!readOnlyMode);
+    deleteButton->setVisible(!readOnlyMode);
 
     connect(editButton, &QPushButton::clicked, this, [this, row]() {
         onEditItemClicked(row);
@@ -178,26 +353,63 @@ void AddEditTemplateDialog::addItemActionButtons(int row)
         });
 }
 
-void AddEditTemplateDialog::onEditItemClicked(int row)
+void AddEditTemplateDialog::onEditItemClicked(
+    int row
+)
 {
+    if (readOnlyMode) {
+        return;
+    }
+
     AddEditTemplateItemDialog dialog(this);
-    dialog.setItem(getItemFromRow(row));
+
+    dialog.setItem(
+        getItemFromRow(row)
+    );
 
     if (dialog.exec() == QDialog::Accepted) {
-        CreateTemplateItemRequest item = dialog.getItem();
+        CreateTemplateItemRequest item =
+            dialog.getItem();
 
-        ui.templateItemsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(item.productName)));
-        ui.templateItemsTable->setItem(row, 1, new QTableWidgetItem(QString::number(item.requiredQuantity)));
-        ui.templateItemsTable->setItem(row, 2, new QTableWidgetItem(QString::number(item.expectedPrice, 'f', 2)));
-        ui.templateItemsTable->setItem(row, 3, new QTableWidgetItem(QString::number(item.minimumQuantity)));
+        ui.templateItemsTable->setItem(
+            row,
+            0,
+            new QTableWidgetItem(QString::fromStdString(item.productName))
+        );
+
+        ui.templateItemsTable->setItem(
+            row,
+            1,
+            new QTableWidgetItem(QString::number(item.requiredQuantity))
+        );
+
+        ui.templateItemsTable->setItem(
+            row,
+            2,
+            new QTableWidgetItem("$" + QString::number(item.expectedPrice, 'f', 2))
+        );
+
+        ui.templateItemsTable->setItem(
+            row,
+            3,
+            new QTableWidgetItem(QString::number(item.minimumQuantity))
+        );
 
         addItemActionButtons(row);
     }
 }
 
-void AddEditTemplateDialog::onDeleteItemClicked(int row)
+void AddEditTemplateDialog::onDeleteItemClicked(
+    int row
+)
 {
-    ui.templateItemsTable->removeRow(row);
+    if (readOnlyMode) {
+        return;
+    }
+
+    if (row >= 0 && row < ui.templateItemsTable->rowCount()) {
+        ui.templateItemsTable->removeRow(row);
+    }
 }
 
 void AddEditTemplateDialog::setTemplateData(
@@ -207,8 +419,12 @@ void AddEditTemplateDialog::setTemplateData(
 {
     readOnlyMode = readOnly;
 
-    ui.dialogTitle->setText(
-        readOnly ? "View Template" : "Edit Template"
+    ui.titleLabel->setText(
+        readOnly ? "Template Details" : "Edit Template"
+    );
+
+    setWindowTitle(
+        readOnly ? "Template Details" : "Edit Template"
     );
 
     ui.templateNameInput->setText(
@@ -231,12 +447,44 @@ void AddEditTemplateDialog::setTemplateData(
 
     ui.addItemButton->setVisible(!readOnly);
     ui.saveButton->setVisible(!readOnly);
+
+    ui.cancelButton->setText(
+        readOnly ? "Close" : "Cancel"
+    );
 }
 
-void AddEditTemplateDialog::applyTheme(Theme::AppTheme theme)
+void AddEditTemplateDialog::applyTheme(
+    Theme::AppTheme theme
+)
 {
     setStyleSheet(
         Theme::dialogStyle(theme)
     );
 }
 
+void AddEditTemplateDialog::mousePressEvent(
+    QMouseEvent* event
+)
+{
+    if (event->button() == Qt::LeftButton) {
+        dragPosition =
+            event->globalPosition().toPoint()
+            - frameGeometry().topLeft();
+
+        event->accept();
+    }
+}
+
+void AddEditTemplateDialog::mouseMoveEvent(
+    QMouseEvent* event
+)
+{
+    if (event->buttons() & Qt::LeftButton) {
+        move(
+            event->globalPosition().toPoint()
+            - dragPosition
+        );
+
+        event->accept();
+    }
+}

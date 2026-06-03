@@ -1,13 +1,27 @@
 #include "AddEditTemplateItemDialog.h"
-#include "Theme.h"
 
 #include <QMessageBox>
+#include <QMouseEvent>
 #include <QPushButton>
 
 AddEditTemplateItemDialog::AddEditTemplateItemDialog(QWidget* parent)
     : QDialog(parent)
 {
     ui.setupUi(this);
+
+    setWindowFlags(Qt::Dialog | Qt::FramelessWindowHint);
+    setAttribute(Qt::WA_TranslucentBackground);
+
+    setModal(true);
+
+    resize(620, 520);
+    setMinimumSize(620, 520);
+    setMaximumSize(620, 520);
+
+    applyTheme(Theme::AppTheme::Dark);
+
+    ui.errorLabel->setText("");
+
     setupConnections();
 }
 
@@ -17,11 +31,26 @@ AddEditTemplateItemDialog::~AddEditTemplateItemDialog()
 
 void AddEditTemplateItemDialog::setupConnections()
 {
-    connect(ui.saveButton, &QPushButton::clicked,
-        this, &AddEditTemplateItemDialog::onSaveClicked);
+    connect(
+        ui.saveButton,
+        &QPushButton::clicked,
+        this,
+        &AddEditTemplateItemDialog::onSaveClicked
+    );
 
-    connect(ui.cancelButton, &QPushButton::clicked,
-        this, &AddEditTemplateItemDialog::onCancelClicked);
+    connect(
+        ui.cancelButton,
+        &QPushButton::clicked,
+        this,
+        &AddEditTemplateItemDialog::onCancelClicked
+    );
+
+    connect(
+        ui.closeButton,
+        &QPushButton::clicked,
+        this,
+        &AddEditTemplateItemDialog::onCloseClicked
+    );
 }
 
 CreateTemplateItemRequest AddEditTemplateItemDialog::getItem() const
@@ -56,7 +85,8 @@ void AddEditTemplateItemDialog::setItem(
     const CreateTemplateItemRequest& item
 )
 {
-    ui.dialogTitle->setText("Edit Template Item");
+    ui.titleLabel->setText("Edit Template Item");
+    setWindowTitle("Edit Template Item");
 
     ui.itemNameInput->setText(
         QString::fromStdString(item.productName)
@@ -89,13 +119,10 @@ void AddEditTemplateItemDialog::setItem(
 
 bool AddEditTemplateItemDialog::validateForm()
 {
-    if (ui.itemNameInput->text().trimmed().isEmpty()) {
-        QMessageBox::warning(
-            this,
-            "Validation Error",
-            "Item name is required."
-        );
+    ui.errorLabel->setText("");
 
+    if (ui.itemNameInput->text().trimmed().isEmpty()) {
+        ui.errorLabel->setText("Item name is required.");
         return false;
     }
 
@@ -116,6 +143,11 @@ void AddEditTemplateItemDialog::onCancelClicked()
     reject();
 }
 
+void AddEditTemplateItemDialog::onCloseClicked()
+{
+    reject();
+}
+
 void AddEditTemplateItemDialog::applyTheme(Theme::AppTheme theme)
 {
     setStyleSheet(
@@ -123,3 +155,25 @@ void AddEditTemplateItemDialog::applyTheme(Theme::AppTheme theme)
     );
 }
 
+void AddEditTemplateItemDialog::mousePressEvent(QMouseEvent* event)
+{
+    if (event->button() == Qt::LeftButton) {
+        dragPosition =
+            event->globalPosition().toPoint()
+            - frameGeometry().topLeft();
+
+        event->accept();
+    }
+}
+
+void AddEditTemplateItemDialog::mouseMoveEvent(QMouseEvent* event)
+{
+    if (event->buttons() & Qt::LeftButton) {
+        move(
+            event->globalPosition().toPoint()
+            - dragPosition
+        );
+
+        event->accept();
+    }
+}
