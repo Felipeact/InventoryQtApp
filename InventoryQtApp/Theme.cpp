@@ -1944,8 +1944,374 @@ QPushButton#activePageButton {
 )";
 }
 
-QString Theme::myTruckStockPageStyle(AppTheme theme) { return truckPageStyle(theme); }
-QString Theme::lowStockAlertsPageStyle(AppTheme theme) { return truckPageStyle(theme); }
+QString Theme::myTruckStockPageStyle(AppTheme theme)
+{
+    if (theme == AppTheme::Light) {
+        return dataPageStyle(theme) + R"(
+
+QWidget#MyTruckStockPageClass {
+    background-color: #F4F7FB;
+}
+
+QWidget#pageContainer,
+QWidget#toolbarContainer,
+QWidget#searchContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+}
+
+QLabel#pageTitle {
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel {
+    color: #64748B;
+    font-size: 12px;
+}
+
+QLineEdit#searchInput {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    color: #111827;
+    padding: 0px 12px;
+    min-height: 38px;
+    max-height: 38px;
+}
+
+QPushButton#useButton {
+    background-color: #16A34A;
+    border: none;
+    color: #FFFFFF;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-weight: 800;
+}
+
+QPushButton#useButton:hover {
+    background-color: #22C55E;
+}
+
+)";
+    }
+
+    return dataPageStyle(theme) + R"(
+
+QWidget#MyTruckStockPageClass {
+    background-color: #050B14;
+}
+
+QWidget#pageContainer,
+QWidget#toolbarContainer,
+QWidget#searchContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard {
+    background-color: #0B1626;
+    border: 1px solid #263A57;
+    border-radius: 12px;
+}
+
+QLabel#pageTitle {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel {
+    color: #94A3B8;
+    font-size: 12px;
+}
+
+QLineEdit#searchInput {
+    background-color: #050B14;
+    border: 1px solid #263A57;
+    border-radius: 8px;
+    color: #CBD5E1;
+    padding: 0px 12px;
+    min-height: 38px;
+    max-height: 38px;
+}
+
+QPushButton#useButton {
+    background-color: #16A34A;
+    border: none;
+    color: #FFFFFF;
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-weight: 800;
+}
+
+QPushButton#useButton:hover {
+    background-color: #22C55E;
+}
+
+)";
+}
+
+QString Theme::lowStockAlertsPageStyle(AppTheme theme)
+{
+    if (theme == AppTheme::Light) {
+        return dataPageStyle(theme) + R"(
+
+QWidget#LowStockAlertsPageClass {
+    background-color: #F4F7FB;
+}
+
+QWidget#pageContainer,
+QWidget#toolbarContainer,
+QWidget#searchContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#metricCard1,
+QWidget#metricCard2,
+QWidget#metricCard3 {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+    min-height: 105px;
+}
+
+QWidget#metricCard1 QLabel,
+QWidget#metricCard2 QLabel,
+QWidget#metricCard3 QLabel {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+}
+
+QLabel#pageTitle {
+    background-color: transparent;
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel {
+    background-color: transparent;
+    color: #64748B;
+    font-size: 12px;
+}
+
+QLabel#metricTitle,
+QLabel#metricTitle1,
+QLabel#metricTitle2 {
+    color: #64748B;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QLabel#metricValue {
+    color: #DC2626;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+QLabel#metricValue1 {
+    color: #D97706;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+QLabel#metricValue2 {
+    color: #16A34A;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+QLabel#dangerText {
+    color: #DC2626;
+    font-size: 12px;
+}
+
+QLabel#warningText {
+    color: #D97706;
+    font-size: 12px;
+}
+
+QLabel#okText {
+    color: #16A34A;
+    font-size: 12px;
+}
+
+QLineEdit#searchInput,
+QComboBox#statusFilter {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    color: #111827;
+    padding: 0px 12px;
+    min-height: 38px;
+    max-height: 38px;
+}
+
+QPushButton#exportButton {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+}
+
+QWidget#paginationContainer {
+    background-color: #FFFFFF;
+    border: none;
+}
+
+QLabel#paginationLabel {
+    background-color: transparent;
+    color: #475569;
+}
+
+QPushButton#activePageButton {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+}
+
+)";
+    }
+
+    return dataPageStyle(theme) + R"(
+
+QWidget#LowStockAlertsPageClass {
+    background-color: #050B14;
+}
+
+QWidget#pageContainer,
+QWidget#toolbarContainer,
+QWidget#searchContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#metricCard1,
+QWidget#metricCard2,
+QWidget#metricCard3 {
+    background-color: #0B1626;
+    border: 1px solid #263A57;
+    border-radius: 12px;
+    min-height: 105px;
+}
+
+QWidget#metricCard1 QLabel,
+QWidget#metricCard2 QLabel,
+QWidget#metricCard3 QLabel {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard {
+    background-color: #0B1626;
+    border: 1px solid #263A57;
+    border-radius: 12px;
+}
+
+QLabel#pageTitle {
+    background-color: transparent;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel {
+    background-color: transparent;
+    color: #94A3B8;
+    font-size: 12px;
+}
+
+QLabel#metricTitle,
+QLabel#metricTitle1,
+QLabel#metricTitle2 {
+    color: #94A3B8;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QLabel#metricValue {
+    color: #EF4444;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+QLabel#metricValue1 {
+    color: #F59E0B;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+QLabel#metricValue2 {
+    color: #22C55E;
+    font-size: 28px;
+    font-weight: 900;
+}
+
+QLabel#dangerText {
+    color: #F87171;
+    font-size: 12px;
+}
+
+QLabel#warningText {
+    color: #FBBF24;
+    font-size: 12px;
+}
+
+QLabel#okText {
+    color: #22C55E;
+    font-size: 12px;
+}
+
+QLineEdit#searchInput,
+QComboBox#statusFilter {
+    background-color: #050B14;
+    border: 1px solid #263A57;
+    border-radius: 8px;
+    color: #CBD5E1;
+    padding: 0px 12px;
+    min-height: 38px;
+    max-height: 38px;
+}
+
+QPushButton#exportButton {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+}
+
+QWidget#paginationContainer {
+    background-color: #0B1626;
+    border: none;
+}
+
+QLabel#paginationLabel {
+    background-color: transparent;
+    color: #CBD5E1;
+}
+
+QPushButton#activePageButton {
+    background-color: #1D4ED8;
+    color: #FFFFFF;
+    border: none;
+}
+
+)";
+}
+
 QString Theme::receiptsPageStyle(AppTheme theme) { return truckPageStyle(theme); }
 
 QString Theme::dataPageStyle(AppTheme theme)

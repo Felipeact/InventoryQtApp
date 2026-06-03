@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
 	<class>LowStockAlertsPageClass</class>
+
 	<widget class="QWidget" name="LowStockAlertsPageClass">
 		<property name="geometry">
 			<rect>
@@ -10,6 +11,7 @@
 				<height>820</height>
 			</rect>
 		</property>
+
 		<property name="windowTitle">
 			<string>Low Stock Alerts</string>
 		</property>
@@ -20,327 +22,288 @@
 
 		<layout class="QVBoxLayout" name="rootLayout">
 			<property name="leftMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="topMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="rightMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="bottomMargin">
-				<number>18</number>
+				<number>14</number>
 			</property>
 			<property name="spacing">
-				<number>16</number>
+				<number>12</number>
 			</property>
 
 			<item>
-				<layout class="QVBoxLayout" name="titleLayout">
-					<item>
-						<widget class="QLabel" name="pageTitle">
-							<property name="text">
-								<string>Low Stock Alerts</string>
-							</property>
-						</widget>
-					</item>
-					<item>
-						<widget class="QLabel" name="subtitleLabel">
-							<property name="text">
-								<string>Monitor truck inventory running low or out of stock</string>
-							</property>
-						</widget>
-					</item>
-				</layout>
-			</item>
-
-			<item>
-				<layout class="QHBoxLayout" name="metricsLayout">
-					<property name="spacing">
-						<number>14</number>
-					</property>
-
-					<item>
-						<widget class="QWidget" name="metricCard1" native="true">
-							<layout class="QVBoxLayout" name="metricLayout1">
-								<property name="leftMargin">
-									<number>18</number>
-								</property>
-								<property name="topMargin">
-									<number>18</number>
-								</property>
-								<property name="rightMargin">
-									<number>18</number>
-								</property>
-								<property name="bottomMargin">
-									<number>18</number>
-								</property>
-
-								<item>
-									<widget class="QLabel" name="metricTitle">
-										<property name="text">
-											<string>Critical Alerts</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QLabel" name="metricValue">
-										<property name="text">
-											<string>5</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QLabel" name="dangerText">
-										<property name="text">
-											<string>Out of stock items</string>
-										</property>
-									</widget>
-								</item>
-							</layout>
-						</widget>
-					</item>
-
-					<item>
-						<widget class="QWidget" name="metricCard2" native="true">
-							<layout class="QVBoxLayout" name="metricLayout2">
-								<property name="leftMargin">
-									<number>18</number>
-								</property>
-								<property name="topMargin">
-									<number>18</number>
-								</property>
-								<property name="rightMargin">
-									<number>18</number>
-								</property>
-								<property name="bottomMargin">
-									<number>18</number>
-								</property>
-
-								<item>
-									<widget class="QLabel" name="metricTitle1">
-										<property name="text">
-											<string>Warning Alerts</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QLabel" name="metricValue1">
-										<property name="text">
-											<string>12</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QLabel" name="warningText">
-										<property name="text">
-											<string>Below minimum quantity</string>
-										</property>
-									</widget>
-								</item>
-							</layout>
-						</widget>
-					</item>
-
-					<item>
-						<widget class="QWidget" name="metricCard3" native="true">
-							<layout class="QVBoxLayout" name="metricLayout3">
-								<property name="leftMargin">
-									<number>18</number>
-								</property>
-								<property name="topMargin">
-									<number>18</number>
-								</property>
-								<property name="rightMargin">
-									<number>18</number>
-								</property>
-								<property name="bottomMargin">
-									<number>18</number>
-								</property>
-
-								<item>
-									<widget class="QLabel" name="metricTitle2">
-										<property name="text">
-											<string>Healthy Items</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QLabel" name="metricValue2">
-										<property name="text">
-											<string>108</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<widget class="QLabel" name="okText">
-										<property name="text">
-											<string>Stock levels are good</string>
-										</property>
-									</widget>
-								</item>
-							</layout>
-						</widget>
-					</item>
-				</layout>
-			</item>
-
-			<item>
-				<widget class="QWidget" name="toolbarCard" native="true">
-					<layout class="QHBoxLayout" name="toolbarLayout">
-						<property name="leftMargin">
-							<number>14</number>
-						</property>
-						<property name="topMargin">
-							<number>12</number>
-						</property>
-						<property name="rightMargin">
-							<number>14</number>
-						</property>
-						<property name="bottomMargin">
-							<number>12</number>
-						</property>
+				<widget class="QWidget" name="pageContainer" native="true">
+					<layout class="QVBoxLayout" name="pageLayout">
 						<property name="spacing">
 							<number>12</number>
 						</property>
 
 						<item>
-							<widget class="QLineEdit" name="searchInput">
-								<property name="minimumWidth">
-									<number>320</number>
-								</property>
-								<property name="placeholderText">
-									<string>Search alerts...</string>
-								</property>
-							</widget>
-						</item>
-
-						<item>
-							<widget class="QComboBox" name="statusFilter">
+							<layout class="QVBoxLayout" name="titleLayout">
 								<item>
-									<property name="text">
-										<string>All Alerts</string>
-									</property>
+									<widget class="QLabel" name="pageTitle">
+										<property name="text">
+											<string>Low Stock Alerts</string>
+										</property>
+									</widget>
 								</item>
+
 								<item>
-									<property name="text">
-										<string>Critical</string>
-									</property>
+									<widget class="QLabel" name="breadcrumbLabel">
+										<property name="text">
+											<string>Truck Stock  &gt;  Low Stock Alerts</string>
+										</property>
+									</widget>
 								</item>
+							</layout>
+						</item>
+
+						<item>
+							<layout class="QHBoxLayout" name="metricsLayout">
+								<property name="spacing">
+									<number>12</number>
+								</property>
+
 								<item>
-									<property name="text">
-										<string>Warning</string>
-									</property>
+									<widget class="QWidget" name="metricCard1" native="true">
+										<layout class="QVBoxLayout" name="metricLayout1">
+											<property name="leftMargin">
+												<number>18</number>
+											</property>
+											<property name="topMargin">
+												<number>16</number>
+											</property>
+											<property name="rightMargin">
+												<number>18</number>
+											</property>
+											<property name="bottomMargin">
+												<number>16</number>
+											</property>
+
+											<item>
+												<widget class="QLabel" name="metricTitle">
+													<property name="text">
+														<string>Critical Alerts</string>
+													</property>
+												</widget>
+											</item>
+
+											<item>
+												<widget class="QLabel" name="metricValue">
+													<property name="text">
+														<string>0</string>
+													</property>
+												</widget>
+											</item>
+
+											<item>
+												<widget class="QLabel" name="dangerText">
+													<property name="text">
+														<string>Out of stock items</string>
+													</property>
+												</widget>
+											</item>
+										</layout>
+									</widget>
 								</item>
-							</widget>
+
+								<item>
+									<widget class="QWidget" name="metricCard2" native="true">
+										<layout class="QVBoxLayout" name="metricLayout2">
+											<property name="leftMargin">
+												<number>18</number>
+											</property>
+											<property name="topMargin">
+												<number>16</number>
+											</property>
+											<property name="rightMargin">
+												<number>18</number>
+											</property>
+											<property name="bottomMargin">
+												<number>16</number>
+											</property>
+
+											<item>
+												<widget class="QLabel" name="metricTitle1">
+													<property name="text">
+														<string>Warning Alerts</string>
+													</property>
+												</widget>
+											</item>
+
+											<item>
+												<widget class="QLabel" name="metricValue1">
+													<property name="text">
+														<string>0</string>
+													</property>
+												</widget>
+											</item>
+
+											<item>
+												<widget class="QLabel" name="warningText">
+													<property name="text">
+														<string>Below minimum quantity</string>
+													</property>
+												</widget>
+											</item>
+										</layout>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QWidget" name="metricCard3" native="true">
+										<layout class="QVBoxLayout" name="metricLayout3">
+											<property name="leftMargin">
+												<number>18</number>
+											</property>
+											<property name="topMargin">
+												<number>16</number>
+											</property>
+											<property name="rightMargin">
+												<number>18</number>
+											</property>
+											<property name="bottomMargin">
+												<number>16</number>
+											</property>
+
+											<item>
+												<widget class="QLabel" name="metricTitle2">
+													<property name="text">
+														<string>Healthy Items</string>
+													</property>
+												</widget>
+											</item>
+
+											<item>
+												<widget class="QLabel" name="metricValue2">
+													<property name="text">
+														<string>0</string>
+													</property>
+												</widget>
+											</item>
+
+											<item>
+												<widget class="QLabel" name="okText">
+													<property name="text">
+														<string>Stock levels are good</string>
+													</property>
+												</widget>
+											</item>
+										</layout>
+									</widget>
+								</item>
+							</layout>
 						</item>
 
 						<item>
-							<spacer name="toolbarSpacer">
-								<property name="orientation">
-									<enum>Qt::Horizontal</enum>
+							<widget class="QWidget" name="toolbarContainer" native="true">
+								<property name="minimumSize">
+									<size>
+										<width>0</width>
+										<height>72</height>
+									</size>
 								</property>
-							</spacer>
-						</item>
 
-						<item>
-							<widget class="QPushButton" name="exportButton">
-								<property name="text">
-									<string>Export Report</string>
-								</property>
-							</widget>
-						</item>
-					</layout>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QWidget" name="tableCard" native="true">
-					<layout class="QVBoxLayout" name="tableLayout">
-						<property name="leftMargin">
-							<number>14</number>
-						</property>
-						<property name="topMargin">
-							<number>14</number>
-						</property>
-						<property name="rightMargin">
-							<number>14</number>
-						</property>
-						<property name="bottomMargin">
-							<number>14</number>
-						</property>
-						<property name="spacing">
-							<number>14</number>
-						</property>
-
-						<item>
-							<widget class="QTableWidget" name="alertsTable">
-								<property name="columnCount">
-									<number>6</number>
-								</property>
-								<property name="rowCount">
-									<number>0</number>
-								</property>
-								<property name="selectionBehavior">
-									<enum>QAbstractItemView::SelectRows</enum>
-								</property>
-								<property name="showGrid">
-									<bool>false</bool>
-								</property>
-								<attribute name="horizontalHeaderStretchLastSection">
-									<bool>true</bool>
-								</attribute>
-
-								<column>
-									<property name="text">
-										<string>Truck</string>
+								<layout class="QHBoxLayout" name="toolbarLayout">
+									<property name="leftMargin">
+										<number>14</number>
 									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Item</string>
+									<property name="topMargin">
+										<number>12</number>
 									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Current Qty</string>
+									<property name="rightMargin">
+										<number>14</number>
 									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Minimum Qty</string>
+									<property name="bottomMargin">
+										<number>12</number>
 									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Status</string>
-									</property>
-								</column>
-								<column>
-									<property name="text">
-										<string>Updated</string>
-									</property>
-								</column>
-							</widget>
-						</item>
-
-						<item>
-							<widget class="QWidget" name="paginationContainer" native="true">
-								<layout class="QHBoxLayout" name="paginationLayout">
 									<property name="spacing">
-										<number>8</number>
+										<number>12</number>
 									</property>
 
 									<item>
-										<widget class="QLabel" name="paginationLabel">
-											<property name="text">
-												<string>Showing 1 to 5 of 17 alerts</string>
+										<widget class="QWidget" name="searchContainer" native="true">
+											<property name="minimumSize">
+												<size>
+													<width>340</width>
+													<height>44</height>
+												</size>
 											</property>
+											<property name="maximumSize">
+												<size>
+													<width>520</width>
+													<height>44</height>
+												</size>
+											</property>
+
+											<layout class="QHBoxLayout" name="searchLayout">
+												<property name="leftMargin">
+													<number>0</number>
+												</property>
+												<property name="topMargin">
+													<number>0</number>
+												</property>
+												<property name="rightMargin">
+													<number>0</number>
+												</property>
+												<property name="bottomMargin">
+													<number>0</number>
+												</property>
+
+												<item>
+													<widget class="QLineEdit" name="searchInput">
+														<property name="placeholderText">
+															<string>Search alerts...</string>
+														</property>
+													</widget>
+												</item>
+											</layout>
 										</widget>
 									</item>
 
 									<item>
-										<spacer name="paginationSpacer">
+										<widget class="QComboBox" name="statusFilter">
+											<property name="minimumSize">
+												<size>
+													<width>160</width>
+													<height>38</height>
+												</size>
+											</property>
+											<property name="maximumSize">
+												<size>
+													<width>180</width>
+													<height>38</height>
+												</size>
+											</property>
+
+											<item>
+												<property name="text">
+													<string>All Alerts</string>
+												</property>
+											</item>
+
+											<item>
+												<property name="text">
+													<string>Critical</string>
+												</property>
+											</item>
+
+											<item>
+												<property name="text">
+													<string>Warning</string>
+												</property>
+											</item>
+										</widget>
+									</item>
+
+									<item>
+										<spacer name="toolbarSpacer">
 											<property name="orientation">
 												<enum>Qt::Horizontal</enum>
 											</property>
@@ -348,41 +311,197 @@
 									</item>
 
 									<item>
-										<widget class="QPushButton" name="pageButton">
+										<widget class="QPushButton" name="exportButton">
 											<property name="text">
-												<string>&lt;</string>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<widget class="QPushButton" name="activePageButton">
-											<property name="text">
-												<string>1</string>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<widget class="QPushButton" name="pageButton2">
-											<property name="text">
-												<string>2</string>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<widget class="QPushButton" name="pageButton3">
-											<property name="text">
-												<string>&gt;</string>
+												<string>Export Report</string>
 											</property>
 										</widget>
 									</item>
 								</layout>
 							</widget>
 						</item>
+
+						<item>
+							<widget class="QWidget" name="tableCard" native="true">
+								<property name="maximumSize">
+									<size>
+										<width>16777215</width>
+										<height>520</height>
+									</size>
+								</property>
+
+								<layout class="QVBoxLayout" name="tableLayout">
+									<property name="leftMargin">
+										<number>12</number>
+									</property>
+									<property name="topMargin">
+										<number>12</number>
+									</property>
+									<property name="rightMargin">
+										<number>12</number>
+									</property>
+									<property name="bottomMargin">
+										<number>12</number>
+									</property>
+									<property name="spacing">
+										<number>10</number>
+									</property>
+
+									<item>
+										<widget class="QTableWidget" name="alertsTable">
+											<property name="minimumSize">
+												<size>
+													<width>0</width>
+													<height>360</height>
+												</size>
+											</property>
+											<property name="columnCount">
+												<number>6</number>
+											</property>
+											<property name="rowCount">
+												<number>0</number>
+											</property>
+											<property name="selectionBehavior">
+												<enum>QAbstractItemView::SelectRows</enum>
+											</property>
+											<property name="showGrid">
+												<bool>false</bool>
+											</property>
+											<attribute name="horizontalHeaderStretchLastSection">
+												<bool>true</bool>
+											</attribute>
+
+											<column>
+												<property name="text">
+													<string>Truck</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Item</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Current Qty</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Minimum Qty</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Status</string>
+												</property>
+											</column>
+
+											<column>
+												<property name="text">
+													<string>Template</string>
+												</property>
+											</column>
+										</widget>
+									</item>
+
+									<item>
+										<widget class="QWidget" name="paginationContainer" native="true">
+											<property name="styleSheet">
+												<string notr="true"/>
+											</property>
+
+											<layout class="QHBoxLayout" name="paginationLayout">
+												<property name="leftMargin">
+													<number>0</number>
+												</property>
+												<property name="topMargin">
+													<number>0</number>
+												</property>
+												<property name="rightMargin">
+													<number>0</number>
+												</property>
+												<property name="bottomMargin">
+													<number>0</number>
+												</property>
+												<property name="spacing">
+													<number>8</number>
+												</property>
+
+												<item>
+													<widget class="QLabel" name="paginationLabel">
+														<property name="text">
+															<string>Showing 0 to 0 of 0 low stock alerts</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<spacer name="paginationSpacer">
+														<property name="orientation">
+															<enum>Qt::Horizontal</enum>
+														</property>
+													</spacer>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="pageButton">
+														<property name="text">
+															<string>&lt;</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="activePageButton">
+														<property name="text">
+															<string>1</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="pageButton2">
+														<property name="text">
+															<string>2</string>
+														</property>
+													</widget>
+												</item>
+
+												<item>
+													<widget class="QPushButton" name="pageButton3">
+														<property name="text">
+															<string>&gt;</string>
+														</property>
+													</widget>
+												</item>
+											</layout>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+
+						<item>
+							<spacer name="bottomSpacer">
+								<property name="orientation">
+									<enum>Qt::Vertical</enum>
+								</property>
+								<property name="sizeType">
+									<enum>QSizePolicy::Expanding</enum>
+								</property>
+							</spacer>
+						</item>
 					</layout>
 				</widget>
 			</item>
 		</layout>
 	</widget>
+
 	<resources/>
 	<connections/>
 </ui>

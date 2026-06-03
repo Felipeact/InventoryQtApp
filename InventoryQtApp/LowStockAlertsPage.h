@@ -13,8 +13,6 @@ class LowStockAlertsPage : public QWidget
     Q_OBJECT
 
 public:
-
-    void applyTheme(Theme::AppTheme theme);
     explicit LowStockAlertsPage(
         TruckStockService* truckStockService,
         QWidget* parent = nullptr
@@ -23,6 +21,10 @@ public:
     ~LowStockAlertsPage();
 
     void refreshAlerts();
+
+    void applyTheme(
+        Theme::AppTheme theme
+    );
 
 private slots:
     void onSearchChanged(const QString& text);
@@ -45,11 +47,15 @@ private:
     int pageSize = 10;
 
     void setupConnections();
+    void setupTable();
+
     void loadAlerts();
     void filterAlerts();
     void populateTable();
     void updateMetrics();
     void updatePagination();
 
-    QString escapeCsv(const QString& value) const;
+    QString escapeCsv(
+        const QString& value
+    ) const;
 };

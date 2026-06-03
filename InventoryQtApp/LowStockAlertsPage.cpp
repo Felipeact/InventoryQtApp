@@ -1,9 +1,13 @@
 #include "LowStockAlertsPage.h"
 #include "Theme.h"
 
+#include <algorithm>
+
+#include <QAbstractItemView>
 #include <QComboBox>
 #include <QFile>
 #include <QFileDialog>
+#include <QFrame>
 #include <QHeaderView>
 #include <QLineEdit>
 #include <QMessageBox>
@@ -11,7 +15,6 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QTextStream>
-#include <algorithm>
 
 LowStockAlertsPage::LowStockAlertsPage(
     TruckStockService* truckStockService,
@@ -21,6 +24,10 @@ LowStockAlertsPage::LowStockAlertsPage(
     truckStockService(truckStockService)
 {
     ui.setupUi(this);
+
+    applyTheme(Theme::AppTheme::Dark);
+
+    setupTable();
     setupConnections();
     loadAlerts();
 }
@@ -31,47 +38,104 @@ LowStockAlertsPage::~LowStockAlertsPage()
 
 void LowStockAlertsPage::setupConnections()
 {
-    connect(ui.searchInput, &QLineEdit::textChanged,
-        this, &LowStockAlertsPage::onSearchChanged);
+    connect(
+        ui.searchInput,
+        &QLineEdit::textChanged,
+        this,
+        &LowStockAlertsPage::onSearchChanged
+    );
 
-    connect(ui.statusFilter,
+    connect(
+        ui.statusFilter,
         QOverload<int>::of(&QComboBox::currentIndexChanged),
         this,
-        &LowStockAlertsPage::onStatusFilterChanged);
+        &LowStockAlertsPage::onStatusFilterChanged
+    );
 
-    connect(ui.exportButton, &QPushButton::clicked,
-        this, &LowStockAlertsPage::onExportClicked);
+    connect(
+        ui.exportButton,
+        &QPushButton::clicked,
+        this,
+        &LowStockAlertsPage::onExportClicked
+    );
 
-    connect(ui.pageButton, &QPushButton::clicked,
-        this, &LowStockAlertsPage::onPreviousPageClicked);
+    connect(
+        ui.pageButton,
+        &QPushButton::clicked,
+        this,
+        &LowStockAlertsPage::onPreviousPageClicked
+    );
 
-    connect(ui.pageButton3, &QPushButton::clicked,
-        this, &LowStockAlertsPage::onNextPageClicked);
+    connect(
+        ui.pageButton3,
+        &QPushButton::clicked,
+        this,
+        &LowStockAlertsPage::onNextPageClicked
+    );
 
-    connect(ui.pageButton2, &QPushButton::clicked,
-        this, &LowStockAlertsPage::onPage2Clicked);
+    connect(
+        ui.pageButton2,
+        &QPushButton::clicked,
+        this,
+        &LowStockAlertsPage::onPage2Clicked
+    );
+}
+
+void LowStockAlertsPage::setupTable()
+{
+    ui.alertsTable->setColumnCount(6);
+
+    ui.alertsTable->setHorizontalHeaderLabels(
+        QStringList()
+        << "Truck"
+        << "Item"
+        << "Current Qty"
+        << "Minimum Qty"
+        << "Status"
+        << "Template"
+    );
+
+    ui.alertsTable->verticalHeader()->setVisible(false);
+    ui.alertsTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui.alertsTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui.alertsTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui.alertsTable->setShowGrid(false);
+    ui.alertsTable->setFrameShape(QFrame::NoFrame);
+    ui.alertsTable->setFocusPolicy(Qt::NoFocus);
+    ui.alertsTable->setAlternatingRowColors(false);
+    ui.alertsTable->viewport()->setAutoFillBackground(false);
+
+    ui.alertsTable->horizontalHeader()->setHighlightSections(false);
+    ui.alertsTable->horizontalHeader()->setDefaultAlignment(
+        Qt::AlignLeft | Qt::AlignVCenter
+    );
+
+    ui.alertsTable->horizontalHeader()->setFixedHeight(48);
+    ui.alertsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    ui.alertsTable->verticalHeader()->setDefaultSectionSize(52);
+
+    ui.alertsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui.alertsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void LowStockAlertsPage::loadAlerts()
 {
-    ui.alertsTable->clearContents();
-    ui.alertsTable->setColumnCount(6);
-
     if (!truckStockService) {
         currentAlerts.clear();
         filteredAlerts.clear();
+
         populateTable();
         updateMetrics();
         updatePagination();
+
         return;
     }
 
-    currentAlerts = truckStockService->getLowStockItems();
+    currentAlerts =
+        truckStockService->getLowStockItems();
 
     filterAlerts();
-
-    ui.alertsTable->horizontalHeader()->setStretchLastSection(true);
-    ui.alertsTable->verticalHeader()->setVisible(false);
 }
 
 void LowStockAlertsPage::refreshAlerts()
@@ -81,18 +145,32 @@ void LowStockAlertsPage::refreshAlerts()
 
 void LowStockAlertsPage::filterAlerts()
 {
-    QString searchText = ui.searchInput->text().trimmed();
-    QString selectedStatus = ui.statusFilter->currentText();
+    QString searchText =
+        ui.searchInput->text().trimmed();
+
+    QString selectedStatus =
+        ui.statusFilter->currentText();
 
     filteredAlerts.clear();
 
     for (const LowStockItemDto& item : currentAlerts) {
-        QString truckNumber = QString::fromStdString(item.truckNumber);
-        QString productName = QString::fromStdString(item.productName);
-        QString currentQuantity = QString::number(item.currentQuantity);
-        QString minimumQuantity = QString::number(item.minimumQuantity);
-        QString status = QString::fromStdString(item.status);
-        QString templateName = QString::fromStdString(item.templateName);
+        QString truckNumber =
+            QString::fromStdString(item.truckNumber);
+
+        QString productName =
+            QString::fromStdString(item.productName);
+
+        QString currentQuantity =
+            QString::number(item.currentQuantity);
+
+        QString minimumQuantity =
+            QString::number(item.minimumQuantity);
+
+        QString status =
+            QString::fromStdString(item.status);
+
+        QString templateName =
+            QString::fromStdString(item.templateName);
 
         bool searchMatch =
             searchText.isEmpty() ||
@@ -123,33 +201,59 @@ void LowStockAlertsPage::populateTable()
 {
     ui.alertsTable->clearContents();
 
-    int totalItems = static_cast<int>(filteredAlerts.size());
-    int startIndex = (currentPage - 1) * pageSize;
-    int endIndex = (std::min)(startIndex + pageSize, totalItems);
-    int rowCount = endIndex - startIndex;
+    int totalItems =
+        static_cast<int>(filteredAlerts.size());
+
+    int startIndex =
+        (currentPage - 1) * pageSize;
+
+    int endIndex =
+        (std::min)(startIndex + pageSize, totalItems);
+
+    int rowCount =
+        endIndex - startIndex;
 
     ui.alertsTable->setRowCount(rowCount);
 
-    for (int row = 0; row < rowCount; ++row) {
-        const LowStockItemDto& item = filteredAlerts[startIndex + row];
+    for (int row = 0; row < rowCount; row++) {
+        const LowStockItemDto& item =
+            filteredAlerts[startIndex + row];
 
-        ui.alertsTable->setItem(row, 0,
-            new QTableWidgetItem(QString::fromStdString(item.truckNumber)));
+        ui.alertsTable->setItem(
+            row,
+            0,
+            new QTableWidgetItem(QString::fromStdString(item.truckNumber))
+        );
 
-        ui.alertsTable->setItem(row, 1,
-            new QTableWidgetItem(QString::fromStdString(item.productName)));
+        ui.alertsTable->setItem(
+            row,
+            1,
+            new QTableWidgetItem(QString::fromStdString(item.productName))
+        );
 
-        ui.alertsTable->setItem(row, 2,
-            new QTableWidgetItem(QString::number(item.currentQuantity)));
+        ui.alertsTable->setItem(
+            row,
+            2,
+            new QTableWidgetItem(QString::number(item.currentQuantity))
+        );
 
-        ui.alertsTable->setItem(row, 3,
-            new QTableWidgetItem(QString::number(item.minimumQuantity)));
+        ui.alertsTable->setItem(
+            row,
+            3,
+            new QTableWidgetItem(QString::number(item.minimumQuantity))
+        );
 
-        ui.alertsTable->setItem(row, 4,
-            new QTableWidgetItem(QString::fromStdString(item.status)));
+        ui.alertsTable->setItem(
+            row,
+            4,
+            new QTableWidgetItem(QString::fromStdString(item.status))
+        );
 
-        ui.alertsTable->setItem(row, 5,
-            new QTableWidgetItem(QString::fromStdString(item.templateName)));
+        ui.alertsTable->setItem(
+            row,
+            5,
+            new QTableWidgetItem(QString::fromStdString(item.templateName))
+        );
     }
 }
 
@@ -159,7 +263,8 @@ void LowStockAlertsPage::updateMetrics()
     int warningCount = 0;
 
     for (const LowStockItemDto& item : filteredAlerts) {
-        QString status = QString::fromStdString(item.status);
+        QString status =
+            QString::fromStdString(item.status);
 
         if (status.compare("Critical", Qt::CaseInsensitive) == 0) {
             criticalCount++;
@@ -169,25 +274,32 @@ void LowStockAlertsPage::updateMetrics()
         }
     }
 
-    int otherCount =
-        static_cast<int>(filteredAlerts.size()) - criticalCount - warningCount;
+    int healthyCount =
+        static_cast<int>(filteredAlerts.size()) -
+        criticalCount -
+        warningCount;
 
     ui.metricValue->setText(QString::number(criticalCount));
     ui.metricValue1->setText(QString::number(warningCount));
-    ui.metricValue2->setText(QString::number(otherCount));
+    ui.metricValue2->setText(QString::number(healthyCount));
 }
 
 void LowStockAlertsPage::updatePagination()
 {
-    int totalItems = static_cast<int>(filteredAlerts.size());
-    int totalPages = (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+    int totalItems =
+        static_cast<int>(filteredAlerts.size());
+
+    int totalPages =
+        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
 
     if (currentPage > totalPages) {
         currentPage = totalPages;
     }
 
     int startItem =
-        totalItems == 0 ? 0 : ((currentPage - 1) * pageSize) + 1;
+        totalItems == 0
+        ? 0
+        : ((currentPage - 1) * pageSize) + 1;
 
     int endItem =
         (std::min)(currentPage * pageSize, totalItems);
@@ -207,15 +319,21 @@ void LowStockAlertsPage::updatePagination()
     ui.pageButton2->setVisible(currentPage < totalPages);
 }
 
-void LowStockAlertsPage::onSearchChanged(const QString& text)
+void LowStockAlertsPage::onSearchChanged(
+    const QString& text
+)
 {
     Q_UNUSED(text);
+
     filterAlerts();
 }
 
-void LowStockAlertsPage::onStatusFilterChanged(int index)
+void LowStockAlertsPage::onStatusFilterChanged(
+    int index
+)
 {
     Q_UNUSED(index);
+
     filterAlerts();
 }
 
@@ -223,6 +341,7 @@ void LowStockAlertsPage::onPreviousPageClicked()
 {
     if (currentPage > 1) {
         currentPage--;
+
         populateTable();
         updatePagination();
     }
@@ -230,11 +349,15 @@ void LowStockAlertsPage::onPreviousPageClicked()
 
 void LowStockAlertsPage::onNextPageClicked()
 {
-    int totalItems = static_cast<int>(filteredAlerts.size());
-    int totalPages = (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+    int totalItems =
+        static_cast<int>(filteredAlerts.size());
+
+    int totalPages =
+        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
 
     if (currentPage < totalPages) {
         currentPage++;
+
         populateTable();
         updatePagination();
     }
@@ -242,22 +365,33 @@ void LowStockAlertsPage::onNextPageClicked()
 
 void LowStockAlertsPage::onPage2Clicked()
 {
-    int totalItems = static_cast<int>(filteredAlerts.size());
-    int totalPages = (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+    int totalItems =
+        static_cast<int>(filteredAlerts.size());
+
+    int totalPages =
+        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
 
     if (currentPage + 1 <= totalPages) {
         currentPage++;
+
         populateTable();
         updatePagination();
     }
 }
 
-QString LowStockAlertsPage::escapeCsv(const QString& value) const
+QString LowStockAlertsPage::escapeCsv(
+    const QString& value
+) const
 {
     QString escaped = value;
+
     escaped.replace("\"", "\"\"");
 
-    if (escaped.contains(",") || escaped.contains("\"") || escaped.contains("\n")) {
+    if (
+        escaped.contains(",") ||
+        escaped.contains("\"") ||
+        escaped.contains("\n")
+        ) {
         escaped = "\"" + escaped + "\"";
     }
 
@@ -266,12 +400,13 @@ QString LowStockAlertsPage::escapeCsv(const QString& value) const
 
 void LowStockAlertsPage::onExportClicked()
 {
-    QString filePath = QFileDialog::getSaveFileName(
-        this,
-        "Export Low Stock Alerts",
-        "low_stock_alerts.csv",
-        "CSV Files (*.csv)"
-    );
+    QString filePath =
+        QFileDialog::getSaveFileName(
+            this,
+            "Export Low Stock Alerts",
+            "low_stock_alerts.csv",
+            "CSV Files (*.csv)"
+        );
 
     if (filePath.isEmpty()) {
         return;
@@ -285,6 +420,7 @@ void LowStockAlertsPage::onExportClicked()
             "Export Failed",
             "Could not create the CSV file."
         );
+
         return;
     }
 
@@ -311,10 +447,11 @@ void LowStockAlertsPage::onExportClicked()
     );
 }
 
-void LowStockAlertsPage::applyTheme(Theme::AppTheme theme)
+void LowStockAlertsPage::applyTheme(
+    Theme::AppTheme theme
+)
 {
     setStyleSheet(
-        Theme::truckPageStyle(theme)
+        Theme::lowStockAlertsPageStyle(theme)
     );
 }
-

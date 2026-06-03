@@ -2,13 +2,16 @@
 #include "Theme.h"
 #include "UseTruckItemDialog.h"
 
+#include <QAbstractItemView>
+#include <QFrame>
 #include <QHeaderView>
+#include <QHBoxLayout>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-#include <QHBoxLayout>
+#include <QWidget>
 
 MyTruckStockPage::MyTruckStockPage(
     TruckStockService* truckStockService,
@@ -18,8 +21,12 @@ MyTruckStockPage::MyTruckStockPage(
     truckStockService(truckStockService)
 {
     ui.setupUi(this);
-    setupConnections();
 
+    applyTheme(Theme::AppTheme::Dark);
+
+    setupTable();
+    setupConnections();
+    loadStock();
 }
 
 MyTruckStockPage::~MyTruckStockPage()
@@ -28,45 +35,106 @@ MyTruckStockPage::~MyTruckStockPage()
 
 void MyTruckStockPage::setupConnections()
 {
-    connect(ui.searchInput, &QLineEdit::textChanged,
-        this, &MyTruckStockPage::onSearchChanged);
+    connect(
+        ui.searchInput,
+        &QLineEdit::textChanged,
+        this,
+        &MyTruckStockPage::onSearchChanged
+    );
+}
+
+void MyTruckStockPage::setupTable()
+{
+    ui.truckStockTable->setColumnCount(6);
+
+    ui.truckStockTable->setHorizontalHeaderLabels(
+        QStringList()
+        << "Item"
+        << "Category"
+        << "Current Qty"
+        << "Minimum Qty"
+        << "Status"
+        << "Actions"
+    );
+
+    ui.truckStockTable->verticalHeader()->setVisible(false);
+    ui.truckStockTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    ui.truckStockTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui.truckStockTable->setSelectionMode(QAbstractItemView::SingleSelection);
+    ui.truckStockTable->setShowGrid(false);
+    ui.truckStockTable->setFrameShape(QFrame::NoFrame);
+    ui.truckStockTable->setFocusPolicy(Qt::NoFocus);
+    ui.truckStockTable->setAlternatingRowColors(false);
+    ui.truckStockTable->viewport()->setAutoFillBackground(false);
+
+    ui.truckStockTable->horizontalHeader()->setHighlightSections(false);
+    ui.truckStockTable->horizontalHeader()->setDefaultAlignment(
+        Qt::AlignLeft | Qt::AlignVCenter
+    );
+
+    ui.truckStockTable->horizontalHeader()->setFixedHeight(48);
+    ui.truckStockTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui.truckStockTable->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
+
+    ui.truckStockTable->setColumnWidth(5, 130);
+    ui.truckStockTable->verticalHeader()->setDefaultSectionSize(52);
+
+    ui.truckStockTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+    ui.truckStockTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void MyTruckStockPage::loadStock()
 {
     ui.truckStockTable->clearContents();
 
-    currentStock = truckStockService->getMyTruckStock();
+    if (!truckStockService) {
+        ui.truckStockTable->setRowCount(0);
+        return;
+    }
+
+    currentStock =
+        truckStockService->getMyTruckStock();
 
     ui.truckStockTable->setRowCount(
         static_cast<int>(currentStock.items.size())
     );
 
-    ui.truckStockTable->setColumnCount(6);
+    for (int row = 0; row < static_cast<int>(currentStock.items.size()); row++) {
+        const MyTruckStockItemDto& item =
+            currentStock.items[row];
 
-    for (int row = 0; row < static_cast<int>(currentStock.items.size()); ++row) {
-        const MyTruckStockItemDto& item = currentStock.items[row];
+        ui.truckStockTable->setItem(
+            row,
+            0,
+            new QTableWidgetItem(QString::fromStdString(item.productName))
+        );
 
-        ui.truckStockTable->setItem(row, 0,
-            new QTableWidgetItem(QString::fromStdString(item.productName)));
+        ui.truckStockTable->setItem(
+            row,
+            1,
+            new QTableWidgetItem(QString::fromStdString(item.category))
+        );
 
-        ui.truckStockTable->setItem(row, 1,
-            new QTableWidgetItem(QString::fromStdString(item.category)));
+        ui.truckStockTable->setItem(
+            row,
+            2,
+            new QTableWidgetItem(QString::number(item.currentQuantity))
+        );
 
-        ui.truckStockTable->setItem(row, 2,
-            new QTableWidgetItem(QString::number(item.currentQuantity)));
+        ui.truckStockTable->setItem(
+            row,
+            3,
+            new QTableWidgetItem(QString::number(item.minimumQuantity))
+        );
 
-        ui.truckStockTable->setItem(row, 3,
-            new QTableWidgetItem(QString::number(item.minimumQuantity)));
-
-        ui.truckStockTable->setItem(row, 4,
-            new QTableWidgetItem(QString::fromStdString(item.status)));
+        ui.truckStockTable->setItem(
+            row,
+            4,
+            new QTableWidgetItem(QString::fromStdString(item.status))
+        );
 
         addUseButton(row);
     }
-
-    ui.truckStockTable->horizontalHeader()->setStretchLastSection(true);
-    ui.truckStockTable->verticalHeader()->setVisible(false);
 }
 
 void MyTruckStockPage::refreshStock()
@@ -74,15 +142,21 @@ void MyTruckStockPage::refreshStock()
     loadStock();
 }
 
-void MyTruckStockPage::onSearchChanged(const QString& text)
+void MyTruckStockPage::onSearchChanged(
+    const QString& text
+)
 {
-    for (int row = 0; row < ui.truckStockTable->rowCount(); ++row) {
-        bool match = false;
+    QString searchText =
+        text.trimmed();
 
-        for (int col = 0; col < ui.truckStockTable->columnCount(); ++col) {
-            QTableWidgetItem* item = ui.truckStockTable->item(row, col);
+    for (int row = 0; row < ui.truckStockTable->rowCount(); row++) {
+        bool match = searchText.isEmpty();
 
-            if (item && item->text().contains(text, Qt::CaseInsensitive)) {
+        for (int col = 0; col < ui.truckStockTable->columnCount(); col++) {
+            QTableWidgetItem* item =
+                ui.truckStockTable->item(row, col);
+
+            if (item && item->text().contains(searchText, Qt::CaseInsensitive)) {
                 match = true;
                 break;
             }
@@ -92,24 +166,46 @@ void MyTruckStockPage::onSearchChanged(const QString& text)
     }
 }
 
-void MyTruckStockPage::addUseButton(int row)
+void MyTruckStockPage::addUseButton(
+    int row
+)
 {
-    QPushButton* useButton = new QPushButton("Use Item", this);
+    QWidget* actionWidget =
+        new QWidget(this);
 
-    ui.truckStockTable->setCellWidget(row, 5, useButton);
+    actionWidget->setObjectName("actionContainer");
+
+    QHBoxLayout* layout =
+        new QHBoxLayout(actionWidget);
+
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+    layout->setAlignment(Qt::AlignCenter);
+
+    QPushButton* useButton =
+        new QPushButton("Use", actionWidget);
+
+    useButton->setObjectName("useButton");
+
+    layout->addWidget(useButton);
+
+    ui.truckStockTable->setCellWidget(row, 5, actionWidget);
 
     connect(useButton, &QPushButton::clicked, this, [this, row]() {
         onUseItemClicked(row);
         });
 }
 
-void MyTruckStockPage::onUseItemClicked(int row)
+void MyTruckStockPage::onUseItemClicked(
+    int row
+)
 {
     if (row < 0 || row >= static_cast<int>(currentStock.items.size())) {
         return;
     }
 
-    const MyTruckStockItemDto& item = currentStock.items[row];
+    const MyTruckStockItemDto& item =
+        currentStock.items[row];
 
     UseTruckItemDialog dialog(this);
 
@@ -119,12 +215,16 @@ void MyTruckStockPage::onUseItemClicked(int row)
     );
 
     if (dialog.exec() == QDialog::Accepted) {
-
         UseTruckItemRequest request;
 
-        request.itemId = item.id;
-        request.quantityUsed = dialog.getQuantityToUse();
-        request.notes = dialog.getNotes().toStdString();
+        request.itemId =
+            item.id;
+
+        request.quantityUsed =
+            dialog.getQuantityToUse();
+
+        request.notes =
+            dialog.getNotes().toStdString();
 
         bool success =
             truckStockService->useTruckItem(request);
@@ -148,10 +248,11 @@ void MyTruckStockPage::onUseItemClicked(int row)
     }
 }
 
-void MyTruckStockPage::applyTheme(Theme::AppTheme theme)
+void MyTruckStockPage::applyTheme(
+    Theme::AppTheme theme
+)
 {
     setStyleSheet(
-        Theme::truckPageStyle(theme)
+        Theme::myTruckStockPageStyle(theme)
     );
 }
-

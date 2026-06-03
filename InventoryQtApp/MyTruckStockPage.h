@@ -12,8 +12,6 @@ class MyTruckStockPage : public QWidget
     Q_OBJECT
 
 public:
-
-    void applyTheme(Theme::AppTheme theme);
     explicit MyTruckStockPage(
         TruckStockService* truckStockService,
         QWidget* parent = nullptr
@@ -23,9 +21,12 @@ public:
 
     void refreshStock();
 
+    void applyTheme(
+        Theme::AppTheme theme
+    );
+
 private slots:
     void onSearchChanged(const QString& text);
-    void addUseButton(int row);
     void onUseItemClicked(int row);
 
 private:
@@ -35,7 +36,8 @@ private:
     MyTruckStockDto currentStock;
 
     void setupConnections();
+    void setupTable();
     void loadStock();
 
-
+    void addUseButton(int row);
 };
