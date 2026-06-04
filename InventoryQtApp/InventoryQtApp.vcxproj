@@ -201,6 +201,14 @@
     <QtMoc Include="TruckStockDashboardPage.h" />
     <ClInclude Include="UserService.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="FINAL_SETUP_GUIDE.md" />
+    <None Include="IMMEDIATE_ACTIONS.md" />
+    <None Include="IMPLEMENTATION_COMPLETE.md" />
+    <None Include="IMPLEMENTATION_REFERENCE.md" />
+    <None Include="IMPLEMENTATION_STATUS.md" />
+    <None Include="PRODUCTION_READY.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

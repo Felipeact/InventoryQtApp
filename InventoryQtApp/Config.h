@@ -12,7 +12,13 @@
 namespace Config
 {
 	// Default API URL (can be overridden by settings or environment variable)
+	// TODO: Update this to your production API URL before deployment
+	// Example: "https://api.your-company.com" or "https://api.your-domain.com"
 	const std::string DEFAULT_API_BASE_URL = "https://orange-robot-5x4pq4vr5vw3p9g-3000.app.github.dev";
+
+	// Update server URL for auto-updates
+	// TODO: Configure your update server URL before deployment
+	const std::string UPDATE_SERVER_URL = "https://updates.your-company.com/api/app/latest-version";
 
 	// Get API URL from settings or environment
 	inline std::string getApiBaseUrl()

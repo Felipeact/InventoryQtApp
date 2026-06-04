@@ -88,6 +88,64 @@ bool AuthService::logout()
     auto response = api.post("/auth/logout", body.dump());
 
     api.clearTokens();
-
     return response.status_code == 200;
+}
+
+PasswordResetResult AuthService::requestPasswordReset(const std::string& email)
+{
+    PasswordResetResult result;
+
+    json body = {
+        {"email", email}
+    };
+
+    auto response = api.post("/auth/request-reset", body.dump());
+
+    if (response.status_code != 200) {
+        result.success = false;
+        result.errorMessage = response.text;
+        return result;
+    }
+
+    try {
+        auto data = json::parse(response.text);
+        result.success = true;
+        result.message = data.contains("message") ? data["message"].get<std::string>() : "Reset link sent to email";
+        return result;
+    }
+    catch (const std::exception& e) {
+        result.success = false;
+        result.errorMessage = std::string("JSON parse error: ") + e.what();
+        return result;
+    }
+}
+
+PasswordResetResult AuthService::resetPassword(const std::string& token, const std::string& newPassword)
+{
+    PasswordResetResult result;
+
+    json body = {
+        {"token", token},
+        {"newPassword", newPassword}
+    };
+
+    auto response = api.post("/auth/reset-password", body.dump());
+
+    if (response.status_code != 200) {
+        result.success = false;
+        result.errorMessage = response.text;
+        return result;
+    }
+
+    try {
+        auto data = json::parse(response.text);
+        result.success = true;
+        result.message = data.contains("message") ? data["message"].get<std::string>() : "Password reset successful";
+        return result;
+    }
+    catch (const std::exception& e) {
+        result.success = false;
+        result.errorMessage = std::string("JSON parse error: ") + e.what();
+        return result;
+    }
 }

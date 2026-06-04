@@ -10,6 +10,14 @@
 #include <QPageSize>
 #include <QPageLayout>
 
+// Try to include QXlsx if available
+#ifdef QXLSX_LIBRARY
+#include <xlsxdocument.h>
+#include <xlsxcellrange.h>
+#include <xlsxformat.h>
+using namespace QXlsx;
+#endif
+
 bool ExportUtility::exportTableToCsv(const QTableWidget* table, const QString& filePath)
 {
     if (!table) return false;
@@ -51,18 +59,57 @@ bool ExportUtility::exportTableToCsv(const QTableWidget* table, const QString& f
 
 bool ExportUtility::exportTableToExcel(const QTableWidget* table, const QString& filePath)
 {
-    // This requires an external library like xlsxwriter or libxlsxwriter
-    // For now, we'll default to CSV format
-    if (filePath.endsWith(".xlsx", Qt::CaseInsensitive)) {
-        // In production, integrate xlsxwriter library here
-        // For this implementation, we'll just save as CSV with xlsx extension
-        // A real implementation would use:
-        // - libxlsxwriter (C library)
-        // - QXlsx (Qt library)
-        // - xlsx-writer (Qt library)
+    if (!table || !filePath.endsWith(".xlsx", Qt::CaseInsensitive)) {
+        return false;
+    }
+
+#ifdef QXLSX_LIBRARY
+    try {
+        // Create XLSX document
+        Document xlsx;
+
+        // Write headers
+        for (int col = 0; col < table->columnCount(); ++col) {
+            QTableWidgetItem* headerItem = table->horizontalHeaderItem(col);
+            QString headerText = headerItem ? headerItem->text() : "";
+
+            // Write to cell (1-indexed in QXlsx)
+            xlsx.write(1, col + 1, headerText);
+
+            // Apply header formatting
+            Format headerFormat;
+            headerFormat.setFontBold(true);
+            headerFormat.setFillColor(QColor(200, 200, 200));
+            xlsx.write(1, col + 1, headerText, headerFormat);
+        }
+
+        // Write data rows
+        for (int row = 0; row < table->rowCount(); ++row) {
+            for (int col = 0; col < table->columnCount(); ++col) {
+                QTableWidgetItem* item = table->item(row, col);
+                QString cellText = item ? item->text() : "";
+                xlsx.write(row + 2, col + 1, cellText);
+            }
+        }
+
+        // Auto-fit columns
+        for (int col = 0; col < table->columnCount(); ++col) {
+            xlsx.setColumnWidth(col + 1, 15);
+        }
+
+        // Save to file
+        return xlsx.saveAs(filePath);
+    }
+    catch (const std::exception& e) {
+        qWarning() << "Excel export error:" << e.what();
+        // Fall back to CSV if QXlsx fails
         return exportTableToCsv(table, filePath);
     }
-    return false;
+#else
+    // QXlsx not available, fall back to CSV
+    qWarning() << "QXlsx library not available, exporting as CSV instead";
+    return exportTableToCsv(table, filePath);
+#endif
 }
 
 bool ExportUtility::exportTableToPdf(const QTableWidget* table, const QString& filePath)

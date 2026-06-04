@@ -240,6 +240,42 @@ void ReportsPage::exportToCsv()
 
 void ReportsPage::applyTheme(Theme::AppTheme theme)
 {
-    // Theme application logic
-    // This will be customized based on your Theme class implementation
+    // Apply theme to the entire page
+    this->setStyleSheet(Theme::dataPageStyle(theme));
+
+    // Apply table styling based on theme
+    if (theme == Theme::AppTheme::Dark) {
+        ui.reportTable->setStyleSheet(
+            "QTableWidget { background-color: #2b2b2b; color: #ffffff; gridline-color: #404040; }"
+            "QTableWidget::item { padding: 5px; }"
+            "QHeaderView::section { background-color: #1e1e1e; color: #ffffff; padding: 5px; border: none; }"
+        );
+    } else {
+        ui.reportTable->setStyleSheet(
+            "QTableWidget { background-color: #ffffff; color: #000000; gridline-color: #e0e0e0; }"
+            "QTableWidget::item { padding: 5px; }"
+            "QHeaderView::section { background-color: #f5f5f5; color: #000000; padding: 5px; border: none; }"
+        );
+    }
+
+    // Apply button styling
+    QString buttonStyle;
+    if (theme == Theme::AppTheme::Dark) {
+        buttonStyle = 
+            "QPushButton { background-color: #0d47a1; color: #ffffff; border-radius: 4px; padding: 6px 12px; }"
+            "QPushButton:hover { background-color: #1565c0; }"
+            "QPushButton:pressed { background-color: #0d3d8f; }";
+    } else {
+        buttonStyle = 
+            "QPushButton { background-color: #1976d2; color: #ffffff; border-radius: 4px; padding: 6px 12px; }"
+            "QPushButton:hover { background-color: #1565c0; }"
+            "QPushButton:pressed { background-color: #1565c0; }";
+    }
+
+    ui.exportPdfBtn->setStyleSheet(buttonStyle);
+    ui.exportExcelBtn->setStyleSheet(buttonStyle);
+    ui.exportCsvBtn->setStyleSheet(buttonStyle);
+    ui.refreshBtn->setStyleSheet(buttonStyle);
+    ui.inventorySummaryBtn->setStyleSheet(buttonStyle);
+    ui.assetsSummaryBtn->setStyleSheet(buttonStyle);
 }

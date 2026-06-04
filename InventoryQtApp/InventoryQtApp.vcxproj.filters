@@ -389,4 +389,12 @@
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="FINAL_SETUP_GUIDE.md" />
+    <None Include="IMPLEMENTATION_COMPLETE.md" />
+    <None Include="PRODUCTION_READY.md" />
+    <None Include="IMMEDIATE_ACTIONS.md" />
+    <None Include="IMPLEMENTATION_STATUS.md" />
+    <None Include="IMPLEMENTATION_REFERENCE.md" />
+  </ItemGroup>
 </Project>

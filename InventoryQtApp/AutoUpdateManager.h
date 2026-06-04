@@ -26,7 +26,7 @@ class AutoUpdateManager : public QObject
     Q_OBJECT
 
 public:
-    AutoUpdateManager(QObject* parent = nullptr);
+    AutoUpdateManager(const QString& updateCheckUrl, QObject* parent = nullptr);
     ~AutoUpdateManager();
 
     // Check for updates
@@ -48,16 +48,19 @@ signals:
     void updateAvailable(const UpdateInfo& info);
     void noUpdateAvailable();
     void updateDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void updateDownloadFinished();
+    void updateDownloadFinished(const QString& filePath);
     void updateError(const QString& errorMessage);
 
 private slots:
-    void onReplyFinished();
+    void onCheckReplyFinished();
     void onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
+    void onDownloadReplyFinished();
+    void onNetworkReplyFinished(QNetworkReply* reply);
 
 private:
     QNetworkAccessManager* networkManager;
     QString updateCheckUrl;
+    QString currentDownloadPath;
 
     void compareVersions(const QString& latestVersion);
 };

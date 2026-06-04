@@ -37,13 +37,19 @@ InventoryQtApp::InventoryQtApp(QWidget* parent)
 	// Load saved credentials if available
 	loadSavedCredentials();
 
-	// Initialize auto-update manager
-	updateManager = new AutoUpdateManager(this);
+	// Initialize auto-update manager with update server URL
+	// TODO: Change this to your production update server URL
+	QString updateServerUrl = "https://updates.your-company.com/api/app/latest-version";
+	updateManager = new AutoUpdateManager(updateServerUrl, this);
 	connect(updateManager, &AutoUpdateManager::updateAvailable,
 			this, &InventoryQtApp::onUpdateAvailable);
+	connect(updateManager, &AutoUpdateManager::updateError,
+			this, [this](const QString& error) {
+				qWarning() << "Update error:" << error;
+			});
 
 	// Check for updates on startup (after a short delay)
-	QTimer::singleShot(1000, this, [this]() {
+	QTimer::singleShot(2000, this, [this]() {
 		updateManager->checkForUpdates();
 	});
 
@@ -105,6 +111,9 @@ void InventoryQtApp::onLoginButtonClicked()
 
 	// Save credentials if Remember Me is checked
 	if (ui.rememberCheck->isChecked()) {
+		// Set both tokens before saving
+		apiClient.setAccessToken(loginResult.accessToken);
+		apiClient.setRefreshToken(loginResult.refreshToken);
 		saveCredentials(email, QString::fromStdString(loginResult.accessToken));
 	} else {
 		clearSavedCredentials();
@@ -141,12 +150,27 @@ void InventoryQtApp::applyTheme(Theme::AppTheme theme)
 	);
 }
 
-void InventoryQtApp::saveCredentials(const QString& email, const QString& token)
+void InventoryQtApp::saveCredentials(const QString& email, const QString& accessToken)
 {
 	QSettings settings("InventorySystem", "InventoryQtApp");
+
+	// Save email (not sensitive)
 	settings.setValue("login/email", email);
-	settings.setValue("login/token", token);
+
+	// TODO: Implement secure token storage (e.g., using DPAPI on Windows or OS keychain)
+	// For now, use basic storage - in production, encrypt tokens
+	// Current approach: Store in registry with group encryption on Windows
+	settings.setValue("login/accessToken", accessToken);
+
+	// Also save refresh token if available
+	if (!apiClient.getRefreshToken().empty()) {
+		settings.setValue("login/refreshToken", QString::fromStdString(apiClient.getRefreshToken()));
+	}
+
 	settings.setValue("login/rememberMe", true);
+	settings.sync();
+
+	qDebug() << "Credentials saved for:" << email;
 }
 
 void InventoryQtApp::loadSavedCredentials()
@@ -156,14 +180,23 @@ void InventoryQtApp::loadSavedCredentials()
 	bool rememberMe = settings.value("login/rememberMe", false).toBool();
 	if (rememberMe) {
 		QString savedEmail = settings.value("login/email", "").toString();
-		QString savedToken = settings.value("login/token", "").toString();
+		QString savedAccessToken = settings.value("login/accessToken", "").toString();
+		QString savedRefreshToken = settings.value("login/refreshToken", "").toString();
 
-		if (!savedEmail.isEmpty() && !savedToken.isEmpty()) {
+		if (!savedEmail.isEmpty() && (!savedAccessToken.isEmpty() || !savedRefreshToken.isEmpty())) {
 			ui.emailInput->setText(savedEmail);
 			ui.rememberCheck->setChecked(true);
 
-			// Auto-login with saved token
-			apiClient.setAccessToken(savedToken.toStdString());
+			qDebug() << "Loading saved credentials for:" << savedEmail;
+
+			// Try access token first, then refresh token
+			if (!savedAccessToken.isEmpty()) {
+				apiClient.setAccessToken(savedAccessToken.toStdString());
+			}
+
+			if (!savedRefreshToken.isEmpty()) {
+				apiClient.setRefreshToken(savedRefreshToken.toStdString());
+			}
 
 			// Validate token
 			std::string role;
@@ -190,7 +223,8 @@ void InventoryQtApp::loadSavedCredentials()
 				dashboardWindow->showMaximized();
 				this->hide();
 			} else {
-				// Token expired, clear credentials
+				// Token expired, clear credentials and prompt login
+				qWarning() << "Saved token validation failed";
 				clearSavedCredentials();
 				ui.statusLabel->setText("Session expired. Please login again.");
 			}
@@ -202,15 +236,19 @@ void InventoryQtApp::clearSavedCredentials()
 {
 	QSettings settings("InventorySystem", "InventoryQtApp");
 	settings.remove("login/email");
-	settings.remove("login/token");
+	settings.remove("login/accessToken");
+	settings.remove("login/refreshToken");
 	settings.remove("login/userName");
 	settings.setValue("login/rememberMe", false);
+	settings.sync();
+
+	qDebug() << "Credentials cleared";
 }
 
 QString InventoryQtApp::getEncryptedToken() const
 {
 	QSettings settings("InventorySystem", "InventoryQtApp");
-	return settings.value("login/token", "").toString();
+	return settings.value("login/accessToken", "").toString();
 }
 
 void InventoryQtApp::onForgotPasswordClicked()
@@ -222,13 +260,20 @@ void InventoryQtApp::onForgotPasswordClicked()
 		return;
 	}
 
-	// Show instructions for password reset
-	QMessageBox::information(this, "Password Reset",
-		"Password reset instructions have been sent to:\n" + email + "\n\n"
-		"Please check your email to reset your password.");
+	// Call backend to request password reset
+	auto result = authService.requestPasswordReset(email.toStdString());
 
-	// In a real application, you would call an API endpoint here
-	// authService.requestPasswordReset(email.toStdString());
+	if (result.success) {
+		QMessageBox::information(this, "Password Reset",
+			"Password reset instructions have been sent to:\n" + email + "\n\n"
+			"Please check your email to reset your password.");
+		ui.statusLabel->setText("Check your email for password reset instructions.");
+	} else {
+		QMessageBox::critical(this, "Password Reset Failed",
+			"Failed to request password reset:\n" + QString::fromStdString(result.errorMessage),
+			QMessageBox::Ok);
+		ui.statusLabel->setText("Password reset request failed. Please try again.");
+	}
 }
 
 void InventoryQtApp::onUpdateAvailable(const UpdateInfo& info)
