@@ -153,6 +153,7 @@ void DashboardWindow::setupPages()
             if (myTruckStockPage) myTruckStockPage->applyTheme(appTheme);
             if (lowStockAlertsPage) lowStockAlertsPage->applyTheme(appTheme);
             if (receiptsPage) receiptsPage->applyTheme(appTheme);
+            if (reportsPage) reportsPage->applyTheme(appTheme);
 
         }
     );
@@ -188,6 +189,9 @@ void DashboardWindow::setupPages()
     receiptsPage = new ReceiptsPage(truckStockService, permissions, this);
     ui.mainStack->addWidget(receiptsPage);
 
+    reportsPage = new ReportsPage(reportService, this);
+    ui.mainStack->addWidget(reportsPage);
+
     QSettings settings("InventorySystem", "InventoryQtApp");
 
     QString savedTheme =
@@ -218,6 +222,7 @@ void DashboardWindow::setupPages()
     myTruckStockPage->applyTheme(appTheme);
     lowStockAlertsPage->applyTheme(appTheme);
     receiptsPage->applyTheme(appTheme);
+    reportsPage->applyTheme(appTheme);
 
 
 
@@ -292,6 +297,11 @@ void DashboardWindow::setupSidebar()
 
     connect(sidebar, &SidebarWidget::receiptsClicked, this, [this]() {
         ui.mainStack->setCurrentWidget(receiptsPage);
+        });
+
+    connect(sidebar, &SidebarWidget::reportsClicked, this, [this]() {
+        reportsPage->refreshReports();
+        ui.mainStack->setCurrentWidget(reportsPage);
         });
 
     connect(sidebar, &SidebarWidget::logoutClicked, this, [this]() {

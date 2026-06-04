@@ -102,14 +102,18 @@
     <ClCompile Include="AssetsPage.cpp" />
     <ClCompile Include="AssignmentsPage.cpp" />
     <ClCompile Include="AssignTemplateDialog.cpp" />
+    <ClCompile Include="AutoUpdateManager.cpp" />
     <ClCompile Include="DashboardPage.cpp" />
     <ClCompile Include="DashboardWindow.cpp" />
+    <ClCompile Include="ErrorHandler.cpp" />
+    <ClCompile Include="ExportUtility.cpp" />
     <ClCompile Include="ItemsPage.cpp" />
     <ClCompile Include="LowStockAlertsPage.cpp" />
     <ClCompile Include="MyTruckStockPage.cpp" />
     <ClCompile Include="ProductService.cpp" />
     <ClCompile Include="ReceiptsPage.cpp" />
     <ClCompile Include="ReportService.cpp" />
+    <ClCompile Include="ReportsPage.cpp" />
     <ClCompile Include="ScanPage.cpp" />
     <ClCompile Include="SettingsPage.cpp" />
     <ClCompile Include="SidebarWidget.cpp" />
@@ -145,6 +149,7 @@
     <QtUic Include="LowStockAlertsPage.ui" />
     <QtUic Include="MyTruckStockPage.ui" />
     <QtUic Include="ReceiptsPage.ui" />
+    <QtUic Include="ReportsPage.ui" />
     <QtUic Include="ScanPage.ui" />
     <QtUic Include="SettingsPage.ui" />
     <QtUic Include="SidebarWidget.ui" />
@@ -160,6 +165,10 @@
     <QtMoc Include="AddEditTemplateItemDialog.h" />
     <QtMoc Include="AddEditUserDialog.h" />
     <QtMoc Include="SettingsPage.h" />
+    <QtMoc Include="AutoUpdateManager.h" />
+    <ClInclude Include="ErrorHandler.h" />
+    <QtMoc Include="ReportsPage.h" />
+    <ClInclude Include="ExportUtility.h" />
     <ClInclude Include="TruckStockService.h" />
     <QtMoc Include="UsersPage.h" />
     <QtMoc Include="LowStockAlertsPage.h" />

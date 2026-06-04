@@ -175,6 +175,18 @@
     <ClCompile Include="SettingsPage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ReportsPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExportUtility.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AutoUpdateManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -202,6 +214,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="TruckStockService.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExportUtility.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -284,6 +302,12 @@
     <QtMoc Include="AddEditUserDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="ReportsPage.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="AutoUpdateManager.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DashboardPage.ui">
@@ -359,6 +383,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="SettingsPage.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ReportsPage.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

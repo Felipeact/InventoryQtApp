@@ -70,16 +70,20 @@ void DashboardPage::setupItemListTable()
             new QTableWidgetItem(QString::fromStdString(name))
         );
 
+        // Image or product ID
+        std::string imageUrl = product.value("imageUrl", "N/A");
         ui.itemListTable->setItem(
             row,
             1,
-            new QTableWidgetItem("Image")
+            new QTableWidgetItem(QString::fromStdString(imageUrl))
         );
 
+        // Store location
+        std::string location = product.value("location", "Unknown Store");
         ui.itemListTable->setItem(
             row,
             2,
-            new QTableWidgetItem("Main Store")
+            new QTableWidgetItem(QString::fromStdString(location))
         );
 
         ui.itemListTable->setItem(
@@ -124,10 +128,12 @@ void DashboardPage::setupLowStockTable()
             new QTableWidgetItem(QString::fromStdString(name))
         );
 
+        // Store location
+        std::string location = product.value("location", "Unknown Store");
         ui.lowStockTable->setItem(
             row,
             1,
-            new QTableWidgetItem("Main Store")
+            new QTableWidgetItem(QString::fromStdString(location))
         );
 
         ui.lowStockTable->setItem(

@@ -14,6 +14,7 @@
 #include <MyTruckStockPage.h>
 #include <LowStockAlertsPage.h>
 #include <ReceiptsPage.h>
+#include <ReportsPage.h>
 #include <TruckStockService.h>
 #include <SettingsPage.h>
 
@@ -91,6 +92,7 @@ private:
 	MyTruckStockPage* myTruckStockPage = nullptr;
 	LowStockAlertsPage* lowStockAlertsPage = nullptr;
 	ReceiptsPage* receiptsPage = nullptr;
+	ReportsPage* reportsPage = nullptr;
 
 
 	// Initialization methods

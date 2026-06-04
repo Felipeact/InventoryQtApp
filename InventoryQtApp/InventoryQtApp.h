@@ -13,6 +13,7 @@
 #include "ReportService.h"
 #include "TruckStockService.h"
 #include "Theme.h"
+#include "AutoUpdateManager.h"
 
 // Main login window of the inventory management application
 class InventoryQtApp : public QMainWindow
@@ -30,6 +31,8 @@ public:
 private slots:
 	// Handles login button click and authenticates user
 	void onLoginButtonClicked();
+	void onForgotPasswordClicked();
+	void onUpdateAvailable(const UpdateInfo& info);
 
 private:
 	Ui::InventoryQtAppClass ui;      // UI components
@@ -41,12 +44,14 @@ private:
 	UserService userService{ apiClient }; // Service for user operations
 	ReportService reportService{ apiClient }; // Service for report operations	
 	TruckStockService truckStockService{ apiClient }; // Service for truck stock operation
+	AutoUpdateManager* updateManager = nullptr; // Auto-update manager
 
 	DashboardWindow* dashboardWindow = nullptr;  // Main dashboard window after login	
 
-
-
-
-
+	// Remember Me functionality
+	void saveCredentials(const QString& email, const QString& token);
+	void loadSavedCredentials();
+	void clearSavedCredentials();
+	QString getEncryptedToken() const;
 };
 
