@@ -3438,64 +3438,301 @@ QWidget#summaryCard {
 QString Theme::truckPageStyle(AppTheme theme)
 {
     if (theme == AppTheme::Light) {
-        return R"(
-QWidget {
+        return dataPageStyle(theme) + R"(
+
+QWidget#TruckStockDashboardPageClass,
+QWidget#TrucksPageClass,
+QWidget#StockTemplatesPageClass,
+QWidget#AssignmentsPageClass,
+QWidget#MyTruckStockPageClass,
+QWidget#LowStockAlertsPageClass,
+QWidget#ReceiptsPageClass {
     background-color: #F4F7FB;
     color: #111827;
 }
 
-QWidget#pageCard, QWidget#card, QWidget#tableCard, QWidget#toolbarCard, QWidget#formCard, QWidget#summaryCard,
-QFrame#pageCard, QFrame#card, QFrame#tableCard, QFrame#toolbarCard, QFrame#formCard, QFrame#summaryCard {
+QWidget#pageContainer,
+QWidget#toolbarContainer,
+QWidget#searchContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard,
+QWidget#metricCard1,
+QWidget#metricCard2,
+QWidget#metricCard3,
+QWidget#metricCard4,
+QWidget#itemSummaryCard,
+QWidget#assetSummaryCard,
+QWidget#recentItemsCard,
+QWidget#lowStockCard,
+QWidget#miniSummaryBox1,
+QWidget#miniSummaryBox2,
+QWidget#miniSummaryBox3,
+QWidget#miniSummaryBox4 {
     background-color: #FFFFFF;
     border: 1px solid #CBD5E1;
     border-radius: 12px;
 }
 
-QLabel { color: #111827; }
+QLabel {
+    background-color: transparent;
+    border: none;
+    color: #111827;
+}
 
-QPushButton#addButton, QPushButton#newTemplateButton, QPushButton#addTruckButton,
-QPushButton#assignTemplateButton, QPushButton#uploadReceiptButton, QPushButton#saveButton,
-QPushButton#submitButton, QPushButton#useButton {
+QLabel#pageTitle,
+QLabel#titleLabel,
+QLabel#cardTitle1,
+QLabel#cardTitle2,
+QLabel#cardTitle3,
+QLabel#cardTitle4 {
+    background-color: transparent;
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel,
+QLabel#subtitleLabel {
+    background-color: transparent;
+    color: #64748B;
+    font-size: 12px;
+}
+
+QLineEdit#searchInput,
+QComboBox#statusFilter,
+QComboBox#roleFilter {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    color: #111827;
+    padding: 0px 12px;
+    min-height: 38px;
+    max-height: 38px;
+}
+
+QTableWidget,
+QTableView {
+    background-color: #FFFFFF;
+    border: none;
+    color: #111827;
+    gridline-color: transparent;
+    selection-background-color: #DBEAFE;
+    selection-color: #111827;
+}
+
+QTableWidget::item,
+QTableView::item {
+    background-color: #FFFFFF;
+    color: #111827;
+    border-bottom: 1px solid #E2E8F0;
+    padding-left: 8px;
+}
+
+QTableWidget::item:selected,
+QTableView::item:selected {
+    background-color: #DBEAFE;
+    color: #111827;
+}
+
+QHeaderView::section {
+    background-color: #FFFFFF;
+    color: #64748B;
+    border: none;
+    border-bottom: 1px solid #E2E8F0;
+    padding-left: 8px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QPushButton#addTruckButton,
+QPushButton#newTemplateButton,
+QPushButton#assignTemplateButton,
+QPushButton#exportButton,
+QPushButton#uploadButton {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    font-weight: 800;
+}
+
+QPushButton#viewButton {
+    background-color: #DBEAFE;
+    border: 1px solid #93C5FD;
+    color: #2563EB;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-weight: 800;
+}
+
+QPushButton#editButton {
+    background-color: #FEF3C7;
+    border: 1px solid #FCD34D;
+    color: #D97706;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-weight: 800;
+}
+
+QPushButton#deleteButton {
+    background-color: #FEE2E2;
+    border: 1px solid #FCA5A5;
+    color: #DC2626;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-weight: 800;
+}
+
+QPushButton#approveButton,
+QPushButton#useButton {
+    background-color: #DCFCE7;
+    border: 1px solid #86EFAC;
+    color: #16A34A;
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-weight: 800;
+}
+
+QWidget#paginationContainer {
+    background-color: #FFFFFF;
+    border: none;
+}
+
+QLabel#paginationLabel {
+    background-color: transparent;
+    color: #475569;
+}
+
+QPushButton#activePageButton {
     background-color: #2563EB;
     color: #FFFFFF;
     border: none;
 }
 
-QPushButton#deleteButton {
-    background-color: #DC2626;
-    color: #FFFFFF;
-    border: none;
-}
 )";
     }
 
-    return R"(
-QWidget {
+    return dataPageStyle(theme) + R"(
+
+QWidget#TruckStockDashboardPageClass,
+QWidget#TrucksPageClass,
+QWidget#StockTemplatesPageClass,
+QWidget#AssignmentsPageClass,
+QWidget#MyTruckStockPageClass,
+QWidget#LowStockAlertsPageClass,
+QWidget#ReceiptsPageClass {
     background-color: #050B14;
     color: #FFFFFF;
 }
 
-QWidget#pageCard, QWidget#card, QWidget#tableCard, QWidget#toolbarCard, QWidget#formCard, QWidget#summaryCard,
-QFrame#pageCard, QFrame#card, QFrame#tableCard, QFrame#toolbarCard, QFrame#formCard, QFrame#summaryCard {
+QWidget#pageContainer,
+QWidget#toolbarContainer,
+QWidget#searchContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard,
+QWidget#metricCard1,
+QWidget#metricCard2,
+QWidget#metricCard3,
+QWidget#metricCard4,
+QWidget#itemSummaryCard,
+QWidget#assetSummaryCard,
+QWidget#recentItemsCard,
+QWidget#lowStockCard,
+QWidget#miniSummaryBox1,
+QWidget#miniSummaryBox2,
+QWidget#miniSummaryBox3,
+QWidget#miniSummaryBox4 {
     background-color: #0B1626;
     border: 1px solid #263A57;
     border-radius: 12px;
 }
 
-QLabel { color: #FFFFFF; }
+QLabel {
+    background-color: transparent;
+    border: none;
+    color: #FFFFFF;
+}
 
-QPushButton#addButton, QPushButton#newTemplateButton, QPushButton#addTruckButton,
-QPushButton#assignTemplateButton, QPushButton#uploadReceiptButton, QPushButton#saveButton,
-QPushButton#submitButton, QPushButton#useButton {
-    background-color: #2563EB;
+QLabel#pageTitle,
+QLabel#titleLabel,
+QLabel#cardTitle1,
+QLabel#cardTitle2,
+QLabel#cardTitle3,
+QLabel#cardTitle4 {
+    background-color: transparent;
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel,
+QLabel#subtitleLabel {
+    background-color: transparent;
+    color: #94A3B8;
+    font-size: 12px;
+}
+
+QLineEdit#searchInput,
+QComboBox#statusFilter,
+QComboBox#roleFilter {
+    background-color: #050B14;
+    border: 1px solid #263A57;
+    border-radius: 8px;
+    color: #CBD5E1;
+    padding: 0px 12px;
+    min-height: 38px;
+    max-height: 38px;
+}
+
+QTableWidget,
+QTableView {
+    background-color: #0B1626;
+    border: none;
+    color: #FFFFFF;
+    gridline-color: transparent;
+    selection-background-color: #1D4ED8;
+    selection-color: #FFFFFF;
+}
+
+QTableWidget::item,
+QTableView::item {
+    background-color: #0B1626;
+    color: #FFFFFF;
+    border-bottom: 1px solid #132238;
+    padding-left: 8px;
+}
+
+QHeaderView::section {
+    background-color: #0B1626;
+    color: #94A3B8;
+    border: none;
+    border-bottom: 1px solid #1F2E45;
+    padding-left: 8px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+QWidget#paginationContainer {
+    background-color: #0B1626;
+    border: none;
+}
+
+QLabel#paginationLabel {
+    background-color: transparent;
+    color: #CBD5E1;
+}
+
+QPushButton#activePageButton {
+    background-color: #1D4ED8;
     color: #FFFFFF;
     border: none;
 }
 
-QPushButton#deleteButton {
-    background-color: #DC2626;
-    color: #FFFFFF;
-    border: none;
-}
 )";
 }
