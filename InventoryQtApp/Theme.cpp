@@ -3736,3 +3736,247 @@ QPushButton#activePageButton {
 
 )";
 }
+
+
+QString Theme::reportsPageStyle(AppTheme theme)
+{
+    return dataPageStyle(theme) + (theme == AppTheme::Light ? R"(
+
+QWidget#ReportsPageClass {
+    background-color: #F4F7FB;
+}
+
+QWidget#pageContainer,
+QWidget#toolbarContainer,
+QWidget#buttonContainer,
+QWidget#exportContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard,
+QFrame#tableCard,
+QWidget#summaryCard,
+QFrame#summaryCard {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 12px;
+}
+
+QLabel#pageTitle,
+QLabel#titleLabel {
+    color: #111827;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel,
+QLabel#subtitleLabel {
+    color: #64748B;
+    font-size: 12px;
+}
+
+QPushButton#inventorySummaryBtn,
+QPushButton#assetsSummaryBtn,
+QPushButton#refreshBtn {
+    background-color: #FFFFFF;
+    color: #111827;
+    border: 1px solid #CBD5E1;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 800;
+}
+
+QPushButton#inventorySummaryBtn:hover,
+QPushButton#assetsSummaryBtn:hover,
+QPushButton#refreshBtn:hover {
+    background-color: #EFF6FF;
+    border-color: #2563EB;
+}
+
+QPushButton#exportPdfBtn {
+    background-color: #DC2626;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 800;
+}
+
+QPushButton#exportPdfBtn:hover {
+    background-color: #EF4444;
+}
+
+QPushButton#exportExcelBtn {
+    background-color: #16A34A;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 800;
+}
+
+QPushButton#exportExcelBtn:hover {
+    background-color: #22C55E;
+}
+
+QPushButton#exportCsvBtn {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 800;
+}
+
+QPushButton#exportCsvBtn:hover {
+    background-color: #3B82F6;
+}
+
+QTableWidget#reportTable,
+QTableWidget {
+    background-color: #FFFFFF;
+    border: 1px solid #CBD5E1;
+    border-radius: 10px;
+    color: #111827;
+    gridline-color: #E5E7EB;
+    selection-background-color: #DBEAFE;
+    selection-color: #111827;
+    alternate-background-color: #F8FAFC;
+}
+
+QTableWidget::item {
+    padding: 8px;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+QHeaderView::section {
+    background-color: #E2E8F0;
+    color: #334155;
+    border: none;
+    border-bottom: 1px solid #CBD5E1;
+    padding: 8px;
+    font-weight: 800;
+}
+
+)" : R"(
+
+QWidget#ReportsPageClass {
+    background-color: #050B14;
+}
+
+QWidget#pageContainer,
+QWidget#toolbarContainer,
+QWidget#buttonContainer,
+QWidget#exportContainer {
+    background-color: transparent;
+    border: none;
+}
+
+QWidget#tableCard,
+QFrame#tableCard,
+QWidget#summaryCard,
+QFrame#summaryCard {
+    background-color: #0B1626;
+    border: 1px solid #263A57;
+    border-radius: 12px;
+}
+
+QLabel#pageTitle,
+QLabel#titleLabel {
+    color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 800;
+}
+
+QLabel#breadcrumbLabel,
+QLabel#subtitleLabel {
+    color: #94A3B8;
+    font-size: 12px;
+}
+
+QPushButton#inventorySummaryBtn,
+QPushButton#assetsSummaryBtn,
+QPushButton#refreshBtn {
+    background-color: #0B1626;
+    color: #F8FAFC;
+    border: 1px solid #263A57;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 800;
+}
+
+QPushButton#inventorySummaryBtn:hover,
+QPushButton#assetsSummaryBtn:hover,
+QPushButton#refreshBtn:hover {
+    background-color: #172033;
+    border-color: #3B82F6;
+}
+
+QPushButton#exportPdfBtn {
+    background-color: #DC2626;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 800;
+}
+
+QPushButton#exportPdfBtn:hover {
+    background-color: #EF4444;
+}
+
+QPushButton#exportExcelBtn {
+    background-color: #16A34A;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 800;
+}
+
+QPushButton#exportExcelBtn:hover {
+    background-color: #22C55E;
+}
+
+QPushButton#exportCsvBtn {
+    background-color: #2563EB;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-weight: 800;
+}
+
+QPushButton#exportCsvBtn:hover {
+    background-color: #3B82F6;
+}
+
+QTableWidget#reportTable,
+QTableWidget {
+    background-color: #0B1626;
+    border: 1px solid #263A57;
+    border-radius: 10px;
+    color: #F8FAFC;
+    gridline-color: #1F2937;
+    selection-background-color: #1D4ED8;
+    selection-color: #FFFFFF;
+    alternate-background-color: #101B2C;
+}
+
+QTableWidget::item {
+    padding: 8px;
+    border-bottom: 1px solid #132238;
+}
+
+QHeaderView::section {
+    background-color: #101B2C;
+    color: #CBD5E1;
+    border: none;
+    border-bottom: 1px solid #263A57;
+    padding: 8px;
+    font-weight: 800;
+}
+
+)");
+}

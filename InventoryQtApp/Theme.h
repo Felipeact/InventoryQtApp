@@ -46,4 +46,6 @@ public:
     static QString dataPageStyle(AppTheme theme);
     static QString dialogStyle(AppTheme theme);
     static QString truckPageStyle(AppTheme theme);
+
+    static QString reportsPageStyle(AppTheme theme);
 };

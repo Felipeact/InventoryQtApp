@@ -1,21 +1,101 @@
+// ReportsPage.cpp
+
 #include "ReportsPage.h"
 #include "ExportUtility.h"
+
 #include <QMessageBox>
 #include <QFileDialog>
-#include <QFile>
-#include <QTextStream>
 #include <QStandardPaths>
-#include <QTableWidget>
 #include <QTableWidgetItem>
+#include <QHeaderView>
 
-ReportsPage::ReportsPage(
-    ReportService* reportService,
-    QWidget* parent
-)
+namespace
+{
+    QString jsonValueToString(const nlohmann::json& value)
+    {
+        try {
+            if (value.is_string()) {
+                return QString::fromStdString(value.get<std::string>());
+            }
+
+            if (value.is_number_integer()) {
+                return QString::number(value.get<long long>());
+            }
+
+            if (value.is_number_unsigned()) {
+                return QString::number(value.get<unsigned long long>());
+            }
+
+            if (value.is_number_float()) {
+                return QString::number(value.get<double>(), 'f', 2);
+            }
+
+            if (value.is_boolean()) {
+                return value.get<bool>() ? "Yes" : "No";
+            }
+
+            if (value.is_null()) {
+                return "N/A";
+            }
+
+            return QString::fromStdString(value.dump());
+        }
+        catch (...) {
+            return "N/A";
+        }
+    }
+
+    QString prettyKey(const std::string& key)
+    {
+        QString text = QString::fromStdString(key);
+
+        text.replace("_", " ");
+        text.replace("-", " ");
+
+        QString result;
+
+        for (int i = 0; i < text.length(); ++i) {
+            const QChar current = text[i];
+
+            if (i > 0 && current.isUpper() && text[i - 1].isLower()) {
+                result += " ";
+            }
+
+            result += current;
+        }
+
+        QStringList words = result.split(" ", Qt::SkipEmptyParts);
+
+        for (QString& word : words) {
+            if (!word.isEmpty()) {
+                word[0] = word[0].toUpper();
+            }
+        }
+
+        return words.join(" ");
+    }
+}
+
+ReportsPage::ReportsPage(ReportService* reportService, QWidget* parent)
     : QWidget(parent),
     reportService(reportService)
 {
     ui.setupUi(this);
+
+    ui.reportTable->setColumnCount(4);
+    ui.reportTable->setHorizontalHeaderLabels({
+        "Metric",
+        "Value",
+        "Status",
+        "Details"
+        });
+
+    ui.reportTable->horizontalHeader()->setStretchLastSection(true);
+    ui.reportTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui.reportTable->setAlternatingRowColors(true);
+    ui.reportTable->setSelectionBehavior(QAbstractItemView::SelectRows);
+    ui.reportTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
     setupConnections();
     refreshReports();
 }
@@ -52,102 +132,246 @@ void ReportsPage::onAssetsSummaryClicked()
 void ReportsPage::loadInventorySummary()
 {
     try {
-        if (reportService) {
-            nlohmann::json data = reportService->getInventorySummary();
-            displayInventoryReport(data);
+        if (!reportService) {
+            QMessageBox::warning(this, "Reports", "Report service is not available.");
+            return;
         }
+
+        nlohmann::json data = reportService->getInventorySummary();
+        displayInventoryReport(data);
     }
     catch (const std::exception& e) {
-        QMessageBox::critical(this, "Error", "Failed to load inventory summary: " + QString::fromStdString(std::string(e.what())));
+        QMessageBox::critical(
+            this,
+            "Error",
+            "Failed to load inventory summary: " + QString::fromStdString(e.what())
+        );
     }
 }
 
 void ReportsPage::loadAssetsSummary()
 {
     try {
-        if (reportService) {
-            nlohmann::json data = reportService->getAssetsSummary();
-            displayAssetsReport(data);
+        if (!reportService) {
+            QMessageBox::warning(this, "Reports", "Report service is not available.");
+            return;
         }
+
+        nlohmann::json data = reportService->getAssetsSummary();
+        displayAssetsReport(data);
     }
     catch (const std::exception& e) {
-        QMessageBox::critical(this, "Error", "Failed to load assets summary: " + QString::fromStdString(std::string(e.what())));
+        QMessageBox::critical(
+            this,
+            "Error",
+            "Failed to load assets summary: " + QString::fromStdString(e.what())
+        );
     }
 }
 
 void ReportsPage::displayInventoryReport(const nlohmann::json& data)
 {
     ui.reportTable->setRowCount(0);
+    ui.reportTable->setHorizontalHeaderLabels({
+        "Inventory Metric",
+        "Value",
+        "Status",
+        "Details"
+        });
 
     try {
-        if (data.is_array()) {
-            for (size_t i = 0; i < data.size(); ++i) {
-                const auto& item = data[i];
-                int row = ui.reportTable->rowCount();
-                ui.reportTable->insertRow(row);
+        nlohmann::json reportData = data;
 
-                // Item name
-                QString itemName = QString::fromStdString(
-                    item.contains("name") ? item["name"].get<std::string>() : "N/A"
-                );
-                ui.reportTable->setItem(row, 0, new QTableWidgetItem(itemName));
+        if (data.contains("data")) {
+            reportData = data["data"];
+        }
+        else if (data.contains("summary")) {
+            reportData = data["summary"];
+        }
+        else if (data.contains("inventorySummary")) {
+            reportData = data["inventorySummary"];
+        }
 
-                // Value
-                QString value = QString::fromStdString(
-                    item.contains("quantity") ? std::to_string(item["quantity"].get<int>()) : "0"
-                );
-                ui.reportTable->setItem(row, 1, new QTableWidgetItem(value));
+        auto addRow = [this](const QString& metric, const QString& value, const QString& status, const QString& details) {
+            int row = ui.reportTable->rowCount();
+            ui.reportTable->insertRow(row);
 
-                // Status
-                QString status = "Active";
-                ui.reportTable->setItem(row, 2, new QTableWidgetItem(status));
+            ui.reportTable->setItem(row, 0, new QTableWidgetItem(metric));
+            ui.reportTable->setItem(row, 1, new QTableWidgetItem(value));
+            ui.reportTable->setItem(row, 2, new QTableWidgetItem(status));
+            ui.reportTable->setItem(row, 3, new QTableWidgetItem(details));
+            };
 
-                // Details
-                QString details = "Inventory Item";
-                ui.reportTable->setItem(row, 3, new QTableWidgetItem(details));
+        if (reportData.is_object()) {
+            for (auto it = reportData.begin(); it != reportData.end(); ++it) {
+                QString metric = prettyKey(it.key());
+                QString value = jsonValueToString(it.value());
+                QString status = "Summary";
+                QString details = "Inventory Summary";
+
+                addRow(metric, value, status, details);
             }
+        }
+        else if (reportData.is_array()) {
+            for (const auto& item : reportData) {
+                QString metric = "Inventory Item";
+                QString value = "0";
+                QString status = "Active";
+                QString details = "Inventory Detail";
+
+                if (item.is_object()) {
+                    if (item.contains("name")) {
+                        metric = jsonValueToString(item["name"]);
+                    }
+                    else if (item.contains("productName")) {
+                        metric = jsonValueToString(item["productName"]);
+                    }
+                    else if (item.contains("itemName")) {
+                        metric = jsonValueToString(item["itemName"]);
+                    }
+                    else if (item.contains("label")) {
+                        metric = jsonValueToString(item["label"]);
+                    }
+
+                    if (item.contains("quantity")) {
+                        value = jsonValueToString(item["quantity"]);
+                    }
+                    else if (item.contains("value")) {
+                        value = jsonValueToString(item["value"]);
+                    }
+                    else if (item.contains("total")) {
+                        value = jsonValueToString(item["total"]);
+                    }
+
+                    if (item.contains("status")) {
+                        status = jsonValueToString(item["status"]);
+                    }
+
+                    if (item.contains("details")) {
+                        details = jsonValueToString(item["details"]);
+                    }
+                }
+
+                addRow(metric, value, status, details);
+            }
+        }
+        else {
+            addRow("Inventory Summary", jsonValueToString(reportData), "Summary", "Inventory Summary");
+        }
+
+        if (ui.reportTable->rowCount() == 0) {
+            addRow("No Data", "0", "Empty", "No inventory report data returned.");
         }
     }
     catch (const std::exception& e) {
-        QMessageBox::warning(this, "Warning", "Error parsing inventory report: " + QString::fromStdString(std::string(e.what())));
+        QMessageBox::warning(
+            this,
+            "Warning",
+            "Error parsing inventory report: " + QString::fromStdString(e.what())
+        );
     }
 }
 
 void ReportsPage::displayAssetsReport(const nlohmann::json& data)
 {
     ui.reportTable->setRowCount(0);
+    ui.reportTable->setHorizontalHeaderLabels({
+        "Asset Metric",
+        "Value",
+        "Status",
+        "Details"
+        });
 
     try {
-        if (data.is_array()) {
-            for (size_t i = 0; i < data.size(); ++i) {
-                const auto& item = data[i];
-                int row = ui.reportTable->rowCount();
-                ui.reportTable->insertRow(row);
+        nlohmann::json reportData = data;
 
-                // Item name
-                QString itemName = QString::fromStdString(
-                    item.contains("assetName") ? item["assetName"].get<std::string>() : "N/A"
-                );
-                ui.reportTable->setItem(row, 0, new QTableWidgetItem(itemName));
+        if (data.contains("data")) {
+            reportData = data["data"];
+        }
+        else if (data.contains("summary")) {
+            reportData = data["summary"];
+        }
+        else if (data.contains("assetsSummary")) {
+            reportData = data["assetsSummary"];
+        }
+        else if (data.contains("assetSummary")) {
+            reportData = data["assetSummary"];
+        }
 
-                // Value
-                QString value = QString::fromStdString(
-                    item.contains("value") ? std::to_string(item["value"].get<double>()) : "0"
-                );
-                ui.reportTable->setItem(row, 1, new QTableWidgetItem(value));
+        auto addRow = [this](const QString& metric, const QString& value, const QString& status, const QString& details) {
+            int row = ui.reportTable->rowCount();
+            ui.reportTable->insertRow(row);
 
-                // Status
-                QString status = "Active";
-                ui.reportTable->setItem(row, 2, new QTableWidgetItem(status));
+            ui.reportTable->setItem(row, 0, new QTableWidgetItem(metric));
+            ui.reportTable->setItem(row, 1, new QTableWidgetItem(value));
+            ui.reportTable->setItem(row, 2, new QTableWidgetItem(status));
+            ui.reportTable->setItem(row, 3, new QTableWidgetItem(details));
+            };
 
-                // Details
-                QString details = "Asset";
-                ui.reportTable->setItem(row, 3, new QTableWidgetItem(details));
+        if (reportData.is_object()) {
+            for (auto it = reportData.begin(); it != reportData.end(); ++it) {
+                QString metric = prettyKey(it.key());
+                QString value = jsonValueToString(it.value());
+                QString status = "Summary";
+                QString details = "Asset Summary";
+
+                addRow(metric, value, status, details);
             }
+        }
+        else if (reportData.is_array()) {
+            for (const auto& item : reportData) {
+                QString metric = "Asset";
+                QString value = "0";
+                QString status = "Active";
+                QString details = "Asset Detail";
+
+                if (item.is_object()) {
+                    if (item.contains("assetName")) {
+                        metric = jsonValueToString(item["assetName"]);
+                    }
+                    else if (item.contains("name")) {
+                        metric = jsonValueToString(item["name"]);
+                    }
+                    else if (item.contains("label")) {
+                        metric = jsonValueToString(item["label"]);
+                    }
+
+                    if (item.contains("value")) {
+                        value = jsonValueToString(item["value"]);
+                    }
+                    else if (item.contains("quantity")) {
+                        value = jsonValueToString(item["quantity"]);
+                    }
+                    else if (item.contains("total")) {
+                        value = jsonValueToString(item["total"]);
+                    }
+
+                    if (item.contains("status")) {
+                        status = jsonValueToString(item["status"]);
+                    }
+
+                    if (item.contains("details")) {
+                        details = jsonValueToString(item["details"]);
+                    }
+                }
+
+                addRow(metric, value, status, details);
+            }
+        }
+        else {
+            addRow("Asset Summary", jsonValueToString(reportData), "Summary", "Asset Summary");
+        }
+
+        if (ui.reportTable->rowCount() == 0) {
+            addRow("No Data", "0", "Empty", "No asset report data returned.");
         }
     }
     catch (const std::exception& e) {
-        QMessageBox::warning(this, "Warning", "Error parsing assets report: " + QString::fromStdString(std::string(e.what())));
+        QMessageBox::warning(
+            this,
+            "Warning",
+            "Error parsing assets report: " + QString::fromStdString(e.what())
+        );
     }
 }
 
@@ -180,14 +404,25 @@ void ReportsPage::exportToPdf()
         "PDF Files (*.pdf)"
     );
 
-    if (fileName.isEmpty()) return;
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    if (!fileName.endsWith(".pdf", Qt::CaseInsensitive)) {
+        fileName += ".pdf";
+    }
 
     if (ExportUtility::exportTableToPdf(ui.reportTable, fileName)) {
         QString fileSize = ExportUtility::getFileSizeString(fileName);
-        QMessageBox::information(this, "Success", 
-            "Report exported successfully to:\n" + fileName + 
-            "\n\nFile size: " + fileSize);
-    } else {
+
+        QMessageBox::information(
+            this,
+            "Success",
+            "Report exported successfully to:\n" + fileName +
+            "\n\nFile size: " + fileSize
+        );
+    }
+    else {
         QMessageBox::critical(this, "Error", "Failed to export PDF file.");
     }
 }
@@ -201,19 +436,45 @@ void ReportsPage::exportToExcel()
         "Excel Files (*.xlsx);;CSV Files (*.csv)"
     );
 
-    if (fileName.isEmpty()) return;
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    if (!fileName.endsWith(".xlsx", Qt::CaseInsensitive) &&
+        !fileName.endsWith(".csv", Qt::CaseInsensitive)) {
+        fileName += ".xlsx";
+    }
 
     if (fileName.endsWith(".csv", Qt::CaseInsensitive)) {
-        exportToCsv();
-    } else if (fileName.endsWith(".xlsx", Qt::CaseInsensitive)) {
-        if (ExportUtility::exportTableToExcel(ui.reportTable, fileName)) {
+        if (ExportUtility::exportTableToCsv(ui.reportTable, fileName)) {
             QString fileSize = ExportUtility::getFileSizeString(fileName);
-            QMessageBox::information(this, "Success",
+
+            QMessageBox::information(
+                this,
+                "Success",
                 "Report exported successfully to:\n" + fileName +
-                "\n\nFile size: " + fileSize);
-        } else {
-            QMessageBox::critical(this, "Error", "Failed to export Excel file.");
+                "\n\nFile size: " + fileSize
+            );
         }
+        else {
+            QMessageBox::critical(this, "Error", "Failed to export CSV file.");
+        }
+
+        return;
+    }
+
+    if (ExportUtility::exportTableToExcel(ui.reportTable, fileName)) {
+        QString fileSize = ExportUtility::getFileSizeString(fileName);
+
+        QMessageBox::information(
+            this,
+            "Success",
+            "Report exported successfully to:\n" + fileName +
+            "\n\nFile size: " + fileSize
+        );
+    }
+    else {
+        QMessageBox::critical(this, "Error", "Failed to export Excel file.");
     }
 }
 
@@ -226,56 +487,30 @@ void ReportsPage::exportToCsv()
         "CSV Files (*.csv)"
     );
 
-    if (fileName.isEmpty()) return;
+    if (fileName.isEmpty()) {
+        return;
+    }
+
+    if (!fileName.endsWith(".csv", Qt::CaseInsensitive)) {
+        fileName += ".csv";
+    }
 
     if (ExportUtility::exportTableToCsv(ui.reportTable, fileName)) {
         QString fileSize = ExportUtility::getFileSizeString(fileName);
-        QMessageBox::information(this, "Success",
+
+        QMessageBox::information(
+            this,
+            "Success",
             "Report exported successfully to:\n" + fileName +
-            "\n\nFile size: " + fileSize);
-    } else {
+            "\n\nFile size: " + fileSize
+        );
+    }
+    else {
         QMessageBox::critical(this, "Error", "Failed to export CSV file.");
     }
 }
 
 void ReportsPage::applyTheme(Theme::AppTheme theme)
 {
-    // Apply theme to the entire page
-    this->setStyleSheet(Theme::dataPageStyle(theme));
-
-    // Apply table styling based on theme
-    if (theme == Theme::AppTheme::Dark) {
-        ui.reportTable->setStyleSheet(
-            "QTableWidget { background-color: #2b2b2b; color: #ffffff; gridline-color: #404040; }"
-            "QTableWidget::item { padding: 5px; }"
-            "QHeaderView::section { background-color: #1e1e1e; color: #ffffff; padding: 5px; border: none; }"
-        );
-    } else {
-        ui.reportTable->setStyleSheet(
-            "QTableWidget { background-color: #ffffff; color: #000000; gridline-color: #e0e0e0; }"
-            "QTableWidget::item { padding: 5px; }"
-            "QHeaderView::section { background-color: #f5f5f5; color: #000000; padding: 5px; border: none; }"
-        );
-    }
-
-    // Apply button styling
-    QString buttonStyle;
-    if (theme == Theme::AppTheme::Dark) {
-        buttonStyle = 
-            "QPushButton { background-color: #0d47a1; color: #ffffff; border-radius: 4px; padding: 6px 12px; }"
-            "QPushButton:hover { background-color: #1565c0; }"
-            "QPushButton:pressed { background-color: #0d3d8f; }";
-    } else {
-        buttonStyle = 
-            "QPushButton { background-color: #1976d2; color: #ffffff; border-radius: 4px; padding: 6px 12px; }"
-            "QPushButton:hover { background-color: #1565c0; }"
-            "QPushButton:pressed { background-color: #1565c0; }";
-    }
-
-    ui.exportPdfBtn->setStyleSheet(buttonStyle);
-    ui.exportExcelBtn->setStyleSheet(buttonStyle);
-    ui.exportCsvBtn->setStyleSheet(buttonStyle);
-    ui.refreshBtn->setStyleSheet(buttonStyle);
-    ui.inventorySummaryBtn->setStyleSheet(buttonStyle);
-    ui.assetsSummaryBtn->setStyleSheet(buttonStyle);
+    this->setStyleSheet(Theme::reportsPageStyle(theme));
 }
