@@ -146,6 +146,14 @@ void DashboardWindow::setupPages()
             if (verticalbar) verticalbar->applyTheme(appTheme);
             if (scanInPage) scanInPage->applyTheme(appTheme);
             if (scanOutPage) scanOutPage->applyTheme(appTheme);
+            if (truckStockDashboardPage) truckStockDashboardPage->applyTheme(appTheme);
+            if (trucksPage) trucksPage->applyTheme(appTheme);
+            if (stockTemplatesPage) stockTemplatesPage->applyTheme(appTheme);
+            if (assignmentsPage) assignmentsPage->applyTheme(appTheme);
+            if (myTruckStockPage) myTruckStockPage->applyTheme(appTheme);
+            if (lowStockAlertsPage) lowStockAlertsPage->applyTheme(appTheme);
+            if (receiptsPage) receiptsPage->applyTheme(appTheme);
+
         }
     );
 
@@ -203,6 +211,15 @@ void DashboardWindow::setupPages()
     scanOutPage->applyTheme(appTheme);
 
     settingsPage->applyTheme(appTheme);
+    truckStockDashboardPage->applyTheme(appTheme);
+    trucksPage->applyTheme(appTheme);
+    stockTemplatesPage->applyTheme(appTheme);
+    assignmentsPage->applyTheme(appTheme);
+    myTruckStockPage->applyTheme(appTheme);
+    lowStockAlertsPage->applyTheme(appTheme);
+    receiptsPage->applyTheme(appTheme);
+
+
 
     if (sidebar)
         sidebar->applyTheme(appTheme);
