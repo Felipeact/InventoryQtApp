@@ -13,11 +13,10 @@ struct UpdateInfo
     QString version;
     QString downloadUrl;
     QString releaseNotes;
-    bool isRequired;
+    bool isRequired = false;
     QString changeLog;
 };
 
-// Forward declaration
 class QNetworkAccessManager;
 class QNetworkReply;
 
@@ -26,22 +25,15 @@ class AutoUpdateManager : public QObject
     Q_OBJECT
 
 public:
-    AutoUpdateManager(const QString& updateCheckUrl, QObject* parent = nullptr);
+    explicit AutoUpdateManager(const QString& checkUrl, QObject* parent = nullptr);
     ~AutoUpdateManager();
 
-    // Check for updates
     void checkForUpdates();
-
-    // Download and install update
     void downloadAndInstallUpdate(const UpdateInfo& updateInfo);
 
-    // Get current app version
     static QString getCurrentVersion();
-
-    // Check if update is needed
     static bool isUpdateNeeded(const QString& latestVersion);
 
-    // Get update info from remote server
     UpdateInfo parseUpdateInfo(const json& data);
 
 signals:
@@ -52,15 +44,15 @@ signals:
     void updateError(const QString& errorMessage);
 
 private slots:
-    void onCheckReplyFinished();
-    void onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
-    void onDownloadReplyFinished();
     void onNetworkReplyFinished(QNetworkReply* reply);
+    void onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
 
 private:
-    QNetworkAccessManager* networkManager;
+    QNetworkAccessManager* networkManager = nullptr;
     QString updateCheckUrl;
     QString currentDownloadPath;
 
+    void onCheckReplyFinished(QNetworkReply* reply);
+    void onDownloadReplyFinished(QNetworkReply* reply);
     void compareVersions(const QString& latestVersion);
 };

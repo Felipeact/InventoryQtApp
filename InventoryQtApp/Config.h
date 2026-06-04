@@ -18,7 +18,7 @@ namespace Config
 
 	// Update server URL for auto-updates
 	// TODO: Configure your update server URL before deployment
-	const std::string UPDATE_SERVER_URL = "https://updates.your-company.com/api/app/latest-version";
+	const std::string UPDATE_SERVER_URL = "/updates/latest";
 
 	// Get API URL from settings or environment
 	inline std::string getApiBaseUrl()

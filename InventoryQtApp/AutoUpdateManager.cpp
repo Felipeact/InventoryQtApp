@@ -1,13 +1,11 @@
 #include "AutoUpdateManager.h"
+
 #include <QSettings>
 #include <QUrl>
 #include <QFile>
 #include <QStandardPaths>
-#include <QJsonDocument>
-#include <QJsonObject>
 #include <QDebug>
 
-// QtNetwork includes - optional
 #ifdef QT_NETWORK_LIB
 #include <QNetworkAccessManager>
 #include <QNetworkRequest>
@@ -16,15 +14,15 @@
 
 AutoUpdateManager::AutoUpdateManager(const QString& checkUrl, QObject* parent)
     : QObject(parent),
-      updateCheckUrl(checkUrl)
+    updateCheckUrl(checkUrl)
 {
 #ifdef QT_NETWORK_LIB
     networkManager = new QNetworkAccessManager(this);
-    if (networkManager) {
-        // Connect network manager signals
-        connect(networkManager, SIGNAL(finished(QNetworkReply*)),
-                this, SLOT(onNetworkReplyFinished(QNetworkReply*)));
-    }
+
+    connect(networkManager, &QNetworkAccessManager::finished,
+        this, &AutoUpdateManager::onNetworkReplyFinished);
+#else
+    qWarning() << "QtNetwork not available. Auto update disabled.";
 #endif
 }
 
@@ -35,14 +33,22 @@ AutoUpdateManager::~AutoUpdateManager()
 void AutoUpdateManager::onNetworkReplyFinished(QNetworkReply* reply)
 {
 #ifdef QT_NETWORK_LIB
-    if (!reply) return;
-
-    if (reply->property("downloadMode").toBool()) {
-        onDownloadReplyFinished();
-    } else {
-        onCheckReplyFinished();
+    if (!reply) {
+        return;
     }
+
+    const bool isDownload = reply->property("downloadMode").toBool();
+
+    if (isDownload) {
+        onDownloadReplyFinished(reply);
+    }
+    else {
+        onCheckReplyFinished(reply);
+    }
+
     reply->deleteLater();
+#else
+    Q_UNUSED(reply);
 #endif
 }
 
@@ -54,13 +60,21 @@ void AutoUpdateManager::checkForUpdates()
         return;
     }
 
+    if (updateCheckUrl.trimmed().isEmpty()) {
+        emit updateError("Update check URL is empty.");
+        return;
+    }
+
     qDebug() << "Checking for updates from:" << updateCheckUrl;
 
-    QNetworkRequest request(QUrl(updateCheckUrl));
+    QUrl url(updateCheckUrl);
+    QNetworkRequest request(url);
+
     request.setHeader(QNetworkRequest::UserAgentHeader, "InventoryQtApp/1.0");
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
 
     QNetworkReply* reply = networkManager->get(request);
+
     if (!reply) {
         emit noUpdateAvailable();
         return;
@@ -76,31 +90,41 @@ void AutoUpdateManager::checkForUpdates()
 void AutoUpdateManager::downloadAndInstallUpdate(const UpdateInfo& updateInfo)
 {
 #ifdef QT_NETWORK_LIB
-    if (!networkManager) return;
+    if (!networkManager) {
+        emit updateError("Network manager is not available.");
+        return;
+    }
 
-    // Save download path
+    if (updateInfo.downloadUrl.trimmed().isEmpty()) {
+        emit updateError("Download URL is empty.");
+        return;
+    }
+
     QString tempDir = QStandardPaths::writableLocation(QStandardPaths::TempLocation);
     currentDownloadPath = tempDir + "/InventoryQtApp-" + updateInfo.version + ".exe";
 
     qDebug() << "Downloading update from:" << updateInfo.downloadUrl;
     qDebug() << "Saving to:" << currentDownloadPath;
 
-    QNetworkRequest request(QUrl(updateInfo.downloadUrl));
+    QUrl url(updateInfo.downloadUrl);
+    QNetworkRequest request(url);
+
     request.setHeader(QNetworkRequest::UserAgentHeader, "InventoryQtApp/1.0");
 
     QNetworkReply* reply = networkManager->get(request);
+
     if (!reply) {
-        emit updateError("Failed to start download");
+        emit updateError("Failed to start download.");
         return;
     }
 
     reply->setProperty("downloadMode", true);
 
-    connect(reply, SIGNAL(downloadProgress(qint64, qint64)),
-            this, SLOT(onDownloadProgress(qint64, qint64)));
+    connect(reply, &QNetworkReply::downloadProgress,
+        this, &AutoUpdateManager::onDownloadProgress);
 #else
     qWarning() << "QtNetwork not available. Update download disabled.";
-    emit updateError("QtNetwork module not available");
+    emit updateError("QtNetwork module not available.");
 #endif
 }
 
@@ -114,24 +138,25 @@ bool AutoUpdateManager::isUpdateNeeded(const QString& latestVersion)
 {
     QString currentVersion = getCurrentVersion();
 
-    // Parse versions (e.g., "1.2.3")
     QStringList currentParts = currentVersion.split(".");
     QStringList latestParts = latestVersion.split(".");
 
-    // Compare major.minor.patch
-    for (int i = 0; i < qMin(currentParts.size(), latestParts.size()); ++i) {
-        int current = currentParts[i].toInt();
-        int latest = latestParts[i].toInt();
+    int maxParts = qMax(currentParts.size(), latestParts.size());
+
+    for (int i = 0; i < maxParts; ++i) {
+        int current = i < currentParts.size() ? currentParts[i].toInt() : 0;
+        int latest = i < latestParts.size() ? latestParts[i].toInt() : 0;
 
         if (latest > current) {
-            return true;  // Update available
-        } else if (latest < current) {
-            return false;  // Current version is newer
+            return true;
+        }
+
+        if (latest < current) {
+            return false;
         }
     }
 
-    // If we're here, versions are equal up to the common length
-    return latestParts.size() > currentParts.size();
+    return false;
 }
 
 UpdateInfo AutoUpdateManager::parseUpdateInfo(const json& data)
@@ -139,15 +164,29 @@ UpdateInfo AutoUpdateManager::parseUpdateInfo(const json& data)
     UpdateInfo info;
 
     try {
-        info.version = QString::fromStdString(data["version"].get<std::string>());
-        info.downloadUrl = QString::fromStdString(data["downloadUrl"].get<std::string>());
-        info.releaseNotes = QString::fromStdString(
-            data.contains("releaseNotes") ? data["releaseNotes"].get<std::string>() : ""
-        );
-        info.isRequired = data.contains("required") ? data["required"].get<bool>() : false;
-        info.changeLog = QString::fromStdString(
-            data.contains("changeLog") ? data["changeLog"].get<std::string>() : ""
-        );
+        if (data.contains("version")) {
+            info.version = QString::fromStdString(data["version"].get<std::string>());
+        }
+
+        if (data.contains("downloadUrl")) {
+            info.downloadUrl = QString::fromStdString(data["downloadUrl"].get<std::string>());
+        }
+        else if (data.contains("url")) {
+            // Supports backend response using "url"
+            info.downloadUrl = QString::fromStdString(data["url"].get<std::string>());
+        }
+
+        if (data.contains("releaseNotes")) {
+            info.releaseNotes = QString::fromStdString(data["releaseNotes"].get<std::string>());
+        }
+
+        if (data.contains("required")) {
+            info.isRequired = data["required"].get<bool>();
+        }
+
+        if (data.contains("changeLog")) {
+            info.changeLog = QString::fromStdString(data["changeLog"].get<std::string>());
+        }
     }
     catch (const std::exception& e) {
         qWarning() << "Failed to parse update info:" << e.what();
@@ -156,43 +195,59 @@ UpdateInfo AutoUpdateManager::parseUpdateInfo(const json& data)
     return info;
 }
 
-void AutoUpdateManager::onCheckReplyFinished()
+void AutoUpdateManager::onCheckReplyFinished(QNetworkReply* reply)
 {
 #ifdef QT_NETWORK_LIB
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    if (!reply) return;
+    if (!reply) {
+        return;
+    }
 
-    if (reply->error() == QNetworkReply::NoError) {
-        try {
-            QString responseStr = QString::fromUtf8(reply->readAll());
-            qDebug() << "Update check response:" << responseStr;
-
-            auto jsonData = json::parse(responseStr.toStdString());
-
-            QString latestVersion = QString::fromStdString(
-                jsonData["version"].get<std::string>()
-            );
-
-            qDebug() << "Latest version:" << latestVersion;
-            qDebug() << "Current version:" << getCurrentVersion();
-
-            if (isUpdateNeeded(latestVersion)) {
-                UpdateInfo updateInfo = parseUpdateInfo(jsonData);
-                qDebug() << "Update available:" << updateInfo.version;
-                emit updateAvailable(updateInfo);
-            } else {
-                qDebug() << "No update needed";
-                emit noUpdateAvailable();
-            }
-        }
-        catch (const std::exception& e) {
-            qWarning() << "Failed to parse update response:" << e.what();
-            emit updateError("Failed to parse update response: " + QString::fromStdString(std::string(e.what())));
-        }
-    } else {
+    if (reply->error() != QNetworkReply::NoError) {
         qWarning() << "Update check error:" << reply->errorString();
         emit updateError("Network error: " + reply->errorString());
+        return;
     }
+
+    try {
+        QString responseStr = QString::fromUtf8(reply->readAll());
+        qDebug() << "Update check response:" << responseStr;
+
+        auto jsonData = json::parse(responseStr.toStdString());
+
+        if (!jsonData.contains("version")) {
+            emit updateError("Update response missing version.");
+            return;
+        }
+
+        QString latestVersion = QString::fromStdString(
+            jsonData["version"].get<std::string>()
+        );
+
+        qDebug() << "Latest version:" << latestVersion;
+        qDebug() << "Current version:" << getCurrentVersion();
+
+        if (isUpdateNeeded(latestVersion)) {
+            UpdateInfo updateInfo = parseUpdateInfo(jsonData);
+
+            if (updateInfo.downloadUrl.trimmed().isEmpty()) {
+                emit updateError("Update available, but download URL is missing.");
+                return;
+            }
+
+            qDebug() << "Update available:" << updateInfo.version;
+            emit updateAvailable(updateInfo);
+        }
+        else {
+            qDebug() << "No update needed";
+            emit noUpdateAvailable();
+        }
+    }
+    catch (const std::exception& e) {
+        qWarning() << "Failed to parse update response:" << e.what();
+        emit updateError("Failed to parse update response: " + QString::fromStdString(e.what()));
+    }
+#else
+    Q_UNUSED(reply);
 #endif
 }
 
@@ -201,36 +256,44 @@ void AutoUpdateManager::onDownloadProgress(qint64 bytesReceived, qint64 bytesTot
 #ifdef QT_NETWORK_LIB
     qDebug() << "Download progress:" << bytesReceived << "/" << bytesTotal;
     emit updateDownloadProgress(bytesReceived, bytesTotal);
+#else
+    Q_UNUSED(bytesReceived);
+    Q_UNUSED(bytesTotal);
 #endif
 }
 
-void AutoUpdateManager::onDownloadReplyFinished()
+void AutoUpdateManager::onDownloadReplyFinished(QNetworkReply* reply)
 {
 #ifdef QT_NETWORK_LIB
-    QNetworkReply* reply = qobject_cast<QNetworkReply*>(sender());
-    if (!reply) return;
+    if (!reply) {
+        return;
+    }
 
-    if (reply->error() == QNetworkReply::NoError) {
-        // Save downloaded file
-        QFile file(currentDownloadPath);
-        if (file.open(QIODevice::WriteOnly)) {
-            file.write(reply->readAll());
-            file.close();
-
-            qDebug() << "Update downloaded to:" << currentDownloadPath;
-            emit updateDownloadFinished(currentDownloadPath);
-        } else {
-            qWarning() << "Failed to save update file";
-            emit updateError("Failed to save update file");
-        }
-    } else {
+    if (reply->error() != QNetworkReply::NoError) {
         qWarning() << "Download error:" << reply->errorString();
         emit updateError("Download error: " + reply->errorString());
+        return;
     }
+
+    QFile file(currentDownloadPath);
+
+    if (!file.open(QIODevice::WriteOnly)) {
+        qWarning() << "Failed to save update file:" << currentDownloadPath;
+        emit updateError("Failed to save update file.");
+        return;
+    }
+
+    file.write(reply->readAll());
+    file.close();
+
+    qDebug() << "Update downloaded to:" << currentDownloadPath;
+    emit updateDownloadFinished(currentDownloadPath);
+#else
+    Q_UNUSED(reply);
 #endif
 }
 
 void AutoUpdateManager::compareVersions(const QString& latestVersion)
 {
-    // Implementation handled in onCheckReplyFinished()
+    Q_UNUSED(latestVersion);
 }
