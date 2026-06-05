@@ -42,19 +42,8 @@ ReceiptsPage::~ReceiptsPage()
 
 void ReceiptsPage::setupConnections()
 {
-    connect(
-        ui.uploadButton,
-        &QPushButton::clicked,
-        this,
-        &ReceiptsPage::onUploadReceiptClicked
-    );
-
-    connect(
-        ui.searchInput,
-        &QLineEdit::textChanged,
-        this,
-        &ReceiptsPage::onSearchChanged
-    );
+    connect(ui.uploadButton, &QPushButton::clicked, this, &ReceiptsPage::onUploadReceiptClicked);
+    connect(ui.searchInput, &QLineEdit::textChanged, this, &ReceiptsPage::onSearchChanged);
 
     connect(
         ui.statusFilter,
@@ -90,10 +79,7 @@ void ReceiptsPage::setupTable()
     ui.receiptsTable->viewport()->setAutoFillBackground(false);
 
     ui.receiptsTable->horizontalHeader()->setHighlightSections(false);
-    ui.receiptsTable->horizontalHeader()->setDefaultAlignment(
-        Qt::AlignLeft | Qt::AlignVCenter
-    );
-
+    ui.receiptsTable->horizontalHeader()->setDefaultAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     ui.receiptsTable->horizontalHeader()->setFixedHeight(48);
     ui.receiptsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui.receiptsTable->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Fixed);
@@ -107,65 +93,14 @@ void ReceiptsPage::setupTable()
 
 void ReceiptsPage::loadReceipts()
 {
-    ui.receiptsTable->clearContents();
-
     if (!truckStockService) {
-        ui.receiptsTable->setRowCount(0);
+        currentReceipts.clear();
+        filteredReceipts.clear();
+        populateTable();
         return;
     }
 
-    currentReceipts =
-        truckStockService->getReceipts();
-
-    ui.receiptsTable->setRowCount(
-        static_cast<int>(currentReceipts.size())
-    );
-
-    for (int row = 0; row < static_cast<int>(currentReceipts.size()); row++) {
-        const ReceiptDto& receipt =
-            currentReceipts[row];
-
-        ui.receiptsTable->setItem(
-            row,
-            0,
-            new QTableWidgetItem(QString::fromStdString(receipt.id))
-        );
-
-        ui.receiptsTable->setItem(
-            row,
-            1,
-            new QTableWidgetItem(QString::fromStdString(receipt.technicianName))
-        );
-
-        ui.receiptsTable->setItem(
-            row,
-            2,
-            new QTableWidgetItem(QString::fromStdString(receipt.truckNumber))
-        );
-
-        ui.receiptsTable->setItem(
-            row,
-            3,
-            new QTableWidgetItem("$" + QString::number(receipt.totalAmount, 'f', 2))
-        );
-
-        ui.receiptsTable->setItem(
-            row,
-            4,
-            new QTableWidgetItem(QString::fromStdString(receipt.status))
-        );
-
-        ui.receiptsTable->setItem(
-            row,
-            5,
-            new QTableWidgetItem(QString::fromStdString(receipt.createdAt))
-        );
-
-        addActionButtons(
-            row,
-            receipt
-        );
-    }
+    currentReceipts = truckStockService->getReceipts();
 
     filterReceipts();
 }
@@ -177,101 +112,110 @@ void ReceiptsPage::refreshReceipts()
 
 void ReceiptsPage::filterReceipts()
 {
-    QString searchText =
-        ui.searchInput->text().trimmed();
+    QString searchText = ui.searchInput->text().trimmed();
+    QString selectedStatus = ui.statusFilter->currentText();
 
-    QString selectedStatus =
-        ui.statusFilter->currentText();
+    filteredReceipts.clear();
 
-    for (int row = 0; row < ui.receiptsTable->rowCount(); row++) {
+    for (const ReceiptDto& receipt : currentReceipts) {
+        QString id = QString::fromStdString(receipt.id);
+        QString technician = QString::fromStdString(receipt.technicianName);
+        QString truck = QString::fromStdString(receipt.truckNumber);
+        QString total = "$" + QString::number(receipt.totalAmount, 'f', 2);
+        QString status = QString::fromStdString(receipt.status);
+        QString date = QString::fromStdString(receipt.createdAt);
+
         bool searchMatch =
-            searchText.isEmpty();
+            searchText.isEmpty() ||
+            id.contains(searchText, Qt::CaseInsensitive) ||
+            technician.contains(searchText, Qt::CaseInsensitive) ||
+            truck.contains(searchText, Qt::CaseInsensitive) ||
+            total.contains(searchText, Qt::CaseInsensitive) ||
+            status.contains(searchText, Qt::CaseInsensitive) ||
+            date.contains(searchText, Qt::CaseInsensitive);
 
         bool statusMatch =
-            selectedStatus == "All Status";
+            selectedStatus == "All Status" ||
+            status.compare(selectedStatus, Qt::CaseInsensitive) == 0;
 
-        for (int col = 0; col < ui.receiptsTable->columnCount(); col++) {
-            QTableWidgetItem* item =
-                ui.receiptsTable->item(row, col);
-
-            if (item && item->text().contains(searchText, Qt::CaseInsensitive)) {
-                searchMatch = true;
-            }
+        if (searchMatch && statusMatch) {
+            filteredReceipts.push_back(receipt);
         }
+    }
 
-        QTableWidgetItem* statusItem =
-            ui.receiptsTable->item(row, 4);
+    populateTable();
+}
 
-        if (
-            statusItem &&
-            statusItem->text().compare(selectedStatus, Qt::CaseInsensitive) == 0
-            ) {
-            statusMatch = true;
-        }
+void ReceiptsPage::populateTable()
+{
+    ui.receiptsTable->clearContents();
+    ui.receiptsTable->clearSpans();
 
-        ui.receiptsTable->setRowHidden(
-            row,
-            !(searchMatch && statusMatch)
+    int rowCount = static_cast<int>(filteredReceipts.size());
+
+    if (rowCount == 0) {
+        ui.receiptsTable->setRowCount(1);
+
+        ui.receiptsTable->setItem(
+            0,
+            0,
+            new QTableWidgetItem("No receipts found")
         );
+
+        ui.receiptsTable->setSpan(0, 0, 1, 7);
+        return;
+    }
+
+    ui.receiptsTable->setRowCount(rowCount);
+
+    for (int row = 0; row < rowCount; row++) {
+        const ReceiptDto& receipt = filteredReceipts[row];
+
+        ui.receiptsTable->setItem(row, 0, new QTableWidgetItem(QString::fromStdString(receipt.id)));
+        ui.receiptsTable->setItem(row, 1, new QTableWidgetItem(QString::fromStdString(receipt.technicianName)));
+        ui.receiptsTable->setItem(row, 2, new QTableWidgetItem(QString::fromStdString(receipt.truckNumber)));
+        ui.receiptsTable->setItem(row, 3, new QTableWidgetItem("$" + QString::number(receipt.totalAmount, 'f', 2)));
+        ui.receiptsTable->setItem(row, 4, new QTableWidgetItem(QString::fromStdString(receipt.status)));
+        ui.receiptsTable->setItem(row, 5, new QTableWidgetItem(QString::fromStdString(receipt.createdAt)));
+
+        addActionButtons(row, receipt);
     }
 }
 
 void ReceiptsPage::onUploadReceiptClicked()
 {
-    UploadReceiptDialog dialog(
-        truckStockService,
-        this
-    );
+    UploadReceiptDialog dialog(truckStockService, this);
 
     if (dialog.exec() == QDialog::Accepted) {
         CreateReceiptRequest request;
 
-        request.truckId =
-            dialog.getSelectedTruckId().toStdString();
+        request.truckId = dialog.getSelectedTruckId().toStdString();
+        request.fileUrl = dialog.getFilePath().toStdString();
+        request.totalAmount = dialog.getTotalAmount().toDouble();
 
-        request.fileUrl =
-            dialog.getFilePath().toStdString();
-
-        request.totalAmount =
-            dialog.getTotalAmount().toDouble();
-
-        bool success =
-            truckStockService->createReceipt(request);
+        bool success = truckStockService->createReceipt(request);
 
         if (success) {
-            QMessageBox::information(
-                this,
-                "Success",
-                "Receipt uploaded successfully."
-            );
+            QMessageBox::information(this, "Success", "Receipt uploaded successfully.");
 
+            emit receiptsChanged();
             loadReceipts();
         }
         else {
-            QMessageBox::warning(
-                this,
-                "Error",
-                "Failed to upload receipt."
-            );
+            QMessageBox::warning(this, "Error", "Failed to upload receipt.");
         }
     }
 }
 
-void ReceiptsPage::onSearchChanged(
-    const QString& text
-)
+void ReceiptsPage::onSearchChanged(const QString& text)
 {
     Q_UNUSED(text);
-
     filterReceipts();
 }
 
-void ReceiptsPage::onStatusFilterChanged(
-    int index
-)
+void ReceiptsPage::onStatusFilterChanged(int index)
 {
     Q_UNUSED(index);
-
     filterReceipts();
 }
 
@@ -280,26 +224,18 @@ void ReceiptsPage::addActionButtons(
     const ReceiptDto& receipt
 )
 {
-    QWidget* actionWidget =
-        new QWidget(this);
-
+    QWidget* actionWidget = new QWidget(this);
     actionWidget->setObjectName("actionContainer");
 
-    QHBoxLayout* layout =
-        new QHBoxLayout(actionWidget);
-
+    QHBoxLayout* layout = new QHBoxLayout(actionWidget);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(6);
     layout->setAlignment(Qt::AlignCenter);
 
-    QPushButton* viewButton =
-        new QPushButton("👁", actionWidget);
-
+    QPushButton* viewButton = new QPushButton("👁", actionWidget);
     viewButton->setObjectName("viewButton");
 
-    QPushButton* approveButton =
-        new QPushButton("✓", actionWidget);
-
+    QPushButton* approveButton = new QPushButton("✓", actionWidget);
     approveButton->setObjectName("approveButton");
 
     if (!hasPermission("APPROVE_RECEIPTS")) {
@@ -316,11 +252,7 @@ void ReceiptsPage::addActionButtons(
     layout->addWidget(viewButton);
     layout->addWidget(approveButton);
 
-    ui.receiptsTable->setCellWidget(
-        row,
-        6,
-        actionWidget
-    );
+    ui.receiptsTable->setCellWidget(row, 6, actionWidget);
 
     connect(viewButton, &QPushButton::clicked, this, [this, receipt]() {
         onViewReceiptClicked(receipt);
@@ -336,21 +268,14 @@ void ReceiptsPage::onViewReceiptClicked(
 )
 {
     if (!receipt.fileUrl.empty()) {
-        QString fileUrl =
-            QString::fromStdString(receipt.fileUrl);
+        QString fileUrl = QString::fromStdString(receipt.fileUrl);
 
-        if (
-            fileUrl.startsWith("http://") ||
-            fileUrl.startsWith("https://")
-            ) {
+        if (fileUrl.startsWith("http://") || fileUrl.startsWith("https://")) {
             QDesktopServices::openUrl(QUrl(fileUrl));
             return;
         }
 
-        QDesktopServices::openUrl(
-            QUrl::fromLocalFile(fileUrl)
-        );
-
+        QDesktopServices::openUrl(QUrl::fromLocalFile(fileUrl));
         return;
     }
 
@@ -363,11 +288,7 @@ void ReceiptsPage::onViewReceiptClicked(
     details += "Status: " + QString::fromStdString(receipt.status) + "\n";
     details += "Created At: " + QString::fromStdString(receipt.createdAt);
 
-    QMessageBox::information(
-        this,
-        "Receipt Details",
-        details
-    );
+    QMessageBox::information(this, "Receipt Details", details);
 }
 
 void ReceiptsPage::onApproveReceiptClicked(
@@ -386,16 +307,12 @@ void ReceiptsPage::onApproveReceiptClicked(
         return;
     }
 
-    bool success =
-        truckStockService->approveReceipt(receipt.id);
+    bool success = truckStockService->approveReceipt(receipt.id);
 
     if (success) {
-        QMessageBox::information(
-            this,
-            "Success",
-            "Receipt approved successfully."
-        );
+        QMessageBox::information(this, "Success", "Receipt approved successfully.");
 
+        emit receiptsChanged();
         loadReceipts();
     }
     else {

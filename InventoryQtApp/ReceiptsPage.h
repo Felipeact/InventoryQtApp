@@ -33,12 +33,17 @@ private slots:
     void onSearchChanged(const QString& text);
     void onStatusFilterChanged(int index);
 
+signals:
+    void receiptsChanged();
+
+
 private:
     Ui::ReceiptsPageClass ui;
 
     TruckStockService* truckStockService = nullptr;
 
     std::vector<ReceiptDto> currentReceipts;
+    std::vector<ReceiptDto> filteredReceipts;
     std::vector<std::string> permissions;
 
     void setupConnections();
@@ -46,6 +51,7 @@ private:
 
     void loadReceipts();
     void filterReceipts();
+    void populateTable();
 
     void addActionButtons(
         int row,

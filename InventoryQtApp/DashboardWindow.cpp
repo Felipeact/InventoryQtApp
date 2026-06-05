@@ -244,6 +244,17 @@ void DashboardWindow::setupPages()
     receiptsPage = new ReceiptsPage(truckStockService, permissions, this);
     ui.mainStack->addWidget(receiptsPage);
 
+    connect(
+        receiptsPage,
+        &ReceiptsPage::receiptsChanged,
+        this,
+        [this]() {
+            truckStockDashboardPage->refreshDashboard();
+            lowStockAlertsPage->refreshAlerts();
+            myTruckStockPage->refreshStock();
+        }
+    );
+
     reportsPage = new ReportsPage(reportService, this);
     ui.mainStack->addWidget(reportsPage);
 
