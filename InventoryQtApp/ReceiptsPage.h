@@ -28,6 +28,8 @@ public:
         Theme::AppTheme theme
     );
 
+    void setSearchText(const QString& text);
+
 private slots:
     void onUploadReceiptClicked();
     void onSearchChanged(const QString& text);

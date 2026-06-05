@@ -30,6 +30,8 @@ public:
 
     void filterAssignments();
 
+    void setSearchText(const QString& text);
+
 private slots:
     void onAssignTemplateClicked();
 

@@ -343,3 +343,8 @@ void ReceiptsPage::applyTheme(
         Theme::receiptsPageStyle(theme)
     );
 }
+
+void ReceiptsPage::setSearchText(const QString& text)
+{
+	ui.searchInput->setText(text);
+}

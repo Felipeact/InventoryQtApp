@@ -465,3 +465,8 @@ void ItemsPage::applyTheme(Theme::AppTheme theme)
         Theme::itemsPageStyle(theme)
     );
 }
+
+void ItemsPage::setSearchText(const QString& text)
+{
+    ui.itemSearchInput->setText(text);
+}

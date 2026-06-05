@@ -31,6 +31,8 @@ public:
         Theme::AppTheme theme
     );
 
+    void setSearchText(const QString& text);
+
 signals:
     void loggedInUserUpdated(
         const std::string& newUserName

@@ -2,6 +2,9 @@
 #include "VerticalWidget.h"
 #include "Theme.h"
 
+#include <QLineEdit>
+#include <QPushButton>
+
 VerticalWidget::VerticalWidget(
     const std::string& userRole,
     const std::string& userName,
@@ -13,6 +16,24 @@ VerticalWidget::VerticalWidget(
 {
     ui.setupUi(this);
     setUserInfo(userRole, userName);
+
+    connect(
+        ui.searchInput,
+        &QLineEdit::returnPressed,
+        this,
+        [this]() {
+            emit globalSearchRequested(ui.searchInput->text().trimmed());
+        }
+    );
+
+    connect(
+        ui.notificationButton,
+        &QPushButton::clicked,
+        this,
+        [this]() {
+            emit notificationRequested();
+        }
+    );
 }
 
 VerticalWidget::~VerticalWidget()

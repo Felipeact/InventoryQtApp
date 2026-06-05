@@ -607,3 +607,8 @@ void UsersPage::applyTheme(
         Theme::usersPageStyle(theme)
     );
 }
+
+void UsersPage::setSearchText(const QString& text)
+{
+    ui.searchInput->setText(text);
+}

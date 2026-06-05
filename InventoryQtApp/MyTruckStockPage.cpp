@@ -300,3 +300,8 @@ void MyTruckStockPage::applyTheme(
         Theme::myTruckStockPageStyle(theme)
     );
 }
+
+void MyTruckStockPage::setSearchText(const QString& text)
+{
+	ui.searchInput->setText(text);
+}

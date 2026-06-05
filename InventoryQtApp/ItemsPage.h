@@ -21,6 +21,7 @@ public:
     ~ItemsPage();
 
     void refreshProducts();
+    void setSearchText(const QString& text);
 
 signals:
     void productsChanged();  // Signal emitted when products are added/updated/deleted

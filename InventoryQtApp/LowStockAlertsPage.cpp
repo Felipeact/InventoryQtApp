@@ -470,3 +470,8 @@ void LowStockAlertsPage::applyTheme(
         Theme::lowStockAlertsPageStyle(theme)
     );
 }
+
+void LowStockAlertsPage::setSearchText(const QString& text)
+{
+	ui.searchInput->setText(text);
+}

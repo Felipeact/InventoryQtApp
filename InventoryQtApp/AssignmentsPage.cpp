@@ -173,6 +173,11 @@ void AssignmentsPage::filterAssignments()
     updatePagination();
 }
 
+void AssignmentsPage::setSearchText(const QString& text)
+{
+	ui.searchInput->setText(text);
+}
+
 void AssignmentsPage::populateTable()
 {
     ui.assignmentsTable->clearContents();

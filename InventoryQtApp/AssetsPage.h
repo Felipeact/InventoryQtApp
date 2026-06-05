@@ -20,6 +20,8 @@ public:
     // Destructor
     ~AssetsPage();
 
+    void setSearchText(const QString& text);
+
 signals:
     void assetsChanged();  // Signal emitted when assets are added/updated/deleted
 

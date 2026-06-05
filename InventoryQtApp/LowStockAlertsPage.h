@@ -26,6 +26,8 @@ public:
         Theme::AppTheme theme
     );
 
+    void setSearchText(const QString& text);
+
 private slots:
     void onSearchChanged(const QString& text);
     void onStatusFilterChanged(int index);

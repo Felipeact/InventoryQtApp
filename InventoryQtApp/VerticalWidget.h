@@ -2,6 +2,7 @@
 #pragma once
 
 #include <QWidget>
+#include <QString>
 #include <string>
 #include "ui_VerticalWidget.h"
 #include "Theme.h"
@@ -20,6 +21,10 @@ public:
 	~VerticalWidget();
 
 	void setUserInfo(const std::string& role, const std::string& userName);
+
+signals:
+	void globalSearchRequested(const QString& text);
+	void notificationRequested();
 
 private:
 	Ui::VerticalWidget ui;  // UI components

@@ -29,6 +29,8 @@ public:
         Theme::AppTheme theme
     );
 
+    void setSearchText(const QString& text);
+
 private slots:
     void onAddTruckClicked();
     void onSearchChanged(const QString& text);

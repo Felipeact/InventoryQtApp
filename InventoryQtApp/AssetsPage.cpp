@@ -366,6 +366,11 @@ json AssetsPage::getCurrentPageAssets() const
     return pageAssets;
 }
 
+void AssetsPage::setSearchText(const QString& text)
+{
+    ui.assetSearchInput->setText(text);
+}
+
 void AssetsPage::updatePagination()
 {
     int totalItems = static_cast<int>(filteredAssets.size());

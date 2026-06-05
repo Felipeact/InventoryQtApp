@@ -579,3 +579,8 @@ void TrucksPage::applyTheme(
         Theme::trucksPageStyle(theme)
     );
 }
+
+void TrucksPage::setSearchText(const QString& text)
+{
+    ui.searchInput->setText(text);
+}

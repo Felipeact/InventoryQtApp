@@ -533,3 +533,8 @@ void StockTemplatesPage::applyTheme(
         Theme::templatesPageStyle(theme)
     );
 }
+
+void StockTemplatesPage::setSearchText(const QString& text)
+{
+    ui.searchInput->setText(text);
+}

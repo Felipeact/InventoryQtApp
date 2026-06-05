@@ -100,5 +100,7 @@ private:
 	void setupVerticalbar();     // Configures the top user information bar
 	void setupPages(); // Initializes the dashboard page
 
-
+private slots:
+	void onGlobalSearchRequested(const QString& text);
+	void onNotificationRequested();
 };

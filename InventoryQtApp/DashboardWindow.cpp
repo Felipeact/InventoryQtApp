@@ -1,6 +1,7 @@
 // DashboardWindow.cpp - Implementation of the main dashboard window
 #include "DashboardWindow.h"
 #include "Theme.h"
+#include <qmessagebox.h>
 
 #include <QVBoxLayout>
 #include <QString>
@@ -393,6 +394,20 @@ void DashboardWindow::setupVerticalbar()
 {
     verticalbar = new VerticalWidget(role, userName, this);
 
+    connect(
+        verticalbar,
+        &VerticalWidget::globalSearchRequested,
+        this,
+        &DashboardWindow::onGlobalSearchRequested
+    );
+
+    connect(
+        verticalbar,
+        &VerticalWidget::notificationRequested,
+        this,
+        &DashboardWindow::onNotificationRequested
+    );
+
     QVBoxLayout* layout = new QVBoxLayout(ui.verticalContainer);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
@@ -416,4 +431,102 @@ void DashboardWindow::applyTheme(Theme::AppTheme theme)
     setStyleSheet(
         Theme::shellStyle(theme)
     );
+}
+
+void DashboardWindow::onGlobalSearchRequested(
+    const QString& text
+)
+{
+    QString searchText =
+        text.trimmed();
+
+    if (searchText.isEmpty()) {
+        return;
+    }
+
+    QString lower =
+        searchText.toLower();
+
+    if (
+        lower.contains("asset") ||
+        lower.contains("equipment")
+        ) {
+        assetsPage->setSearchText(searchText);
+        ui.mainStack->setCurrentWidget(assetsPage);
+        return;
+    }
+
+    if (
+        lower.contains("user") ||
+        lower.contains("admin") ||
+        lower.contains("technician")
+        ) {
+        usersPage->setSearchText(searchText);
+        ui.mainStack->setCurrentWidget(usersPage);
+        return;
+    }
+
+    if (
+        lower.contains("truck") ||
+        lower.contains("plate")
+        ) {
+        trucksPage->setSearchText(searchText);
+        ui.mainStack->setCurrentWidget(trucksPage);
+        return;
+    }
+
+    if (
+        lower.contains("template") ||
+        lower.contains("trade")
+        ) {
+        stockTemplatesPage->setSearchText(searchText);
+        ui.mainStack->setCurrentWidget(stockTemplatesPage);
+        return;
+    }
+
+    if (
+        lower.contains("assignment") ||
+        lower.contains("assigned")
+        ) {
+        assignmentsPage->setSearchText(searchText);
+        ui.mainStack->setCurrentWidget(assignmentsPage);
+        return;
+    }
+
+    if (
+        lower.contains("receipt") ||
+        lower.contains("invoice")
+        ) {
+        receiptsPage->setSearchText(searchText);
+        ui.mainStack->setCurrentWidget(receiptsPage);
+        return;
+    }
+
+    if (
+        lower.contains("low stock") ||
+        lower.contains("critical") ||
+        lower.contains("warning")
+        ) {
+        lowStockAlertsPage->setSearchText(searchText);
+        ui.mainStack->setCurrentWidget(lowStockAlertsPage);
+        return;
+    }
+
+    if (
+        lower.contains("my stock") ||
+        lower.contains("stock item")
+        ) {
+        myTruckStockPage->setSearchText(searchText);
+        ui.mainStack->setCurrentWidget(myTruckStockPage);
+        return;
+    }
+
+    itemsPage->setSearchText(searchText);
+    ui.mainStack->setCurrentWidget(itemsPage);
+}
+
+void DashboardWindow::onNotificationRequested()
+{
+    lowStockAlertsPage->refreshAlerts();
+    ui.mainStack->setCurrentWidget(lowStockAlertsPage);
 }
