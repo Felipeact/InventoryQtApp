@@ -86,22 +86,87 @@ void MyTruckStockPage::setupTable()
 void MyTruckStockPage::loadStock()
 {
     ui.truckStockTable->clearContents();
+    ui.truckStockTable->clearSpans();
 
     if (!truckStockService) {
-        ui.truckStockTable->setRowCount(0);
+        currentStock.items.clear();
+        filteredItems.clear();
+
+        populateTable();
         return;
     }
 
     currentStock =
         truckStockService->getMyTruckStock();
 
-    ui.truckStockTable->setRowCount(
-        static_cast<int>(currentStock.items.size())
-    );
+    filterStock();
+}
 
-    for (int row = 0; row < static_cast<int>(currentStock.items.size()); row++) {
+void MyTruckStockPage::refreshStock()
+{
+    loadStock();
+}
+
+void MyTruckStockPage::filterStock()
+{
+    QString searchText =
+        ui.searchInput->text().trimmed();
+
+    filteredItems.clear();
+
+    for (const MyTruckStockItemDto& item : currentStock.items) {
+        QString productName =
+            QString::fromStdString(item.productName);
+
+        QString category =
+            QString::fromStdString(item.category);
+
+        QString status =
+            QString::fromStdString(item.status);
+
+        bool matches =
+            searchText.isEmpty() ||
+            productName.contains(searchText, Qt::CaseInsensitive) ||
+            category.contains(searchText, Qt::CaseInsensitive) ||
+            status.contains(searchText, Qt::CaseInsensitive) ||
+            QString::number(item.currentQuantity).contains(searchText) ||
+            QString::number(item.minimumQuantity).contains(searchText);
+
+        if (matches) {
+            filteredItems.push_back(item);
+        }
+    }
+
+    populateTable();
+}
+
+void MyTruckStockPage::populateTable()
+{
+    ui.truckStockTable->clearContents();
+    ui.truckStockTable->clearSpans();
+
+    int rowCount =
+        static_cast<int>(filteredItems.size());
+
+    if (rowCount == 0) {
+        ui.truckStockTable->setRowCount(1);
+
+        ui.truckStockTable->setItem(
+            0,
+            0,
+            new QTableWidgetItem("No truck stock items found")
+        );
+
+        ui.truckStockTable->setSpan(0, 0, 1, 6);
+
+        return;
+    }
+
+    ui.truckStockTable->setRowCount(rowCount);
+
+    for (int row = 0; row < rowCount; row++) {
         const MyTruckStockItemDto& item =
-            currentStock.items[row];
+            filteredItems[row];
 
         ui.truckStockTable->setItem(
             row,
@@ -137,33 +202,11 @@ void MyTruckStockPage::loadStock()
     }
 }
 
-void MyTruckStockPage::refreshStock()
+void MyTruckStockPage::onSearchChanged(const QString& text)
 {
-    loadStock();
-}
+    Q_UNUSED(text);
 
-void MyTruckStockPage::onSearchChanged(
-    const QString& text
-)
-{
-    QString searchText =
-        text.trimmed();
-
-    for (int row = 0; row < ui.truckStockTable->rowCount(); row++) {
-        bool match = searchText.isEmpty();
-
-        for (int col = 0; col < ui.truckStockTable->columnCount(); col++) {
-            QTableWidgetItem* item =
-                ui.truckStockTable->item(row, col);
-
-            if (item && item->text().contains(searchText, Qt::CaseInsensitive)) {
-                match = true;
-                break;
-            }
-        }
-
-        ui.truckStockTable->setRowHidden(row, !match);
-    }
+    filterStock();
 }
 
 void MyTruckStockPage::addUseButton(
@@ -200,12 +243,12 @@ void MyTruckStockPage::onUseItemClicked(
     int row
 )
 {
-    if (row < 0 || row >= static_cast<int>(currentStock.items.size())) {
+    if (row < 0 || row >= static_cast<int>(filteredItems.size())) {
         return;
     }
 
     const MyTruckStockItemDto& item =
-        currentStock.items[row];
+        filteredItems[row];
 
     UseTruckItemDialog dialog(this);
 
@@ -236,6 +279,7 @@ void MyTruckStockPage::onUseItemClicked(
                 "Item usage recorded successfully."
             );
 
+            emit stockChanged();
             loadStock();
         }
         else {

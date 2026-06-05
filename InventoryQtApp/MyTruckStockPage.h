@@ -2,6 +2,7 @@
 
 #include <QWidget>
 #include <QString>
+#include <vector>
 
 #include "ui_MyTruckStockPage.h"
 #include "TruckStockService.h"
@@ -29,15 +30,22 @@ private slots:
     void onSearchChanged(const QString& text);
     void onUseItemClicked(int row);
 
+signals:
+    void stockChanged();
+
 private:
     Ui::MyTruckStockPageClass ui;
 
     TruckStockService* truckStockService = nullptr;
     MyTruckStockDto currentStock;
+    std::vector<MyTruckStockItemDto> filteredItems;
 
     void setupConnections();
     void setupTable();
     void loadStock();
 
     void addUseButton(int row);
+
+    void filterStock();
+    void populateTable();
 };

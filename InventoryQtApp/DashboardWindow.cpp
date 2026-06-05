@@ -209,6 +209,16 @@ void DashboardWindow::setupPages()
     myTruckStockPage = new MyTruckStockPage(truckStockService, this);
     ui.mainStack->addWidget(myTruckStockPage);
 
+    connect(
+        myTruckStockPage,
+        &MyTruckStockPage::stockChanged,
+        this,
+        [this]() {
+            truckStockDashboardPage->refreshDashboard();
+            lowStockAlertsPage->refreshAlerts();
+        }
+    );
+
     lowStockAlertsPage = new LowStockAlertsPage(truckStockService, this);
     ui.mainStack->addWidget(lowStockAlertsPage);
 
