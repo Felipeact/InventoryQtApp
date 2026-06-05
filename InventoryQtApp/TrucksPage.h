@@ -37,6 +37,9 @@ private slots:
     void onNextPageClicked();
     void onPage2Clicked();
 
+signals:
+    void trucksChanged();
+
 private:
     Ui::TrucksPageClass ui;
 

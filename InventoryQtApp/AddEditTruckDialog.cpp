@@ -133,6 +133,19 @@ void AddEditTruckDialog::setEditMode(
     ui.saveButton->setText("Save Truck");
 }
 
+void AddEditTruckDialog::setViewMode()
+{
+    setWindowTitle("View Truck");
+
+    ui.truckNameInput->setReadOnly(true);
+    ui.licensePlateInput->setReadOnly(true);
+    ui.technicianComboBox->setEnabled(false);
+    ui.statusComboBox->setEnabled(false);
+
+    ui.saveButton->hide();
+    ui.cancelButton->setText("Close");
+}
+
 QString AddEditTruckDialog::getTruckName() const
 {
     return ui.truckNameInput->text().trimmed();

@@ -184,6 +184,20 @@ void TrucksPage::populateTable()
     int rowCount =
         endIndex - startIndex;
 
+    if (rowCount == 0) {
+        ui.trucksTable->setRowCount(1);
+
+        ui.trucksTable->setItem(
+            0,
+            0,
+            new QTableWidgetItem("No trucks found")
+        );
+
+        ui.trucksTable->setSpan(0, 0, 1, 5);
+
+        return;
+    }
+
     ui.trucksTable->setRowCount(rowCount);
 
     for (int row = 0; row < rowCount; row++) {
@@ -286,6 +300,7 @@ void TrucksPage::onAddTruckClicked()
                 "Truck created successfully."
             );
 
+			emit trucksChanged();
             loadTrucks();
         }
         else {
@@ -417,17 +432,21 @@ void TrucksPage::onViewTruckClicked(
         return;
     }
 
-    const TruckDto& truck =
-        *it;
+    const TruckDto& truck = *it;
 
-    QMessageBox::information(
-        this,
-        "Truck Details",
-        "Truck Name: " + QString::fromStdString(truck.truckName) +
-        "\nLicense Plate: " + QString::fromStdString(truck.licensePlate) +
-        "\nTechnician: " + QString::fromStdString(truck.technicianName) +
-        "\nStatus: " + QString::fromStdString(truck.status)
+    AddEditTruckDialog dialog(userService, this);
+
+    dialog.setEditMode(
+        QString::fromStdString(truck.id),
+        QString::fromStdString(truck.truckName),
+        QString::fromStdString(truck.licensePlate),
+        QString::fromStdString(truck.technicianId),
+        QString::fromStdString(truck.status)
     );
+
+    dialog.setViewMode();
+
+    dialog.exec();
 }
 
 void TrucksPage::onEditTruckClicked(
@@ -485,6 +504,7 @@ void TrucksPage::onEditTruckClicked(
                 "Truck updated successfully."
             );
 
+			emit trucksChanged();
             loadTrucks();
         }
         else {
@@ -539,6 +559,7 @@ void TrucksPage::onDeleteTruckClicked(
             "Truck deactivated."
         );
 
+		emit trucksChanged();
         loadTrucks();
     }
     else {

@@ -180,6 +180,15 @@ void DashboardWindow::setupPages()
     trucksPage = new TrucksPage(truckStockService, userService, this);
     ui.mainStack->addWidget(trucksPage);
 
+    connect(
+        trucksPage,
+        &TrucksPage::trucksChanged,
+        this,
+        [this]() {
+            truckStockDashboardPage->refreshDashboard();
+        }
+    );
+
     stockTemplatesPage = new StockTemplatesPage(truckStockService, this);
     ui.mainStack->addWidget(stockTemplatesPage);
 

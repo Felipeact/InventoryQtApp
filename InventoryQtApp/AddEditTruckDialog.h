@@ -32,6 +32,8 @@ public:
         const QString& status
     );
 
+    void setViewMode();
+
     QString getTruckName() const;
     QString getLicensePlate() const;
     QString getTechnician() const;
