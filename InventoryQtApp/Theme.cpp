@@ -2890,6 +2890,87 @@ QPushButton#approveButton:disabled {
 )";
 }
 
+QString Theme::notificationDialogStyle(AppTheme theme)
+{
+    QString background =
+        theme == AppTheme::Light ? "#F8FAFC" : "#0F172A";
+
+    QString card =
+        theme == AppTheme::Light ? "#FFFFFF" : "#111827";
+
+    QString text =
+        theme == AppTheme::Light ? "#0F172A" : "#E5E7EB";
+
+    QString muted =
+        theme == AppTheme::Light ? "#64748B" : "#9CA3AF";
+
+    QString border =
+        theme == AppTheme::Light ? "#E2E8F0" : "#1F2937";
+
+    QString button =
+        theme == AppTheme::Light ? "#2563EB" : "#3B82F6";
+
+    QString buttonText =
+        "#FFFFFF";
+
+    return QString(R"(
+        QDialog {
+            background-color: %1;
+            color: %3;
+        }
+
+        QLabel#titleLabel {
+            color: %3;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        QLabel#summaryLabel {
+            color: %4;
+            font-size: 13px;
+        }
+
+        QTextEdit#notificationText {
+            background-color: %2;
+            color: %3;
+            border: 1px solid %5;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 13px;
+        }
+
+        QPushButton {
+            background-color: %6;
+            color: %7;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-weight: 600;
+        }
+
+        QPushButton:hover {
+            background-color: #1D4ED8;
+        }
+
+        QPushButton#closeButton {
+            background-color: transparent;
+            color: %3;
+            border: 1px solid %5;
+        }
+
+        QPushButton#closeButton:hover {
+            background-color: %2;
+        }
+    )")
+        .arg(background)
+        .arg(card)
+        .arg(text)
+        .arg(muted)
+        .arg(border)
+        .arg(button)
+        .arg(buttonText);
+}
+
 QString Theme::dataPageStyle(AppTheme theme)
 {
     if (theme == AppTheme::Light) {

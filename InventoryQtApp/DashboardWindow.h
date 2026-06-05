@@ -1,6 +1,7 @@
 // DashboardWindow.h - Main application window after user login
 #pragma once
 #include <DashboardPage.h>
+#include "NotificationDialog.h"
 #include <ItemsPage.h>
 #include "ProductService.h"
 #include "AssetService.h"

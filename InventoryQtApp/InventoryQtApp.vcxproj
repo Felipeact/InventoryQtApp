@@ -110,6 +110,7 @@
     <ClCompile Include="ItemsPage.cpp" />
     <ClCompile Include="LowStockAlertsPage.cpp" />
     <ClCompile Include="MyTruckStockPage.cpp" />
+    <ClCompile Include="NotificationDialog.cpp" />
     <ClCompile Include="ProductService.cpp" />
     <ClCompile Include="ReceiptsPage.cpp" />
     <ClCompile Include="ReportService.cpp" />
@@ -148,6 +149,7 @@
     <QtUic Include="ItemsPage.ui" />
     <QtUic Include="LowStockAlertsPage.ui" />
     <QtUic Include="MyTruckStockPage.ui" />
+    <QtUic Include="NotificationDialog.ui" />
     <QtUic Include="ReceiptsPage.ui" />
     <QtUic Include="ReportsPage.ui" />
     <QtUic Include="ScanPage.ui" />
@@ -169,6 +171,7 @@
     <ClInclude Include="ErrorHandler.h" />
     <QtMoc Include="ReportsPage.h" />
     <ClInclude Include="ExportUtility.h" />
+    <QtMoc Include="NotificationDialog.h" />
     <ClInclude Include="TruckStockService.h" />
     <QtMoc Include="UsersPage.h" />
     <QtMoc Include="LowStockAlertsPage.h" />

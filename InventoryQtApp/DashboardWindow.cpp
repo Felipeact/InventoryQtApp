@@ -1,6 +1,7 @@
 // DashboardWindow.cpp - Implementation of the main dashboard window
 #include "DashboardWindow.h"
 #include "Theme.h"
+
 #include <qmessagebox.h>
 
 #include <QVBoxLayout>
@@ -527,6 +528,30 @@ void DashboardWindow::onGlobalSearchRequested(
 
 void DashboardWindow::onNotificationRequested()
 {
-    lowStockAlertsPage->refreshAlerts();
-    ui.mainStack->setCurrentWidget(lowStockAlertsPage);
+    NotificationDialog dialog(
+        truckStockService,
+        this
+    );
+
+    connect(
+        &dialog,
+        &NotificationDialog::openLowStockRequested,
+        this,
+        [this]() {
+            lowStockAlertsPage->refreshAlerts();
+            ui.mainStack->setCurrentWidget(lowStockAlertsPage);
+        }
+    );
+
+    connect(
+        &dialog,
+        &NotificationDialog::openReceiptsRequested,
+        this,
+        [this]() {
+            receiptsPage->refreshReceipts();
+            ui.mainStack->setCurrentWidget(receiptsPage);
+        }
+    );
+
+    dialog.exec();
 }

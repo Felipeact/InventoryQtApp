@@ -42,6 +42,7 @@ public:
     static QString myTruckStockPageStyle(AppTheme theme);
     static QString lowStockAlertsPageStyle(AppTheme theme);
     static QString receiptsPageStyle(AppTheme theme);
+    static QString notificationDialogStyle(AppTheme theme);
 
     static QString dataPageStyle(AppTheme theme);
     static QString dialogStyle(AppTheme theme);
