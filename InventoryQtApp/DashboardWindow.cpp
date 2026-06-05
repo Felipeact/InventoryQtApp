@@ -195,6 +195,17 @@ void DashboardWindow::setupPages()
     assignmentsPage = new AssignmentsPage(truckStockService, userService, this);
     ui.mainStack->addWidget(assignmentsPage);
 
+    connect(
+        assignmentsPage,
+        &AssignmentsPage::assignmentsChanged,
+        this,
+        [this]() {
+            truckStockDashboardPage->refreshDashboard();
+            myTruckStockPage->refreshStock();
+            lowStockAlertsPage->refreshAlerts();
+        }
+    );
+
     myTruckStockPage = new MyTruckStockPage(truckStockService, this);
     ui.mainStack->addWidget(myTruckStockPage);
 

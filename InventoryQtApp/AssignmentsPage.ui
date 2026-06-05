@@ -91,6 +91,14 @@
 									</property>
 
 									<item>
+										<widget class="QLineEdit" name="searchInput">
+											<property name="placeholderText">
+												<string>Search assignments...</string>
+											</property>
+										</widget>
+									</item>
+
+									<item>
 										<spacer name="toolbarSpacer">
 											<property name="orientation">
 												<enum>Qt::Horizontal</enum>

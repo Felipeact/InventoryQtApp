@@ -7,6 +7,7 @@
 #include <QAbstractItemView>
 #include <QFrame>
 #include <QHeaderView>
+#include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTableWidget>
@@ -41,6 +42,13 @@ void AssignmentsPage::setupConnections()
         &QPushButton::clicked,
         this,
         &AssignmentsPage::onAssignTemplateClicked
+    );
+
+    connect(
+        ui.searchInput,
+        &QLineEdit::textChanged,
+        this,
+        &AssignmentsPage::onSearchChanged
     );
 
     connect(
@@ -106,6 +114,7 @@ void AssignmentsPage::loadAssignments()
 {
     if (!truckStockService) {
         currentAssignments.clear();
+        filteredAssignments.clear();
 
         populateTable();
         updatePagination();
@@ -113,13 +122,9 @@ void AssignmentsPage::loadAssignments()
         return;
     }
 
-    currentAssignments =
-        truckStockService->getAssignments();
+    currentAssignments = truckStockService->getAssignments();
 
-    currentPage = 1;
-
-    populateTable();
-    updatePagination();
+    filterAssignments();
 }
 
 void AssignmentsPage::refreshAssignments()
@@ -127,12 +132,54 @@ void AssignmentsPage::refreshAssignments()
     loadAssignments();
 }
 
+void AssignmentsPage::filterAssignments()
+{
+    QString searchText = ui.searchInput->text().trimmed();
+
+    filteredAssignments.clear();
+
+    for (const TruckAssignmentDto& assignment : currentAssignments) {
+        QString truck =
+            QString::fromStdString(assignment.truckNumber);
+
+        QString templateName =
+            QString::fromStdString(assignment.templateName);
+
+        QString assignedBy =
+            QString::fromStdString(assignment.assignedBy);
+
+        QString assignedOn =
+            QString::fromStdString(assignment.assignedOn);
+
+        QString status =
+            QString::fromStdString(assignment.status);
+
+        bool matches =
+            searchText.isEmpty() ||
+            truck.contains(searchText, Qt::CaseInsensitive) ||
+            templateName.contains(searchText, Qt::CaseInsensitive) ||
+            assignedBy.contains(searchText, Qt::CaseInsensitive) ||
+            assignedOn.contains(searchText, Qt::CaseInsensitive) ||
+            status.contains(searchText, Qt::CaseInsensitive);
+
+        if (matches) {
+            filteredAssignments.push_back(assignment);
+        }
+    }
+
+    currentPage = 1;
+
+    populateTable();
+    updatePagination();
+}
+
 void AssignmentsPage::populateTable()
 {
     ui.assignmentsTable->clearContents();
+    ui.assignmentsTable->clearSpans();
 
     int totalItems =
-        static_cast<int>(currentAssignments.size());
+        static_cast<int>(filteredAssignments.size());
 
     int startIndex =
         (currentPage - 1) * pageSize;
@@ -143,11 +190,25 @@ void AssignmentsPage::populateTable()
     int rowCount =
         endIndex - startIndex;
 
+    if (rowCount == 0) {
+        ui.assignmentsTable->setRowCount(1);
+
+        ui.assignmentsTable->setItem(
+            0,
+            0,
+            new QTableWidgetItem("No assignments found")
+        );
+
+        ui.assignmentsTable->setSpan(0, 0, 1, 5);
+
+        return;
+    }
+
     ui.assignmentsTable->setRowCount(rowCount);
 
     for (int row = 0; row < rowCount; row++) {
         const TruckAssignmentDto& assignment =
-            currentAssignments[startIndex + row];
+            filteredAssignments[startIndex + row];
 
         ui.assignmentsTable->setItem(
             row,
@@ -194,7 +255,7 @@ void AssignmentsPage::populateTable()
 void AssignmentsPage::updatePagination()
 {
     int totalItems =
-        static_cast<int>(currentAssignments.size());
+        static_cast<int>(filteredAssignments.size());
 
     int totalPages =
         (std::max)(1, (totalItems + pageSize - 1) / pageSize);
@@ -266,6 +327,7 @@ void AssignmentsPage::onAssignTemplateClicked()
                 "Template assigned successfully."
             );
 
+            emit assignmentsChanged();
             loadAssignments();
         }
         else {
@@ -276,6 +338,13 @@ void AssignmentsPage::onAssignTemplateClicked()
             );
         }
     }
+}
+
+void AssignmentsPage::onSearchChanged(const QString& text)
+{
+    Q_UNUSED(text);
+
+    filterAssignments();
 }
 
 void AssignmentsPage::onPreviousPageClicked()
@@ -291,7 +360,7 @@ void AssignmentsPage::onPreviousPageClicked()
 void AssignmentsPage::onNextPageClicked()
 {
     int totalItems =
-        static_cast<int>(currentAssignments.size());
+        static_cast<int>(filteredAssignments.size());
 
     int totalPages =
         (std::max)(1, (totalItems + pageSize - 1) / pageSize);
@@ -307,7 +376,7 @@ void AssignmentsPage::onNextPageClicked()
 void AssignmentsPage::onPage2Clicked()
 {
     int totalItems =
-        static_cast<int>(currentAssignments.size());
+        static_cast<int>(filteredAssignments.size());
 
     int totalPages =
         (std::max)(1, (totalItems + pageSize - 1) / pageSize);
