@@ -6,8 +6,16 @@
 #include <QTableWidgetItem>
 #include <QAbstractItemView>
 #include <QStringList>
+#include <QLabel>
+#include <QPixmap>
+#include <QUrl>
+#include <QLocale>
+
 #include <algorithm>
 #include <iostream>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
 
 DashboardPage::DashboardPage(
     ProductService& productService,
@@ -22,8 +30,14 @@ DashboardPage::DashboardPage(
 
     refreshDashboard();
 
+    
+
     connect(ui.viewAllItemsButton, &QPushButton::clicked, this, [this]() {
         emit viewAllItemsRequested();
+        });
+
+    connect(ui.viewAllLowStockButton, &QPushButton::clicked, this, [this]() {
+        emit viewAllLowStockRequested();
         });
 }
 
@@ -52,6 +66,14 @@ void DashboardPage::setupItemListTable()
     int productCount = static_cast<int>(products.size());
     int rowCount = productCount < 4 ? productCount : 4;
 
+    if (rowCount == 0) {
+        ui.itemListTable->setRowCount(1);
+        ui.itemListTable->setItem(0, 0, new QTableWidgetItem("No recent items found"));
+        ui.itemListTable->setSpan(0, 0, 1, 4);
+        styleDashboardTable(ui.itemListTable);
+        return;
+    }
+
     ui.itemListTable->setRowCount(rowCount);
 
     for (int row = 0; row < rowCount; row++) {
@@ -71,12 +93,39 @@ void DashboardPage::setupItemListTable()
         );
 
         // Image or product ID
-        std::string imageUrl = product.value("imageUrl", "N/A");
-        ui.itemListTable->setItem(
-            row,
-            1,
-            new QTableWidgetItem(QString::fromStdString(imageUrl))
-        );
+        std::string imageUrl = product.value("imageUrl", "");
+
+        QLabel* imageLabel = new QLabel();
+        imageLabel->setAlignment(Qt::AlignCenter);
+        imageLabel->setFixedSize(50, 38);
+        imageLabel->setText("No image");
+
+        ui.itemListTable->setCellWidget(row, 1, imageLabel);
+
+        if (!imageUrl.empty()) {
+            QNetworkAccessManager* manager = new QNetworkAccessManager(imageLabel);
+
+            QNetworkRequest request(QUrl(QString::fromStdString(imageUrl)));
+
+            QNetworkReply* reply = manager->get(request);
+
+            connect(reply, &QNetworkReply::finished, imageLabel, [reply, imageLabel]() {
+                QByteArray imageData = reply->readAll();
+
+                QPixmap pixmap;
+                if (pixmap.loadFromData(imageData)) {
+                    imageLabel->setPixmap(
+                        pixmap.scaled(
+                            imageLabel->size(),
+                            Qt::KeepAspectRatio,
+                            Qt::SmoothTransformation
+                        )
+                    );
+                }
+
+                reply->deleteLater();
+                });
+        }
 
         // Store location
         std::string location = product.value("location", "Unknown Store");
@@ -109,6 +158,14 @@ void DashboardPage::setupLowStockTable()
 
     int productCount = static_cast<int>(lowStockProducts.size());
     int rowCount = productCount < 4 ? productCount : 4;
+
+    if (rowCount == 0) {
+        ui.lowStockTable->setRowCount(1);
+        ui.lowStockTable->setItem(0, 0, new QTableWidgetItem("No low stock items"));
+        ui.lowStockTable->setSpan(0, 0, 1, 3);
+        styleDashboardTable(ui.lowStockTable);
+        return;
+    }
 
     ui.lowStockTable->setRowCount(rowCount);
 
@@ -161,7 +218,7 @@ void DashboardPage::styleDashboardTable(QTableWidget* table)
     table->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     table->horizontalHeader()->setStretchLastSection(true);
 
-    table->verticalHeader()->setDefaultSectionSize(42);
+    table->verticalHeader()->setDefaultSectionSize(56);
 
     table->setShowGrid(false);
     table->setFrameShape(QFrame::NoFrame);
@@ -189,19 +246,28 @@ void DashboardPage::setupReportCards()
 
     int toBeReceived = inventory.value("toBeReceived", 0);
 
-    ui.totalItemsValue->setText(QString::number(totalProducts));
-    ui.quantityInHandValue->setText(QString::number(quantityInHand));
-    ui.toBeReceivedValue->setText(QString::number(toBeReceived));
+    QLocale locale;
 
-    ui.itemQuantityValue->setText(QString::number(quantityInHand));
-    ui.itemReceivedValue->setText(QString::number(toBeReceived));
+    ui.totalItemsValue->setText(locale.toString(totalProducts));
+    ui.quantityInHandValue->setText(locale.toString(quantityInHand));
+    ui.toBeReceivedValue->setText(locale.toString(toBeReceived));
 
-    ui.totalAssetsValue->setText(QString::number(totalAssets));
-    ui.assetActiveValue->setText(QString::number(activeAssets));
-    ui.assetInactiveValue->setText(QString::number(inactiveAssets));
+    ui.lowStockCountValue->setText(locale.toString(lowStockCount));
+
+    ui.itemQuantityValue->setText(locale.toString(quantityInHand));
+    ui.itemReceivedValue->setText(locale.toString(toBeReceived));
+
+    ui.totalAssetsValue->setText(locale.toString(totalAssets));
+    ui.assetActiveValue->setText(locale.toString(activeAssets));
+    ui.assetInactiveValue->setText(locale.toString(inactiveAssets));
 
     // Optional: show low stock count somewhere if you add a QLabel later.
-    // ui.lowStockCountValue->setText(QString::number(lowStockCount));
+    ui.lowStockCountValue->setText(QString::number(lowStockCount));
+
+    ui.totalItemsChange->setText("Products tracked");
+    ui.totalAssetsChange->setText("Assets registered");
+    ui.quantityChange->setText("Units available");
+    ui.receivedChange->setText("Pending receipts");
 }
 
 void DashboardPage::applyTheme(Theme::AppTheme theme)

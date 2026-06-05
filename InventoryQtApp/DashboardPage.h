@@ -24,6 +24,7 @@ public:
 
 signals:
 	void viewAllItemsRequested();
+	void viewAllLowStockRequested();
 
 
 private:

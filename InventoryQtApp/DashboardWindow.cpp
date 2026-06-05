@@ -93,6 +93,11 @@ void DashboardWindow::setupPages()
         ui.mainStack->setCurrentWidget(itemsPage);
         });
 
+    connect(dashboardPage, &DashboardPage::viewAllLowStockRequested, this, [this]() {
+        lowStockAlertsPage->refreshAlerts();
+        ui.mainStack->setCurrentWidget(lowStockAlertsPage);
+        });
+
     connect(itemsPage, &ItemsPage::productsChanged, this, [this]() {
         dashboardPage->refreshDashboard();
         });
@@ -112,6 +117,7 @@ void DashboardWindow::setupPages()
         });
 
     settingsPage = new SettingsPage(role, userName, this);
+	dashboardPage->refreshDashboard();
     ui.mainStack->addWidget(settingsPage);
 
     connect(

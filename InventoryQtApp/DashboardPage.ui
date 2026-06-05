@@ -647,6 +647,16 @@
 											</widget>
 										</item>
 										<item>
+											<widget class="QLabel" name="lowStockCountValue">
+												<property name="text">
+													<string>0</string>
+												</property>
+												<property name="alignment">
+													<set>Qt::AlignmentFlag::AlignCenter</set>
+												</property>
+											</widget>
+										</item>
+										<item>
 											<spacer name="lowStockSpacer">
 												<property name="orientation">
 													<enum>Qt::Orientation::Horizontal</enum>
