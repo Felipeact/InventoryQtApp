@@ -76,6 +76,7 @@ void TruckStockDashboardPage::setupTables()
 
 void TruckStockDashboardPage::loadDashboardData()
 {
+    loadMetricCards();
     loadRecentTrucks();
     loadLowStockItems();
 }
@@ -228,6 +229,74 @@ void TruckStockDashboardPage::loadLowStockItems()
             new QTableWidgetItem(QString::number(item.minimumQuantity))
         );
     }
+}
+
+void TruckStockDashboardPage::loadMetricCards()
+{
+    if (!truckStockService) {
+        return;
+    }
+
+    std::vector<TruckDto> trucks =
+        truckStockService->getTrucks();
+
+    std::vector<StockTemplateDto> templates =
+        truckStockService->getTemplates();
+
+    std::vector<LowStockItemDto> lowStockItems =
+        truckStockService->getLowStockItems();
+
+    int totalTrucks =
+        static_cast<int>(trucks.size());
+
+    int totalTemplates =
+        static_cast<int>(templates.size());
+
+    int lowStockCount =
+        static_cast<int>(lowStockItems.size());
+
+    int activeTrucks = 0;
+
+    for (const TruckDto& truck : trucks) {
+        QString status =
+            QString::fromStdString(truck.status).toLower();
+
+        if (status == "active") {
+            activeTrucks++;
+        }
+    }
+
+    ui.metricTitle1->setText("Total Trucks");
+    ui.metricValue1->setText(QString::number(totalTrucks));
+    ui.positiveLabel1->setText("Trucks registered");
+
+    ui.metricTitle2->setText("Stock Templates");
+    ui.metricValue2->setText(QString::number(totalTemplates));
+    ui.positiveLabel2->setText("Templates available");
+
+    ui.metricTitle3->setText("Active Trucks");
+    ui.metricValue3->setText(QString::number(activeTrucks));
+    ui.positiveLabel3->setText("Currently active");
+
+    ui.metricTitle4->setText("Low Stock Items");
+    ui.metricValue4->setText(QString::number(lowStockCount));
+    ui.negativeLabel1->setText("Need attention");
+
+    ui.summarySmallLabel1->setText("Total Trucks");
+    ui.summaryValue1->setText(QString::number(totalTrucks));
+    ui.summaryPositive1->setText("Registered");
+
+    ui.summarySmallLabel2->setText("Templates");
+    ui.summaryValue2->setText(QString::number(totalTemplates));
+    ui.summaryNegative1->setText("Available");
+
+    ui.summarySmallLabel3->setText("Active Trucks");
+    ui.summaryValue3->setText(QString::number(activeTrucks));
+    ui.summaryPositive2->setText("Active");
+
+    ui.summarySmallLabel4->setText("Low Stock");
+    ui.summaryValue4->setText(QString::number(lowStockCount));
+    ui.summaryNegative2->setText("Alerts");
 }
 
 void TruckStockDashboardPage::applyTheme(

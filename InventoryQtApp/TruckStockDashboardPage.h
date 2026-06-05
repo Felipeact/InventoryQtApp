@@ -39,4 +39,5 @@ private:
     void loadDashboardData();
     void loadRecentTrucks();
     void loadLowStockItems();
+    void loadMetricCards();
 };
