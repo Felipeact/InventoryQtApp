@@ -118,7 +118,7 @@ void DashboardWindow::setupPages()
         itemsPage->refreshProducts();
         });
 
-    settingsPage = new SettingsPage(role, userName, this);
+    settingsPage = new SettingsPage(role, userName, userService, this);
 	dashboardPage->refreshDashboard();
     ui.mainStack->addWidget(settingsPage);
 

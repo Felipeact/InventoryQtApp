@@ -6,21 +6,25 @@
 
 #include "ui_SettingsPage.h"
 #include "Theme.h"
+#include "UserService.h"
 
 class SettingsPage : public QWidget
 {
     Q_OBJECT
 
 public:
-
-    void applyTheme(Theme::AppTheme theme);
     explicit SettingsPage(
         const std::string& role,
         const std::string& userName,
+        UserService* userService,
         QWidget* parent = nullptr
     );
 
     ~SettingsPage();
+
+    void applyTheme(
+        Theme::AppTheme theme
+    );
 
     void setUserInfo(
         const std::string& role,
@@ -28,13 +32,21 @@ public:
     );
 
 signals:
-    void userNameChanged(const std::string& newUserName);
-    void themeChanged(const QString& themeName);
+    void userNameChanged(
+        const std::string& newUserName
+    );
+
+    void themeChanged(
+        const QString& themeName
+    );
+
     void logoutRequested();
 
 private slots:
     void onSaveProfileClicked();
     void onApplyThemeClicked();
+    void onSaveApiUrlClicked();
+    void onResetApiUrlClicked();
     void onLogoutClicked();
 
 private:
@@ -42,4 +54,12 @@ private:
 
     std::string role;
     std::string userName;
+
+    UserService* userService = nullptr;
+
+    void loadSettings();
+
+    bool isValidApiUrl(
+        const QString& url
+    ) const;
 };

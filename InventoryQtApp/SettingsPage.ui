@@ -7,7 +7,7 @@
 				<x>0</x>
 				<y>0</y>
 				<width>900</width>
-				<height>650</height>
+				<height>760</height>
 			</rect>
 		</property>
 
@@ -43,7 +43,7 @@
 			<item>
 				<widget class="QLabel" name="subtitleLabel">
 					<property name="text">
-						<string>Manage your profile, appearance, and session.</string>
+						<string>Manage your profile, appearance, API connection, and session.</string>
 					</property>
 				</widget>
 			</item>
@@ -180,6 +180,98 @@
 			</item>
 
 			<item>
+				<widget class="QWidget" name="apiCard" native="true">
+					<layout class="QVBoxLayout" name="apiLayout">
+						<property name="leftMargin">
+							<number>24</number>
+						</property>
+						<property name="topMargin">
+							<number>24</number>
+						</property>
+						<property name="rightMargin">
+							<number>24</number>
+						</property>
+						<property name="bottomMargin">
+							<number>24</number>
+						</property>
+						<property name="spacing">
+							<number>12</number>
+						</property>
+
+						<item>
+							<widget class="QLabel" name="apiTitleLabel">
+								<property name="text">
+									<string>API Connection</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QLabel" name="apiDescriptionLabel">
+								<property name="text">
+									<string>Set the backend API base URL used by the application.</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QLabel" name="apiUrlLabel">
+								<property name="text">
+									<string>API Base URL</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QLineEdit" name="apiUrlInput">
+								<property name="placeholderText">
+									<string>https://your-api-url.com</string>
+								</property>
+							</widget>
+						</item>
+
+						<item>
+							<layout class="QHBoxLayout" name="apiButtonLayout">
+								<property name="spacing">
+									<number>10</number>
+								</property>
+
+								<item>
+									<widget class="QPushButton" name="saveApiUrlButton">
+										<property name="text">
+											<string>Save API URL</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="resetApiUrlButton">
+										<property name="text">
+											<string>Reset to Default</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<spacer name="apiButtonSpacer">
+										<property name="orientation">
+											<enum>Qt::Horizontal</enum>
+										</property>
+										<property name="sizeHint" stdset="0">
+											<size>
+												<width>40</width>
+												<height>20</height>
+											</size>
+										</property>
+									</spacer>
+								</item>
+							</layout>
+						</item>
+					</layout>
+				</widget>
+			</item>
+
+			<item>
 				<widget class="QWidget" name="sessionCard" native="true">
 					<layout class="QVBoxLayout" name="sessionLayout">
 						<property name="leftMargin">
@@ -232,6 +324,7 @@
 			</item>
 		</layout>
 	</widget>
+
 	<resources/>
 	<connections/>
 </ui>

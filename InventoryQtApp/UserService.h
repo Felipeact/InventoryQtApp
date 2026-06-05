@@ -44,7 +44,9 @@ public:
     bool createUser(const CreateUserRequest& request);
     bool updateUser(const std::string& userId, const UpdateUserRequest& request);
     bool deleteUser(const std::string& userId);
+
+    bool updateCurrentUserProfile(const std::string& name);
+
 private:
     ApiClient& apiClient;
-
 };

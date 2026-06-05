@@ -1,10 +1,9 @@
 #include "UserService.h"
-#include <algorithm>
 
-#include <QComboBox>
+#include <algorithm>
+#include <iostream>
 
 #include <nlohmann/json.hpp>
-#include <iostream>
 
 using json = nlohmann::json;
 
@@ -26,11 +25,11 @@ std::vector<UserDto> UserService::getUsers()
                 << " Body: "
                 << response.text
                 << std::endl;
+
             return users;
         }
 
         json data = json::parse(response.text);
-
 
         for (const auto& item : data) {
             UserDto user;
@@ -52,7 +51,9 @@ std::vector<UserDto> UserService::getUsers()
         }
     }
     catch (const std::exception& ex) {
-        std::cerr << "UserService::getUsers error: " << ex.what() << std::endl;
+        std::cerr << "UserService::getUsers error: "
+            << ex.what()
+            << std::endl;
     }
 
     return users;
@@ -106,7 +107,10 @@ bool UserService::createUser(const CreateUserRequest& request)
     }
 }
 
-bool UserService::updateUser(const std::string& userId, const UpdateUserRequest& request)
+bool UserService::updateUser(
+    const std::string& userId,
+    const UpdateUserRequest& request
+)
 {
     try {
         json body;
@@ -162,6 +166,47 @@ bool UserService::deleteUser(const std::string& userId)
     }
     catch (const std::exception& ex) {
         std::cerr << "UserService::deleteUser error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}
+
+bool UserService::updateCurrentUserProfile(const std::string& name)
+{
+    try {
+        json body;
+        body["name"] = name;
+
+        auto response = apiClient.patch(
+            "/auth/profile",
+            body.dump()
+        );
+
+        if (response.status_code == 200 || response.status_code == 204) {
+            return true;
+        }
+
+        response = apiClient.patch(
+            "/users/me",
+            body.dump()
+        );
+
+        if (response.status_code == 200 || response.status_code == 204) {
+            return true;
+        }
+
+        std::cerr << "Update current profile failed. Status: "
+            << response.status_code
+            << " Body: "
+            << response.text
+            << std::endl;
+
+        return false;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "UserService::updateCurrentUserProfile error: "
             << ex.what()
             << std::endl;
 
