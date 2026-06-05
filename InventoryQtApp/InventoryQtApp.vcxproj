@@ -107,6 +107,7 @@
     <ClCompile Include="DashboardWindow.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="ExportUtility.cpp" />
+    <ClCompile Include="GlobalSearchDialog.cpp" />
     <ClCompile Include="ItemsPage.cpp" />
     <ClCompile Include="LowStockAlertsPage.cpp" />
     <ClCompile Include="MyTruckStockPage.cpp" />
@@ -140,6 +141,7 @@
     <QtUic Include="AssignTemplateDialog.ui" />
     <QtUic Include="DashboardPage.ui" />
     <QtUic Include="DashboardWindow.ui" />
+    <QtUic Include="GlobalSearchDialog.ui" />
     <QtUic Include="InventoryQtApp.ui" />
     <QtMoc Include="InventoryQtApp.h" />
     <ClCompile Include="ApiClient.cpp" />
@@ -172,6 +174,7 @@
     <QtMoc Include="ReportsPage.h" />
     <ClInclude Include="ExportUtility.h" />
     <QtMoc Include="NotificationDialog.h" />
+    <QtMoc Include="GlobalSearchDialog.h" />
     <ClInclude Include="TruckStockService.h" />
     <QtMoc Include="UsersPage.h" />
     <QtMoc Include="LowStockAlertsPage.h" />

@@ -190,6 +190,9 @@
     <ClCompile Include="NotificationDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="GlobalSearchDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -314,6 +317,9 @@
     <QtMoc Include="NotificationDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="GlobalSearchDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DashboardPage.ui">
@@ -395,6 +401,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="NotificationDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="GlobalSearchDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

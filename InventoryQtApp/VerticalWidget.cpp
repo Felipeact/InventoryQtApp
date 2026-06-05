@@ -15,14 +15,15 @@ VerticalWidget::VerticalWidget(
     username(userName)
 {
     ui.setupUi(this);
+
     setUserInfo(userRole, userName);
 
     connect(
         ui.searchInput,
-        &QLineEdit::returnPressed,
+        &QLineEdit::textChanged,
         this,
-        [this]() {
-            emit globalSearchRequested(ui.searchInput->text().trimmed());
+        [this](const QString& text) {
+            emit globalSearchTextChanged(text);
         }
     );
 
@@ -51,6 +52,23 @@ void VerticalWidget::setUserInfo(
     ui.welcomeLabel->setText(
         "Hello " + QString::fromStdString(userName)
     );
+
+    if (!userName.empty()) {
+        ui.avatarLabel->setText(
+            QString::fromStdString(userName.substr(0, 1)).toUpper()
+        );
+    }
+}
+
+void VerticalWidget::clearSearch()
+{
+    ui.searchInput->clear();
+}
+
+void VerticalWidget::focusSearch()
+{
+    ui.searchInput->setFocus();
+    ui.searchInput->selectAll();
 }
 
 void VerticalWidget::applyTheme(Theme::AppTheme theme)
@@ -59,4 +77,3 @@ void VerticalWidget::applyTheme(Theme::AppTheme theme)
         Theme::verticalBarStyle(theme)
     );
 }
-

@@ -4,33 +4,40 @@
 #include <QWidget>
 #include <QString>
 #include <string>
+
 #include "ui_VerticalWidget.h"
 #include "Theme.h"
 
-// Widget that displays user role and name in the top bar
 class VerticalWidget : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
+    VerticalWidget(
+        const std::string& userRole,
+        const std::string& userName,
+        QWidget* parent = nullptr
+    );
 
-	void applyTheme(Theme::AppTheme theme);
-	// Constructor that initializes the user info bar with role and name
-	VerticalWidget(const std::string& userRole, const std::string& userName, QWidget* parent = nullptr);
-	// Destructor
-	~VerticalWidget();
+    ~VerticalWidget();
 
-	void setUserInfo(const std::string& role, const std::string& userName);
+    void applyTheme(Theme::AppTheme theme);
+
+    void setUserInfo(
+        const std::string& role,
+        const std::string& userName
+    );
+
+    void clearSearch();
+    void focusSearch();
 
 signals:
-	void globalSearchRequested(const QString& text);
-	void notificationRequested();
+    void globalSearchTextChanged(const QString& text);
+    void notificationRequested();
 
 private:
-	Ui::VerticalWidget ui;  // UI components
+    Ui::VerticalWidget ui;
 
-	std::string role;
-	std::string username;
-
+    std::string role;
+    std::string username;
 };
-

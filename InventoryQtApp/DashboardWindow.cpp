@@ -397,9 +397,9 @@ void DashboardWindow::setupVerticalbar()
 
     connect(
         verticalbar,
-        &VerticalWidget::globalSearchRequested,
+        &VerticalWidget::globalSearchTextChanged,
         this,
-        &DashboardWindow::onGlobalSearchRequested
+        &DashboardWindow::onGlobalSearchTextChanged
     );
 
     connect(
@@ -434,7 +434,7 @@ void DashboardWindow::applyTheme(Theme::AppTheme theme)
     );
 }
 
-void DashboardWindow::onGlobalSearchRequested(
+void DashboardWindow::onGlobalSearchTextChanged(
     const QString& text
 )
 {
@@ -442,88 +442,146 @@ void DashboardWindow::onGlobalSearchRequested(
         text.trimmed();
 
     if (searchText.isEmpty()) {
+        closeGlobalSearchDialog();
         return;
     }
 
-    QString lower =
-        searchText.toLower();
+    showGlobalSearchDialog(searchText);
+}
 
-    if (
-        lower.contains("asset") ||
-        lower.contains("equipment")
-        ) {
-        assetsPage->setSearchText(searchText);
+void DashboardWindow::showGlobalSearchDialog(
+    const QString& text
+)
+{
+    if (!globalSearchDialog) {
+        globalSearchDialog =
+            new GlobalSearchDialog(
+                text,
+                productService,
+                assetService,
+                userService,
+                truckStockService,
+                this
+            );
+
+        connect(
+            globalSearchDialog,
+            &GlobalSearchDialog::resultSelected,
+            this,
+            &DashboardWindow::handleGlobalSearchResult
+        );
+
+        connect(
+            globalSearchDialog,
+            &QObject::destroyed,
+            this,
+            [this]() {
+                globalSearchDialog = nullptr;
+            }
+        );
+
+        QPoint globalPos =
+            ui.verticalContainer->mapToGlobal(
+                QPoint(0, ui.verticalContainer->height())
+            );
+
+        globalSearchDialog->move(
+            globalPos.x() + 260,
+            globalPos.y() + 6
+        );
+
+        globalSearchDialog->show();
+    }
+
+    globalSearchDialog->setSearchText(text);
+    globalSearchDialog->raise();
+    globalSearchDialog->activateWindow();
+}
+
+void DashboardWindow::closeGlobalSearchDialog()
+{
+    if (globalSearchDialog) {
+        globalSearchDialog->close();
+        globalSearchDialog = nullptr;
+    }
+}
+
+void DashboardWindow::handleGlobalSearchResult(
+    GlobalSearchDialog::SearchTarget target,
+    const QString& value
+)
+{
+    closeGlobalSearchDialog();
+
+    if (verticalbar) {
+        verticalbar->clearSearch();
+    }
+
+    switch (target) {
+    case GlobalSearchDialog::SearchTarget::Dashboard:
+        dashboardPage->refreshDashboard();
+        ui.mainStack->setCurrentWidget(dashboardPage);
+        break;
+
+    case GlobalSearchDialog::SearchTarget::Items:
+        itemsPage->setSearchText(value);
+        ui.mainStack->setCurrentWidget(itemsPage);
+        break;
+
+    case GlobalSearchDialog::SearchTarget::Assets:
+        assetsPage->setSearchText(value);
         ui.mainStack->setCurrentWidget(assetsPage);
-        return;
-    }
+        break;
 
-    if (
-        lower.contains("user") ||
-        lower.contains("admin") ||
-        lower.contains("technician")
-        ) {
-        usersPage->setSearchText(searchText);
+    case GlobalSearchDialog::SearchTarget::Users:
+        usersPage->setSearchText(value);
         ui.mainStack->setCurrentWidget(usersPage);
-        return;
-    }
+        break;
 
-    if (
-        lower.contains("truck") ||
-        lower.contains("plate")
-        ) {
-        trucksPage->setSearchText(searchText);
+    case GlobalSearchDialog::SearchTarget::Reports:
+        reportsPage->refreshReports();
+        ui.mainStack->setCurrentWidget(reportsPage);
+        break;
+
+    case GlobalSearchDialog::SearchTarget::Settings:
+        ui.mainStack->setCurrentWidget(settingsPage);
+        break;
+
+    case GlobalSearchDialog::SearchTarget::TruckDashboard:
+        truckStockDashboardPage->refreshDashboard();
+        ui.mainStack->setCurrentWidget(truckStockDashboardPage);
+        break;
+
+    case GlobalSearchDialog::SearchTarget::Trucks:
+        trucksPage->setSearchText(value);
         ui.mainStack->setCurrentWidget(trucksPage);
-        return;
-    }
+        break;
 
-    if (
-        lower.contains("template") ||
-        lower.contains("trade")
-        ) {
-        stockTemplatesPage->setSearchText(searchText);
+    case GlobalSearchDialog::SearchTarget::Templates:
+        stockTemplatesPage->setSearchText(value);
         ui.mainStack->setCurrentWidget(stockTemplatesPage);
-        return;
-    }
+        break;
 
-    if (
-        lower.contains("assignment") ||
-        lower.contains("assigned")
-        ) {
-        assignmentsPage->setSearchText(searchText);
+    case GlobalSearchDialog::SearchTarget::Assignments:
+        assignmentsPage->setSearchText(value);
         ui.mainStack->setCurrentWidget(assignmentsPage);
-        return;
-    }
+        break;
 
-    if (
-        lower.contains("receipt") ||
-        lower.contains("invoice")
-        ) {
-        receiptsPage->setSearchText(searchText);
-        ui.mainStack->setCurrentWidget(receiptsPage);
-        return;
-    }
-
-    if (
-        lower.contains("low stock") ||
-        lower.contains("critical") ||
-        lower.contains("warning")
-        ) {
-        lowStockAlertsPage->setSearchText(searchText);
-        ui.mainStack->setCurrentWidget(lowStockAlertsPage);
-        return;
-    }
-
-    if (
-        lower.contains("my stock") ||
-        lower.contains("stock item")
-        ) {
-        myTruckStockPage->setSearchText(searchText);
+    case GlobalSearchDialog::SearchTarget::MyTruckStock:
+        myTruckStockPage->setSearchText(value);
         ui.mainStack->setCurrentWidget(myTruckStockPage);
-        return;
-    }
+        break;
 
-    itemsPage->setSearchText(searchText);
-    ui.mainStack->setCurrentWidget(itemsPage);
+    case GlobalSearchDialog::SearchTarget::LowStockAlerts:
+        lowStockAlertsPage->setSearchText(value);
+        ui.mainStack->setCurrentWidget(lowStockAlertsPage);
+        break;
+
+    case GlobalSearchDialog::SearchTarget::Receipts:
+        receiptsPage->setSearchText(value);
+        ui.mainStack->setCurrentWidget(receiptsPage);
+        break;
+    }
 }
 
 void DashboardWindow::onNotificationRequested()
