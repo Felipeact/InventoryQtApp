@@ -35,6 +35,9 @@ private slots:
     void onNextPageClicked();
     void onPage2Clicked();
 
+signals:
+    void templatesChanged();
+
 private:
     Ui::StockTemplatesPageClass ui;
 

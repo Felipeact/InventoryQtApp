@@ -154,6 +154,7 @@ void StockTemplatesPage::onNewTemplateClicked()
                 "Template created successfully."
             );
 
+            emit templatesChanged();
             loadTemplates();
         }
         else {
@@ -224,6 +225,20 @@ void StockTemplatesPage::populateTable()
 
     int rowCount =
         endIndex - startIndex;
+
+    if (rowCount == 0) {
+        ui.templatesTable->setRowCount(1);
+
+        ui.templatesTable->setItem(
+            0,
+            0,
+            new QTableWidgetItem("No stock templates found")
+        );
+
+        ui.templatesTable->setSpan(0, 0, 1, 4);
+
+        return;
+    }
 
     ui.templatesTable->setRowCount(rowCount);
 
@@ -369,6 +384,7 @@ void StockTemplatesPage::onEditTemplateClicked(
                 "Template updated successfully."
             );
 
+            emit templatesChanged();
             loadTemplates();
         }
         else {
@@ -407,6 +423,7 @@ void StockTemplatesPage::onDeleteTemplateClicked(
             "Template deleted successfully."
         );
 
+        emit templatesChanged();
         loadTemplates();
     }
     else {
