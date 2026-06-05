@@ -24,6 +24,10 @@ public:
         Theme::AppTheme theme
     );
 
+signals:
+    void viewAllTrucksRequested();
+    void viewAllLowStockRequested();
+
 private:
     Ui::TruckStockDashboardPageClass ui;
 

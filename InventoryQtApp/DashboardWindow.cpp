@@ -192,6 +192,25 @@ void DashboardWindow::setupPages()
     lowStockAlertsPage = new LowStockAlertsPage(truckStockService, this);
     ui.mainStack->addWidget(lowStockAlertsPage);
 
+    connect(
+        truckStockDashboardPage,
+        &TruckStockDashboardPage::viewAllTrucksRequested,
+        this,
+        [this]() {
+            ui.mainStack->setCurrentWidget(trucksPage);
+        }
+    );
+
+    connect(
+        truckStockDashboardPage,
+        &TruckStockDashboardPage::viewAllLowStockRequested,
+        this,
+        [this]() {
+            lowStockAlertsPage->refreshAlerts();
+            ui.mainStack->setCurrentWidget(lowStockAlertsPage);
+        }
+    );
+
     receiptsPage = new ReceiptsPage(truckStockService, permissions, this);
     ui.mainStack->addWidget(receiptsPage);
 
@@ -277,6 +296,7 @@ void DashboardWindow::setupSidebar()
         });
 
     connect(sidebar, &SidebarWidget::truckStockDashboardClicked, this, [this]() {
+        truckStockDashboardPage->refreshDashboard();
         ui.mainStack->setCurrentWidget(truckStockDashboardPage);
         });
 

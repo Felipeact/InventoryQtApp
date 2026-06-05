@@ -8,6 +8,7 @@
 #include <QHeaderView>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <QPushButton>
 
 TruckStockDashboardPage::TruckStockDashboardPage(
     TruckStockService* truckStockService,
@@ -31,6 +32,13 @@ TruckStockDashboardPage::~TruckStockDashboardPage()
 
 void TruckStockDashboardPage::setupConnections()
 {
+    connect(ui.viewAllTrucksButton, &QPushButton::clicked, this, [this]() {
+        emit viewAllTrucksRequested();
+        });
+
+    connect(ui.viewAllLowStockButton, &QPushButton::clicked, this, [this]() {
+        emit viewAllLowStockRequested();
+        });
 }
 
 void TruckStockDashboardPage::setupTables()
@@ -89,7 +97,7 @@ void TruckStockDashboardPage::loadRecentTrucks()
         << "Plate"
         << "Technician"
         << "Status"
-        << "Updated"
+        << "Stock Status"
     );
 
     if (!truckStockService) {
@@ -102,6 +110,17 @@ void TruckStockDashboardPage::loadRecentTrucks()
 
     int rowCount =
         (std::min)(static_cast<int>(trucks.size()), 5);
+
+    if (rowCount == 0) {
+        ui.recentTrucksTable->setRowCount(1);
+        ui.recentTrucksTable->setItem(
+            0,
+            0,
+            new QTableWidgetItem("No trucks found")
+        );
+        ui.recentTrucksTable->setSpan(0, 0, 1, 5);
+        return;
+    }
 
     ui.recentTrucksTable->setRowCount(rowCount);
 
@@ -133,10 +152,12 @@ void TruckStockDashboardPage::loadRecentTrucks()
             new QTableWidgetItem(QString::fromStdString(truck.status))
         );
 
+        QString stockStatus = "Normal";
+
         ui.recentTrucksTable->setItem(
             row,
             4,
-            new QTableWidgetItem("-")
+            new QTableWidgetItem(stockStatus)
         );
     }
 }
@@ -165,6 +186,17 @@ void TruckStockDashboardPage::loadLowStockItems()
 
     int rowCount =
         (std::min)(static_cast<int>(lowStockItems.size()), 5);
+
+    if (rowCount == 0) {
+        ui.lowStockTable->setRowCount(1);
+        ui.lowStockTable->setItem(
+            0,
+            0,
+            new QTableWidgetItem("No low stock truck items")
+        );
+        ui.lowStockTable->setSpan(0, 0, 1, 4);
+        return;
+    }
 
     ui.lowStockTable->setRowCount(rowCount);
 

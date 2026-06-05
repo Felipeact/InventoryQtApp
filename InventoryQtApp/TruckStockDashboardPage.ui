@@ -1,733 +1,728 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-	<class>TruckStockDashboardPageClass</class>
-	<widget class="QWidget" name="TruckStockDashboardPageClass">
-		<property name="geometry">
-			<rect>
-				<x>0</x>
-				<y>0</y>
-				<width>1280</width>
-				<height>820</height>
-			</rect>
-		</property>
-		<property name="windowTitle">
-			<string>Truck Stock Dashboard</string>
-		</property>
-		<property name="styleSheet">
-			<string notr="true"/>
-		</property>
-
-		<layout class="QVBoxLayout" name="rootLayout">
-			<property name="leftMargin">
-				<number>18</number>
-			</property>
-			<property name="topMargin">
-				<number>18</number>
-			</property>
-			<property name="rightMargin">
-				<number>18</number>
-			</property>
-			<property name="bottomMargin">
-				<number>18</number>
-			</property>
-			<property name="spacing">
-				<number>16</number>
-			</property>
-
-			<item>
-				<layout class="QVBoxLayout" name="titleLayout">
-					<property name="spacing">
-						<number>2</number>
-					</property>
-					<item>
-						<widget class="QLabel" name="pageTitle">
-							<property name="text">
-								<string>Dashboard</string>
-							</property>
-						</widget>
-					</item>
-					<item>
-						<widget class="QLabel" name="subtitleLabel">
-							<property name="text">
-								<string>Welcome back to Truck Stock Management</string>
-							</property>
-						</widget>
-					</item>
-				</layout>
-			</item>
-
-			<item>
-				<layout class="QHBoxLayout" name="metricsLayout">
-					<property name="spacing">
-						<number>14</number>
-					</property>
-
-					<item>
-						<widget class="QWidget" name="metricCard1" native="true">
-							<property name="minimumSize">
-								<size>
-									<width>0</width>
-									<height>118</height>
-								</size>
-							</property>
-							<layout class="QHBoxLayout" name="metricCardLayout1">
-								<property name="leftMargin">
-									<number>18</number>
-								</property>
-								<property name="topMargin">
-									<number>14</number>
-								</property>
-								<property name="rightMargin">
-									<number>18</number>
-								</property>
-								<property name="bottomMargin">
-									<number>14</number>
-								</property>
-								<item>
-									<layout class="QVBoxLayout" name="metricTextLayout1">
-										<item>
-											<widget class="QLabel" name="metricTitle1">
-												<property name="text">
-													<string>Total Items</string>
-												</property>
-											</widget>
-										</item>
-										<item>
-											<widget class="QLabel" name="metricValue1">
-												<property name="text">
-													<string>1,250</string>
-												</property>
-											</widget>
-										</item>
-										<item>
-											<widget class="QLabel" name="positiveLabel1">
-												<property name="text">
-													<string>+12.5% from last month</string>
-												</property>
-											</widget>
-										</item>
-									</layout>
-								</item>
-								<item>
-									<widget class="QWidget" name="blueIconBox" native="true">
-										<property name="minimumSize">
-											<size>
-												<width>54</width>
-												<height>54</height>
-											</size>
-										</property>
-										<property name="maximumSize">
-											<size>
-												<width>54</width>
-												<height>54</height>
-											</size>
-										</property>
-										<layout class="QVBoxLayout" name="blueIconLayout">
-											<item>
-												<widget class="QLabel" name="blueIconLabel">
-													<property name="alignment">
-														<set>Qt::AlignCenter</set>
-													</property>
-													<property name="text">
-														<string>▧</string>
-													</property>
-												</widget>
-											</item>
-										</layout>
-									</widget>
-								</item>
-							</layout>
-						</widget>
-					</item>
-
-					<item>
-						<widget class="QWidget" name="metricCard2" native="true">
-							<layout class="QHBoxLayout" name="metricCardLayout2">
-								<property name="leftMargin">
-									<number>18</number>
-								</property>
-								<property name="topMargin">
-									<number>14</number>
-								</property>
-								<property name="rightMargin">
-									<number>18</number>
-								</property>
-								<property name="bottomMargin">
-									<number>14</number>
-								</property>
-								<item>
-									<layout class="QVBoxLayout" name="metricTextLayout2">
-										<item>
-											<widget class="QLabel" name="metricTitle2">
-												<property name="text">
-													<string>Truck Templates</string>
-												</property>
-											</widget>
-										</item>
-										<item>
-											<widget class="QLabel" name="metricValue2">
-												<property name="text">
-													<string>320</string>
-												</property>
-											</widget>
-										</item>
-										<item>
-											<widget class="QLabel" name="positiveLabel2">
-												<property name="text">
-													<string>+8.2% from last month</string>
-												</property>
-											</widget>
-										</item>
-									</layout>
-								</item>
-								<item>
-									<widget class="QWidget" name="blueIconBox2" native="true">
-										<property name="minimumSize">
-											<size>
-												<width>54</width>
-												<height>54</height>
-											</size>
-										</property>
-										<property name="maximumSize">
-											<size>
-												<width>54</width>
-												<height>54</height>
-											</size>
-										</property>
-										<layout class="QVBoxLayout" name="blueIconLayout2">
-											<item>
-												<widget class="QLabel" name="blueIconLabel2">
-													<property name="alignment">
-														<set>Qt::AlignCenter</set>
-													</property>
-													<property name="text">
-														<string>▤</string>
-													</property>
-												</widget>
-											</item>
-										</layout>
-									</widget>
-								</item>
-							</layout>
-						</widget>
-					</item>
-
-					<item>
-						<widget class="QWidget" name="metricCard3" native="true">
-							<layout class="QHBoxLayout" name="metricCardLayout3">
-								<property name="leftMargin">
-									<number>18</number>
-								</property>
-								<property name="topMargin">
-									<number>14</number>
-								</property>
-								<property name="rightMargin">
-									<number>18</number>
-								</property>
-								<property name="bottomMargin">
-									<number>14</number>
-								</property>
-								<item>
-									<layout class="QVBoxLayout" name="metricTextLayout3">
-										<item>
-											<widget class="QLabel" name="metricTitle3">
-												<property name="text">
-													<string>Quantity In Hand</string>
-												</property>
-											</widget>
-										</item>
-										<item>
-											<widget class="QLabel" name="metricValue3">
-												<property name="text">
-													<string>2,450</string>
-												</property>
-											</widget>
-										</item>
-										<item>
-											<widget class="QLabel" name="positiveLabel3">
-												<property name="text">
-													<string>+15.7% from last month</string>
-												</property>
-											</widget>
-										</item>
-									</layout>
-								</item>
-								<item>
-									<widget class="QWidget" name="greenIconBox" native="true">
-										<property name="minimumSize">
-											<size>
-												<width>54</width>
-												<height>54</height>
-											</size>
-										</property>
-										<property name="maximumSize">
-											<size>
-												<width>54</width>
-												<height>54</height>
-											</size>
-										</property>
-										<layout class="QVBoxLayout" name="greenIconLayout">
-											<item>
-												<widget class="QLabel" name="greenIconLabel">
-													<property name="alignment">
-														<set>Qt::AlignCenter</set>
-													</property>
-													<property name="text">
-														<string>▣</string>
-													</property>
-												</widget>
-											</item>
-										</layout>
-									</widget>
-								</item>
-							</layout>
-						</widget>
-					</item>
-
-					<item>
-						<widget class="QWidget" name="metricCard4" native="true">
-							<layout class="QHBoxLayout" name="metricCardLayout4">
-								<property name="leftMargin">
-									<number>18</number>
-								</property>
-								<property name="topMargin">
-									<number>14</number>
-								</property>
-								<property name="rightMargin">
-									<number>18</number>
-								</property>
-								<property name="bottomMargin">
-									<number>14</number>
-								</property>
-								<item>
-									<layout class="QVBoxLayout" name="metricTextLayout4">
-										<item>
-											<widget class="QLabel" name="metricTitle4">
-												<property name="text">
-													<string>To Be Received</string>
-												</property>
-											</widget>
-										</item>
-										<item>
-											<widget class="QLabel" name="metricValue4">
-												<property name="text">
-													<string>780</string>
-												</property>
-											</widget>
-										</item>
-										<item>
-											<widget class="QLabel" name="negativeLabel1">
-												<property name="text">
-													<string>-2.4% from last month</string>
-												</property>
-											</widget>
-										</item>
-									</layout>
-								</item>
-								<item>
-									<widget class="QWidget" name="orangeIconBox" native="true">
-										<property name="minimumSize">
-											<size>
-												<width>54</width>
-												<height>54</height>
-											</size>
-										</property>
-										<property name="maximumSize">
-											<size>
-												<width>54</width>
-												<height>54</height>
-											</size>
-										</property>
-										<layout class="QVBoxLayout" name="orangeIconLayout">
-											<item>
-												<widget class="QLabel" name="orangeIconLabel">
-													<property name="alignment">
-														<set>Qt::AlignCenter</set>
-													</property>
-													<property name="text">
-														<string>▰</string>
-													</property>
-												</widget>
-											</item>
-										</layout>
-									</widget>
-								</item>
-							</layout>
-						</widget>
-					</item>
-				</layout>
-			</item>
-
-			<item>
-				<layout class="QHBoxLayout" name="summaryLayout">
-					<property name="spacing">
-						<number>14</number>
-					</property>
-
-					<item>
-						<widget class="QWidget" name="itemSummaryCard" native="true">
-							<layout class="QVBoxLayout" name="itemSummaryLayout">
-								<property name="leftMargin">
-									<number>16</number>
-								</property>
-								<property name="topMargin">
-									<number>14</number>
-								</property>
-								<property name="rightMargin">
-									<number>16</number>
-								</property>
-								<property name="bottomMargin">
-									<number>14</number>
-								</property>
-								<item>
-									<widget class="QLabel" name="cardTitle1">
-										<property name="text">
-											<string>Truck Stock Summary</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<layout class="QHBoxLayout" name="itemSummaryInnerLayout">
-										<item>
-											<widget class="QWidget" name="miniSummaryBox1" native="true">
-												<layout class="QVBoxLayout" name="miniSummaryLayout1">
-													<item>
-														<widget class="QLabel" name="summarySmallLabel1">
-															<property name="text">
-																<string>Quantity In Hand</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="summaryValue1">
-															<property name="text">
-																<string>2,450</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="summaryPositive1">
-															<property name="text">
-																<string>+15.7%</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="blueSparkline">
-															<property name="text">
-																<string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
-															</property>
-														</widget>
-													</item>
-												</layout>
-											</widget>
-										</item>
-										<item>
-											<widget class="QWidget" name="miniSummaryBox2" native="true">
-												<layout class="QVBoxLayout" name="miniSummaryLayout2">
-													<item>
-														<widget class="QLabel" name="summarySmallLabel2">
-															<property name="text">
-																<string>To Be Received</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="summaryValue2">
-															<property name="text">
-																<string>780</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="summaryNegative1">
-															<property name="text">
-																<string>-2.4%</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="orangeSparkline">
-															<property name="text">
-																<string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
-															</property>
-														</widget>
-													</item>
-												</layout>
-											</widget>
-										</item>
-									</layout>
-								</item>
-							</layout>
-						</widget>
-					</item>
-
-					<item>
-						<widget class="QWidget" name="assetSummaryCard" native="true">
-							<layout class="QVBoxLayout" name="assetSummaryLayout">
-								<property name="leftMargin">
-									<number>16</number>
-								</property>
-								<property name="topMargin">
-									<number>14</number>
-								</property>
-								<property name="rightMargin">
-									<number>16</number>
-								</property>
-								<property name="bottomMargin">
-									<number>14</number>
-								</property>
-								<item>
-									<widget class="QLabel" name="cardTitle2">
-										<property name="text">
-											<string>Low Stock Summary</string>
-										</property>
-									</widget>
-								</item>
-								<item>
-									<layout class="QHBoxLayout" name="assetSummaryInnerLayout">
-										<item>
-											<widget class="QWidget" name="miniSummaryBox3" native="true">
-												<layout class="QVBoxLayout" name="miniSummaryLayout3">
-													<item>
-														<widget class="QLabel" name="summarySmallLabel3">
-															<property name="text">
-																<string>OK Items</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="summaryValue3">
-															<property name="text">
-																<string>200</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="summaryPositive2">
-															<property name="text">
-																<string>+10.3%</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="greenSparkline">
-															<property name="text">
-																<string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
-															</property>
-														</widget>
-													</item>
-												</layout>
-											</widget>
-										</item>
-										<item>
-											<widget class="QWidget" name="miniSummaryBox4" native="true">
-												<layout class="QVBoxLayout" name="miniSummaryLayout4">
-													<item>
-														<widget class="QLabel" name="summarySmallLabel4">
-															<property name="text">
-																<string>Low Items</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="summaryValue4">
-															<property name="text">
-																<string>120</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="summaryNegative2">
-															<property name="text">
-																<string>-6.1%</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="redSparkline">
-															<property name="text">
-																<string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
-															</property>
-														</widget>
-													</item>
-												</layout>
-											</widget>
-										</item>
-									</layout>
-								</item>
-							</layout>
-						</widget>
-					</item>
-				</layout>
-			</item>
-
-			<item>
-				<layout class="QHBoxLayout" name="tablesLayout">
-					<property name="spacing">
-						<number>14</number>
-					</property>
-
-					<item>
-						<widget class="QWidget" name="recentItemsCard" native="true">
-							<layout class="QVBoxLayout" name="recentItemsLayout">
-								<property name="leftMargin">
-									<number>14</number>
-								</property>
-								<property name="topMargin">
-									<number>12</number>
-								</property>
-								<property name="rightMargin">
-									<number>14</number>
-								</property>
-								<property name="bottomMargin">
-									<number>12</number>
-								</property>
-
-								<item>
-									<layout class="QHBoxLayout" name="recentItemsHeaderLayout">
-										<item>
-											<widget class="QLabel" name="cardTitle3">
-												<property name="text">
-													<string>Recent Trucks</string>
-												</property>
-											</widget>
-										</item>
-										<item>
-											<spacer name="recentItemsHeaderSpacer">
-												<property name="orientation">
-													<enum>Qt::Horizontal</enum>
-												</property>
-											</spacer>
-										</item>
-										<item>
-											<widget class="QPushButton" name="viewAllItemsButton">
-												<property name="text">
-													<string>View All</string>
-												</property>
-											</widget>
-										</item>
-									</layout>
-								</item>
-
-								<item>
-									<widget class="QTableWidget" name="recentTrucksTable">
-										<property name="columnCount">
-											<number>5</number>
-										</property>
-										<property name="rowCount">
-											<number>0</number>
-										</property>
-										<column>
-											<property name="text">
-												<string>Truck</string>
-											</property>
-										</column>
-										<column>
-											<property name="text">
-												<string>Plate</string>
-											</property>
-										</column>
-										<column>
-											<property name="text">
-												<string>Technician</string>
-											</property>
-										</column>
-										<column>
-											<property name="text">
-												<string>Status</string>
-											</property>
-										</column>
-										<column>
-											<property name="text">
-												<string>Updated</string>
-											</property>
-										</column>
-									</widget>
-								</item>
-							</layout>
-						</widget>
-					</item>
-
-					<item>
-						<widget class="QWidget" name="lowStockCard" native="true">
-							<layout class="QVBoxLayout" name="lowStockLayout">
-								<property name="leftMargin">
-									<number>14</number>
-								</property>
-								<property name="topMargin">
-									<number>12</number>
-								</property>
-								<property name="rightMargin">
-									<number>14</number>
-								</property>
-								<property name="bottomMargin">
-									<number>12</number>
-								</property>
-
-								<item>
-									<layout class="QHBoxLayout" name="lowStockHeaderLayout">
-										<item>
-											<widget class="QLabel" name="cardTitle4">
-												<property name="text">
-													<string>Low Stock Items</string>
-												</property>
-											</widget>
-										</item>
-										<item>
-											<spacer name="lowStockHeaderSpacer">
-												<property name="orientation">
-													<enum>Qt::Horizontal</enum>
-												</property>
-											</spacer>
-										</item>
-										<item>
-											<widget class="QPushButton" name="viewAllLowStockButton">
-												<property name="text">
-													<string>View All</string>
-												</property>
-											</widget>
-										</item>
-									</layout>
-								</item>
-
-								<item>
-									<widget class="QTableWidget" name="lowStockTable">
-										<property name="columnCount">
-											<number>4</number>
-										</property>
-										<property name="rowCount">
-											<number>0</number>
-										</property>
-										<column>
-											<property name="text">
-												<string>Truck</string>
-											</property>
-										</column>
-										<column>
-											<property name="text">
-												<string>Item</string>
-											</property>
-										</column>
-										<column>
-											<property name="text">
-												<string>Current</string>
-											</property>
-										</column>
-										<column>
-											<property name="text">
-												<string>Minimum</string>
-											</property>
-										</column>
-									</widget>
-								</item>
-							</layout>
-						</widget>
-					</item>
-				</layout>
-			</item>
-		</layout>
-	</widget>
-	<resources/>
-	<connections/>
+ <class>TruckStockDashboardPageClass</class>
+ <widget class="QWidget" name="TruckStockDashboardPageClass">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1280</width>
+    <height>820</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Truck Stock Dashboard</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true"/>
+  </property>
+  <layout class="QVBoxLayout" name="rootLayout">
+   <property name="spacing">
+    <number>16</number>
+   </property>
+   <property name="leftMargin">
+    <number>18</number>
+   </property>
+   <property name="topMargin">
+    <number>18</number>
+   </property>
+   <property name="rightMargin">
+    <number>18</number>
+   </property>
+   <property name="bottomMargin">
+    <number>18</number>
+   </property>
+   <item>
+    <layout class="QVBoxLayout" name="titleLayout">
+     <property name="spacing">
+      <number>2</number>
+     </property>
+     <item>
+      <widget class="QLabel" name="pageTitle">
+       <property name="text">
+        <string>Dashboard</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="subtitleLabel">
+       <property name="text">
+        <string>Welcome back to Truck Stock Management</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="metricsLayout">
+     <property name="spacing">
+      <number>14</number>
+     </property>
+     <item>
+      <widget class="QWidget" name="metricCard1" native="true">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>118</height>
+        </size>
+       </property>
+       <layout class="QHBoxLayout" name="metricCardLayout1">
+        <property name="leftMargin">
+         <number>18</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>18</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="metricTextLayout1">
+          <item>
+           <widget class="QLabel" name="metricTitle1">
+            <property name="text">
+             <string>Total Items</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="metricValue1">
+            <property name="text">
+             <string>1,250</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="positiveLabel1">
+            <property name="text">
+             <string>+12.5% from last month</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QWidget" name="blueIconBox" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>54</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>54</width>
+            <height>54</height>
+           </size>
+          </property>
+          <layout class="QVBoxLayout" name="blueIconLayout">
+           <item>
+            <widget class="QLabel" name="blueIconLabel">
+             <property name="text">
+              <string>▧</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="metricCard2" native="true">
+       <layout class="QHBoxLayout" name="metricCardLayout2">
+        <property name="leftMargin">
+         <number>18</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>18</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="metricTextLayout2">
+          <item>
+           <widget class="QLabel" name="metricTitle2">
+            <property name="text">
+             <string>Truck Templates</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="metricValue2">
+            <property name="text">
+             <string>320</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="positiveLabel2">
+            <property name="text">
+             <string>+8.2% from last month</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QWidget" name="blueIconBox2" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>54</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>54</width>
+            <height>54</height>
+           </size>
+          </property>
+          <layout class="QVBoxLayout" name="blueIconLayout2">
+           <item>
+            <widget class="QLabel" name="blueIconLabel2">
+             <property name="text">
+              <string>▤</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="metricCard3" native="true">
+       <layout class="QHBoxLayout" name="metricCardLayout3">
+        <property name="leftMargin">
+         <number>18</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>18</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="metricTextLayout3">
+          <item>
+           <widget class="QLabel" name="metricTitle3">
+            <property name="text">
+             <string>Quantity In Hand</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="metricValue3">
+            <property name="text">
+             <string>2,450</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="positiveLabel3">
+            <property name="text">
+             <string>+15.7% from last month</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QWidget" name="greenIconBox" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>54</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>54</width>
+            <height>54</height>
+           </size>
+          </property>
+          <layout class="QVBoxLayout" name="greenIconLayout">
+           <item>
+            <widget class="QLabel" name="greenIconLabel">
+             <property name="text">
+              <string>▣</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="metricCard4" native="true">
+       <layout class="QHBoxLayout" name="metricCardLayout4">
+        <property name="leftMargin">
+         <number>18</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>18</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <layout class="QVBoxLayout" name="metricTextLayout4">
+          <item>
+           <widget class="QLabel" name="metricTitle4">
+            <property name="text">
+             <string>To Be Received</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="metricValue4">
+            <property name="text">
+             <string>780</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="negativeLabel1">
+            <property name="text">
+             <string>-2.4% from last month</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QWidget" name="orangeIconBox" native="true">
+          <property name="minimumSize">
+           <size>
+            <width>54</width>
+            <height>54</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>54</width>
+            <height>54</height>
+           </size>
+          </property>
+          <layout class="QVBoxLayout" name="orangeIconLayout">
+           <item>
+            <widget class="QLabel" name="orangeIconLabel">
+             <property name="text">
+              <string>▰</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignmentFlag::AlignCenter</set>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="summaryLayout">
+     <property name="spacing">
+      <number>14</number>
+     </property>
+     <item>
+      <widget class="QWidget" name="itemSummaryCard" native="true">
+       <layout class="QVBoxLayout" name="itemSummaryLayout">
+        <property name="leftMargin">
+         <number>16</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>16</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="cardTitle1">
+          <property name="text">
+           <string>Truck Stock Summary</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="itemSummaryInnerLayout">
+          <item>
+           <widget class="QWidget" name="miniSummaryBox1" native="true">
+            <layout class="QVBoxLayout" name="miniSummaryLayout1">
+             <item>
+              <widget class="QLabel" name="summarySmallLabel1">
+               <property name="text">
+                <string>Quantity In Hand</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="summaryValue1">
+               <property name="text">
+                <string>2,450</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="summaryPositive1">
+               <property name="text">
+                <string>+15.7%</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="blueSparkline">
+               <property name="text">
+                <string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="miniSummaryBox2" native="true">
+            <layout class="QVBoxLayout" name="miniSummaryLayout2">
+             <item>
+              <widget class="QLabel" name="summarySmallLabel2">
+               <property name="text">
+                <string>To Be Received</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="summaryValue2">
+               <property name="text">
+                <string>780</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="summaryNegative1">
+               <property name="text">
+                <string>-2.4%</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="orangeSparkline">
+               <property name="text">
+                <string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="assetSummaryCard" native="true">
+       <layout class="QVBoxLayout" name="assetSummaryLayout">
+        <property name="leftMargin">
+         <number>16</number>
+        </property>
+        <property name="topMargin">
+         <number>14</number>
+        </property>
+        <property name="rightMargin">
+         <number>16</number>
+        </property>
+        <property name="bottomMargin">
+         <number>14</number>
+        </property>
+        <item>
+         <widget class="QLabel" name="cardTitle2">
+          <property name="text">
+           <string>Low Stock Summary</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="assetSummaryInnerLayout">
+          <item>
+           <widget class="QWidget" name="miniSummaryBox3" native="true">
+            <layout class="QVBoxLayout" name="miniSummaryLayout3">
+             <item>
+              <widget class="QLabel" name="summarySmallLabel3">
+               <property name="text">
+                <string>OK Items</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="summaryValue3">
+               <property name="text">
+                <string>200</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="summaryPositive2">
+               <property name="text">
+                <string>+10.3%</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="greenSparkline">
+               <property name="text">
+                <string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+          <item>
+           <widget class="QWidget" name="miniSummaryBox4" native="true">
+            <layout class="QVBoxLayout" name="miniSummaryLayout4">
+             <item>
+              <widget class="QLabel" name="summarySmallLabel4">
+               <property name="text">
+                <string>Low Items</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="summaryValue4">
+               <property name="text">
+                <string>120</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="summaryNegative2">
+               <property name="text">
+                <string>-6.1%</string>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QLabel" name="redSparkline">
+               <property name="text">
+                <string>⌁⌁⌁⌁⌁⌁⌁⌁⌁⌁</string>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="tablesLayout">
+     <property name="spacing">
+      <number>14</number>
+     </property>
+     <item>
+      <widget class="QWidget" name="recentItemsCard" native="true">
+       <layout class="QVBoxLayout" name="recentItemsLayout">
+        <property name="leftMargin">
+         <number>14</number>
+        </property>
+        <property name="topMargin">
+         <number>12</number>
+        </property>
+        <property name="rightMargin">
+         <number>14</number>
+        </property>
+        <property name="bottomMargin">
+         <number>12</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="recentItemsHeaderLayout">
+          <item>
+           <widget class="QLabel" name="cardTitle3">
+            <property name="text">
+             <string>Recent Trucks</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="recentItemsHeaderSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="viewAllTrucksButton">
+            <property name="text">
+             <string>View All</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="recentTrucksTable">
+          <property name="rowCount">
+           <number>0</number>
+          </property>
+          <property name="columnCount">
+           <number>5</number>
+          </property>
+          <column>
+           <property name="text">
+            <string>Truck</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Plate</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Technician</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Status</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Updated</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+     <item>
+      <widget class="QWidget" name="lowStockCard" native="true">
+       <layout class="QVBoxLayout" name="lowStockLayout">
+        <property name="leftMargin">
+         <number>14</number>
+        </property>
+        <property name="topMargin">
+         <number>12</number>
+        </property>
+        <property name="rightMargin">
+         <number>14</number>
+        </property>
+        <property name="bottomMargin">
+         <number>12</number>
+        </property>
+        <item>
+         <layout class="QHBoxLayout" name="lowStockHeaderLayout">
+          <item>
+           <widget class="QLabel" name="cardTitle4">
+            <property name="text">
+             <string>Low Stock Items</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <spacer name="lowStockHeaderSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item>
+           <widget class="QPushButton" name="viewAllLowStockButton">
+            <property name="text">
+             <string>View All</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <widget class="QTableWidget" name="lowStockTable">
+          <property name="rowCount">
+           <number>0</number>
+          </property>
+          <property name="columnCount">
+           <number>4</number>
+          </property>
+          <column>
+           <property name="text">
+            <string>Truck</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Item</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Current</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Minimum</string>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>
