@@ -200,6 +200,7 @@ void LowStockAlertsPage::filterAlerts()
 void LowStockAlertsPage::populateTable()
 {
     ui.alertsTable->clearContents();
+    ui.alertsTable->clearSpans();
 
     int totalItems =
         static_cast<int>(filteredAlerts.size());
@@ -212,6 +213,20 @@ void LowStockAlertsPage::populateTable()
 
     int rowCount =
         endIndex - startIndex;
+
+    if (rowCount == 0) {
+        ui.alertsTable->setRowCount(1);
+
+        ui.alertsTable->setItem(
+            0,
+            0,
+            new QTableWidgetItem("No low stock alerts found")
+        );
+
+        ui.alertsTable->setSpan(0, 0, 1, 6);
+
+        return;
+    }
 
     ui.alertsTable->setRowCount(rowCount);
 
