@@ -121,6 +121,14 @@
 									</widget>
 								</item>
 
+								<item>
+									<widget class="QPushButton" name="technicianStockSummaryBtn">
+										<property name="text">
+											<string>Technician Stock</string>
+										</property>
+									</widget>
+								</item>
+
                                 <item>
                                     <spacer name="horizontalSpacer">
                                         <property name="orientation">

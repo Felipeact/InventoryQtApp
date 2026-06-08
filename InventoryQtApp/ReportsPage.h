@@ -31,6 +31,7 @@ private slots:
     void onInventorySummaryClicked();
     void onAssetsSummaryClicked();
     void onTruckSummaryClicked();
+    void onTechnicianStockSummaryClicked();
     void onTemplatesSummaryClicked();
     void onAssignmentsSummaryClicked();
     void onReceiptsSummaryClicked();
@@ -54,6 +55,7 @@ private:
     void loadInventorySummary();
     void loadAssetsSummary();
     void loadTruckSummary();
+    void loadTechnicianStockSummary();
     void loadTemplatesSummary();
     void loadAssignmentsSummary();
     void loadReceiptsSummary();

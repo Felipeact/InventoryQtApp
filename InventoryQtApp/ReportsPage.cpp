@@ -133,6 +133,7 @@ void ReportsPage::setupConnections()
     connect(ui.exportExcelBtn, &QPushButton::clicked, this, &ReportsPage::onExportExcelClicked);
     connect(ui.exportCsvBtn, &QPushButton::clicked, this, &ReportsPage::onExportCsvClicked);
     connect(ui.refreshBtn, &QPushButton::clicked, this, &ReportsPage::onRefreshClicked);
+    connect(ui.technicianStockSummaryBtn,&QPushButton::clicked,this,&ReportsPage::onTechnicianStockSummaryClicked);
 }
 
 void ReportsPage::refreshReports()
@@ -155,6 +156,9 @@ void ReportsPage::refreshReports()
     else if (currentReportName == "Low Stock Summary") {
         loadLowStockSummary();
     }
+    else if (currentReportName == "Technician Stock Summary") {
+        loadTechnicianStockSummary();
+    }
     else {
         loadInventorySummary();
     }
@@ -173,6 +177,11 @@ void ReportsPage::onAssetsSummaryClicked()
 void ReportsPage::onTruckSummaryClicked()
 {
     loadTruckSummary();
+}
+
+void ReportsPage::onTechnicianStockSummaryClicked()
+{
+    loadTechnicianStockSummary();
 }
 
 void ReportsPage::onTemplatesSummaryClicked()
@@ -369,6 +378,87 @@ void ReportsPage::loadTruckSummary()
     displayGenericReport(
         "Truck Summary",
         QStringList() << "Truck" << "Plate" << "Technician" << "Status" << "Stock Status",
+        rows
+    );
+}
+
+void ReportsPage::loadTechnicianStockSummary()
+{
+    currentReportName = "Technician Stock Summary";
+
+    if (!truckStockService) {
+        displayGenericReport(
+            "Technician Stock Summary",
+            QStringList()
+            << "Truck"
+            << "Plate"
+            << "Item"
+            << "Category"
+            << "Current"
+            << "Minimum"
+            << "Required"
+            << "Status",
+            {
+                QStringList()
+                << "No service available"
+                << "N/A"
+                << "N/A"
+                << "N/A"
+                << "N/A"
+                << "N/A"
+                << "N/A"
+                << "Error"
+            }
+        );
+
+        return;
+    }
+
+    MyTruckStockDto stock =
+        truckStockService->getMyTruckStock();
+
+    std::vector<QStringList> rows;
+
+    if (stock.items.empty()) {
+        rows.push_back(
+            QStringList()
+            << "No technician stock found"
+            << ""
+            << ""
+            << ""
+            << "0"
+            << "0"
+            << "0"
+            << "Empty"
+        );
+    }
+    else {
+        for (const MyTruckStockItemDto& item : stock.items) {
+            rows.push_back(
+                QStringList()
+                << QString::fromStdString(stock.truckNumber)
+                << QString::fromStdString(stock.plateNumber)
+                << QString::fromStdString(item.productName)
+                << QString::fromStdString(item.category)
+                << QString::number(item.currentQuantity)
+                << QString::number(item.minimumQuantity)
+                << QString::number(item.requiredQuantity)
+                << QString::fromStdString(item.status)
+            );
+        }
+    }
+
+    displayGenericReport(
+        "Technician Stock Summary",
+        QStringList()
+        << "Truck"
+        << "Plate"
+        << "Item"
+        << "Category"
+        << "Current"
+        << "Minimum"
+        << "Required"
+        << "Status",
         rows
     );
 }
