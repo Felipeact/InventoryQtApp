@@ -47,6 +47,10 @@ public:
 
     bool updateCurrentUserProfile(const std::string& name);
 
+    std::string resetPassword(
+        const std::string& userId
+    );
+
 private:
     ApiClient& apiClient;
 };

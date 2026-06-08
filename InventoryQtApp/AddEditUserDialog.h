@@ -47,6 +47,8 @@ private:
     void setupConnections();
     bool validateForm();
 
+    void setInviteMode();
+
 private slots:
     void onSaveClicked();
     void onCancelClicked();

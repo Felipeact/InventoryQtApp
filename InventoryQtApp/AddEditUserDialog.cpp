@@ -166,6 +166,21 @@ bool AddEditUserDialog::validateForm()
     return true;
 }
 
+void AddEditUserDialog::setInviteMode()
+{
+    viewMode = false;
+
+    setWindowTitle("Invite User");
+
+    ui.titleLabel->setText("Invite User");
+    ui.saveButton->setText("Invite User");
+
+    ui.passwordLabel->hide();
+    ui.passwordInput->hide();
+
+    ui.statusComboBox->setCurrentText("Active");
+}
+
 void AddEditUserDialog::onSaveClicked()
 {
     if (!validateForm()) {

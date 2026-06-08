@@ -5,6 +5,7 @@
 
 #include <QAbstractItemView>
 #include <QComboBox>
+#include <QFrame>
 #include <QHeaderView>
 #include <QHBoxLayout>
 #include <QLineEdit>
@@ -86,7 +87,7 @@ void UsersPage::setupConnections()
 
 void UsersPage::setupTable()
 {
-    ui.usersTable->setColumnCount(6);
+    ui.usersTable->setColumnCount(7);
 
     ui.usersTable->setHorizontalHeaderLabels(
         QStringList()
@@ -96,6 +97,7 @@ void UsersPage::setupTable()
         << "Status"
         << "Created"
         << "Actions"
+        << "Security"
     );
 
     ui.usersTable->verticalHeader()->setVisible(false);
@@ -115,9 +117,19 @@ void UsersPage::setupTable()
 
     ui.usersTable->horizontalHeader()->setFixedHeight(48);
     ui.usersTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui.usersTable->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
+
+    ui.usersTable->horizontalHeader()->setSectionResizeMode(
+        5,
+        QHeaderView::Fixed
+    );
+
+    ui.usersTable->horizontalHeader()->setSectionResizeMode(
+        6,
+        QHeaderView::Fixed
+    );
 
     ui.usersTable->setColumnWidth(5, 130);
+    ui.usersTable->setColumnWidth(6, 140);
     ui.usersTable->verticalHeader()->setDefaultSectionSize(52);
 
     ui.usersTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -132,16 +144,37 @@ void UsersPage::loadUsers()
 
     QPointer<UsersPage> self(this);
     UserService* service = userService;
-    QThread* worker = QThread::create([self, service]() {
-        std::vector<UserDto> users = service->getUsers();
-        if (!self) return;
-        QMetaObject::invokeMethod(self, [self, users]() {
-            if (!self) return;
-            self->currentUsers = users;
-            self->filterUsers();
-            }, Qt::QueuedConnection);
-        });
-    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+
+    QThread* worker =
+        QThread::create([self, service]() {
+        std::vector<UserDto> users =
+            service->getUsers();
+
+        if (!self) {
+            return;
+        }
+
+        QMetaObject::invokeMethod(
+            self,
+            [self, users]() {
+                if (!self) {
+                    return;
+                }
+
+                self->currentUsers = users;
+                self->filterUsers();
+            },
+            Qt::QueuedConnection
+        );
+            });
+
+    connect(
+        worker,
+        &QThread::finished,
+        worker,
+        &QObject::deleteLater
+    );
+
     worker->start();
 }
 
@@ -154,7 +187,8 @@ void UsersPage::setLoggedInUserName(
     const std::string& userName
 )
 {
-    loggedInUserName = userName;
+    loggedInUserName =
+        userName;
 }
 
 void UsersPage::filterUsers()
@@ -189,7 +223,10 @@ void UsersPage::filterUsers()
 
         bool matchesRole =
             selectedRole == "All Roles" ||
-            role.compare(selectedRole, Qt::CaseInsensitive) == 0;
+            role.compare(
+                selectedRole,
+                Qt::CaseInsensitive
+            ) == 0;
 
         if (matchesSearch && matchesRole) {
             filteredUsers.push_back(user);
@@ -205,6 +242,7 @@ void UsersPage::filterUsers()
 void UsersPage::populateTable()
 {
     ui.usersTable->clearContents();
+    ui.usersTable->clearSpans();
 
     int totalItems =
         static_cast<int>(filteredUsers.size());
@@ -218,6 +256,25 @@ void UsersPage::populateTable()
     int rowCount =
         endIndex - startIndex;
 
+    if (rowCount == 0) {
+        ui.usersTable->setRowCount(1);
+
+        ui.usersTable->setItem(
+            0,
+            0,
+            new QTableWidgetItem("No users found")
+        );
+
+        ui.usersTable->setSpan(
+            0,
+            0,
+            1,
+            7
+        );
+
+        return;
+    }
+
     ui.usersTable->setRowCount(rowCount);
 
     for (int row = 0; row < rowCount; row++) {
@@ -225,40 +282,57 @@ void UsersPage::populateTable()
             filteredUsers[startIndex + row];
 
         QTableWidgetItem* nameItem =
-            new QTableWidgetItem(QString::fromStdString(user.name));
+            new QTableWidgetItem(
+                QString::fromStdString(user.name)
+            );
 
         nameItem->setData(
             Qt::UserRole,
             QString::fromStdString(user.id)
         );
 
-        ui.usersTable->setItem(row, 0, nameItem);
+        ui.usersTable->setItem(
+            row,
+            0,
+            nameItem
+        );
 
         ui.usersTable->setItem(
             row,
             1,
-            new QTableWidgetItem(QString::fromStdString(user.email))
+            new QTableWidgetItem(
+                QString::fromStdString(user.email)
+            )
         );
 
         ui.usersTable->setItem(
             row,
             2,
-            new QTableWidgetItem(QString::fromStdString(user.role))
+            new QTableWidgetItem(
+                QString::fromStdString(user.role)
+            )
         );
 
         ui.usersTable->setItem(
             row,
             3,
-            new QTableWidgetItem(QString::fromStdString(user.status))
+            new QTableWidgetItem(
+                QString::fromStdString(user.status)
+            )
         );
 
         ui.usersTable->setItem(
             row,
             4,
-            new QTableWidgetItem(QString::fromStdString(user.createdAt))
+            new QTableWidgetItem(
+                QString::fromStdString(user.createdAt)
+            )
         );
 
-        addActionButtons(row, user.id);
+        addActionButtons(
+            row,
+            user.id
+        );
     }
 
     ui.usersTable->setUpdatesEnabled(true);
@@ -270,7 +344,10 @@ void UsersPage::updatePagination()
         static_cast<int>(filteredUsers.size());
 
     int totalPages =
-        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+        (std::max)(
+            1,
+            (totalItems + pageSize - 1) / pageSize
+            );
 
     if (currentPage > totalPages) {
         currentPage = totalPages;
@@ -282,7 +359,10 @@ void UsersPage::updatePagination()
         : ((currentPage - 1) * pageSize) + 1;
 
     int endItem =
-        (std::min)(currentPage * pageSize, totalItems);
+        (std::min)(
+            currentPage * pageSize,
+            totalItems
+            );
 
     ui.paginationLabel->setText(
         QString("Showing %1 to %2 of %3 users")
@@ -291,16 +371,39 @@ void UsersPage::updatePagination()
         .arg(totalItems)
     );
 
-    ui.activePageButton->setText(QString::number(currentPage));
-    ui.pageButton2->setText(QString::number(currentPage + 1));
+    ui.activePageButton->setText(
+        QString::number(currentPage)
+    );
 
-    ui.pageButton->setEnabled(currentPage > 1);
-    ui.pageButton3->setEnabled(currentPage < totalPages);
-    ui.pageButton2->setVisible(currentPage < totalPages);
+    ui.pageButton2->setText(
+        QString::number(currentPage + 1)
+    );
+
+    ui.pageButton->setEnabled(
+        currentPage > 1
+    );
+
+    ui.pageButton3->setEnabled(
+        currentPage < totalPages
+    );
+
+    ui.pageButton2->setVisible(
+        currentPage < totalPages
+    );
 }
 
 void UsersPage::onAddUserClicked()
 {
+    if (!userService) {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "User service is unavailable."
+        );
+
+        return;
+    }
+
     AddEditUserDialog dialog(this);
 
     if (dialog.exec() == QDialog::Accepted) {
@@ -377,7 +480,10 @@ void UsersPage::onNextPageClicked()
         static_cast<int>(filteredUsers.size());
 
     int totalPages =
-        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+        (std::max)(
+            1,
+            (totalItems + pageSize - 1) / pageSize
+            );
 
     if (currentPage < totalPages) {
         currentPage++;
@@ -393,7 +499,10 @@ void UsersPage::onPage2Clicked()
         static_cast<int>(filteredUsers.size());
 
     int totalPages =
-        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+        (std::max)(
+            1,
+            (totalItems + pageSize - 1) / pageSize
+            );
 
     if (currentPage + 1 <= totalPages) {
         currentPage++;
@@ -413,12 +522,12 @@ void UsersPage::addActionButtons(
 
     actionWidget->setObjectName("actionContainer");
 
-    QHBoxLayout* layout =
+    QHBoxLayout* actionLayout =
         new QHBoxLayout(actionWidget);
 
-    layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(6);
-    layout->setAlignment(Qt::AlignCenter);
+    actionLayout->setContentsMargins(0, 0, 0, 0);
+    actionLayout->setSpacing(6);
+    actionLayout->setAlignment(Qt::AlignCenter);
 
     QPushButton* viewButton =
         new QPushButton("👁", actionWidget);
@@ -435,23 +544,77 @@ void UsersPage::addActionButtons(
 
     deleteButton->setObjectName("deleteButton");
 
-    layout->addWidget(viewButton);
-    layout->addWidget(editButton);
-    layout->addWidget(deleteButton);
+    actionLayout->addWidget(viewButton);
+    actionLayout->addWidget(editButton);
+    actionLayout->addWidget(deleteButton);
 
-    ui.usersTable->setCellWidget(row, 5, actionWidget);
+    ui.usersTable->setCellWidget(
+        row,
+        5,
+        actionWidget
+    );
 
-    connect(viewButton, &QPushButton::clicked, this, [this, userId]() {
-        onViewUserClicked(userId);
-        });
+    QWidget* securityWidget =
+        new QWidget(this);
 
-    connect(editButton, &QPushButton::clicked, this, [this, userId]() {
-        onEditUserClicked(userId);
-        });
+    securityWidget->setObjectName("securityContainer");
 
-    connect(deleteButton, &QPushButton::clicked, this, [this, userId]() {
-        onDeleteUserClicked(userId);
-        });
+    QHBoxLayout* securityLayout =
+        new QHBoxLayout(securityWidget);
+
+    securityLayout->setContentsMargins(0, 0, 0, 0);
+    securityLayout->setSpacing(6);
+    securityLayout->setAlignment(Qt::AlignCenter);
+
+    QPushButton* resetButton =
+        new QPushButton("🔑", securityWidget);
+
+    resetButton->setObjectName("resetButton");
+    resetButton->setToolTip("Reset Password");
+
+    securityLayout->addWidget(resetButton);
+
+    ui.usersTable->setCellWidget(
+        row,
+        6,
+        securityWidget
+    );
+
+    connect(
+        viewButton,
+        &QPushButton::clicked,
+        this,
+        [this, userId]() {
+            onViewUserClicked(userId);
+        }
+    );
+
+    connect(
+        editButton,
+        &QPushButton::clicked,
+        this,
+        [this, userId]() {
+            onEditUserClicked(userId);
+        }
+    );
+
+    connect(
+        deleteButton,
+        &QPushButton::clicked,
+        this,
+        [this, userId]() {
+            onDeleteUserClicked(userId);
+        }
+    );
+
+    connect(
+        resetButton,
+        &QPushButton::clicked,
+        this,
+        [this, userId]() {
+            onResetPasswordClicked(userId);
+        }
+    );
 }
 
 void UsersPage::onViewUserClicked(
@@ -536,7 +699,10 @@ void UsersPage::onEditUserClicked(
             dialog.getStatus().toStdString();
 
         bool success =
-            userService->updateUser(user.id, request);
+            userService->updateUser(
+                user.id,
+                request
+            );
 
         if (success) {
             QMessageBox::information(
@@ -546,7 +712,9 @@ void UsersPage::onEditUserClicked(
             );
 
             if (user.name == loggedInUserName) {
-                emit loggedInUserUpdated(request.name);
+                emit loggedInUserUpdated(
+                    request.name
+                );
             }
 
             loadUsers();
@@ -614,6 +782,89 @@ void UsersPage::onDeleteUserClicked(
     }
 }
 
+void UsersPage::onResetPasswordClicked(
+    const std::string& userId
+)
+{
+    if (!userService) {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "User service is unavailable."
+        );
+
+        return;
+    }
+
+    auto it =
+        std::find_if(
+            currentUsers.begin(),
+            currentUsers.end(),
+            [&userId](const UserDto& user) {
+                return user.id == userId;
+            }
+        );
+
+    QString userName =
+        it != currentUsers.end()
+        ? QString::fromStdString(it->name)
+        : "this user";
+
+    QString userEmail =
+        it != currentUsers.end()
+        ? QString::fromStdString(it->email)
+        : "";
+
+    QString message =
+        "Generate a temporary password for " + userName;
+
+    if (!userEmail.isEmpty()) {
+        message += "\n\nEmail: " + userEmail;
+    }
+
+    message += "\n\nThe old password will stop working.";
+
+    QMessageBox::StandardButton confirm =
+        QMessageBox::question(
+            this,
+            "Reset Password",
+            message,
+            QMessageBox::Yes | QMessageBox::No
+        );
+
+    if (confirm != QMessageBox::Yes) {
+        return;
+    }
+
+    std::string temporaryPassword =
+        userService->resetPassword(userId);
+
+    if (temporaryPassword.empty()) {
+        QMessageBox::warning(
+            this,
+            "Reset Failed",
+            "Password reset failed. Check the backend console."
+        );
+
+        return;
+    }
+
+    QMessageBox::information(
+        this,
+        "Temporary Password",
+        QString(
+            "Temporary password generated successfully.\n\n"
+            "User: %1\n"
+            "Email: %2\n\n"
+            "Temporary password:\n%3\n\n"
+            "Give this password to the user and ask them to change it after login."
+        )
+        .arg(userName)
+        .arg(userEmail.isEmpty() ? "-" : userEmail)
+        .arg(QString::fromStdString(temporaryPassword))
+    );
+}
+
 void UsersPage::applyTheme(
     Theme::AppTheme theme
 )
@@ -623,7 +874,9 @@ void UsersPage::applyTheme(
     );
 }
 
-void UsersPage::setSearchText(const QString& text)
+void UsersPage::setSearchText(
+    const QString& text
+)
 {
     ui.searchInput->setText(text);
 }

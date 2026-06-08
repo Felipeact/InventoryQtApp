@@ -213,3 +213,32 @@ bool UserService::updateCurrentUserProfile(const std::string& name)
         return false;
     }
 }
+
+std::string UserService::resetPassword(
+    const std::string& userId
+)
+{
+    try {
+
+        auto response =
+            apiClient.post(
+                "/users/" + userId + "/reset-password",
+                "{}"
+            );
+
+        if (response.status_code != 200) {
+            return "";
+        }
+
+        auto jsonResponse =
+            json::parse(response.text);
+
+        return jsonResponse.value(
+            "temporaryPassword",
+            ""
+        );
+    }
+    catch (...) {
+        return "";
+    }
+}

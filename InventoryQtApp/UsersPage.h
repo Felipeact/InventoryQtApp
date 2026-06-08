@@ -76,4 +76,8 @@ private slots:
     void onViewUserClicked(const std::string& userId);
     void onEditUserClicked(const std::string& userId);
     void onDeleteUserClicked(const std::string& userId);
+
+    void onResetPasswordClicked(
+        const std::string& userId
+    );
 };
