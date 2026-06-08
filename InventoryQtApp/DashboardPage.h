@@ -1,44 +1,70 @@
-// DashboardPage.h - Main dashboard page showing inventory overview
 #pragma once
 
 #include <QWidget>
+#include <QTableWidget>
+#include <QLabel>
+
 #include "ui_DashboardPage.h"
 #include "ProductService.h"
 #include "ReportService.h"
 #include "Theme.h"
 
-// Dashboard widget that displays a summary of inventory items
 class DashboardPage : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
+    DashboardPage(
+        ProductService& productService,
+        ReportService& reportService,
+        QWidget* parent = nullptr
+    );
 
-	void applyTheme(Theme::AppTheme theme);
-	// Constructor
-	DashboardPage(ProductService& productService, ReportService& reportService, QWidget* parent = nullptr);
-	// Destructor
-	~DashboardPage();
+    ~DashboardPage();
 
-	void refreshDashboard();  // Refreshes the dashboard data and UI components
+    void refreshDashboard();
+
+    void applyTheme(
+        Theme::AppTheme theme
+    );
 
 signals:
-	void viewAllItemsRequested();
-	void viewAllLowStockRequested();
-
+    void viewAllItemsRequested();
+    void viewAllLowStockRequested();
 
 private:
-	Ui::DashboardPageClass ui;  // UI components
-	ProductService& productService;  // Reference to product service for API interactions
-	ReportService& reportService;  // Reference to report service for API interactions
+    Ui::DashboardPageClass ui;
 
-	// Initializes and configures the item list table
-	void setupItemListTable(const json& products);
-	void setupReportCards(const json& inventory, const json& assets);
+    ProductService& productService;
+    ReportService& reportService;
 
-	void setupLowStockTable(const json& lowStockProducts);
-	void styleDashboardTable(QTableWidget* table);
+    void setupConnections();
 
+    void setupItemListTable(
+        const json& products
+    );
 
+    void setupLowStockTable(
+        const json& lowStockProducts
+    );
+
+    void setupReportCards(
+        const json& inventory,
+        const json& assets,
+        const json& lowStockProducts
+    );
+
+    void styleDashboardTable(
+        QTableWidget* table
+    );
+
+    void setProductImageCell(
+        int row,
+        int column,
+        const QString& imagePathOrUrl
+    );
+
+    QString getProductImageUrl(
+        const json& product
+    ) const;
 };
-

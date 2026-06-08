@@ -90,15 +90,31 @@ DashboardPage* DashboardWindow::ensureDashboardPage()
         ui.mainStack->addWidget(dashboardPage);
         dashboardPage->applyTheme(currentTheme);
 
-        connect(dashboardPage, &DashboardPage::viewAllItemsRequested, this, [this]() {
-            ui.mainStack->setCurrentWidget(ensureItemsPage());
-            });
+        connect(
+            dashboardPage,
+            &DashboardPage::viewAllItemsRequested,
+            this,
+            [this]() {
+                ItemsPage* page =
+                    ensureItemsPage();
 
-        connect(dashboardPage, &DashboardPage::viewAllLowStockRequested, this, [this]() {
-            LowStockAlertsPage* page = ensureLowStockAlertsPage();
-            page->refreshAlerts();
-            ui.mainStack->setCurrentWidget(page);
-            });
+                ui.mainStack->setCurrentWidget(page);
+            }
+        );
+
+        connect(
+            dashboardPage,
+            &DashboardPage::viewAllLowStockRequested,
+            this,
+            [this]() {
+                ItemsPage* page =
+                    ensureItemsPage();
+
+                page->setSearchText("low");
+
+                ui.mainStack->setCurrentWidget(page);
+            }
+        );
     }
     return dashboardPage;
 }
