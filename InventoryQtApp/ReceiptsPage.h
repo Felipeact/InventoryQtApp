@@ -68,6 +68,10 @@ private:
         const ReceiptDto& receipt
     );
 
+    void onRejectReceiptClicked(
+        const ReceiptDto& receipt
+    );
+
     bool hasPermission(
         const std::string& permission
     ) const;

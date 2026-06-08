@@ -805,3 +805,35 @@ bool TruckStockService::approveReceipt(const std::string& receiptId)
         return false;
     }
 }
+
+bool TruckStockService::rejectReceipt(const std::string& receiptId)
+{
+    try {
+        json body;
+        body["status"] = "REJECTED";
+
+        auto response = apiClient.patch(
+            "/truck-stock/receipts/" + receiptId + "/status",
+            body.dump()
+        );
+
+        if (response.status_code != 200) {
+            std::cerr << "PATCH reject receipt failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::rejectReceipt error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}

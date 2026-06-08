@@ -200,6 +200,7 @@ public:
     );
 
     bool approveReceipt(const std::string& receiptId);
+    bool rejectReceipt(const std::string& receiptId);
 
 private:
     ApiClient& apiClient;
