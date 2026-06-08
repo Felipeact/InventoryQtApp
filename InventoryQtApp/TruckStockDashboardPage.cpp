@@ -59,7 +59,7 @@ void TruckStockDashboardPage::setupTables()
         << "Plate"
         << "Technician"
         << "Status"
-        << "Stock Status"
+        << "Updated"
     );
 
     ui.lowStockTable->setColumnCount(4);
@@ -241,12 +241,17 @@ void TruckStockDashboardPage::populateRecentTrucks(const std::vector<TruckDto>& 
             new QTableWidgetItem(QString::fromStdString(truck.status))
         );
 
-        QString stockStatus = "Normal";
+        QString updatedAt =
+            QString::fromStdString(truck.updatedAt);
+
+        if (updatedAt.trimmed().isEmpty()) {
+            updatedAt = "N/A";
+        }
 
         ui.recentTrucksTable->setItem(
             row,
             4,
-            new QTableWidgetItem(stockStatus)
+            new QTableWidgetItem(updatedAt)
         );
     }
 

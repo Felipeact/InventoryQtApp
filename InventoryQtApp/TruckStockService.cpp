@@ -36,6 +36,7 @@ std::vector<TruckDto> TruckStockService::getTrucks()
             truck.truckName = item.value("truckNumber", "");
             truck.licensePlate = item.value("plateNumber", "");
             truck.status = item.value("status", "");
+            truck.updatedAt =item.value("updatedAt",item.value("createdAt", ""));
 
             if (item.contains("technician") && item["technician"].is_object()) {
                 truck.technicianId = item["technician"].value("id", "");

@@ -13,6 +13,7 @@ struct TruckDto
     std::string technicianId;
     std::string technicianName;
     std::string status;
+    std::string updatedAt;
 };
 
 struct CreateTruckRequest
