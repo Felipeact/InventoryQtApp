@@ -98,9 +98,29 @@ private:
     ReceiptsPage* receiptsPage = nullptr;
     ReportsPage* reportsPage = nullptr;
 
+    Theme::AppTheme currentTheme = Theme::AppTheme::Dark;
+
     void setupSidebar();
     void setupVerticalbar();
     void setupPages();
+    void loadSavedTheme();
+    void applyThemeToLoadedPages();
+
+    DashboardPage* ensureDashboardPage();
+    ItemsPage* ensureItemsPage();
+    AssetsPage* ensureAssetsPage();
+    UsersPage* ensureUsersPage();
+    ScanPage* ensureScanInPage();
+    ScanPage* ensureScanOutPage();
+    SettingsPage* ensureSettingsPage();
+    TruckStockDashboardPage* ensureTruckStockDashboardPage();
+    TrucksPage* ensureTrucksPage();
+    StockTemplatesPage* ensureStockTemplatesPage();
+    AssignmentsPage* ensureAssignmentsPage();
+    MyTruckStockPage* ensureMyTruckStockPage();
+    LowStockAlertsPage* ensureLowStockAlertsPage();
+    ReceiptsPage* ensureReceiptsPage();
+    ReportsPage* ensureReportsPage();
 
     void showGlobalSearchDialog(const QString& text);
     void closeGlobalSearchDialog();

@@ -17,6 +17,9 @@
 #include <QTableWidgetItem>
 #include <QUrl>
 #include <QWidget>
+#include <QThread>
+#include <QPointer>
+#include <QMetaObject>
 
 ReceiptsPage::ReceiptsPage(
     TruckStockService* truckStockService,
@@ -100,9 +103,19 @@ void ReceiptsPage::loadReceipts()
         return;
     }
 
-    currentReceipts = truckStockService->getReceipts();
-
-    filterReceipts();
+    QPointer<ReceiptsPage> self(this);
+    TruckStockService* service = truckStockService;
+    QThread* worker = QThread::create([self, service]() {
+        std::vector<ReceiptDto> receipts = service->getReceipts();
+        if (!self) return;
+        QMetaObject::invokeMethod(self, [self, receipts]() {
+            if (!self) return;
+            self->currentReceipts = receipts;
+            self->filterReceipts();
+            }, Qt::QueuedConnection);
+        });
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void ReceiptsPage::refreshReceipts()
@@ -148,6 +161,7 @@ void ReceiptsPage::filterReceipts()
 
 void ReceiptsPage::populateTable()
 {
+    ui.receiptsTable->setUpdatesEnabled(false);
     ui.receiptsTable->clearContents();
     ui.receiptsTable->clearSpans();
 
@@ -163,6 +177,7 @@ void ReceiptsPage::populateTable()
         );
 
         ui.receiptsTable->setSpan(0, 0, 1, 7);
+        ui.receiptsTable->setUpdatesEnabled(true);
         return;
     }
 
@@ -180,6 +195,8 @@ void ReceiptsPage::populateTable()
 
         addActionButtons(row, receipt);
     }
+
+    ui.receiptsTable->setUpdatesEnabled(true);
 }
 
 void ReceiptsPage::onUploadReceiptClicked()
@@ -346,5 +363,5 @@ void ReceiptsPage::applyTheme(
 
 void ReceiptsPage::setSearchText(const QString& text)
 {
-	ui.searchInput->setText(text);
+    ui.searchInput->setText(text);
 }

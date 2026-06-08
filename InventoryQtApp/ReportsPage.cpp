@@ -8,6 +8,9 @@
 #include <QStandardPaths>
 #include <QTableWidgetItem>
 #include <QHeaderView>
+#include <QThread>
+#include <QPointer>
+#include <QMetaObject>
 
 namespace
 {
@@ -131,46 +134,69 @@ void ReportsPage::onAssetsSummaryClicked()
 
 void ReportsPage::loadInventorySummary()
 {
-    try {
-        if (!reportService) {
-            QMessageBox::warning(this, "Reports", "Report service is not available.");
-            return;
-        }
+    if (!reportService) {
+        QMessageBox::warning(this, "Reports", "Report service is not available.");
+        return;
+    }
 
-        nlohmann::json data = reportService->getInventorySummary();
-        displayInventoryReport(data);
-    }
-    catch (const std::exception& e) {
-        QMessageBox::critical(
-            this,
-            "Error",
-            "Failed to load inventory summary: " + QString::fromStdString(e.what())
-        );
-    }
+    QPointer<ReportsPage> self(this);
+    ReportService* service = reportService;
+    QThread* worker = QThread::create([self, service]() {
+        try {
+            nlohmann::json data = service->getInventorySummary();
+            if (!self) return;
+            QMetaObject::invokeMethod(self, [self, data]() {
+                if (!self) return;
+                self->displayInventoryReport(data);
+                }, Qt::QueuedConnection);
+        }
+        catch (const std::exception& e) {
+            QString message = QString::fromStdString(e.what());
+            if (!self) return;
+            QMetaObject::invokeMethod(self, [self, message]() {
+                if (!self) return;
+                QMessageBox::critical(self, "Error", "Failed to load inventory summary: " + message);
+                }, Qt::QueuedConnection);
+        }
+        });
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void ReportsPage::loadAssetsSummary()
 {
-    try {
-        if (!reportService) {
-            QMessageBox::warning(this, "Reports", "Report service is not available.");
-            return;
-        }
+    if (!reportService) {
+        QMessageBox::warning(this, "Reports", "Report service is not available.");
+        return;
+    }
 
-        nlohmann::json data = reportService->getAssetsSummary();
-        displayAssetsReport(data);
-    }
-    catch (const std::exception& e) {
-        QMessageBox::critical(
-            this,
-            "Error",
-            "Failed to load assets summary: " + QString::fromStdString(e.what())
-        );
-    }
+    QPointer<ReportsPage> self(this);
+    ReportService* service = reportService;
+    QThread* worker = QThread::create([self, service]() {
+        try {
+            nlohmann::json data = service->getAssetsSummary();
+            if (!self) return;
+            QMetaObject::invokeMethod(self, [self, data]() {
+                if (!self) return;
+                self->displayAssetsReport(data);
+                }, Qt::QueuedConnection);
+        }
+        catch (const std::exception& e) {
+            QString message = QString::fromStdString(e.what());
+            if (!self) return;
+            QMetaObject::invokeMethod(self, [self, message]() {
+                if (!self) return;
+                QMessageBox::critical(self, "Error", "Failed to load assets summary: " + message);
+                }, Qt::QueuedConnection);
+        }
+        });
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void ReportsPage::displayInventoryReport(const nlohmann::json& data)
 {
+    ui.reportTable->setUpdatesEnabled(false);
     ui.reportTable->setRowCount(0);
     ui.reportTable->setHorizontalHeaderLabels({
         "Inventory Metric",
@@ -270,10 +296,13 @@ void ReportsPage::displayInventoryReport(const nlohmann::json& data)
             "Error parsing inventory report: " + QString::fromStdString(e.what())
         );
     }
+
+    ui.reportTable->setUpdatesEnabled(true);
 }
 
 void ReportsPage::displayAssetsReport(const nlohmann::json& data)
 {
+    ui.reportTable->setUpdatesEnabled(false);
     ui.reportTable->setRowCount(0);
     ui.reportTable->setHorizontalHeaderLabels({
         "Asset Metric",
@@ -373,6 +402,8 @@ void ReportsPage::displayAssetsReport(const nlohmann::json& data)
             "Error parsing assets report: " + QString::fromStdString(e.what())
         );
     }
+
+    ui.reportTable->setUpdatesEnabled(true);
 }
 
 void ReportsPage::onExportPdfClicked()

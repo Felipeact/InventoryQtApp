@@ -6,9 +6,13 @@
 #include <QAbstractItemView>
 #include <QFrame>
 #include <QHeaderView>
+#include <QMetaObject>
+#include <QPointer>
+#include <QPushButton>
 #include <QTableWidget>
 #include <QTableWidgetItem>
-#include <QPushButton>
+#include <QThread>
+#include <QTimer>
 
 TruckStockDashboardPage::TruckStockDashboardPage(
     TruckStockService* truckStockService,
@@ -23,7 +27,12 @@ TruckStockDashboardPage::TruckStockDashboardPage(
 
     setupTables();
     setupConnections();
-    loadDashboardData();
+
+    showLoadingState();
+
+    QTimer::singleShot(0, this, [this]() {
+        loadDashboardData();
+        });
 }
 
 TruckStockDashboardPage::~TruckStockDashboardPage()
@@ -43,6 +52,25 @@ void TruckStockDashboardPage::setupConnections()
 
 void TruckStockDashboardPage::setupTables()
 {
+    ui.recentTrucksTable->setColumnCount(5);
+    ui.recentTrucksTable->setHorizontalHeaderLabels(
+        QStringList()
+        << "Truck"
+        << "Plate"
+        << "Technician"
+        << "Status"
+        << "Stock Status"
+    );
+
+    ui.lowStockTable->setColumnCount(4);
+    ui.lowStockTable->setHorizontalHeaderLabels(
+        QStringList()
+        << "Truck"
+        << "Item"
+        << "Current"
+        << "Minimum"
+    );
+
     QList<QTableWidget*> tables = {
         ui.recentTrucksTable,
         ui.lowStockTable
@@ -74,11 +102,80 @@ void TruckStockDashboardPage::setupTables()
     }
 }
 
+void TruckStockDashboardPage::showLoadingState()
+{
+    ui.metricTitle1->setText("Total Trucks");
+    ui.metricValue1->setText(hasCachedData ? QString::number(cachedData.trucks.size()) : "...");
+    ui.positiveLabel1->setText(hasCachedData ? "Cached" : "Loading");
+
+    ui.metricTitle2->setText("Stock Templates");
+    ui.metricValue2->setText(hasCachedData ? QString::number(cachedData.templates.size()) : "...");
+    ui.positiveLabel2->setText(hasCachedData ? "Cached" : "Loading");
+
+    ui.metricTitle3->setText("Active Trucks");
+    ui.metricValue3->setText("...");
+    ui.positiveLabel3->setText("Loading");
+
+    ui.metricTitle4->setText("Low Stock Items");
+    ui.metricValue4->setText(hasCachedData ? QString::number(cachedData.lowStockItems.size()) : "...");
+    ui.negativeLabel1->setText(hasCachedData ? "Cached" : "Loading");
+
+    if (!hasCachedData) {
+        ui.recentTrucksTable->setRowCount(1);
+        ui.recentTrucksTable->setItem(0, 0, new QTableWidgetItem("Loading trucks..."));
+        ui.recentTrucksTable->setSpan(0, 0, 1, 5);
+
+        ui.lowStockTable->setRowCount(1);
+        ui.lowStockTable->setItem(0, 0, new QTableWidgetItem("Loading low stock items..."));
+        ui.lowStockTable->setSpan(0, 0, 1, 4);
+    }
+}
+
 void TruckStockDashboardPage::loadDashboardData()
 {
-    loadMetricCards();
-    loadRecentTrucks();
-    loadLowStockItems();
+    if (!truckStockService) {
+        return;
+    }
+
+    if (refreshInProgress) {
+        pendingRefresh = true;
+        return;
+    }
+
+    refreshInProgress = true;
+    pendingRefresh = false;
+
+    showLoadingState();
+
+    TruckStockService* service = truckStockService;
+    QPointer<TruckStockDashboardPage> self(this);
+
+    QThread* worker = QThread::create([self, service]() {
+        DashboardData data;
+
+        data.trucks = service->getTrucks();
+        data.templates = service->getTemplates();
+        data.lowStockItems = service->getLowStockItems();
+
+        QMetaObject::invokeMethod(self, [self, data]() {
+            if (!self) {
+                return;
+            }
+
+            self->refreshInProgress = false;
+            self->cachedData = data;
+            self->hasCachedData = true;
+            self->applyDashboardData(data);
+
+            if (self->pendingRefresh) {
+                self->pendingRefresh = false;
+                self->loadDashboardData();
+            }
+            }, Qt::QueuedConnection);
+        });
+
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void TruckStockDashboardPage::refreshDashboard()
@@ -86,28 +183,18 @@ void TruckStockDashboardPage::refreshDashboard()
     loadDashboardData();
 }
 
-void TruckStockDashboardPage::loadRecentTrucks()
+void TruckStockDashboardPage::applyDashboardData(const DashboardData& data)
 {
+    populateMetricCards(data.trucks, data.templates, data.lowStockItems);
+    populateRecentTrucks(data.trucks);
+    populateLowStockItems(data.lowStockItems);
+}
+
+void TruckStockDashboardPage::populateRecentTrucks(const std::vector<TruckDto>& trucks)
+{
+    ui.recentTrucksTable->setUpdatesEnabled(false);
     ui.recentTrucksTable->clearContents();
-
-    ui.recentTrucksTable->setColumnCount(5);
-
-    ui.recentTrucksTable->setHorizontalHeaderLabels(
-        QStringList()
-        << "Truck"
-        << "Plate"
-        << "Technician"
-        << "Status"
-        << "Stock Status"
-    );
-
-    if (!truckStockService) {
-        ui.recentTrucksTable->setRowCount(0);
-        return;
-    }
-
-    std::vector<TruckDto> trucks =
-        truckStockService->getTrucks();
+    ui.recentTrucksTable->clearSpans();
 
     int rowCount =
         (std::min)(static_cast<int>(trucks.size()), 5);
@@ -120,6 +207,7 @@ void TruckStockDashboardPage::loadRecentTrucks()
             new QTableWidgetItem("No trucks found")
         );
         ui.recentTrucksTable->setSpan(0, 0, 1, 5);
+        ui.recentTrucksTable->setUpdatesEnabled(true);
         return;
     }
 
@@ -161,29 +249,15 @@ void TruckStockDashboardPage::loadRecentTrucks()
             new QTableWidgetItem(stockStatus)
         );
     }
+
+    ui.recentTrucksTable->setUpdatesEnabled(true);
 }
 
-void TruckStockDashboardPage::loadLowStockItems()
+void TruckStockDashboardPage::populateLowStockItems(const std::vector<LowStockItemDto>& lowStockItems)
 {
+    ui.lowStockTable->setUpdatesEnabled(false);
     ui.lowStockTable->clearContents();
-
-    ui.lowStockTable->setColumnCount(4);
-
-    ui.lowStockTable->setHorizontalHeaderLabels(
-        QStringList()
-        << "Truck"
-        << "Item"
-        << "Current"
-        << "Minimum"
-    );
-
-    if (!truckStockService) {
-        ui.lowStockTable->setRowCount(0);
-        return;
-    }
-
-    std::vector<LowStockItemDto> lowStockItems =
-        truckStockService->getLowStockItems();
+    ui.lowStockTable->clearSpans();
 
     int rowCount =
         (std::min)(static_cast<int>(lowStockItems.size()), 5);
@@ -196,6 +270,7 @@ void TruckStockDashboardPage::loadLowStockItems()
             new QTableWidgetItem("No low stock truck items")
         );
         ui.lowStockTable->setSpan(0, 0, 1, 4);
+        ui.lowStockTable->setUpdatesEnabled(true);
         return;
     }
 
@@ -229,23 +304,16 @@ void TruckStockDashboardPage::loadLowStockItems()
             new QTableWidgetItem(QString::number(item.minimumQuantity))
         );
     }
+
+    ui.lowStockTable->setUpdatesEnabled(true);
 }
 
-void TruckStockDashboardPage::loadMetricCards()
+void TruckStockDashboardPage::populateMetricCards(
+    const std::vector<TruckDto>& trucks,
+    const std::vector<StockTemplateDto>& templates,
+    const std::vector<LowStockItemDto>& lowStockItems
+)
 {
-    if (!truckStockService) {
-        return;
-    }
-
-    std::vector<TruckDto> trucks =
-        truckStockService->getTrucks();
-
-    std::vector<StockTemplateDto> templates =
-        truckStockService->getTemplates();
-
-    std::vector<LowStockItemDto> lowStockItems =
-        truckStockService->getLowStockItems();
-
     int totalTrucks =
         static_cast<int>(trucks.size());
 

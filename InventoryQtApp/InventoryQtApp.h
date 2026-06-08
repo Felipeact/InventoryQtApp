@@ -3,6 +3,8 @@
 #include <DashboardWindow.h>
 
 #include <QtWidgets/QMainWindow>
+#include <string>
+#include <vector>
 #include "ui_InventoryQtApp.h"
 
 #include "ApiClient.h"
@@ -49,7 +51,9 @@ private:
 	DashboardWindow* dashboardWindow = nullptr;  // Main dashboard window after login	
 
 	// Remember Me functionality
-	void saveCredentials(const QString& email, const QString& token);
+	void saveCredentials(const QString& email, const QString& accessToken, const QString& userName);
+	void openDashboard(const std::string& role, const std::vector<std::string>& permissions, const std::string& userName);
+	void handleLogout();
 	void loadSavedCredentials();
 	void clearSavedCredentials();
 	QString getEncryptedToken() const;

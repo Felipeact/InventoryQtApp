@@ -35,7 +35,7 @@ public:
 
 	// Validates the current token and retrieves user role and permissions
 	bool validateToken(std::string& role, std::vector<std::string>& permissions);
-	
+
 	bool refreshAccessToken(); // Refreshes the access token using the refresh token
-			
+
 };

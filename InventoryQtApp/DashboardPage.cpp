@@ -16,6 +16,9 @@
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
 #include <QNetworkRequest>
+#include <QThread>
+#include <QPointer>
+#include <QMetaObject>
 
 DashboardPage::DashboardPage(
     ProductService& productService,
@@ -30,7 +33,7 @@ DashboardPage::DashboardPage(
 
     refreshDashboard();
 
-    
+
 
     connect(ui.viewAllItemsButton, &QPushButton::clicked, this, [this]() {
         emit viewAllItemsRequested();
@@ -47,12 +50,30 @@ DashboardPage::~DashboardPage()
 
 void DashboardPage::refreshDashboard()
 {
-    setupItemListTable();
-    setupLowStockTable();
-    setupReportCards();
+    QPointer<DashboardPage> self(this);
+    ProductService* products = &productService;
+    ReportService* reports = &reportService;
+
+    QThread* worker = QThread::create([self, products, reports]() {
+        json allProducts = products->getProducts();
+        json lowStockProducts = products->getLowStockProducts();
+        json inventory = reports->getInventorySummary();
+        json assets = reports->getAssetsSummary();
+
+        if (!self) return;
+        QMetaObject::invokeMethod(self, [self, allProducts, lowStockProducts, inventory, assets]() {
+            if (!self) return;
+            self->setupItemListTable(allProducts);
+            self->setupLowStockTable(lowStockProducts);
+            self->setupReportCards(inventory, assets);
+            }, Qt::QueuedConnection);
+        });
+
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
-void DashboardPage::setupItemListTable()
+void DashboardPage::setupItemListTable(const json& products)
 {
     ui.itemListTable->clear();
     ui.itemListTable->setColumnCount(4);
@@ -60,8 +81,6 @@ void DashboardPage::setupItemListTable()
     ui.itemListTable->setHorizontalHeaderLabels(
         QStringList() << "Name" << "Image" << "Store" << "Amount"
     );
-
-    json products = productService.getProducts();
 
     int productCount = static_cast<int>(products.size());
     int rowCount = productCount < 4 ? productCount : 4;
@@ -145,7 +164,7 @@ void DashboardPage::setupItemListTable()
     styleDashboardTable(ui.itemListTable);
 }
 
-void DashboardPage::setupLowStockTable()
+void DashboardPage::setupLowStockTable(const json& lowStockProducts)
 {
     ui.lowStockTable->clear();
     ui.lowStockTable->setColumnCount(3);
@@ -153,8 +172,6 @@ void DashboardPage::setupLowStockTable()
     ui.lowStockTable->setHorizontalHeaderLabels(
         QStringList() << "Item Name" << "Store" << "Quantity"
     );
-
-    json lowStockProducts = productService.getLowStockProducts();
 
     int productCount = static_cast<int>(lowStockProducts.size());
     int rowCount = productCount < 4 ? productCount : 4;
@@ -231,10 +248,8 @@ void DashboardPage::styleDashboardTable(QTableWidget* table)
     table->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
-void DashboardPage::setupReportCards()
+void DashboardPage::setupReportCards(const json& inventory, const json& assets)
 {
-    json inventory = reportService.getInventorySummary();
-    json assets = reportService.getAssetsSummary();
 
     int totalProducts = inventory.value("totalProducts", 0);
     int quantityInHand = inventory.value("totalQuantity", 0);

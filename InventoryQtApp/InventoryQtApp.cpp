@@ -130,7 +130,7 @@ void InventoryQtApp::onLoginButtonClicked()
     if (ui.rememberCheck->isChecked()) {
         apiClient.setAccessToken(loginResult.accessToken);
         apiClient.setRefreshToken(loginResult.refreshToken);
-        saveCredentials(email, QString::fromStdString(loginResult.accessToken));
+        saveCredentials(email, QString::fromStdString(loginResult.accessToken), QString::fromStdString(loginResult.userName));
     }
     else {
         clearSavedCredentials();
@@ -148,10 +148,25 @@ void InventoryQtApp::onLoginButtonClicked()
         return;
     }
 
+    openDashboard(role, permissions, loginResult.userName);
+}
+
+void InventoryQtApp::openDashboard(
+    const std::string& role,
+    const std::vector<std::string>& permissions,
+    const std::string& userName
+)
+{
+    if (dashboardWindow) {
+        dashboardWindow->close();
+        dashboardWindow->deleteLater();
+        dashboardWindow = nullptr;
+    }
+
     dashboardWindow = new DashboardWindow(
         role,
         permissions,
-        loginResult.userName,
+        userName.empty() ? std::string("User") : userName,
         productService,
         assetService,
         userService,
@@ -159,14 +174,34 @@ void InventoryQtApp::onLoginButtonClicked()
         truckStockService
     );
 
-    connect(dashboardWindow, &DashboardWindow::logoutRequested, this, [this]() {
-        authService.logout();
-        ui.statusLabel->setText("");
-        this->show();
+    connect(dashboardWindow, &DashboardWindow::logoutRequested, this, &InventoryQtApp::handleLogout);
+    connect(dashboardWindow, &QObject::destroyed, this, [this]() {
+        dashboardWindow = nullptr;
         });
 
     dashboardWindow->showMaximized();
     this->hide();
+}
+
+void InventoryQtApp::handleLogout()
+{
+    clearSavedCredentials();
+    authService.logout();
+
+    if (dashboardWindow) {
+        DashboardWindow* windowToClose = dashboardWindow;
+        dashboardWindow = nullptr;
+        windowToClose->close();
+        windowToClose->deleteLater();
+    }
+
+    ui.statusLabel->setText("");
+    ui.passwordInput->clear();
+    ui.rememberCheck->setChecked(false);
+
+    this->show();
+    this->raise();
+    this->activateWindow();
 }
 
 void InventoryQtApp::applyTheme(Theme::AppTheme theme)
@@ -176,12 +211,13 @@ void InventoryQtApp::applyTheme(Theme::AppTheme theme)
     );
 }
 
-void InventoryQtApp::saveCredentials(const QString& email, const QString& accessToken)
+void InventoryQtApp::saveCredentials(const QString& email, const QString& accessToken, const QString& userName)
 {
     QSettings settings("InventorySystem", "InventoryQtApp");
 
     settings.setValue("login/email", email);
     settings.setValue("login/accessToken", accessToken);
+    settings.setValue("login/userName", userName.isEmpty() ? email : userName);
 
     if (!apiClient.getRefreshToken().empty()) {
         settings.setValue("login/refreshToken",
@@ -229,28 +265,7 @@ void InventoryQtApp::loadSavedCredentials()
 
                 QString userName = settings.value("login/userName", "User").toString();
 
-                dashboardWindow = new DashboardWindow(
-                    role,
-                    permissions,
-                    userName.toStdString(),
-                    productService,
-                    assetService,
-                    userService,
-                    reportService,
-                    truckStockService
-                );
-
-                connect(dashboardWindow, &DashboardWindow::logoutRequested, this, [this]() {
-                    clearSavedCredentials();
-                    authService.logout();
-                    ui.statusLabel->setText("");
-                    ui.emailInput->clear();
-                    ui.passwordInput->clear();
-                    this->show();
-                    });
-
-                dashboardWindow->showMaximized();
-                this->hide();
+                openDashboard(role, permissions, userName.toStdString());
             }
             else {
                 qWarning() << "Saved token validation failed";

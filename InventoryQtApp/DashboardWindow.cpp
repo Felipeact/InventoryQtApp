@@ -2,13 +2,11 @@
 #include "DashboardWindow.h"
 #include "Theme.h"
 
-#include <qmessagebox.h>
-
 #include <QVBoxLayout>
 #include <QString>
 #include <QSettings>
+#include <QPoint>
 
-// Constructor initializes the main window with pages and navigation
 DashboardWindow::DashboardWindow(
     const std::string& role,
     const std::vector<std::string>& permissions,
@@ -27,278 +25,288 @@ DashboardWindow::DashboardWindow(
     productService(&productService),
     assetService(&assetService),
     userService(&userService),
-    truckStockService(&truckStockService),
-    reportService(&reportService)
+    reportService(&reportService),
+    truckStockService(&truckStockService)
 {
     ui.setupUi(this);
 
-    this->setWindowTitle("Inventory Dashboard");
-    this->resize(1440, 900);
-    this->setMinimumSize(1100, 720);
+    setWindowTitle("Inventory Dashboard");
+    resize(1440, 900);
+    setMinimumSize(1100, 720);
 
+    loadSavedTheme();
     setupPages();
     setupSidebar();
     setupVerticalbar();
+    applyThemeToLoadedPages();
 
-    ui.mainStack->setCurrentWidget(dashboardPage);
+    ui.mainStack->setCurrentWidget(ensureDashboardPage());
 }
 
 DashboardWindow::~DashboardWindow()
 {
 }
 
-void DashboardWindow::updateLoggedInUserInfo(
-    const std::string& newUserName
-)
+void DashboardWindow::loadSavedTheme()
 {
-    userName = newUserName;
+    QSettings settings("InventorySystem", "InventoryQtApp");
+    QString savedTheme = settings.value("appearance/theme", "Dark").toString();
+    currentTheme = savedTheme == "Light" ? Theme::AppTheme::Light : Theme::AppTheme::Dark;
+    Theme::applyTheme(currentTheme);
+    applyTheme(currentTheme);
+}
 
-    if (verticalbar) {
-        verticalbar->setUserInfo(role, userName);
-    }
-
-    if (sidebar) {
-        sidebar->setUserInfo(role, userName);
-    }
+void DashboardWindow::applyThemeToLoadedPages()
+{
+    applyTheme(currentTheme);
+    if (dashboardPage) dashboardPage->applyTheme(currentTheme);
+    if (itemsPage) itemsPage->applyTheme(currentTheme);
+    if (assetsPage) assetsPage->applyTheme(currentTheme);
+    if (usersPage) usersPage->applyTheme(currentTheme);
+    if (settingsPage) settingsPage->applyTheme(currentTheme);
+    if (sidebar) sidebar->applyTheme(currentTheme);
+    if (verticalbar) verticalbar->applyTheme(currentTheme);
+    if (scanInPage) scanInPage->applyTheme(currentTheme);
+    if (scanOutPage) scanOutPage->applyTheme(currentTheme);
+    if (truckStockDashboardPage) truckStockDashboardPage->applyTheme(currentTheme);
+    if (trucksPage) trucksPage->applyTheme(currentTheme);
+    if (stockTemplatesPage) stockTemplatesPage->applyTheme(currentTheme);
+    if (assignmentsPage) assignmentsPage->applyTheme(currentTheme);
+    if (myTruckStockPage) myTruckStockPage->applyTheme(currentTheme);
+    if (lowStockAlertsPage) lowStockAlertsPage->applyTheme(currentTheme);
+    if (receiptsPage) receiptsPage->applyTheme(currentTheme);
+    if (reportsPage) reportsPage->applyTheme(currentTheme);
 }
 
 void DashboardWindow::setupPages()
 {
-    dashboardPage = new DashboardPage(*productService, *reportService, this);
-    ui.mainStack->addWidget(dashboardPage);
+    ensureDashboardPage();
+}
 
-    itemsPage = new ItemsPage(*productService, this);
-    ui.mainStack->addWidget(itemsPage);
+DashboardPage* DashboardWindow::ensureDashboardPage()
+{
+    if (!dashboardPage) {
+        dashboardPage = new DashboardPage(*productService, *reportService, this);
+        ui.mainStack->addWidget(dashboardPage);
+        dashboardPage->applyTheme(currentTheme);
 
-    assetsPage = new AssetsPage(*assetService, this);
-    ui.mainStack->addWidget(assetsPage);
+        connect(dashboardPage, &DashboardPage::viewAllItemsRequested, this, [this]() {
+            ui.mainStack->setCurrentWidget(ensureItemsPage());
+            });
 
-    usersPage = new UsersPage(userService, this);
-    ui.mainStack->addWidget(usersPage);
+        connect(dashboardPage, &DashboardPage::viewAllLowStockRequested, this, [this]() {
+            LowStockAlertsPage* page = ensureLowStockAlertsPage();
+            page->refreshAlerts();
+            ui.mainStack->setCurrentWidget(page);
+            });
+    }
+    return dashboardPage;
+}
 
-    usersPage->setLoggedInUserName(userName);
+ItemsPage* DashboardWindow::ensureItemsPage()
+{
+    if (!itemsPage) {
+        itemsPage = new ItemsPage(*productService, this);
+        ui.mainStack->addWidget(itemsPage);
+        itemsPage->applyTheme(currentTheme);
+        connect(itemsPage, &ItemsPage::productsChanged, this, [this]() {
+            if (dashboardPage) dashboardPage->refreshDashboard();
+            });
+    }
+    return itemsPage;
+}
 
-    connect(
-        usersPage,
-        &UsersPage::loggedInUserUpdated,
-        this,
-        &DashboardWindow::updateLoggedInUserInfo
-    );
+AssetsPage* DashboardWindow::ensureAssetsPage()
+{
+    if (!assetsPage) {
+        assetsPage = new AssetsPage(*assetService, this);
+        ui.mainStack->addWidget(assetsPage);
+        assetsPage->applyTheme(currentTheme);
+        connect(assetsPage, &AssetsPage::assetsChanged, this, [this]() {
+            if (dashboardPage) dashboardPage->refreshDashboard();
+            });
+    }
+    return assetsPage;
+}
 
-    scanInPage = new ScanPage(*productService, ScanMode::ScanIn, this);
-    ui.mainStack->addWidget(scanInPage);
+UsersPage* DashboardWindow::ensureUsersPage()
+{
+    if (!usersPage) {
+        usersPage = new UsersPage(userService, this);
+        usersPage->setLoggedInUserName(userName);
+        ui.mainStack->addWidget(usersPage);
+        usersPage->applyTheme(currentTheme);
+        connect(usersPage, &UsersPage::loggedInUserUpdated, this, &DashboardWindow::updateLoggedInUserInfo);
+    }
+    return usersPage;
+}
 
-    scanOutPage = new ScanPage(*productService, ScanMode::ScanOut, this);
-    ui.mainStack->addWidget(scanOutPage);
+ScanPage* DashboardWindow::ensureScanInPage()
+{
+    if (!scanInPage) {
+        scanInPage = new ScanPage(*productService, ScanMode::ScanIn, this);
+        ui.mainStack->addWidget(scanInPage);
+        scanInPage->applyTheme(currentTheme);
+        connect(scanInPage, &ScanPage::stockChanged, this, [this]() {
+            if (dashboardPage) dashboardPage->refreshDashboard();
+            if (itemsPage) itemsPage->refreshProducts();
+            });
+    }
+    return scanInPage;
+}
 
-    connect(dashboardPage, &DashboardPage::viewAllItemsRequested, this, [this]() {
-        ui.mainStack->setCurrentWidget(itemsPage);
-        });
+ScanPage* DashboardWindow::ensureScanOutPage()
+{
+    if (!scanOutPage) {
+        scanOutPage = new ScanPage(*productService, ScanMode::ScanOut, this);
+        ui.mainStack->addWidget(scanOutPage);
+        scanOutPage->applyTheme(currentTheme);
+        connect(scanOutPage, &ScanPage::stockChanged, this, [this]() {
+            if (dashboardPage) dashboardPage->refreshDashboard();
+            if (itemsPage) itemsPage->refreshProducts();
+            });
+    }
+    return scanOutPage;
+}
 
-    connect(dashboardPage, &DashboardPage::viewAllLowStockRequested, this, [this]() {
-        lowStockAlertsPage->refreshAlerts();
-        ui.mainStack->setCurrentWidget(lowStockAlertsPage);
-        });
+SettingsPage* DashboardWindow::ensureSettingsPage()
+{
+    if (!settingsPage) {
+        settingsPage = new SettingsPage(role, userName, userService, this);
+        ui.mainStack->addWidget(settingsPage);
+        settingsPage->applyTheme(currentTheme);
 
-    connect(itemsPage, &ItemsPage::productsChanged, this, [this]() {
-        dashboardPage->refreshDashboard();
-        });
+        connect(settingsPage, &SettingsPage::userNameChanged, this, &DashboardWindow::updateLoggedInUserInfo);
 
-    connect(assetsPage, &AssetsPage::assetsChanged, this, [this]() {
-        dashboardPage->refreshDashboard();
-        });
-
-    connect(scanInPage, &ScanPage::stockChanged, this, [this]() {
-        dashboardPage->refreshDashboard();
-        itemsPage->refreshProducts();
-        });
-
-    connect(scanOutPage, &ScanPage::stockChanged, this, [this]() {
-        dashboardPage->refreshDashboard();
-        itemsPage->refreshProducts();
-        });
-
-    settingsPage = new SettingsPage(role, userName, userService, this);
-	dashboardPage->refreshDashboard();
-    ui.mainStack->addWidget(settingsPage);
-
-    connect(
-        settingsPage,
-        &SettingsPage::userNameChanged,
-        this,
-        &DashboardWindow::updateLoggedInUserInfo
-    );
-
-    connect(
-        settingsPage,
-        &SettingsPage::themeChanged,
-        this,
-        [this](const QString& themeName) {
+        connect(settingsPage, &SettingsPage::themeChanged, this, [this](const QString& themeName) {
             QSettings settings("InventorySystem", "InventoryQtApp");
             settings.setValue("appearance/theme", themeName);
+            currentTheme = themeName == "Light" ? Theme::AppTheme::Light : Theme::AppTheme::Dark;
+            Theme::applyTheme(currentTheme);
+            applyThemeToLoadedPages();
+            });
 
-            Theme::AppTheme appTheme =
-                themeName == "Light"
-                ? Theme::AppTheme::Light
-                : Theme::AppTheme::Dark;
-
-            Theme::applyTheme(appTheme);
-            applyTheme(appTheme);
-
-            if (dashboardPage) dashboardPage->applyTheme(appTheme);
-            if (itemsPage) itemsPage->applyTheme(appTheme);
-            if (assetsPage) assetsPage->applyTheme(appTheme);
-            if (usersPage) usersPage->applyTheme(appTheme);
-            if (settingsPage) settingsPage->applyTheme(appTheme);
-            if (sidebar) sidebar->applyTheme(appTheme);
-            if (verticalbar) verticalbar->applyTheme(appTheme);
-            if (scanInPage) scanInPage->applyTheme(appTheme);
-            if (scanOutPage) scanOutPage->applyTheme(appTheme);
-            if (truckStockDashboardPage) truckStockDashboardPage->applyTheme(appTheme);
-            if (trucksPage) trucksPage->applyTheme(appTheme);
-            if (stockTemplatesPage) stockTemplatesPage->applyTheme(appTheme);
-            if (assignmentsPage) assignmentsPage->applyTheme(appTheme);
-            if (myTruckStockPage) myTruckStockPage->applyTheme(appTheme);
-            if (lowStockAlertsPage) lowStockAlertsPage->applyTheme(appTheme);
-            if (receiptsPage) receiptsPage->applyTheme(appTheme);
-            if (reportsPage) reportsPage->applyTheme(appTheme);
-
-        }
-    );
-
-    connect(
-        settingsPage,
-        &SettingsPage::logoutRequested,
-        this,
-        [this]() {
+        connect(settingsPage, &SettingsPage::logoutRequested, this, [this]() {
             emit logoutRequested();
-            this->close();
-        }
-    );
+            close();
+            });
+    }
+    return settingsPage;
+}
 
-    truckStockDashboardPage = new TruckStockDashboardPage(truckStockService, this);
-    ui.mainStack->addWidget(truckStockDashboardPage);
+TruckStockDashboardPage* DashboardWindow::ensureTruckStockDashboardPage()
+{
+    if (!truckStockDashboardPage) {
+        truckStockDashboardPage = new TruckStockDashboardPage(truckStockService, this);
+        ui.mainStack->addWidget(truckStockDashboardPage);
+        truckStockDashboardPage->applyTheme(currentTheme);
 
-    trucksPage = new TrucksPage(truckStockService, userService, this);
-    ui.mainStack->addWidget(trucksPage);
+        connect(truckStockDashboardPage, &TruckStockDashboardPage::viewAllTrucksRequested, this, [this]() {
+            ui.mainStack->setCurrentWidget(ensureTrucksPage());
+            });
 
-    connect(
-        trucksPage,
-        &TrucksPage::trucksChanged,
-        this,
-        [this]() {
-            truckStockDashboardPage->refreshDashboard();
-        }
-    );
+        connect(truckStockDashboardPage, &TruckStockDashboardPage::viewAllLowStockRequested, this, [this]() {
+            LowStockAlertsPage* page = ensureLowStockAlertsPage();
+            page->refreshAlerts();
+            ui.mainStack->setCurrentWidget(page);
+            });
+    }
+    return truckStockDashboardPage;
+}
 
-    stockTemplatesPage = new StockTemplatesPage(truckStockService, this);
-    ui.mainStack->addWidget(stockTemplatesPage);
+TrucksPage* DashboardWindow::ensureTrucksPage()
+{
+    if (!trucksPage) {
+        trucksPage = new TrucksPage(truckStockService, userService, this);
+        ui.mainStack->addWidget(trucksPage);
+        trucksPage->applyTheme(currentTheme);
+        connect(trucksPage, &TrucksPage::trucksChanged, this, [this]() {
+            if (truckStockDashboardPage) truckStockDashboardPage->refreshDashboard();
+            });
+    }
+    return trucksPage;
+}
 
-    assignmentsPage = new AssignmentsPage(truckStockService, userService, this);
-    ui.mainStack->addWidget(assignmentsPage);
+StockTemplatesPage* DashboardWindow::ensureStockTemplatesPage()
+{
+    if (!stockTemplatesPage) {
+        stockTemplatesPage = new StockTemplatesPage(truckStockService, this);
+        ui.mainStack->addWidget(stockTemplatesPage);
+        stockTemplatesPage->applyTheme(currentTheme);
+    }
+    return stockTemplatesPage;
+}
 
-    connect(
-        assignmentsPage,
-        &AssignmentsPage::assignmentsChanged,
-        this,
-        [this]() {
-            truckStockDashboardPage->refreshDashboard();
-            myTruckStockPage->refreshStock();
-            lowStockAlertsPage->refreshAlerts();
-        }
-    );
+AssignmentsPage* DashboardWindow::ensureAssignmentsPage()
+{
+    if (!assignmentsPage) {
+        assignmentsPage = new AssignmentsPage(truckStockService, userService, this);
+        ui.mainStack->addWidget(assignmentsPage);
+        assignmentsPage->applyTheme(currentTheme);
+        connect(assignmentsPage, &AssignmentsPage::assignmentsChanged, this, [this]() {
+            if (truckStockDashboardPage) truckStockDashboardPage->refreshDashboard();
+            if (myTruckStockPage) myTruckStockPage->refreshStock();
+            if (lowStockAlertsPage) lowStockAlertsPage->refreshAlerts();
+            });
+    }
+    return assignmentsPage;
+}
 
-    myTruckStockPage = new MyTruckStockPage(truckStockService, this);
-    ui.mainStack->addWidget(myTruckStockPage);
+MyTruckStockPage* DashboardWindow::ensureMyTruckStockPage()
+{
+    if (!myTruckStockPage) {
+        myTruckStockPage = new MyTruckStockPage(truckStockService, this);
+        ui.mainStack->addWidget(myTruckStockPage);
+        myTruckStockPage->applyTheme(currentTheme);
+        connect(myTruckStockPage, &MyTruckStockPage::stockChanged, this, [this]() {
+            if (truckStockDashboardPage) truckStockDashboardPage->refreshDashboard();
+            if (lowStockAlertsPage) lowStockAlertsPage->refreshAlerts();
+            });
+    }
+    return myTruckStockPage;
+}
 
-    connect(
-        myTruckStockPage,
-        &MyTruckStockPage::stockChanged,
-        this,
-        [this]() {
-            truckStockDashboardPage->refreshDashboard();
-            lowStockAlertsPage->refreshAlerts();
-        }
-    );
+LowStockAlertsPage* DashboardWindow::ensureLowStockAlertsPage()
+{
+    if (!lowStockAlertsPage) {
+        lowStockAlertsPage = new LowStockAlertsPage(truckStockService, this);
+        ui.mainStack->addWidget(lowStockAlertsPage);
+        lowStockAlertsPage->applyTheme(currentTheme);
+    }
+    return lowStockAlertsPage;
+}
 
-    lowStockAlertsPage = new LowStockAlertsPage(truckStockService, this);
-    ui.mainStack->addWidget(lowStockAlertsPage);
+ReceiptsPage* DashboardWindow::ensureReceiptsPage()
+{
+    if (!receiptsPage) {
+        receiptsPage = new ReceiptsPage(truckStockService, permissions, this);
+        ui.mainStack->addWidget(receiptsPage);
+        receiptsPage->applyTheme(currentTheme);
+        connect(receiptsPage, &ReceiptsPage::receiptsChanged, this, [this]() {
+            if (truckStockDashboardPage) truckStockDashboardPage->refreshDashboard();
+            if (lowStockAlertsPage) lowStockAlertsPage->refreshAlerts();
+            if (myTruckStockPage) myTruckStockPage->refreshStock();
+            });
+    }
+    return receiptsPage;
+}
 
-    connect(
-        truckStockDashboardPage,
-        &TruckStockDashboardPage::viewAllTrucksRequested,
-        this,
-        [this]() {
-            ui.mainStack->setCurrentWidget(trucksPage);
-        }
-    );
+ReportsPage* DashboardWindow::ensureReportsPage()
+{
+    if (!reportsPage) {
+        reportsPage = new ReportsPage(reportService, this);
+        ui.mainStack->addWidget(reportsPage);
+        reportsPage->applyTheme(currentTheme);
+    }
+    return reportsPage;
+}
 
-    connect(
-        truckStockDashboardPage,
-        &TruckStockDashboardPage::viewAllLowStockRequested,
-        this,
-        [this]() {
-            lowStockAlertsPage->refreshAlerts();
-            ui.mainStack->setCurrentWidget(lowStockAlertsPage);
-        }
-    );
-
-    receiptsPage = new ReceiptsPage(truckStockService, permissions, this);
-    ui.mainStack->addWidget(receiptsPage);
-
-    connect(
-        receiptsPage,
-        &ReceiptsPage::receiptsChanged,
-        this,
-        [this]() {
-            truckStockDashboardPage->refreshDashboard();
-            lowStockAlertsPage->refreshAlerts();
-            myTruckStockPage->refreshStock();
-        }
-    );
-
-    reportsPage = new ReportsPage(reportService, this);
-    ui.mainStack->addWidget(reportsPage);
-
-    QSettings settings("InventorySystem", "InventoryQtApp");
-
-    QString savedTheme =
-        settings.value("appearance/theme", "Dark").toString();
-
-    Theme::AppTheme appTheme =
-        savedTheme == "Light"
-        ? Theme::AppTheme::Light
-        : Theme::AppTheme::Dark;
-
-    Theme::applyTheme(appTheme);
-
-    applyTheme(appTheme);
-
-    dashboardPage->applyTheme(appTheme);
-    itemsPage->applyTheme(appTheme);
-    assetsPage->applyTheme(appTheme);
-    usersPage->applyTheme(appTheme);
-
-    scanInPage->applyTheme(appTheme);
-    scanOutPage->applyTheme(appTheme);
-
-    settingsPage->applyTheme(appTheme);
-    truckStockDashboardPage->applyTheme(appTheme);
-    trucksPage->applyTheme(appTheme);
-    stockTemplatesPage->applyTheme(appTheme);
-    assignmentsPage->applyTheme(appTheme);
-    myTruckStockPage->applyTheme(appTheme);
-    lowStockAlertsPage->applyTheme(appTheme);
-    receiptsPage->applyTheme(appTheme);
-    reportsPage->applyTheme(appTheme);
-
-
-
-    if (sidebar)
-        sidebar->applyTheme(appTheme);
-
-    if (verticalbar)
-        verticalbar->applyTheme(appTheme);
+void DashboardWindow::updateLoggedInUserInfo(const std::string& newUserName)
+{
+    userName = newUserName;
+    if (verticalbar) verticalbar->setUserInfo(role, userName);
+    if (sidebar) sidebar->setUserInfo(role, userName);
+    if (usersPage) usersPage->setLoggedInUserName(userName);
 }
 
 void DashboardWindow::setupSidebar()
@@ -311,185 +319,119 @@ void DashboardWindow::setupSidebar()
     layout->addWidget(sidebar);
 
     connect(sidebar, &SidebarWidget::dashboardClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(dashboardPage);
+        ui.mainStack->setCurrentWidget(ensureDashboardPage());
         });
 
     connect(sidebar, &SidebarWidget::itemsClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(itemsPage);
+        ui.mainStack->setCurrentWidget(ensureItemsPage());
         });
 
     connect(sidebar, &SidebarWidget::assetsClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(assetsPage);
+        ui.mainStack->setCurrentWidget(ensureAssetsPage());
         });
 
     connect(sidebar, &SidebarWidget::usersClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(usersPage);
+        ui.mainStack->setCurrentWidget(ensureUsersPage());
         });
 
     connect(sidebar, &SidebarWidget::scanInClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(scanInPage);
+        ui.mainStack->setCurrentWidget(ensureScanInPage());
         });
 
     connect(sidebar, &SidebarWidget::scanOutClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(scanOutPage);
+        ui.mainStack->setCurrentWidget(ensureScanOutPage());
         });
 
     connect(sidebar, &SidebarWidget::settingsClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(settingsPage);
+        ui.mainStack->setCurrentWidget(ensureSettingsPage());
         });
 
     connect(sidebar, &SidebarWidget::truckStockDashboardClicked, this, [this]() {
-        truckStockDashboardPage->refreshDashboard();
-        ui.mainStack->setCurrentWidget(truckStockDashboardPage);
+        TruckStockDashboardPage* page = ensureTruckStockDashboardPage();
+        page->refreshDashboard();
+        ui.mainStack->setCurrentWidget(page);
         });
 
     connect(sidebar, &SidebarWidget::trucksClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(trucksPage);
+        ui.mainStack->setCurrentWidget(ensureTrucksPage());
         });
 
     connect(sidebar, &SidebarWidget::templatesClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(stockTemplatesPage);
+        ui.mainStack->setCurrentWidget(ensureStockTemplatesPage());
         });
 
     connect(sidebar, &SidebarWidget::assignmentsClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(assignmentsPage);
+        ui.mainStack->setCurrentWidget(ensureAssignmentsPage());
         });
 
     connect(sidebar, &SidebarWidget::myTruckStockClicked, this, [this]() {
-        myTruckStockPage->refreshStock();
-        ui.mainStack->setCurrentWidget(myTruckStockPage);
+        MyTruckStockPage* page = ensureMyTruckStockPage();
+        page->refreshStock();
+        ui.mainStack->setCurrentWidget(page);
         });
 
     connect(sidebar, &SidebarWidget::lowStockAlertsClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(lowStockAlertsPage);
+        ui.mainStack->setCurrentWidget(ensureLowStockAlertsPage());
         });
 
     connect(sidebar, &SidebarWidget::receiptsClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(receiptsPage);
+        ui.mainStack->setCurrentWidget(ensureReceiptsPage());
         });
 
     connect(sidebar, &SidebarWidget::reportsClicked, this, [this]() {
-        reportsPage->refreshReports();
-        ui.mainStack->setCurrentWidget(reportsPage);
+        ReportsPage* page = ensureReportsPage();
+        page->refreshReports();
+        ui.mainStack->setCurrentWidget(page);
         });
 
     connect(sidebar, &SidebarWidget::logoutClicked, this, [this]() {
         emit logoutRequested();
-        this->close();
+        close();
         });
 
-    QSettings settings("InventorySystem", "InventoryQtApp");
-
-    QString savedTheme =
-        settings.value("appearance/theme", "Dark").toString();
-
-    Theme::AppTheme appTheme =
-        savedTheme == "Light"
-        ? Theme::AppTheme::Light
-        : Theme::AppTheme::Dark;
-
-    sidebar->applyTheme(appTheme);
+    sidebar->applyTheme(currentTheme);
 }
 
 void DashboardWindow::setupVerticalbar()
 {
     verticalbar = new VerticalWidget(role, userName, this);
 
-    connect(
-        verticalbar,
-        &VerticalWidget::globalSearchTextChanged,
-        this,
-        &DashboardWindow::onGlobalSearchTextChanged
-    );
-
-    connect(
-        verticalbar,
-        &VerticalWidget::notificationRequested,
-        this,
-        &DashboardWindow::onNotificationRequested
-    );
+    connect(verticalbar, &VerticalWidget::globalSearchTextChanged, this, &DashboardWindow::onGlobalSearchTextChanged);
+    connect(verticalbar, &VerticalWidget::notificationRequested, this, &DashboardWindow::onNotificationRequested);
 
     QVBoxLayout* layout = new QVBoxLayout(ui.verticalContainer);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(verticalbar);
 
-    QSettings settings("InventorySystem", "InventoryQtApp");
-
-    QString savedTheme =
-        settings.value("appearance/theme", "Dark").toString();
-
-    Theme::AppTheme appTheme =
-        savedTheme == "Light"
-        ? Theme::AppTheme::Light
-        : Theme::AppTheme::Dark;
-
-    verticalbar->applyTheme(appTheme);
+    verticalbar->applyTheme(currentTheme);
 }
 
 void DashboardWindow::applyTheme(Theme::AppTheme theme)
 {
-    setStyleSheet(
-        Theme::shellStyle(theme)
-    );
+    setStyleSheet(Theme::shellStyle(theme));
 }
 
-void DashboardWindow::onGlobalSearchTextChanged(
-    const QString& text
-)
+void DashboardWindow::onGlobalSearchTextChanged(const QString& text)
 {
-    QString searchText =
-        text.trimmed();
-
+    QString searchText = text.trimmed();
     if (searchText.isEmpty()) {
         closeGlobalSearchDialog();
         return;
     }
-
     showGlobalSearchDialog(searchText);
 }
 
-void DashboardWindow::showGlobalSearchDialog(
-    const QString& text
-)
+void DashboardWindow::showGlobalSearchDialog(const QString& text)
 {
     if (!globalSearchDialog) {
-        globalSearchDialog =
-            new GlobalSearchDialog(
-                text,
-                productService,
-                assetService,
-                userService,
-                truckStockService,
-                this
-            );
+        globalSearchDialog = new GlobalSearchDialog(text, productService, assetService, userService, truckStockService, this);
 
-        connect(
-            globalSearchDialog,
-            &GlobalSearchDialog::resultSelected,
-            this,
-            &DashboardWindow::handleGlobalSearchResult
-        );
+        connect(globalSearchDialog, &GlobalSearchDialog::resultSelected, this, &DashboardWindow::handleGlobalSearchResult);
+        connect(globalSearchDialog, &QObject::destroyed, this, [this]() { globalSearchDialog = nullptr; });
 
-        connect(
-            globalSearchDialog,
-            &QObject::destroyed,
-            this,
-            [this]() {
-                globalSearchDialog = nullptr;
-            }
-        );
-
-        QPoint globalPos =
-            ui.verticalContainer->mapToGlobal(
-                QPoint(0, ui.verticalContainer->height())
-            );
-
-        globalSearchDialog->move(
-            globalPos.x() + 260,
-            globalPos.y() + 6
-        );
-
+        QPoint globalPos = ui.verticalContainer->mapToGlobal(QPoint(0, ui.verticalContainer->height()));
+        globalSearchDialog->move(globalPos.x() + 260, globalPos.y() + 6);
         globalSearchDialog->show();
     }
 
@@ -506,79 +448,61 @@ void DashboardWindow::closeGlobalSearchDialog()
     }
 }
 
-void DashboardWindow::handleGlobalSearchResult(
-    GlobalSearchDialog::SearchTarget target,
-    const QString& value
-)
+void DashboardWindow::handleGlobalSearchResult(GlobalSearchDialog::SearchTarget target, const QString& value)
 {
     closeGlobalSearchDialog();
-
-    if (verticalbar) {
-        verticalbar->clearSearch();
-    }
+    if (verticalbar) verticalbar->clearSearch();
 
     switch (target) {
     case GlobalSearchDialog::SearchTarget::Dashboard:
-        dashboardPage->refreshDashboard();
+        ensureDashboardPage()->refreshDashboard();
         ui.mainStack->setCurrentWidget(dashboardPage);
         break;
-
     case GlobalSearchDialog::SearchTarget::Items:
-        itemsPage->setSearchText(value);
+        ensureItemsPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(itemsPage);
         break;
-
     case GlobalSearchDialog::SearchTarget::Assets:
-        assetsPage->setSearchText(value);
+        ensureAssetsPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(assetsPage);
         break;
-
     case GlobalSearchDialog::SearchTarget::Users:
-        usersPage->setSearchText(value);
+        ensureUsersPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(usersPage);
         break;
-
     case GlobalSearchDialog::SearchTarget::Reports:
-        reportsPage->refreshReports();
+        ensureReportsPage()->refreshReports();
         ui.mainStack->setCurrentWidget(reportsPage);
         break;
-
     case GlobalSearchDialog::SearchTarget::Settings:
-        ui.mainStack->setCurrentWidget(settingsPage);
+        ui.mainStack->setCurrentWidget(ensureSettingsPage());
         break;
-
     case GlobalSearchDialog::SearchTarget::TruckDashboard:
-        truckStockDashboardPage->refreshDashboard();
+        ensureTruckStockDashboardPage()->refreshDashboard();
         ui.mainStack->setCurrentWidget(truckStockDashboardPage);
         break;
-
     case GlobalSearchDialog::SearchTarget::Trucks:
-        trucksPage->setSearchText(value);
+        ensureTrucksPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(trucksPage);
         break;
-
     case GlobalSearchDialog::SearchTarget::Templates:
-        stockTemplatesPage->setSearchText(value);
+        ensureStockTemplatesPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(stockTemplatesPage);
         break;
-
     case GlobalSearchDialog::SearchTarget::Assignments:
-        assignmentsPage->setSearchText(value);
+        ensureAssignmentsPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(assignmentsPage);
         break;
-
     case GlobalSearchDialog::SearchTarget::MyTruckStock:
-        myTruckStockPage->setSearchText(value);
+        ensureMyTruckStockPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(myTruckStockPage);
         break;
-
     case GlobalSearchDialog::SearchTarget::LowStockAlerts:
-        lowStockAlertsPage->setSearchText(value);
+        ensureLowStockAlertsPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(lowStockAlertsPage);
         break;
-
     case GlobalSearchDialog::SearchTarget::Receipts:
-        receiptsPage->setSearchText(value);
+        ensureReceiptsPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(receiptsPage);
         break;
     }
@@ -586,30 +510,19 @@ void DashboardWindow::handleGlobalSearchResult(
 
 void DashboardWindow::onNotificationRequested()
 {
-    NotificationDialog dialog(
-        truckStockService,
-        this
-    );
+    NotificationDialog dialog(truckStockService, this);
 
-    connect(
-        &dialog,
-        &NotificationDialog::openLowStockRequested,
-        this,
-        [this]() {
-            lowStockAlertsPage->refreshAlerts();
-            ui.mainStack->setCurrentWidget(lowStockAlertsPage);
-        }
-    );
+    connect(&dialog, &NotificationDialog::openLowStockRequested, this, [this]() {
+        LowStockAlertsPage* page = ensureLowStockAlertsPage();
+        page->refreshAlerts();
+        ui.mainStack->setCurrentWidget(page);
+        });
 
-    connect(
-        &dialog,
-        &NotificationDialog::openReceiptsRequested,
-        this,
-        [this]() {
-            receiptsPage->refreshReceipts();
-            ui.mainStack->setCurrentWidget(receiptsPage);
-        }
-    );
+    connect(&dialog, &NotificationDialog::openReceiptsRequested, this, [this]() {
+        ReceiptsPage* page = ensureReceiptsPage();
+        page->refreshReceipts();
+        ui.mainStack->setCurrentWidget(page);
+        });
 
     dialog.exec();
 }

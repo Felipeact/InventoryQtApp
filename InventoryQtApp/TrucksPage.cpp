@@ -14,6 +14,9 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QWidget>
+#include <QThread>
+#include <QPointer>
+#include <QMetaObject>
 
 TrucksPage::TrucksPage(
     TruckStockService* truckStockService,
@@ -120,9 +123,19 @@ void TrucksPage::loadTrucks()
         return;
     }
 
-    currentTrucks = truckStockService->getTrucks();
-
-    filterTrucks();
+    QPointer<TrucksPage> self(this);
+    TruckStockService* service = truckStockService;
+    QThread* worker = QThread::create([self, service]() {
+        std::vector<TruckDto> trucks = service->getTrucks();
+        if (!self) return;
+        QMetaObject::invokeMethod(self, [self, trucks]() {
+            if (!self) return;
+            self->currentTrucks = trucks;
+            self->filterTrucks();
+            }, Qt::QueuedConnection);
+        });
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void TrucksPage::refreshTrucksList()
@@ -234,6 +247,8 @@ void TrucksPage::populateTable()
 
         addActionButtons(row, truck.id);
     }
+
+    ui.trucksTable->setUpdatesEnabled(true);
 }
 
 void TrucksPage::updatePagination()
@@ -300,7 +315,7 @@ void TrucksPage::onAddTruckClicked()
                 "Truck created successfully."
             );
 
-			emit trucksChanged();
+            emit trucksChanged();
             loadTrucks();
         }
         else {
@@ -504,7 +519,7 @@ void TrucksPage::onEditTruckClicked(
                 "Truck updated successfully."
             );
 
-			emit trucksChanged();
+            emit trucksChanged();
             loadTrucks();
         }
         else {
@@ -559,7 +574,7 @@ void TrucksPage::onDeleteTruckClicked(
             "Truck deactivated."
         );
 
-		emit trucksChanged();
+        emit trucksChanged();
         loadTrucks();
     }
     else {

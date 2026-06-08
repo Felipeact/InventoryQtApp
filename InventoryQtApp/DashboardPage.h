@@ -33,10 +33,10 @@ private:
 	ReportService& reportService;  // Reference to report service for API interactions
 
 	// Initializes and configures the item list table
-	void setupItemListTable();
-	void setupReportCards();
+	void setupItemListTable(const json& products);
+	void setupReportCards(const json& inventory, const json& assets);
 
-	void setupLowStockTable();
+	void setupLowStockTable(const json& lowStockProducts);
 	void styleDashboardTable(QTableWidget* table);
 
 

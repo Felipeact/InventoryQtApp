@@ -1,6 +1,7 @@
 #include "ApiClient.h"
 #include <nlohmann/json.hpp>
 #include <iostream>
+#include <cpr/timeout.h>
 
 using json = nlohmann::json;
 
@@ -48,21 +49,19 @@ void ApiClient::clearTokens()
 
 cpr::Response ApiClient::get(const std::string& endpoint)
 {
-    std::cout << "GET: " << baseUrl + endpoint << std::endl;
-    std::cout << "ACCESS TOKEN EMPTY: " << (accessToken.empty() ? "YES" : "NO") << std::endl;
-
     auto res = cpr::Get(
         cpr::Url{ baseUrl + endpoint },
-        authHeader()
+        authHeader(),
+        cpr::Timeout{ 5000 }
     );
 
-    std::cout << "STATUS: " << res.status_code << std::endl;
-    std::cout << "BODY: " << res.text << std::endl;
+    std::cout << "GET " << endpoint << " -> " << res.status_code << std::endl;
 
     if (res.status_code == 401 && refreshAccessToken()) {
         res = cpr::Get(
             cpr::Url{ baseUrl + endpoint },
-            authHeader()
+            authHeader(),
+            cpr::Timeout{ 5000 }
         );
     }
 
@@ -71,9 +70,7 @@ cpr::Response ApiClient::get(const std::string& endpoint)
 
 cpr::Response ApiClient::post(const std::string& endpoint, const std::string& body)
 {
-    std::cout << "POST: " << baseUrl + endpoint << std::endl;
-    std::cout << "BODY SENT: " << body << std::endl;
-    std::cout << "ACCESS TOKEN EMPTY: " << (accessToken.empty() ? "YES" : "NO") << std::endl;
+
 
     cpr::Header headers{
         {"Content-Type", "application/json"}
@@ -90,11 +87,11 @@ cpr::Response ApiClient::post(const std::string& endpoint, const std::string& bo
     auto res = cpr::Post(
         cpr::Url{ baseUrl + endpoint },
         headers,
-        cpr::Body{ body }
+        cpr::Body{ body },
+        cpr::Timeout{ 5000 }
     );
 
-    std::cout << "STATUS: " << res.status_code << std::endl;
-    std::cout << "BODY: " << res.text << std::endl;
+    std::cout << "POST " << endpoint << " -> " << res.status_code << std::endl;
 
     if (
         res.status_code == 401 &&
@@ -110,7 +107,8 @@ cpr::Response ApiClient::post(const std::string& endpoint, const std::string& bo
         res = cpr::Post(
             cpr::Url{ baseUrl + endpoint },
             retryHeaders,
-            cpr::Body{ body }
+            cpr::Body{ body },
+            cpr::Timeout{ 5000 }
         );
     }
 
@@ -119,20 +117,17 @@ cpr::Response ApiClient::post(const std::string& endpoint, const std::string& bo
 
 cpr::Response ApiClient::put(const std::string& endpoint, const std::string& body)
 {
-    std::cout << "PUT: " << baseUrl + endpoint << std::endl;
-    std::cout << "BODY SENT: " << body << std::endl;
-
     auto res = cpr::Put(
         cpr::Url{ baseUrl + endpoint },
         cpr::Header{
             {"Content-Type", "application/json"},
             {"Authorization", "Bearer " + accessToken}
         },
-        cpr::Body{ body }
+        cpr::Body{ body },
+        cpr::Timeout{ 5000 }
     );
 
-    std::cout << "STATUS: " << res.status_code << std::endl;
-    std::cout << "BODY: " << res.text << std::endl;
+    std::cout << "PUT " << endpoint << " -> " << res.status_code << std::endl;
 
     if (res.status_code == 401 && refreshAccessToken()) {
         res = cpr::Put(
@@ -141,7 +136,8 @@ cpr::Response ApiClient::put(const std::string& endpoint, const std::string& bod
                 {"Content-Type", "application/json"},
                 {"Authorization", "Bearer " + accessToken}
             },
-            cpr::Body{ body }
+            cpr::Body{ body },
+            cpr::Timeout{ 5000 }
         );
     }
 
@@ -150,20 +146,17 @@ cpr::Response ApiClient::put(const std::string& endpoint, const std::string& bod
 
 cpr::Response ApiClient::patch(const std::string& endpoint, const std::string& body)
 {
-    std::cout << "PATCH: " << baseUrl + endpoint << std::endl;
-    std::cout << "BODY SENT: " << body << std::endl;
-
     auto res = cpr::Patch(
         cpr::Url{ baseUrl + endpoint },
         cpr::Header{
             {"Content-Type", "application/json"},
             {"Authorization", "Bearer " + accessToken}
         },
-        cpr::Body{ body }
+        cpr::Body{ body },
+        cpr::Timeout{ 5000 }
     );
 
-    std::cout << "STATUS: " << res.status_code << std::endl;
-    std::cout << "BODY: " << res.text << std::endl;
+    std::cout << "PATCH " << endpoint << " -> " << res.status_code << std::endl;
 
     if (res.status_code == 401 && refreshAccessToken()) {
         res = cpr::Patch(
@@ -172,7 +165,8 @@ cpr::Response ApiClient::patch(const std::string& endpoint, const std::string& b
                 {"Content-Type", "application/json"},
                 {"Authorization", "Bearer " + accessToken}
             },
-            cpr::Body{ body }
+            cpr::Body{ body },
+            cpr::Timeout{ 5000 }
         );
     }
 
@@ -181,20 +175,19 @@ cpr::Response ApiClient::patch(const std::string& endpoint, const std::string& b
 
 cpr::Response ApiClient::del(const std::string& endpoint)
 {
-    std::cout << "DELETE: " << baseUrl + endpoint << std::endl;
-
     auto res = cpr::Delete(
         cpr::Url{ baseUrl + endpoint },
-        authHeader()
+        authHeader(),
+        cpr::Timeout{ 5000 }
     );
 
-    std::cout << "STATUS: " << res.status_code << std::endl;
-    std::cout << "BODY: " << res.text << std::endl;
+    std::cout << "DELETE " << endpoint << " -> " << res.status_code << std::endl;
 
     if (res.status_code == 401 && refreshAccessToken()) {
         res = cpr::Delete(
             cpr::Url{ baseUrl + endpoint },
-            authHeader()
+            authHeader(),
+            cpr::Timeout{ 5000 }
         );
     }
 
@@ -244,7 +237,8 @@ bool ApiClient::refreshAccessToken()
         cpr::Header{
             {"Content-Type", "application/json"}
         },
-        cpr::Body{ body.dump() }
+        cpr::Body{ body.dump() },
+        cpr::Timeout{ 5000 }
     );
 
     if (res.status_code != 200) {

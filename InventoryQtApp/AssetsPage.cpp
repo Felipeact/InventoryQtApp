@@ -14,6 +14,9 @@
 #include <QFrame>
 #include <QMessageBox>
 #include <QLineEdit>
+#include <QThread>
+#include <QPointer>
+#include <QMetaObject>
 
 AssetsPage::AssetsPage(
     AssetService& assetService,
@@ -125,17 +128,26 @@ void AssetsPage::setupTable()
 
 void AssetsPage::loadAssets()
 {
-    currentAssets = assetService.getAssets();
-    filteredAssets = currentAssets;
-
-    currentPage = 1;
-
-    populateTable(getCurrentPageAssets());
-    updatePagination();
+    QPointer<AssetsPage> self(this);
+    QThread* worker = QThread::create([self]() {
+        if (!self) return;
+        json assets = self->assetService.getAssets();
+        QMetaObject::invokeMethod(self, [self, assets]() {
+            if (!self) return;
+            self->currentAssets = assets;
+            self->filteredAssets = self->currentAssets;
+            self->currentPage = 1;
+            self->populateTable(self->getCurrentPageAssets());
+            self->updatePagination();
+            }, Qt::QueuedConnection);
+        });
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void AssetsPage::populateTable(const json& assets)
 {
+    ui.assetsTable->setUpdatesEnabled(false);
     ui.assetsTable->clearContents();
     ui.assetsTable->setRowCount(static_cast<int>(assets.size()));
 
@@ -305,6 +317,8 @@ void AssetsPage::populateTable(const json& assets)
 
         ui.assetsTable->setCellWidget(row, 6, actionWidget);
     }
+
+    ui.assetsTable->setUpdatesEnabled(true);
 }
 
 void AssetsPage::deleteAsset(const std::string& assetId)
@@ -318,9 +332,20 @@ void AssetsPage::filterAssets(const QString& searchText)
         filteredAssets = currentAssets;
     }
     else {
-        filteredAssets = assetService.searchAssets(
-            searchText.toStdString()
-        );
+        filteredAssets = json::array();
+        const QString query = searchText.trimmed();
+
+        for (const auto& asset : currentAssets) {
+            QString name = QString::fromStdString(asset.value("name", ""));
+            QString type = QString::fromStdString(asset.value("type", ""));
+            QString serialCode = QString::fromStdString(asset.value("serialCode", ""));
+
+            if (name.contains(query, Qt::CaseInsensitive) ||
+                type.contains(query, Qt::CaseInsensitive) ||
+                serialCode.contains(query, Qt::CaseInsensitive)) {
+                filteredAssets.push_back(asset);
+            }
+        }
     }
 
     currentPage = 1;

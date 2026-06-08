@@ -14,6 +14,9 @@
 #include <QFrame>
 #include <QMessageBox>
 #include <QLineEdit>
+#include <QThread>
+#include <QPointer>
+#include <QMetaObject>
 
 ItemsPage::ItemsPage(
     ProductService& productService,
@@ -84,8 +87,18 @@ ItemsPage::~ItemsPage()
 
 void ItemsPage::refreshProducts()
 {
-    currentProducts = productService.getProducts(true);
-    filterProducts(ui.itemSearchInput->text());
+    QPointer<ItemsPage> self(this);
+    QThread* worker = QThread::create([self]() {
+        if (!self) return;
+        json products = self->productService.getProducts(true);
+        QMetaObject::invokeMethod(self, [self, products]() {
+            if (!self) return;
+            self->currentProducts = products;
+            self->filterProducts(self->ui.itemSearchInput->text());
+            }, Qt::QueuedConnection);
+        });
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void ItemsPage::setupTable()
@@ -133,16 +146,26 @@ void ItemsPage::setupTable()
 
 void ItemsPage::loadProducts()
 {
-    currentProducts = productService.getProducts();
-    filteredProducts = currentProducts;
-    currentPage = 1;
-
-    populateTable(getCurrentPageProducts());
-    updatePagination();
+    QPointer<ItemsPage> self(this);
+    QThread* worker = QThread::create([self]() {
+        if (!self) return;
+        json products = self->productService.getProducts();
+        QMetaObject::invokeMethod(self, [self, products]() {
+            if (!self) return;
+            self->currentProducts = products;
+            self->filteredProducts = self->currentProducts;
+            self->currentPage = 1;
+            self->populateTable(self->getCurrentPageProducts());
+            self->updatePagination();
+            }, Qt::QueuedConnection);
+        });
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void ItemsPage::populateTable(const json& products)
 {
+    ui.itemsTable->setUpdatesEnabled(false);
     ui.itemsTable->clearContents();
     ui.itemsTable->setRowCount(static_cast<int>(products.size()));
 
@@ -320,6 +343,8 @@ void ItemsPage::populateTable(const json& products)
 
         ui.itemsTable->setCellWidget(row, 8, actionWidget);
     }
+
+    ui.itemsTable->setUpdatesEnabled(true);
 }
 
 void ItemsPage::deleteProduct(const std::string& productId)
@@ -333,9 +358,18 @@ void ItemsPage::filterProducts(const QString& searchText)
         filteredProducts = currentProducts;
     }
     else {
-        filteredProducts = productService.searchProducts(
-            searchText.toStdString()
-        );
+        filteredProducts = json::array();
+        const QString query = searchText.trimmed();
+
+        for (const auto& product : currentProducts) {
+            QString name = QString::fromStdString(product.value("name", ""));
+            QString barcode = QString::fromStdString(product.value("barcode", ""));
+
+            if (name.contains(query, Qt::CaseInsensitive) ||
+                barcode.contains(query, Qt::CaseInsensitive)) {
+                filteredProducts.push_back(product);
+            }
+        }
     }
 
     currentPage = 1;

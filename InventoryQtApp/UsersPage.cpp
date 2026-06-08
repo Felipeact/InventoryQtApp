@@ -13,6 +13,9 @@
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QWidget>
+#include <QThread>
+#include <QPointer>
+#include <QMetaObject>
 
 #include "AddEditUserDialog.h"
 
@@ -127,9 +130,19 @@ void UsersPage::loadUsers()
         return;
     }
 
-    currentUsers = userService->getUsers();
-
-    filterUsers();
+    QPointer<UsersPage> self(this);
+    UserService* service = userService;
+    QThread* worker = QThread::create([self, service]() {
+        std::vector<UserDto> users = service->getUsers();
+        if (!self) return;
+        QMetaObject::invokeMethod(self, [self, users]() {
+            if (!self) return;
+            self->currentUsers = users;
+            self->filterUsers();
+            }, Qt::QueuedConnection);
+        });
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void UsersPage::refreshUsers()
@@ -247,6 +260,8 @@ void UsersPage::populateTable()
 
         addActionButtons(row, user.id);
     }
+
+    ui.usersTable->setUpdatesEnabled(true);
 }
 
 void UsersPage::updatePagination()
