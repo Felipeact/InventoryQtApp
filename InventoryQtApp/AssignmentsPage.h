@@ -40,6 +40,10 @@ private slots:
     void onPage2Clicked();
     void onSearchChanged(const QString& text);
 
+    void onEditAssignmentClicked(
+        const TruckAssignmentDto& assignment
+    );
+
     void onUnassignClicked(
         const TruckAssignmentDto& assignment
     );

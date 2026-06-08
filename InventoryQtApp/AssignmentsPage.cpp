@@ -288,18 +288,34 @@ void AssignmentsPage::addActionButtons(
     layout->setSpacing(6);
     layout->setAlignment(Qt::AlignCenter);
 
+    QPushButton* editButton =
+        new QPushButton("✎", actionWidget);
+
+    editButton->setObjectName("editButton");
+    editButton->setToolTip("Edit Assignment");
+
     QPushButton* unassignButton =
         new QPushButton("❌", actionWidget);
 
     unassignButton->setObjectName("unassignButton");
     unassignButton->setToolTip("Unassign Template");
 
+    layout->addWidget(editButton);
     layout->addWidget(unassignButton);
 
     ui.assignmentsTable->setCellWidget(
         row,
         5,
         actionWidget
+    );
+
+    connect(
+        editButton,
+        &QPushButton::clicked,
+        this,
+        [this, assignment]() {
+            onEditAssignmentClicked(assignment);
+        }
     );
 
     connect(
@@ -467,6 +483,72 @@ void AssignmentsPage::onPreviousPageClicked()
 
         populateTable();
         updatePagination();
+    }
+}
+
+void AssignmentsPage::onEditAssignmentClicked(
+    const TruckAssignmentDto& assignment
+)
+{
+    AssignTemplateDialog dialog(
+        truckStockService,
+        userService,
+        this
+    );
+
+    dialog.setEditMode(
+        QString::fromStdString(assignment.truckId),
+        QString::fromStdString(assignment.templateId)
+    );
+
+    if (dialog.exec() != QDialog::Accepted) {
+        return;
+    }
+
+    if (!truckStockService) {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Truck stock service is unavailable."
+        );
+
+        return;
+    }
+
+    UpdateAssignmentRequest request;
+
+    request.truckId =
+        dialog.getTruckId().toStdString();
+
+    request.templateId =
+        dialog.getTemplateId().toStdString();
+
+    request.status =
+        assignment.status;
+
+    bool success =
+        truckStockService->updateAssignment(
+            assignment.id,
+            request
+        );
+
+    if (success) {
+        QMessageBox::information(
+            this,
+            "Success",
+            "Assignment updated successfully."
+        );
+
+        emit assignmentsChanged();
+
+        loadAssignments();
+    }
+    else {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Failed to update assignment."
+        );
     }
 }
 

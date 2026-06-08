@@ -68,6 +68,37 @@ void AssignTemplateDialog::setupConnections()
     );
 }
 
+void AssignTemplateDialog::setEditMode(
+    const QString& truckId,
+    const QString& templateId
+)
+{
+    editMode = true;
+
+    setWindowTitle("Edit Assignment");
+
+    ui.titleLabel->setText("Edit Assignment");
+    ui.assignButton->setText("Save Assignment");
+
+    int truckIndex =
+        ui.truckComboBox->findData(truckId);
+
+    if (truckIndex >= 0) {
+        ui.truckComboBox->setCurrentIndex(truckIndex);
+    }
+
+    int templateIndex =
+        ui.templateComboBox->findData(templateId);
+
+    if (templateIndex >= 0) {
+        ui.templateComboBox->setCurrentIndex(templateIndex);
+    }
+
+    ui.technicianComboBox->setEnabled(false);
+    ui.assignmentDateEdit->setEnabled(false);
+    ui.notesInput->setEnabled(false);
+}
+
 void AssignTemplateDialog::loadTrucks()
 {
     ui.truckComboBox->clear();
@@ -204,7 +235,7 @@ void AssignTemplateDialog::onAssignClicked()
         return;
     }
 
-    if (getTechnicianId().isEmpty()) {
+    if (!editMode && getTechnicianId().isEmpty()) {
         ui.errorLabel->setText("Please select a technician.");
         return;
     }

@@ -26,6 +26,11 @@ public:
 
     void applyTheme(Theme::AppTheme theme);
 
+    void setEditMode(
+        const QString& truckId,
+        const QString& templateId
+    );
+
     QString getTruckId() const;
     QString getTemplateId() const;
     QString getTechnicianId() const;
@@ -46,6 +51,8 @@ private:
 
     TruckStockService* truckStockService = nullptr;
     UserService* userService = nullptr;
+
+    bool editMode = false;
 
     QPoint dragPosition;
 

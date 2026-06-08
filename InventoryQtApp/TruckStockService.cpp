@@ -341,6 +341,22 @@ std::vector<TruckAssignmentDto> TruckStockService::getAssignments()
                 }
             }
 
+            if (item.contains("truck") && item["truck"].is_object()) {
+                assignment.truckId =
+                    item["truck"].value("id", "");
+
+                assignment.truckNumber =
+                    item["truck"].value("truckNumber", "");
+            }
+
+            if (item.contains("template") && item["template"].is_object()) {
+                assignment.templateId =
+                    item["template"].value("id", "");
+
+                assignment.templateName =
+                    item["template"].value("name", "");
+            }
+
             assignments.push_back(assignment);
         }
     }
@@ -867,6 +883,50 @@ bool TruckStockService::unassignTemplate(
     catch (const std::exception& ex) {
         std::cerr
             << "TruckStockService::unassignTemplate error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}
+
+bool TruckStockService::updateAssignment(
+    const std::string& assignmentId,
+    const UpdateAssignmentRequest& request
+)
+{
+    try {
+        json body;
+
+        body["truckId"] = request.truckId;
+        body["templateId"] = request.templateId;
+
+        if (!request.status.empty()) {
+            body["status"] = request.status;
+        }
+
+        auto response =
+            apiClient.put(
+                "/truck-stock/assignments/" + assignmentId,
+                body.dump()
+            );
+
+        if (response.status_code != 200) {
+            std::cerr
+                << "PUT assignment failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr
+            << "TruckStockService::updateAssignment error: "
             << ex.what()
             << std::endl;
 

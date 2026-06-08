@@ -96,6 +96,8 @@ struct TruckAssignmentDto
     std::string assignedOn;
     std::string assignedBy;
     std::string status;
+    std::string truckId;
+    std::string templateId;
 };
 
 struct TemplateDetailsDto
@@ -161,6 +163,13 @@ struct CreateReceiptRequest
     double totalAmount;
 };
 
+struct UpdateAssignmentRequest
+{
+    std::string truckId;
+    std::string templateId;
+    std::string status;
+};
+
 class TruckStockService
 {
 public:
@@ -205,6 +214,11 @@ public:
 
     bool unassignTemplate(
         const std::string& assignmentId
+    );
+
+    bool updateAssignment(
+        const std::string& assignmentId,
+        const UpdateAssignmentRequest& request
     );
 
 private:
