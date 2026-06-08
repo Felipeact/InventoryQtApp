@@ -199,6 +199,12 @@
     <ClCompile Include="ReceiptDetailsDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ItemDetailsDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemAdvancedFilterDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -332,6 +338,12 @@
     <QtMoc Include="ReceiptDetailsDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="ItemDetailsDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ItemAdvancedFilterDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DashboardPage.ui">
@@ -422,6 +434,12 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="ReceiptDetailsDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ItemDetailsDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ItemAdvancedFilterDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

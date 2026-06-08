@@ -1,22 +1,28 @@
-// ItemsPage.cpp - Implementation of the items management page
 #include "ItemsPage.h"
 #include "Theme.h"
+#include "ItemDetailsDialog.h"
 
 #include <algorithm>
 
-#include <QComboBox>
-#include <QTableWidgetItem>
-#include <QHeaderView>
 #include <QAbstractItemView>
-#include <QPushButton>
-#include <QHBoxLayout>
-#include <QWidget>
+#include <QComboBox>
+#include <QFileInfo>
 #include <QFrame>
-#include <QMessageBox>
+#include <QHeaderView>
+#include <QHBoxLayout>
+#include <QLabel>
 #include <QLineEdit>
-#include <QThread>
-#include <QPointer>
+#include <QMessageBox>
 #include <QMetaObject>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QNetworkRequest>
+#include <QPointer>
+#include <QPushButton>
+#include <QTableWidgetItem>
+#include <QThread>
+#include <QUrl>
+#include <QWidget>
 
 ItemsPage::ItemsPage(
     ProductService& productService,
@@ -36,8 +42,16 @@ ItemsPage::ItemsPage(
     ui.pageSizeCombo->setCurrentText("10 / page");
 
     setupTable();
+    setupConnections();
     loadProducts();
+}
 
+ItemsPage::~ItemsPage()
+{
+}
+
+void ItemsPage::setupConnections()
+{
     connect(
         ui.addItemButton,
         &QPushButton::clicked,
@@ -74,6 +88,13 @@ ItemsPage::ItemsPage(
     );
 
     connect(
+        ui.page2Button,
+        &QPushButton::clicked,
+        this,
+        &ItemsPage::onPage2Clicked
+    );
+
+    connect(
         ui.pageSizeCombo,
         QOverload<int>::of(&QComboBox::currentIndexChanged),
         this,
@@ -81,23 +102,40 @@ ItemsPage::ItemsPage(
     );
 }
 
-ItemsPage::~ItemsPage()
-{
-}
-
 void ItemsPage::refreshProducts()
 {
     QPointer<ItemsPage> self(this);
-    QThread* worker = QThread::create([self]() {
-        if (!self) return;
-        json products = self->productService.getProducts(true);
-        QMetaObject::invokeMethod(self, [self, products]() {
-            if (!self) return;
-            self->currentProducts = products;
-            self->filterProducts(self->ui.itemSearchInput->text());
-            }, Qt::QueuedConnection);
-        });
-    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+
+    QThread* worker =
+        QThread::create([self]() {
+        if (!self) {
+            return;
+        }
+
+        json products =
+            self->productService.getProducts(true);
+
+        QMetaObject::invokeMethod(
+            self,
+            [self, products]() {
+                if (!self) {
+                    return;
+                }
+
+                self->currentProducts = products;
+                self->applyFilters();
+            },
+            Qt::QueuedConnection
+        );
+            });
+
+    connect(
+        worker,
+        &QThread::finished,
+        worker,
+        &QObject::deleteLater
+    );
+
     worker->start();
 }
 
@@ -132,13 +170,13 @@ void ItemsPage::setupTable()
     ui.itemsTable->horizontalHeader()->setDefaultAlignment(
         Qt::AlignLeft | Qt::AlignVCenter
     );
-    ui.itemsTable->horizontalHeader()->setFixedHeight(48);
 
+    ui.itemsTable->horizontalHeader()->setFixedHeight(48);
     ui.itemsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui.itemsTable->horizontalHeader()->setSectionResizeMode(8, QHeaderView::Fixed);
-    ui.itemsTable->setColumnWidth(8, 130);
 
-    ui.itemsTable->verticalHeader()->setDefaultSectionSize(52);
+    ui.itemsTable->setColumnWidth(8, 130);
+    ui.itemsTable->verticalHeader()->setDefaultSectionSize(58);
 
     ui.itemsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui.itemsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -147,235 +185,634 @@ void ItemsPage::setupTable()
 void ItemsPage::loadProducts()
 {
     QPointer<ItemsPage> self(this);
-    QThread* worker = QThread::create([self]() {
-        if (!self) return;
-        json products = self->productService.getProducts();
-        QMetaObject::invokeMethod(self, [self, products]() {
-            if (!self) return;
-            self->currentProducts = products;
-            self->filteredProducts = self->currentProducts;
-            self->currentPage = 1;
-            self->populateTable(self->getCurrentPageProducts());
-            self->updatePagination();
-            }, Qt::QueuedConnection);
-        });
-    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+
+    QThread* worker =
+        QThread::create([self]() {
+        if (!self) {
+            return;
+        }
+
+        json products =
+            self->productService.getProducts();
+
+        QMetaObject::invokeMethod(
+            self,
+            [self, products]() {
+                if (!self) {
+                    return;
+                }
+
+                self->currentProducts = products;
+                self->applyFilters();
+            },
+            Qt::QueuedConnection
+        );
+            });
+
+    connect(
+        worker,
+        &QThread::finished,
+        worker,
+        &QObject::deleteLater
+    );
+
     worker->start();
 }
 
-void ItemsPage::populateTable(const json& products)
+void ItemsPage::populateTable(
+    const json& products
+)
 {
     ui.itemsTable->setUpdatesEnabled(false);
     ui.itemsTable->clearContents();
-    ui.itemsTable->setRowCount(static_cast<int>(products.size()));
+    ui.itemsTable->clearSpans();
 
-    for (int row = 0; row < static_cast<int>(products.size()); row++) {
-        auto product = products[row];
+    int rowCount =
+        products.is_array()
+        ? static_cast<int>(products.size())
+        : 0;
 
-        std::string productId = product.value("id", "");
-        std::string name = product.value("name", "");
-        std::string barcode = product.value("barcode", "");
+    if (rowCount == 0) {
+        ui.itemsTable->setRowCount(1);
 
-        int quantity = 0;
+        ui.itemsTable->setItem(
+            0,
+            0,
+            new QTableWidgetItem("No items found")
+        );
 
-        if (product.contains("inventory") && !product["inventory"].is_null()) {
-            quantity = product["inventory"].value("quantity", 0);
-        }
+        ui.itemsTable->setSpan(0, 0, 1, 9);
+        ui.itemsTable->setUpdatesEnabled(true);
+        return;
+    }
+
+    ui.itemsTable->setRowCount(rowCount);
+
+    for (int row = 0; row < rowCount; row++) {
+        json product =
+            products[row];
+
+        std::string productId =
+            product.value("id", "");
+
+        QString name =
+            getProductString(product, "name");
+
+        QString barcode =
+            getProductString(product, "barcode");
+
+        int quantity =
+            getProductQuantity(product);
+
+        QString type =
+            getProductString(product, "type", "Product");
+
+        QString store =
+            getProductString(product, "location", "Main Store");
+
+        QString project =
+            getProductString(product, "project", "HQ");
+
+        QString account =
+            getProductString(product, "status", "Activated");
 
         ui.itemsTable->setItem(
             row,
             0,
-            new QTableWidgetItem(QString::fromStdString(name))
+            new QTableWidgetItem(name)
         );
 
-        ui.itemsTable->setItem(
+        setImageCell(
             row,
             1,
-            new QTableWidgetItem("Image")
+            getProductImageValue(product)
         );
 
         ui.itemsTable->setItem(
             row,
             2,
-            new QTableWidgetItem(QString::fromStdString(barcode))
+            new QTableWidgetItem(barcode)
         );
 
         ui.itemsTable->setItem(
             row,
             3,
-            new QTableWidgetItem("Product")
+            new QTableWidgetItem(type)
         );
 
         ui.itemsTable->setItem(
             row,
             4,
-            new QTableWidgetItem("Main Store")
+            new QTableWidgetItem(store)
         );
 
         ui.itemsTable->setItem(
             row,
             5,
-            new QTableWidgetItem(QString::number(quantity) + " pcs")
+            new QTableWidgetItem(
+                QString::number(quantity) + " pcs"
+            )
         );
 
         ui.itemsTable->setItem(
             row,
             6,
-            new QTableWidgetItem("HQ")
+            new QTableWidgetItem(project)
         );
 
         ui.itemsTable->setItem(
             row,
             7,
-            new QTableWidgetItem("Activated")
+            new QTableWidgetItem(account)
         );
 
-        QWidget* actionWidget = new QWidget();
+        QWidget* actionWidget =
+            new QWidget(this);
+
         actionWidget->setObjectName("actionContainer");
 
-        QHBoxLayout* actionLayout = new QHBoxLayout(actionWidget);
+        QHBoxLayout* actionLayout =
+            new QHBoxLayout(actionWidget);
+
         actionLayout->setContentsMargins(0, 0, 0, 0);
         actionLayout->setSpacing(6);
         actionLayout->setAlignment(Qt::AlignCenter);
 
-        QPushButton* viewButton = new QPushButton("👁");
+        QPushButton* viewButton =
+            new QPushButton("👁", actionWidget);
+
         viewButton->setObjectName("viewButton");
 
-        QPushButton* editButton = new QPushButton("✎");
+        QPushButton* editButton =
+            new QPushButton("✎", actionWidget);
+
         editButton->setObjectName("editButton");
 
-        QPushButton* deleteButton = new QPushButton("🗑");
+        QPushButton* deleteButton =
+            new QPushButton("🗑", actionWidget);
+
         deleteButton->setObjectName("deleteButton");
 
-        connect(viewButton, &QPushButton::clicked, this, [this, product]() {
-            std::string name = product.value("name", "");
-            std::string barcode = product.value("barcode", "");
-
-            int quantity = 0;
-
-            if (product.contains("inventory") && !product["inventory"].is_null()) {
-                quantity = product["inventory"].value("quantity", 0);
-            }
-
-            AddProductDialog dialog(this);
-
-            dialog.setViewMode(
-                QString::fromStdString(name),
-                QString::fromStdString(barcode),
-                quantity
-            );
-
-            dialog.exec();
-            });
-
-        connect(editButton, &QPushButton::clicked, this, [this, productId, product]() {
-            std::string name = product.value("name", "");
-            std::string barcode = product.value("barcode", "");
-
-            int quantity = 0;
-
-            if (product.contains("inventory") && !product["inventory"].is_null()) {
-                quantity = product["inventory"].value("quantity", 0);
-            }
-
-            AddProductDialog dialog(this);
-
-            dialog.setProductData(
-                QString::fromStdString(name),
-                QString::fromStdString(barcode),
-                quantity
-            );
-
-            if (dialog.exec() == QDialog::Accepted) {
-                bool success = productService.updateProduct(
-                    productId,
-                    dialog.getProductName().toStdString(),
-                    dialog.getBarcode().toStdString(),
-                    dialog.getQuantity()
+        connect(
+            viewButton,
+            &QPushButton::clicked,
+            this,
+            [this, product]() {
+                ItemDetailsDialog dialog(
+                    product,
+                    this
                 );
 
-                if (success) {
-                    currentProducts = productService.getProducts(true);
-                    filterProducts(ui.itemSearchInput->text());
-                    emit productsChanged();
+                dialog.exec();
+            }
+        );
+
+        connect(
+            editButton,
+            &QPushButton::clicked,
+            this,
+            [this, productId, product]() {
+                QString name =
+                    getProductString(product, "name");
+
+                QString barcode =
+                    getProductString(product, "barcode");
+
+                int quantity =
+                    getProductQuantity(product);
+
+                AddProductDialog dialog(this);
+
+                dialog.setProductData(
+                    name,
+                    barcode,
+                    quantity
+                );
+
+                if (dialog.exec() == QDialog::Accepted) {
+                    bool success =
+                        productService.updateProduct(
+                            productId,
+                            dialog.getProductName().toStdString(),
+                            dialog.getBarcode().toStdString(),
+                            dialog.getQuantity()
+                        );
+
+                    if (success) {
+                        currentProducts =
+                            productService.getProducts(true);
+
+                        applyFilters();
+
+                        emit productsChanged();
+                    }
                 }
             }
-            });
+        );
 
-        connect(deleteButton, &QPushButton::clicked, this, [this, productId]() {
-            QMessageBox::StandardButton reply = QMessageBox::question(
-                this,
-                "Delete Product",
-                "Are you sure you want to delete this product?",
-                QMessageBox::Yes | QMessageBox::No
-            );
+        connect(
+            deleteButton,
+            &QPushButton::clicked,
+            this,
+            [this, productId]() {
+                QMessageBox::StandardButton reply =
+                    QMessageBox::question(
+                        this,
+                        "Delete Product",
+                        "Are you sure you want to delete this product?",
+                        QMessageBox::Yes | QMessageBox::No
+                    );
 
-            if (reply != QMessageBox::Yes) {
-                return;
+                if (reply != QMessageBox::Yes) {
+                    return;
+                }
+
+                bool success =
+                    productService.deleteProduct(productId);
+
+                if (success) {
+                    currentProducts =
+                        productService.getProducts(true);
+
+                    applyFilters();
+
+                    emit productsChanged();
+
+                    QMessageBox::information(
+                        this,
+                        "Deleted",
+                        "Product deleted successfully."
+                    );
+                }
+                else {
+                    QMessageBox::warning(
+                        this,
+                        "Error",
+                        "Could not delete product."
+                    );
+                }
             }
-
-            bool success = productService.deleteProduct(productId);
-
-            if (success) {
-                currentProducts = productService.getProducts(true);
-                filterProducts(ui.itemSearchInput->text());
-
-                emit productsChanged();
-
-                QMessageBox::information(
-                    this,
-                    "Deleted",
-                    "Product deleted successfully."
-                );
-            }
-            else {
-                QMessageBox::warning(
-                    this,
-                    "Error",
-                    "Could not delete product."
-                );
-            }
-            });
+        );
 
         actionLayout->addWidget(viewButton);
         actionLayout->addWidget(editButton);
         actionLayout->addWidget(deleteButton);
 
-        ui.itemsTable->setCellWidget(row, 8, actionWidget);
+        ui.itemsTable->setCellWidget(
+            row,
+            8,
+            actionWidget
+        );
     }
 
     ui.itemsTable->setUpdatesEnabled(true);
 }
 
-void ItemsPage::deleteProduct(const std::string& productId)
+void ItemsPage::deleteProduct(
+    const std::string& productId
+)
 {
     productService.deleteProduct(productId);
 }
 
-void ItemsPage::filterProducts(const QString& searchText)
+void ItemsPage::filterProducts(
+    const QString& searchText
+)
 {
-    if (searchText.trimmed().isEmpty()) {
-        filteredProducts = currentProducts;
-    }
-    else {
-        filteredProducts = json::array();
-        const QString query = searchText.trimmed();
+    Q_UNUSED(searchText);
 
-        for (const auto& product : currentProducts) {
-            QString name = QString::fromStdString(product.value("name", ""));
-            QString barcode = QString::fromStdString(product.value("barcode", ""));
+    applyFilters();
+}
 
-            if (name.contains(query, Qt::CaseInsensitive) ||
-                barcode.contains(query, Qt::CaseInsensitive)) {
-                filteredProducts.push_back(product);
-            }
+void ItemsPage::applyFilters()
+{
+    filteredProducts =
+        json::array();
+
+    QString searchText =
+        ui.itemSearchInput->text().trimmed();
+
+    for (const auto& product : currentProducts) {
+        if (
+            productMatchesSearch(product, searchText) &&
+            productMatchesAdvancedFilters(product)
+            ) {
+            filteredProducts.push_back(product);
         }
     }
 
     currentPage = 1;
 
-    populateTable(getCurrentPageProducts());
+    populateTable(
+        getCurrentPageProducts()
+    );
+
     updatePagination();
+}
+
+bool ItemsPage::productMatchesSearch(
+    const json& product,
+    const QString& searchText
+) const
+{
+    if (searchText.isEmpty()) {
+        return true;
+    }
+
+    QString name =
+        getProductString(product, "name");
+
+    QString barcode =
+        getProductString(product, "barcode");
+
+    QString type =
+        getProductString(product, "type", "Product");
+
+    QString store =
+        getProductString(product, "location", "Main Store");
+
+    return name.contains(searchText, Qt::CaseInsensitive) ||
+        barcode.contains(searchText, Qt::CaseInsensitive) ||
+        type.contains(searchText, Qt::CaseInsensitive) ||
+        store.contains(searchText, Qt::CaseInsensitive);
+}
+
+bool ItemsPage::productMatchesAdvancedFilters(
+    const json& product
+) const
+{
+    if (!advancedFilters.enabled) {
+        return true;
+    }
+
+    int quantity =
+        getProductQuantity(product);
+
+    if (
+        advancedFilters.useMinQuantity &&
+        quantity < advancedFilters.minQuantity
+        ) {
+        return false;
+    }
+
+    if (
+        advancedFilters.useMaxQuantity &&
+        quantity > advancedFilters.maxQuantity
+        ) {
+        return false;
+    }
+
+    if (!advancedFilters.storeText.isEmpty()) {
+        QString store =
+            getProductString(product, "location", "Main Store");
+
+        if (!store.contains(advancedFilters.storeText, Qt::CaseInsensitive)) {
+            return false;
+        }
+    }
+
+    if (!advancedFilters.typeText.isEmpty()) {
+        QString type =
+            getProductString(product, "type", "Product");
+
+        if (!type.contains(advancedFilters.typeText, Qt::CaseInsensitive)) {
+            return false;
+        }
+    }
+
+    if (advancedFilters.stockStatus != "All") {
+        int minimumQuantity =
+            getProductMinimumQuantity(product);
+
+        bool outOfStock =
+            quantity <= 0;
+
+        bool lowStock =
+            quantity > 0 &&
+            minimumQuantity > 0 &&
+            quantity <= minimumQuantity;
+
+        bool inStock =
+            quantity > 0 &&
+            !lowStock;
+
+        if (
+            advancedFilters.stockStatus == "Out of Stock" &&
+            !outOfStock
+            ) {
+            return false;
+        }
+
+        if (
+            advancedFilters.stockStatus == "Low Stock" &&
+            !lowStock
+            ) {
+            return false;
+        }
+
+        if (
+            advancedFilters.stockStatus == "In Stock" &&
+            !inStock
+            ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+int ItemsPage::getProductQuantity(
+    const json& product
+) const
+{
+    if (
+        product.contains("inventory") &&
+        !product["inventory"].is_null()
+        ) {
+        return product["inventory"].value("quantity", 0);
+    }
+
+    return product.value("quantity", 0);
+}
+
+int ItemsPage::getProductMinimumQuantity(
+    const json& product
+) const
+{
+    if (
+        product.contains("inventory") &&
+        !product["inventory"].is_null()
+        ) {
+        if (product["inventory"].contains("minimumQuantity")) {
+            return product["inventory"].value("minimumQuantity", 0);
+        }
+
+        if (product["inventory"].contains("minimumStock")) {
+            return product["inventory"].value("minimumStock", 0);
+        }
+
+        if (product["inventory"].contains("reorderLevel")) {
+            return product["inventory"].value("reorderLevel", 0);
+        }
+    }
+
+    if (product.contains("minimumQuantity")) {
+        return product.value("minimumQuantity", 0);
+    }
+
+    if (product.contains("minimumStock")) {
+        return product.value("minimumStock", 0);
+    }
+
+    if (product.contains("reorderLevel")) {
+        return product.value("reorderLevel", 0);
+    }
+
+    return 0;
+}
+
+QString ItemsPage::getProductString(
+    const json& product,
+    const std::string& key,
+    const QString& fallback
+) const
+{
+    if (
+        product.contains(key) &&
+        product[key].is_string()
+        ) {
+        std::string value =
+            product.value(key, "");
+
+        if (!value.empty()) {
+            return QString::fromStdString(value);
+        }
+    }
+
+    return fallback;
+}
+
+QString ItemsPage::getProductImageValue(
+    const json& product
+) const
+{
+    if (product.contains("imageUrl")) {
+        return QString::fromStdString(
+            product.value("imageUrl", "")
+        );
+    }
+
+    if (product.contains("image")) {
+        return QString::fromStdString(
+            product.value("image", "")
+        );
+    }
+
+    if (product.contains("photoUrl")) {
+        return QString::fromStdString(
+            product.value("photoUrl", "")
+        );
+    }
+
+    if (product.contains("thumbnailUrl")) {
+        return QString::fromStdString(
+            product.value("thumbnailUrl", "")
+        );
+    }
+
+    return "";
+}
+
+void ItemsPage::setImageCell(
+    int row,
+    int column,
+    const QString& imagePathOrUrl
+)
+{
+    QLabel* imageLabel =
+        new QLabel(this);
+
+    imageLabel->setAlignment(Qt::AlignCenter);
+    imageLabel->setFixedSize(52, 40);
+    imageLabel->setText("Image");
+
+    ui.itemsTable->setCellWidget(
+        row,
+        column,
+        imageLabel
+    );
+
+    QString imageValue =
+        imagePathOrUrl.trimmed();
+
+    if (imageValue.isEmpty()) {
+        return;
+    }
+
+    if (
+        imageValue.startsWith("http://", Qt::CaseInsensitive) ||
+        imageValue.startsWith("https://", Qt::CaseInsensitive)
+        ) {
+        QNetworkAccessManager* manager =
+            new QNetworkAccessManager(imageLabel);
+
+        QNetworkReply* reply =
+            manager->get(
+                QNetworkRequest(
+                    QUrl(imageValue)
+                )
+            );
+
+        connect(
+            reply,
+            &QNetworkReply::finished,
+            imageLabel,
+            [reply, imageLabel]() {
+                QByteArray imageData =
+                    reply->readAll();
+
+                QPixmap pixmap;
+
+                if (pixmap.loadFromData(imageData)) {
+                    imageLabel->setText("");
+
+                    imageLabel->setPixmap(
+                        pixmap.scaled(
+                            imageLabel->size(),
+                            Qt::KeepAspectRatio,
+                            Qt::SmoothTransformation
+                        )
+                    );
+                }
+
+                reply->deleteLater();
+            }
+        );
+
+        return;
+    }
+
+    QFileInfo fileInfo(imageValue);
+
+    if (!fileInfo.exists()) {
+        return;
+    }
+
+    QPixmap pixmap(imageValue);
+
+    if (pixmap.isNull()) {
+        return;
+    }
+
+    imageLabel->setText("");
+
+    imageLabel->setPixmap(
+        pixmap.scaled(
+            imageLabel->size(),
+            Qt::KeepAspectRatio,
+            Qt::SmoothTransformation
+        )
+    );
 }
 
 void ItemsPage::onAddItemClicked()
@@ -383,15 +820,18 @@ void ItemsPage::onAddItemClicked()
     AddProductDialog dialog(this);
 
     if (dialog.exec() == QDialog::Accepted) {
-        bool success = productService.createProduct(
-            dialog.getProductName().toStdString(),
-            dialog.getBarcode().toStdString(),
-            dialog.getQuantity()
-        );
+        bool success =
+            productService.createProduct(
+                dialog.getProductName().toStdString(),
+                dialog.getBarcode().toStdString(),
+                dialog.getQuantity()
+            );
 
         if (success) {
-            currentProducts = productService.getProducts(true);
-            filterProducts(ui.itemSearchInput->text());
+            currentProducts =
+                productService.getProducts(true);
+
+            applyFilters();
 
             emit productsChanged();
         }
@@ -400,14 +840,22 @@ void ItemsPage::onAddItemClicked()
 
 json ItemsPage::getCurrentPageProducts() const
 {
-    json pageProducts = json::array();
+    json pageProducts =
+        json::array();
 
-    int totalItems = static_cast<int>(filteredProducts.size());
-    int startIndex = (currentPage - 1) * pageSize;
-    int endIndex = (std::min)(startIndex + pageSize, totalItems);
+    int totalItems =
+        static_cast<int>(filteredProducts.size());
+
+    int startIndex =
+        (currentPage - 1) * pageSize;
+
+    int endIndex =
+        (std::min)(startIndex + pageSize, totalItems);
 
     for (int i = startIndex; i < endIndex; i++) {
-        pageProducts.push_back(filteredProducts[i]);
+        pageProducts.push_back(
+            filteredProducts[i]
+        );
     }
 
     return pageProducts;
@@ -415,8 +863,11 @@ json ItemsPage::getCurrentPageProducts() const
 
 void ItemsPage::updatePagination()
 {
-    int totalItems = static_cast<int>(filteredProducts.size());
-    int totalPages = (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+    int totalItems =
+        static_cast<int>(filteredProducts.size());
+
+    int totalPages =
+        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
 
     if (currentPage > totalPages) {
         currentPage = totalPages;
@@ -437,28 +888,57 @@ void ItemsPage::updatePagination()
         .arg(totalItems)
     );
 
-    ui.activePageButton->setText(QString::number(currentPage));
-    ui.page2Button->setText(QString::number(currentPage + 1));
+    ui.activePageButton->setText(
+        QString::number(currentPage)
+    );
 
-    ui.prevPageButton->setEnabled(currentPage > 1);
-    ui.nextPageButton->setEnabled(currentPage < totalPages);
-    ui.page2Button->setVisible(currentPage < totalPages);
+    ui.page2Button->setText(
+        QString::number(currentPage + 1)
+    );
+
+    ui.prevPageButton->setEnabled(
+        currentPage > 1
+    );
+
+    ui.nextPageButton->setEnabled(
+        currentPage < totalPages
+    );
+
+    ui.page2Button->setVisible(
+        currentPage < totalPages
+    );
 }
 
 void ItemsPage::onFilterButtonClicked()
 {
-    filterProducts(ui.itemSearchInput->text());
+    ItemAdvancedFilterDialog dialog(
+        advancedFilters,
+        this
+    );
+
+    if (dialog.exec() == QDialog::Accepted) {
+        advancedFilters =
+            dialog.getFilters();
+
+        applyFilters();
+    }
 }
 
 void ItemsPage::onNextPageClicked()
 {
-    int totalItems = static_cast<int>(filteredProducts.size());
-    int totalPages = (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+    int totalItems =
+        static_cast<int>(filteredProducts.size());
+
+    int totalPages =
+        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
 
     if (currentPage < totalPages) {
         currentPage++;
 
-        populateTable(getCurrentPageProducts());
+        populateTable(
+            getCurrentPageProducts()
+        );
+
         updatePagination();
     }
 }
@@ -468,14 +948,39 @@ void ItemsPage::onPrevPageClicked()
     if (currentPage > 1) {
         currentPage--;
 
-        populateTable(getCurrentPageProducts());
+        populateTable(
+            getCurrentPageProducts()
+        );
+
         updatePagination();
     }
 }
 
-void ItemsPage::onPageSizeChanged(int index)
+void ItemsPage::onPage2Clicked()
 {
-    QString text = ui.pageSizeCombo->itemText(index);
+    int totalItems =
+        static_cast<int>(filteredProducts.size());
+
+    int totalPages =
+        (std::max)(1, (totalItems + pageSize - 1) / pageSize);
+
+    if (currentPage + 1 <= totalPages) {
+        currentPage++;
+
+        populateTable(
+            getCurrentPageProducts()
+        );
+
+        updatePagination();
+    }
+}
+
+void ItemsPage::onPageSizeChanged(
+    int index
+)
+{
+    QString text =
+        ui.pageSizeCombo->itemText(index);
 
     if (text.startsWith("5")) {
         pageSize = 5;
@@ -489,18 +994,25 @@ void ItemsPage::onPageSizeChanged(int index)
 
     currentPage = 1;
 
-    populateTable(getCurrentPageProducts());
+    populateTable(
+        getCurrentPageProducts()
+    );
+
     updatePagination();
 }
 
-void ItemsPage::applyTheme(Theme::AppTheme theme)
+void ItemsPage::applyTheme(
+    Theme::AppTheme theme
+)
 {
     setStyleSheet(
         Theme::itemsPageStyle(theme)
     );
 }
 
-void ItemsPage::setSearchText(const QString& text)
+void ItemsPage::setSearchText(
+    const QString& text
+)
 {
     ui.itemSearchInput->setText(text);
 }

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>ItemAdvancedFilterDialogClass</class>
+
+	<widget class="QDialog" name="ItemAdvancedFilterDialogClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>640</width>
+				<height>430</height>
+			</rect>
+		</property>
+
+		<property name="windowTitle">
+			<string>Advanced Item Filters</string>
+		</property>
+
+		<layout class="QVBoxLayout" name="rootLayout">
+			<property name="leftMargin">
+				<number>0</number>
+			</property>
+			<property name="topMargin">
+				<number>0</number>
+			</property>
+			<property name="rightMargin">
+				<number>0</number>
+			</property>
+			<property name="bottomMargin">
+				<number>0</number>
+			</property>
+
+			<item>
+				<widget class="QWidget" name="dialogCard" native="true">
+					<layout class="QVBoxLayout" name="dialogCardLayout">
+						<property name="spacing">
+							<number>0</number>
+						</property>
+						<property name="leftMargin">
+							<number>0</number>
+						</property>
+						<property name="topMargin">
+							<number>0</number>
+						</property>
+						<property name="rightMargin">
+							<number>0</number>
+						</property>
+						<property name="bottomMargin">
+							<number>0</number>
+						</property>
+
+						<item>
+							<widget class="QWidget" name="headerContainer" native="true">
+								<property name="minimumSize">
+									<size>
+										<width>0</width>
+										<height>50</height>
+									</size>
+								</property>
+
+								<layout class="QHBoxLayout" name="headerLayout">
+									<property name="leftMargin">
+										<number>24</number>
+									</property>
+									<property name="rightMargin">
+										<number>18</number>
+									</property>
+
+									<item>
+										<widget class="QLabel" name="titleLabel">
+											<property name="text">
+												<string>Advanced Item Filters</string>
+											</property>
+										</widget>
+									</item>
+
+									<item>
+										<spacer name="headerSpacer">
+											<property name="orientation">
+												<enum>Qt::Horizontal</enum>
+											</property>
+										</spacer>
+									</item>
+
+									<item>
+										<widget class="QPushButton" name="closeButton">
+											<property name="maximumSize">
+												<size>
+													<width>28</width>
+													<height>28</height>
+												</size>
+											</property>
+											<property name="text">
+												<string>×</string>
+											</property>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QWidget" name="contentContainer" native="true">
+								<layout class="QVBoxLayout" name="contentLayout">
+									<property name="leftMargin">
+										<number>28</number>
+									</property>
+									<property name="topMargin">
+										<number>24</number>
+									</property>
+									<property name="rightMargin">
+										<number>28</number>
+									</property>
+									<property name="bottomMargin">
+										<number>18</number>
+									</property>
+									<property name="spacing">
+										<number>14</number>
+									</property>
+
+									<item>
+										<layout class="QGridLayout" name="filterGrid">
+											<property name="horizontalSpacing">
+												<number>18</number>
+											</property>
+											<property name="verticalSpacing">
+												<number>12</number>
+											</property>
+
+											<item row="0" column="0">
+												<widget class="QCheckBox" name="minQuantityCheckBox">
+													<property name="text">
+														<string>Minimum Quantity</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="0" column="1">
+												<widget class="QSpinBox" name="minQuantityInput">
+													<property name="minimum">
+														<number>0</number>
+													</property>
+													<property name="maximum">
+														<number>1000000</number>
+													</property>
+												</widget>
+											</item>
+
+											<item row="1" column="0">
+												<widget class="QCheckBox" name="maxQuantityCheckBox">
+													<property name="text">
+														<string>Maximum Quantity</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="1" column="1">
+												<widget class="QSpinBox" name="maxQuantityInput">
+													<property name="minimum">
+														<number>0</number>
+													</property>
+													<property name="maximum">
+														<number>1000000</number>
+													</property>
+												</widget>
+											</item>
+
+											<item row="2" column="0">
+												<widget class="QLabel" name="stockStatusLabel">
+													<property name="text">
+														<string>Stock Status</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="2" column="1">
+												<widget class="QComboBox" name="stockStatusComboBox">
+													<item>
+														<property name="text">
+															<string>All</string>
+														</property>
+													</item>
+													<item>
+														<property name="text">
+															<string>In Stock</string>
+														</property>
+													</item>
+													<item>
+														<property name="text">
+															<string>Low Stock</string>
+														</property>
+													</item>
+													<item>
+														<property name="text">
+															<string>Out of Stock</string>
+														</property>
+													</item>
+												</widget>
+											</item>
+
+											<item row="3" column="0">
+												<widget class="QLabel" name="storeLabel">
+													<property name="text">
+														<string>Store Contains</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="3" column="1">
+												<widget class="QLineEdit" name="storeInput">
+													<property name="placeholderText">
+														<string>Main Store</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="4" column="0">
+												<widget class="QLabel" name="typeLabel">
+													<property name="text">
+														<string>Type Contains</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="4" column="1">
+												<widget class="QLineEdit" name="typeInput">
+													<property name="placeholderText">
+														<string>Product</string>
+													</property>
+												</widget>
+											</item>
+										</layout>
+									</item>
+								</layout>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QWidget" name="footerContainer" native="true">
+								<layout class="QHBoxLayout" name="footerLayout">
+									<property name="leftMargin">
+										<number>28</number>
+									</property>
+									<property name="rightMargin">
+										<number>28</number>
+									</property>
+									<property name="bottomMargin">
+										<number>22</number>
+									</property>
+
+									<item>
+										<widget class="QPushButton" name="clearButton">
+											<property name="text">
+												<string>Clear Filters</string>
+											</property>
+										</widget>
+									</item>
+
+									<item>
+										<spacer name="footerSpacer">
+											<property name="orientation">
+												<enum>Qt::Horizontal</enum>
+											</property>
+										</spacer>
+									</item>
+
+									<item>
+										<widget class="QPushButton" name="cancelButton">
+											<property name="text">
+												<string>Cancel</string>
+											</property>
+										</widget>
+									</item>
+
+									<item>
+										<widget class="QPushButton" name="applyButton">
+											<property name="text">
+												<string>Apply Filters</string>
+											</property>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+					</layout>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+
+	<resources/>
+	<connections/>
+</ui>

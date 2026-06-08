@@ -108,6 +108,8 @@
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="ExportUtility.cpp" />
     <ClCompile Include="GlobalSearchDialog.cpp" />
+    <ClCompile Include="ItemAdvancedFilterDialog.cpp" />
+    <ClCompile Include="ItemDetailsDialog.cpp" />
     <ClCompile Include="ItemsPage.cpp" />
     <ClCompile Include="LowStockAlertsPage.cpp" />
     <ClCompile Include="MyTruckStockPage.cpp" />
@@ -150,6 +152,8 @@
     <ClCompile Include="AuthService.cpp" />
     <ClCompile Include="InventoryQtApp.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="ItemAdvancedFilterDialog.ui" />
+    <QtUic Include="ItemDetailsDialog.ui" />
     <QtUic Include="ItemsPage.ui" />
     <QtUic Include="LowStockAlertsPage.ui" />
     <QtUic Include="MyTruckStockPage.ui" />
@@ -181,6 +185,8 @@
     <QtMoc Include="GlobalSearchDialog.h" />
     <QtMoc Include="TruckDetailsDialog.h" />
     <QtMoc Include="ReceiptDetailsDialog.h" />
+    <QtMoc Include="ItemDetailsDialog.h" />
+    <QtMoc Include="ItemAdvancedFilterDialog.h" />
     <ClInclude Include="TruckStockService.h" />
     <QtMoc Include="UsersPage.h" />
     <QtMoc Include="LowStockAlertsPage.h" />
