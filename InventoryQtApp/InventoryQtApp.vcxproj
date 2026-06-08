@@ -98,6 +98,7 @@
     <ClCompile Include="AddEditTruckDialog.cpp" />
     <ClCompile Include="AddEditUserDialog.cpp" />
     <ClCompile Include="AddProductDialog.cpp" />
+    <ClCompile Include="AssetDetailsDialog.cpp" />
     <ClCompile Include="AssetService.cpp" />
     <ClCompile Include="AssetsPage.cpp" />
     <ClCompile Include="AssignmentsPage.cpp" />
@@ -140,6 +141,7 @@
     <QtUic Include="AddEditTruckDialog.ui" />
     <QtUic Include="AddEditUserDialog.ui" />
     <QtUic Include="AddProductDialog.ui" />
+    <QtUic Include="AssetDetailsDialog.ui" />
     <QtUic Include="AssetsPage.ui" />
     <QtUic Include="AssignmentsPage.ui" />
     <QtUic Include="AssignTemplateDialog.ui" />
@@ -178,6 +180,7 @@
     <QtMoc Include="AddEditUserDialog.h" />
     <QtMoc Include="SettingsPage.h" />
     <QtMoc Include="AutoUpdateManager.h" />
+    <QtMoc Include="AssetDetailsDialog.h" />
     <ClInclude Include="ErrorHandler.h" />
     <QtMoc Include="ReportsPage.h" />
     <ClInclude Include="ExportUtility.h" />

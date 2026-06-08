@@ -22,6 +22,7 @@ public:
 
     void setSearchText(const QString& text);
 
+
 signals:
     void assetsChanged();  // Signal emitted when assets are added/updated/deleted
 
@@ -40,6 +41,9 @@ private:
     Ui::AssetsPageClass ui;  // UI components
     AssetService& assetService;  // Reference to asset service for API interactions
     json currentAssets;  // Cache for asset data
+
+    QString currentTypeFilter;
+    QString currentStatusFilter;
 
     // Configures the assets table with columns and styling
     void setupTable();

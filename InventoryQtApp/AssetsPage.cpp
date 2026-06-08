@@ -1,6 +1,7 @@
 // AssetsPage.cpp - Implementation of the assets management page
 #include "AssetsPage.h"
 #include "Theme.h"
+#include "AssetDetailsDialog.h"
 
 #include <algorithm>
 
@@ -17,6 +18,7 @@
 #include <QThread>
 #include <QPointer>
 #include <QMetaObject>
+#include <QInputDialog>
 
 AssetsPage::AssetsPage(
     AssetService& assetService,
@@ -221,20 +223,9 @@ void AssetsPage::populateTable(const json& assets)
         deleteButton->setObjectName("deleteButton");
 
         connect(viewButton, &QPushButton::clicked, this, [this, asset]() {
-            std::string name = asset.value("name", "");
-            std::string type = asset.value("type", "");
-            std::string serialCode = asset.value("serialCode", "");
-            std::string status = asset.value("status", "active");
-            std::string description = asset.value("description", "");
-
-            AddAssetDialog dialog(this);
-
-            dialog.setViewMode(
-                QString::fromStdString(name),
-                QString::fromStdString(type),
-                QString::fromStdString(serialCode),
-                QString::fromStdString(status),
-                QString::fromStdString(description)
+            AssetDetailsDialog dialog(
+                asset,
+                this
             );
 
             dialog.exec();
@@ -339,10 +330,23 @@ void AssetsPage::filterAssets(const QString& searchText)
             QString name = QString::fromStdString(asset.value("name", ""));
             QString type = QString::fromStdString(asset.value("type", ""));
             QString serialCode = QString::fromStdString(asset.value("serialCode", ""));
+            QString status = QString::fromStdString(asset.value("status", ""));
 
-            if (name.contains(query, Qt::CaseInsensitive) ||
+            bool matchesSearch =
+                name.contains(query, Qt::CaseInsensitive) ||
                 type.contains(query, Qt::CaseInsensitive) ||
-                serialCode.contains(query, Qt::CaseInsensitive)) {
+                serialCode.contains(query, Qt::CaseInsensitive);
+
+            bool matchesStatus =
+                currentStatusFilter.isEmpty() ||
+                currentStatusFilter == "All" ||
+                status.compare(
+                    currentStatusFilter,
+                    Qt::CaseInsensitive
+                ) == 0;
+
+            if (matchesSearch && matchesStatus)
+            {
                 filteredAssets.push_back(asset);
             }
         }
@@ -430,7 +434,35 @@ void AssetsPage::updatePagination()
 
 void AssetsPage::onFilterButtonClicked()
 {
-    filterAssets(ui.assetSearchInput->text());
+    QStringList options;
+
+    options
+        << "All"
+        << "Active"
+        << "Inactive"
+        << "Maintenance";
+
+    bool ok = false;
+
+    QString selected =
+        QInputDialog::getItem(
+            this,
+            "Filter Assets",
+            "Status:",
+            options,
+            0,
+            false,
+            &ok
+        );
+
+    if (!ok)
+        return;
+
+    currentStatusFilter = selected;
+
+    filterAssets(
+        ui.assetSearchInput->text()
+    );
 }
 
 void AssetsPage::onNextPageClicked()
