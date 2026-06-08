@@ -1,6 +1,7 @@
 #include "TrucksPage.h"
 #include "Theme.h"
 #include "AddEditTruckDialog.h"
+#include "TruckDetailsDialog.h"
 
 #include <algorithm>
 
@@ -447,19 +448,11 @@ void TrucksPage::onViewTruckClicked(
         return;
     }
 
-    const TruckDto& truck = *it;
-
-    AddEditTruckDialog dialog(userService, this);
-
-    dialog.setEditMode(
-        QString::fromStdString(truck.id),
-        QString::fromStdString(truck.truckName),
-        QString::fromStdString(truck.licensePlate),
-        QString::fromStdString(truck.technicianId),
-        QString::fromStdString(truck.status)
+    TruckDetailsDialog dialog(
+        *it,
+        truckStockService,
+        this
     );
-
-    dialog.setViewMode();
 
     dialog.exec();
 }

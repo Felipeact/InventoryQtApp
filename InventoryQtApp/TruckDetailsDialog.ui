@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>TruckDetailsDialogClass</class>
+
+	<widget class="QDialog" name="TruckDetailsDialogClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>820</width>
+				<height>620</height>
+			</rect>
+		</property>
+
+		<property name="minimumSize">
+			<size>
+				<width>820</width>
+				<height>620</height>
+			</size>
+		</property>
+
+		<property name="maximumSize">
+			<size>
+				<width>820</width>
+				<height>620</height>
+			</size>
+		</property>
+
+		<property name="windowTitle">
+			<string>Truck Details</string>
+		</property>
+
+		<layout class="QVBoxLayout" name="rootLayout">
+			<property name="leftMargin">
+				<number>0</number>
+			</property>
+			<property name="topMargin">
+				<number>0</number>
+			</property>
+			<property name="rightMargin">
+				<number>0</number>
+			</property>
+			<property name="bottomMargin">
+				<number>0</number>
+			</property>
+			<property name="spacing">
+				<number>0</number>
+			</property>
+
+			<item>
+				<widget class="QWidget" name="dialogCard" native="true">
+					<layout class="QVBoxLayout" name="dialogCardLayout">
+						<property name="leftMargin">
+							<number>0</number>
+						</property>
+						<property name="topMargin">
+							<number>0</number>
+						</property>
+						<property name="rightMargin">
+							<number>0</number>
+						</property>
+						<property name="bottomMargin">
+							<number>0</number>
+						</property>
+						<property name="spacing">
+							<number>0</number>
+						</property>
+
+						<item>
+							<widget class="QWidget" name="headerContainer" native="true">
+								<property name="minimumSize">
+									<size>
+										<width>0</width>
+										<height>50</height>
+									</size>
+								</property>
+
+								<layout class="QHBoxLayout" name="headerLayout">
+									<property name="leftMargin">
+										<number>24</number>
+									</property>
+									<property name="topMargin">
+										<number>0</number>
+									</property>
+									<property name="rightMargin">
+										<number>18</number>
+									</property>
+									<property name="bottomMargin">
+										<number>0</number>
+									</property>
+
+									<item>
+										<widget class="QLabel" name="titleLabel">
+											<property name="text">
+												<string>Truck Details</string>
+											</property>
+										</widget>
+									</item>
+
+									<item>
+										<spacer name="headerSpacer">
+											<property name="orientation">
+												<enum>Qt::Horizontal</enum>
+											</property>
+										</spacer>
+									</item>
+
+									<item>
+										<widget class="QPushButton" name="closeButton">
+											<property name="minimumSize">
+												<size>
+													<width>28</width>
+													<height>28</height>
+												</size>
+											</property>
+
+											<property name="maximumSize">
+												<size>
+													<width>28</width>
+													<height>28</height>
+												</size>
+											</property>
+
+											<property name="text">
+												<string>×</string>
+											</property>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QWidget" name="contentContainer" native="true">
+								<layout class="QVBoxLayout" name="contentLayout">
+									<property name="leftMargin">
+										<number>28</number>
+									</property>
+									<property name="topMargin">
+										<number>20</number>
+									</property>
+									<property name="rightMargin">
+										<number>28</number>
+									</property>
+									<property name="bottomMargin">
+										<number>16</number>
+									</property>
+									<property name="spacing">
+										<number>14</number>
+									</property>
+
+									<item>
+										<layout class="QGridLayout" name="truckInfoGrid">
+											<property name="horizontalSpacing">
+												<number>24</number>
+											</property>
+											<property name="verticalSpacing">
+												<number>8</number>
+											</property>
+
+											<item row="0" column="0">
+												<widget class="QLabel" name="truckNumberLabel">
+													<property name="text">
+														<string>Truck Number</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="0" column="1">
+												<widget class="QLabel" name="plateLabel">
+													<property name="text">
+														<string>Plate</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="0" column="2">
+												<widget class="QLabel" name="technicianLabel">
+													<property name="text">
+														<string>Technician</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="0" column="3">
+												<widget class="QLabel" name="statusLabel">
+													<property name="text">
+														<string>Status</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="1" column="0">
+												<widget class="QLabel" name="truckNumberValue">
+													<property name="text">
+														<string>-</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="1" column="1">
+												<widget class="QLabel" name="plateValue">
+													<property name="text">
+														<string>-</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="1" column="2">
+												<widget class="QLabel" name="technicianValue">
+													<property name="text">
+														<string>-</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="1" column="3">
+												<widget class="QLabel" name="statusValue">
+													<property name="text">
+														<string>-</string>
+													</property>
+												</widget>
+											</item>
+										</layout>
+									</item>
+
+									<item>
+										<widget class="QLabel" name="assignmentsTitleLabel">
+											<property name="text">
+												<string>Assigned Templates</string>
+											</property>
+										</widget>
+									</item>
+
+									<item>
+										<widget class="QTableWidget" name="assignmentsTable">
+											<property name="minimumSize">
+												<size>
+													<width>0</width>
+													<height>150</height>
+												</size>
+											</property>
+											<property name="rowCount">
+												<number>0</number>
+											</property>
+											<property name="columnCount">
+												<number>4</number>
+											</property>
+										</widget>
+									</item>
+
+									<item>
+										<layout class="QHBoxLayout" name="lowStockHeaderLayout">
+											<item>
+												<widget class="QLabel" name="lowStockTitleLabel">
+													<property name="text">
+														<string>Low Stock Items</string>
+													</property>
+												</widget>
+											</item>
+
+											<item>
+												<spacer name="lowStockSpacer">
+													<property name="orientation">
+														<enum>Qt::Horizontal</enum>
+													</property>
+												</spacer>
+											</item>
+
+											<item>
+												<widget class="QLabel" name="lowStockCountLabel">
+													<property name="text">
+														<string>Total:</string>
+													</property>
+												</widget>
+											</item>
+
+											<item>
+												<widget class="QLabel" name="lowStockCountValue">
+													<property name="text">
+														<string>0</string>
+													</property>
+												</widget>
+											</item>
+										</layout>
+									</item>
+
+									<item>
+										<widget class="QTableWidget" name="lowStockTable">
+											<property name="minimumSize">
+												<size>
+													<width>0</width>
+													<height>190</height>
+												</size>
+											</property>
+											<property name="rowCount">
+												<number>0</number>
+											</property>
+											<property name="columnCount">
+												<number>5</number>
+											</property>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QWidget" name="footerContainer" native="true">
+								<layout class="QHBoxLayout" name="footerLayout">
+									<property name="leftMargin">
+										<number>28</number>
+									</property>
+									<property name="topMargin">
+										<number>8</number>
+									</property>
+									<property name="rightMargin">
+										<number>28</number>
+									</property>
+									<property name="bottomMargin">
+										<number>22</number>
+									</property>
+
+									<item>
+										<spacer name="footerSpacer">
+											<property name="orientation">
+												<enum>Qt::Horizontal</enum>
+											</property>
+										</spacer>
+									</item>
+
+									<item>
+										<widget class="QPushButton" name="closeBottomButton">
+											<property name="text">
+												<string>Close</string>
+											</property>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+
+					</layout>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+
+	<resources/>
+	<connections/>
+</ui>

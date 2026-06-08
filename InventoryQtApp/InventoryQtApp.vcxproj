@@ -121,6 +121,7 @@
     <ClCompile Include="SidebarWidget.cpp" />
     <ClCompile Include="StockTemplatesPage.cpp" />
     <ClCompile Include="Theme.cpp" />
+    <ClCompile Include="TruckDetailsDialog.cpp" />
     <ClCompile Include="TrucksPage.cpp" />
     <ClCompile Include="TruckStockDashboardPage.cpp" />
     <ClCompile Include="TruckStockService.cpp" />
@@ -158,6 +159,7 @@
     <QtUic Include="SettingsPage.ui" />
     <QtUic Include="SidebarWidget.ui" />
     <QtUic Include="StockTemplatesPage.ui" />
+    <QtUic Include="TruckDetailsDialog.ui" />
     <QtUic Include="TrucksPage.ui" />
     <QtUic Include="TruckStockDashboardPage.ui" />
     <QtUic Include="UploadReceiptDialog.ui" />
@@ -175,6 +177,7 @@
     <ClInclude Include="ExportUtility.h" />
     <QtMoc Include="NotificationDialog.h" />
     <QtMoc Include="GlobalSearchDialog.h" />
+    <QtMoc Include="TruckDetailsDialog.h" />
     <ClInclude Include="TruckStockService.h" />
     <QtMoc Include="UsersPage.h" />
     <QtMoc Include="LowStockAlertsPage.h" />
