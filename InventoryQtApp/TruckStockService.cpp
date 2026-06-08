@@ -837,3 +837,38 @@ bool TruckStockService::rejectReceipt(const std::string& receiptId)
         return false;
     }
 }
+
+bool TruckStockService::unassignTemplate(
+    const std::string& assignmentId
+)
+{
+    try {
+        auto response = apiClient.del(
+            "/truck-stock/assignments/" + assignmentId
+        );
+
+        if (
+            response.status_code != 200 &&
+            response.status_code != 204
+            ) {
+            std::cerr
+                << "DELETE assignment failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr
+            << "TruckStockService::unassignTemplate error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}

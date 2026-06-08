@@ -7,11 +7,13 @@
 #include <QAbstractItemView>
 #include <QFrame>
 #include <QHeaderView>
+#include <QHBoxLayout>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <QWidget>
 
 AssignmentsPage::AssignmentsPage(
     TruckStockService* truckStockService,
@@ -75,7 +77,7 @@ void AssignmentsPage::setupConnections()
 
 void AssignmentsPage::setupTable()
 {
-    ui.assignmentsTable->setColumnCount(5);
+    ui.assignmentsTable->setColumnCount(6);
 
     ui.assignmentsTable->setHorizontalHeaderLabels(
         QStringList()
@@ -84,6 +86,7 @@ void AssignmentsPage::setupTable()
         << "Assigned By"
         << "Assigned On"
         << "Status"
+        << "Actions"
     );
 
     ui.assignmentsTable->verticalHeader()->setVisible(false);
@@ -103,7 +106,9 @@ void AssignmentsPage::setupTable()
 
     ui.assignmentsTable->horizontalHeader()->setFixedHeight(48);
     ui.assignmentsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui.assignmentsTable->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
 
+    ui.assignmentsTable->setColumnWidth(5, 140);
     ui.assignmentsTable->verticalHeader()->setDefaultSectionSize(52);
 
     ui.assignmentsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -122,7 +127,8 @@ void AssignmentsPage::loadAssignments()
         return;
     }
 
-    currentAssignments = truckStockService->getAssignments();
+    currentAssignments =
+        truckStockService->getAssignments();
 
     filterAssignments();
 }
@@ -134,7 +140,8 @@ void AssignmentsPage::refreshAssignments()
 
 void AssignmentsPage::filterAssignments()
 {
-    QString searchText = ui.searchInput->text().trimmed();
+    QString searchText =
+        ui.searchInput->text().trimmed();
 
     filteredAssignments.clear();
 
@@ -173,9 +180,11 @@ void AssignmentsPage::filterAssignments()
     updatePagination();
 }
 
-void AssignmentsPage::setSearchText(const QString& text)
+void AssignmentsPage::setSearchText(
+    const QString& text
+)
 {
-	ui.searchInput->setText(text);
+    ui.searchInput->setText(text);
 }
 
 void AssignmentsPage::populateTable()
@@ -204,7 +213,7 @@ void AssignmentsPage::populateTable()
             new QTableWidgetItem("No assignments found")
         );
 
-        ui.assignmentsTable->setSpan(0, 0, 1, 5);
+        ui.assignmentsTable->setSpan(0, 0, 1, 6);
 
         return;
     }
@@ -254,7 +263,53 @@ void AssignmentsPage::populateTable()
                 QString::fromStdString(assignment.status)
             )
         );
+
+        addActionButtons(
+            row,
+            assignment
+        );
     }
+}
+
+void AssignmentsPage::addActionButtons(
+    int row,
+    const TruckAssignmentDto& assignment
+)
+{
+    QWidget* actionWidget =
+        new QWidget(this);
+
+    actionWidget->setObjectName("actionContainer");
+
+    QHBoxLayout* layout =
+        new QHBoxLayout(actionWidget);
+
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+    layout->setAlignment(Qt::AlignCenter);
+
+    QPushButton* unassignButton =
+        new QPushButton("❌", actionWidget);
+
+    unassignButton->setObjectName("unassignButton");
+    unassignButton->setToolTip("Unassign Template");
+
+    layout->addWidget(unassignButton);
+
+    ui.assignmentsTable->setCellWidget(
+        row,
+        5,
+        actionWidget
+    );
+
+    connect(
+        unassignButton,
+        &QPushButton::clicked,
+        this,
+        [this, assignment]() {
+            onUnassignClicked(assignment);
+        }
+    );
 }
 
 void AssignmentsPage::updatePagination()
@@ -345,7 +400,60 @@ void AssignmentsPage::onAssignTemplateClicked()
     }
 }
 
-void AssignmentsPage::onSearchChanged(const QString& text)
+void AssignmentsPage::onUnassignClicked(
+    const TruckAssignmentDto& assignment
+)
+{
+    QMessageBox::StandardButton result =
+        QMessageBox::question(
+            this,
+            "Unassign Template",
+            QString("Remove template '%1' from truck '%2'?")
+            .arg(QString::fromStdString(assignment.templateName))
+            .arg(QString::fromStdString(assignment.truckNumber)),
+            QMessageBox::Yes | QMessageBox::No
+        );
+
+    if (result != QMessageBox::Yes) {
+        return;
+    }
+
+    if (!truckStockService) {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Truck stock service is unavailable."
+        );
+
+        return;
+    }
+
+    bool success =
+        truckStockService->unassignTemplate(assignment.id);
+
+    if (success) {
+        QMessageBox::information(
+            this,
+            "Success",
+            "Assignment removed successfully."
+        );
+
+        emit assignmentsChanged();
+
+        loadAssignments();
+    }
+    else {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Failed to remove assignment."
+        );
+    }
+}
+
+void AssignmentsPage::onSearchChanged(
+    const QString& text
+)
 {
     Q_UNUSED(text);
 

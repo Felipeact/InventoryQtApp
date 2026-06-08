@@ -40,6 +40,10 @@ private slots:
     void onPage2Clicked();
     void onSearchChanged(const QString& text);
 
+    void onUnassignClicked(
+        const TruckAssignmentDto& assignment
+    );
+
 signals:
     void assignmentsChanged();
 
@@ -57,6 +61,11 @@ private:
 
     void setupConnections();
     void setupTable();
+
+    void addActionButtons(
+        int row,
+        const TruckAssignmentDto& assignment
+    );
 
     void loadAssignments();
     void populateTable();

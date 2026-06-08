@@ -202,6 +202,10 @@ public:
     bool approveReceipt(const std::string& receiptId);
     bool rejectReceipt(const std::string& receiptId);
 
+    bool unassignTemplate(
+        const std::string& assignmentId
+    );
+
 private:
     ApiClient& apiClient;
 
