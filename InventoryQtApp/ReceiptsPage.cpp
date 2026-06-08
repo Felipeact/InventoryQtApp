@@ -1,6 +1,7 @@
 #include "ReceiptsPage.h"
 #include "Theme.h"
 #include "UploadReceiptDialog.h"
+#include "ReceiptDetailsDialog.h"
 
 #include <algorithm>
 
@@ -436,39 +437,12 @@ void ReceiptsPage::onViewReceiptClicked(
     const ReceiptDto& receipt
 )
 {
-    if (!receipt.fileUrl.empty()) {
-        QString fileUrl =
-            QString::fromStdString(receipt.fileUrl);
-
-        if (
-            fileUrl.startsWith("http://") ||
-            fileUrl.startsWith("https://")
-            ) {
-            QDesktopServices::openUrl(QUrl(fileUrl));
-            return;
-        }
-
-        QDesktopServices::openUrl(
-            QUrl::fromLocalFile(fileUrl)
-        );
-
-        return;
-    }
-
-    QString details;
-
-    details += "Receipt ID: " + QString::fromStdString(receipt.id) + "\n";
-    details += "Technician: " + QString::fromStdString(receipt.technicianName) + "\n";
-    details += "Truck: " + QString::fromStdString(receipt.truckNumber) + "\n";
-    details += "Amount: $" + QString::number(receipt.totalAmount, 'f', 2) + "\n";
-    details += "Status: " + QString::fromStdString(receipt.status) + "\n";
-    details += "Created At: " + QString::fromStdString(receipt.createdAt);
-
-    QMessageBox::information(
-        this,
-        "Receipt Details",
-        details
+    ReceiptDetailsDialog dialog(
+        receipt,
+        this
     );
+
+    dialog.exec();
 }
 
 void ReceiptsPage::onApproveReceiptClicked(
