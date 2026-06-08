@@ -81,6 +81,46 @@
                                     </widget>
                                 </item>
 
+								<item>
+									<widget class="QPushButton" name="truckSummaryBtn">
+										<property name="text">
+											<string>Truck Summary</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="templatesSummaryBtn">
+										<property name="text">
+											<string>Templates</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="assignmentsSummaryBtn">
+										<property name="text">
+											<string>Assignments</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="receiptsSummaryBtn">
+										<property name="text">
+											<string>Receipts</string>
+										</property>
+									</widget>
+								</item>
+
+								<item>
+									<widget class="QPushButton" name="lowStockSummaryBtn">
+										<property name="text">
+											<string>Low Stock</string>
+										</property>
+									</widget>
+								</item>
+
                                 <item>
                                     <spacer name="horizontalSpacer">
                                         <property name="orientation">

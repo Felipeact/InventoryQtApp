@@ -294,7 +294,7 @@ ReceiptsPage* DashboardWindow::ensureReceiptsPage()
 ReportsPage* DashboardWindow::ensureReportsPage()
 {
     if (!reportsPage) {
-        reportsPage = new ReportsPage(reportService, this);
+        reportsPage = new ReportsPage(reportService, truckStockService, this);
         ui.mainStack->addWidget(reportsPage);
         reportsPage->applyTheme(currentTheme);
     }
