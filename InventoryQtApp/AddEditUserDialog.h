@@ -33,6 +33,7 @@ public:
     );
 
     void setViewMode();
+    void setInviteMode();
 
 protected:
     void mousePressEvent(QMouseEvent* event) override;
@@ -47,7 +48,6 @@ private:
     void setupConnections();
     bool validateForm();
 
-    void setInviteMode();
 
 private slots:
     void onSaveClicked();

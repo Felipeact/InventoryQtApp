@@ -41,6 +41,7 @@ public:
     std::vector<UserDto> getUsers();
     std::vector<UserDto> getTechnicians();
 
+    std::string inviteUser(const CreateUserRequest& request);
     bool createUser(const CreateUserRequest& request);
     bool updateUser(const std::string& userId, const UpdateUserRequest& request);
     bool deleteUser(const std::string& userId);

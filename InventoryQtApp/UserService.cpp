@@ -73,6 +73,52 @@ std::vector<UserDto> UserService::getTechnicians()
     return technicians;
 }
 
+std::string UserService::inviteUser(const CreateUserRequest& request)
+{
+    try {
+        json body;
+
+        body["name"] = request.name;
+        body["email"] = request.email;
+        body["role"] = request.role;
+        body["status"] = request.status;
+
+        auto response =
+            apiClient.post(
+                "/users/invite",
+                body.dump()
+            );
+
+        if (
+            response.status_code != 200 &&
+            response.status_code != 201
+            ) {
+            std::cerr << "Invite user failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return "";
+        }
+
+        auto data =
+            json::parse(response.text);
+
+        return data.value(
+            "temporaryPassword",
+            ""
+        );
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "UserService::inviteUser error: "
+            << ex.what()
+            << std::endl;
+
+        return "";
+    }
+}
+
 bool UserService::createUser(const CreateUserRequest& request)
 {
     try {

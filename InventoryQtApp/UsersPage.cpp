@@ -405,6 +405,7 @@ void UsersPage::onAddUserClicked()
     }
 
     AddEditUserDialog dialog(this);
+    dialog.setInviteMode();
 
     if (dialog.exec() == QDialog::Accepted) {
         CreateUserRequest request;
@@ -415,8 +416,7 @@ void UsersPage::onAddUserClicked()
         request.email =
             dialog.getEmail().toStdString();
 
-        request.password =
-            dialog.getPassword().toStdString();
+        request.password = "";
 
         request.role =
             dialog.getRole().toStdString();
@@ -424,14 +424,23 @@ void UsersPage::onAddUserClicked()
         request.status =
             dialog.getStatus().toStdString();
 
-        bool success =
-            userService->createUser(request);
+        std::string temporaryPassword =
+            userService->inviteUser(request);
 
-        if (success) {
+        if (!temporaryPassword.empty()) {
             QMessageBox::information(
                 this,
-                "Success",
-                "User created successfully."
+                "User Invited",
+                QString(
+                    "User invited successfully.\n\n"
+                    "Name: %1\n"
+                    "Email: %2\n\n"
+                    "Temporary password:\n%3\n\n"
+                    "Give this password to the user."
+                )
+                .arg(dialog.getName())
+                .arg(dialog.getEmail())
+                .arg(QString::fromStdString(temporaryPassword))
             );
 
             loadUsers();
@@ -440,7 +449,7 @@ void UsersPage::onAddUserClicked()
             QMessageBox::warning(
                 this,
                 "Error",
-                "Failed to create user. Check the backend console."
+                "Failed to invite user. Check the backend console."
             );
         }
     }
