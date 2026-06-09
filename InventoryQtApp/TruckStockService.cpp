@@ -447,36 +447,100 @@ TemplateDetailsDto TruckStockService::getTemplateById(
 
         json data = json::parse(response.text);
 
-        templateDetails.id = data.value("id", "");
-        templateDetails.name = data.value("name", "");
-        templateDetails.tradeType = data.value("tradeType", "");
+        templateDetails.id =
+            getStringValue(data, { "id" });
+
+        templateDetails.name =
+            getStringValue(data, { "name" });
+
+        templateDetails.tradeType =
+            getStringValue(data, { "tradeType", "type" });
 
         if (data.contains("items") && data["items"].is_array()) {
             for (const auto& itemJson : data["items"]) {
                 CreateTemplateItemRequest item;
 
                 item.productName =
-                    itemJson.value("productName", "");
+                    getStringValue(
+                        itemJson,
+                        { "productName", "name", "itemName" }
+                    );
+
+                if (
+                    item.productName.empty() &&
+                    itemJson.contains("product") &&
+                    itemJson["product"].is_object()
+                    ) {
+                    item.productName =
+                        getStringValue(
+                            itemJson["product"],
+                            { "name", "productName", "itemName" }
+                        );
+                }
 
                 item.category =
-                    itemJson.value("category", "");
+                    getStringValue(
+                        itemJson,
+                        { "category", "productCategory" }
+                    );
+
+                if (
+                    item.category.empty() &&
+                    itemJson.contains("product") &&
+                    itemJson["product"].is_object()
+                    ) {
+                    item.category =
+                        getStringValue(
+                            itemJson["product"],
+                            { "category", "type" }
+                        );
+                }
 
                 item.requiredQuantity =
-                    itemJson.value("requiredQuantity", 1);
+                    getIntValue(
+                        itemJson,
+                        { "requiredQuantity", "requiredQty", "quantity", "qty" },
+                        1
+                    );
 
                 item.minimumQuantity =
-                    itemJson.value("minimumQuantity", 1);
+                    getIntValue(
+                        itemJson,
+                        { "minimumQuantity", "minimumQty", "minQuantity", "minQty" },
+                        1
+                    );
 
-                item.expectedPrice =
-                    itemJson.value("expectedPrice", 0.0);
+                if (itemJson.contains("expectedPrice") && !itemJson["expectedPrice"].is_null()) {
+                    if (itemJson["expectedPrice"].is_number()) {
+                        item.expectedPrice =
+                            itemJson["expectedPrice"].get<double>();
+                    }
+                    else if (itemJson["expectedPrice"].is_string()) {
+                        try {
+                            item.expectedPrice =
+                                std::stod(itemJson["expectedPrice"].get<std::string>());
+                        }
+                        catch (...) {
+                            item.expectedPrice = 0.0;
+                        }
+                    }
+                    else {
+                        item.expectedPrice = 0.0;
+                    }
+                }
+                else {
+                    item.expectedPrice = 0.0;
+                }
 
                 item.unit =
-                    itemJson.value("unit", "");
+                    getStringValue(itemJson, { "unit" });
 
                 item.notes =
-                    itemJson.value("notes", "");
+                    getStringValue(itemJson, { "notes", "description" });
 
-                templateDetails.items.push_back(item);
+                if (!item.productName.empty()) {
+                    templateDetails.items.push_back(item);
+                }
             }
         }
     }

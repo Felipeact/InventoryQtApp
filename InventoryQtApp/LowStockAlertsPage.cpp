@@ -15,6 +15,7 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
+#include <QSizePolicy>
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QTextStream>
@@ -116,11 +117,22 @@ void LowStockAlertsPage::setupTable()
     );
 
     ui.alertsTable->horizontalHeader()->setFixedHeight(48);
-    ui.alertsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui.alertsTable->horizontalHeader()->setStretchLastSection(false);
+
+    ui.alertsTable->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui.alertsTable->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    ui.alertsTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
+    ui.alertsTable->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
+    ui.alertsTable->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
+    ui.alertsTable->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Stretch);
     ui.alertsTable->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Fixed);
 
-    ui.alertsTable->setColumnWidth(6, 330);
-    ui.alertsTable->verticalHeader()->setDefaultSectionSize(52);
+    ui.alertsTable->setColumnWidth(2, 100);
+    ui.alertsTable->setColumnWidth(3, 110);
+    ui.alertsTable->setColumnWidth(4, 95);
+    ui.alertsTable->setColumnWidth(6, 285);
+
+    ui.alertsTable->verticalHeader()->setDefaultSectionSize(54);
 
     ui.alertsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
     ui.alertsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
@@ -293,28 +305,34 @@ void LowStockAlertsPage::addActionButtons(
         new QWidget(this);
 
     actionWidget->setObjectName("actionContainer");
+    actionWidget->setMinimumWidth(275);
+    actionWidget->setMaximumWidth(275);
+    actionWidget->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Preferred);
 
     QHBoxLayout* layout =
         new QHBoxLayout(actionWidget);
 
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(6);
+    layout->setSpacing(4);
     layout->setAlignment(Qt::AlignCenter);
 
     QPushButton* restockButton =
-        new QPushButton("Add Stock", actionWidget);
+        new QPushButton("Stock", actionWidget);
 
     restockButton->setObjectName("restockButton");
+    restockButton->setFixedWidth(76);
 
     QPushButton* receiptButton =
         new QPushButton("Receipt", actionWidget);
 
     receiptButton->setObjectName("receiptButton");
+    receiptButton->setFixedWidth(84);
 
     QPushButton* assignButton =
         new QPushButton("Assign", actionWidget);
 
     assignButton->setObjectName("assignButton");
+    assignButton->setFixedWidth(76);
 
     layout->addWidget(restockButton);
     layout->addWidget(receiptButton);

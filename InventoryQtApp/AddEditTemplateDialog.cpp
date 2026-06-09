@@ -99,14 +99,21 @@ void AddEditTemplateDialog::setupTable()
     );
 
     ui.templateItemsTable->horizontalHeader()->setFixedHeight(42);
-    ui.templateItemsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-    ui.templateItemsTable->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
 
-    ui.templateItemsTable->setColumnWidth(4, 130);
-    ui.templateItemsTable->verticalHeader()->setDefaultSectionSize(44);
+    ui.templateItemsTable->horizontalHeader()->setSectionResizeMode(
+        QHeaderView::Interactive
+    );
+
+    ui.templateItemsTable->setColumnWidth(0, 230);
+    ui.templateItemsTable->setColumnWidth(1, 110);
+    ui.templateItemsTable->setColumnWidth(2, 125);
+    ui.templateItemsTable->setColumnWidth(3, 115);
+    ui.templateItemsTable->setColumnWidth(4, 90);
+
+    ui.templateItemsTable->verticalHeader()->setDefaultSectionSize(48);
 
     ui.templateItemsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-    ui.templateItemsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    ui.templateItemsTable->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
 }
 
 void AddEditTemplateDialog::setEditMode(const QString& templateId)
@@ -177,6 +184,7 @@ std::vector<CreateTemplateItemRequest> AddEditTemplateDialog::getItems() const
             : 1;
 
         item.unit = "";
+
         item.notes =
             getDescription().toStdString();
 
@@ -303,6 +311,10 @@ CreateTemplateItemRequest AddEditTemplateDialog::getItemFromRow(
         ? ui.templateItemsTable->item(row, 3)->text().toInt()
         : 1;
 
+    item.category = "";
+    item.unit = "";
+    item.notes = "";
+
     return item;
 }
 
@@ -311,7 +323,7 @@ void AddEditTemplateDialog::addItemActionButtons(
 )
 {
     QWidget* actionWidget =
-        new QWidget(this);
+        new QWidget(ui.templateItemsTable);
 
     actionWidget->setObjectName("actionContainer");
 
@@ -319,18 +331,22 @@ void AddEditTemplateDialog::addItemActionButtons(
         new QHBoxLayout(actionWidget);
 
     layout->setContentsMargins(0, 0, 0, 0);
-    layout->setSpacing(6);
+    layout->setSpacing(4);
     layout->setAlignment(Qt::AlignCenter);
 
     QPushButton* editButton =
         new QPushButton("✎", actionWidget);
 
     editButton->setObjectName("editButton");
+    editButton->setFixedSize(28, 28);
+    editButton->setToolTip("Edit");
 
     QPushButton* deleteButton =
         new QPushButton("🗑", actionWidget);
 
     deleteButton->setObjectName("deleteButton");
+    deleteButton->setFixedSize(28, 28);
+    deleteButton->setToolTip("Delete");
 
     layout->addWidget(editButton);
     layout->addWidget(deleteButton);
@@ -341,16 +357,23 @@ void AddEditTemplateDialog::addItemActionButtons(
         actionWidget
     );
 
-    editButton->setVisible(!readOnlyMode);
-    deleteButton->setVisible(!readOnlyMode);
+    connect(
+        editButton,
+        &QPushButton::clicked,
+        this,
+        [this, row]() {
+            onEditItemClicked(row);
+        }
+    );
 
-    connect(editButton, &QPushButton::clicked, this, [this, row]() {
-        onEditItemClicked(row);
-        });
-
-    connect(deleteButton, &QPushButton::clicked, this, [this, row]() {
-        onDeleteItemClicked(row);
-        });
+    connect(
+        deleteButton,
+        &QPushButton::clicked,
+        this,
+        [this, row]() {
+            onDeleteItemClicked(row);
+        }
+    );
 }
 
 void AddEditTemplateDialog::onEditItemClicked(
