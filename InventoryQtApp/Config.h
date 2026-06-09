@@ -16,38 +16,54 @@ namespace Config
     const std::string DEFAULT_API_BASE_URL =
         "https://orange-robot-5x4pq4vr5vw3p9g-3000.app.github.dev";
 
-    const std::string UPDATE_SERVER_URL =
-        "/updates/latest";
+    const std::string DEFAULT_UPDATE_SERVER_URL =
+        "https://orange-robot-5x4pq4vr5vw3p9g-3000.app.github.dev/updates/latest";
 
-    inline std::string getApiBaseUrl()
+    inline std::string getEnvironmentValue(
+        const char* key
+    )
     {
 #ifdef _WIN32
-        char* envUrl = nullptr;
+        char* envValue = nullptr;
         size_t envSize = 0;
 
         _dupenv_s(
-            &envUrl,
+            &envValue,
             &envSize,
-            "INVENTORY_APP_API_URL"
+            key
         );
 
-        if (envUrl && strlen(envUrl) > 0) {
-            std::string result(envUrl);
-            free(envUrl);
+        if (envValue && strlen(envValue) > 0) {
+            std::string result(envValue);
+            free(envValue);
             return result;
         }
 
-        if (envUrl) {
-            free(envUrl);
+        if (envValue) {
+            free(envValue);
         }
-#else
-        const char* envUrl =
-            std::getenv("INVENTORY_APP_API_URL");
 
-        if (envUrl && strlen(envUrl) > 0) {
-            return std::string(envUrl);
+        return "";
+#else
+        const char* envValue =
+            std::getenv(key);
+
+        if (envValue && strlen(envValue) > 0) {
+            return std::string(envValue);
         }
+
+        return "";
 #endif
+    }
+
+    inline std::string getApiBaseUrl()
+    {
+        std::string envUrl =
+            getEnvironmentValue("INVENTORY_APP_API_URL");
+
+        if (!envUrl.empty()) {
+            return envUrl;
+        }
 
         QSettings settings(
             "InventorySystem",
@@ -65,6 +81,29 @@ namespace Config
         }
 
         return DEFAULT_API_BASE_URL;
+    }
+
+    inline std::string getUpdateServerUrl()
+    {
+        std::string envUrl =
+            getEnvironmentValue("INVENTORY_APP_UPDATE_URL");
+
+        if (!envUrl.empty()) {
+            return envUrl;
+        }
+
+        QSettings settings(
+            "InventorySystem",
+            "InventoryQtApp"
+        );
+
+        QString settingsUrl =
+            settings.value(
+                "updates/checkUrl",
+                QString::fromStdString(DEFAULT_UPDATE_SERVER_URL)
+            ).toString();
+
+        return settingsUrl.trimmed().toStdString();
     }
 
     inline void setApiBaseUrl(

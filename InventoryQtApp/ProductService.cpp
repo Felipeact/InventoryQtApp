@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <QtGlobal>
+#include <chrono>
 
 ProductService::ProductService(ApiClient& apiClient)
     : api(apiClient)

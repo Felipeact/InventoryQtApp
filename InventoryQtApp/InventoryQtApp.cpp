@@ -39,7 +39,59 @@ InventoryQtApp::InventoryQtApp(QWidget* parent)
 
     // Initialize auto-update manager with backend update endpoint
     QString updateServerUrl =
-        QString::fromStdString(Config::getApiBaseUrl()) + "/updates/latest";
+        QString::fromStdString(
+            Config::getUpdateServerUrl()
+        );
+
+    if (!updateServerUrl.trimmed().isEmpty()) {
+        qDebug() << "Update server URL:" << updateServerUrl;
+
+        updateManager =
+            new AutoUpdateManager(
+                updateServerUrl,
+                this
+            );
+
+        connect(
+            updateManager,
+            &AutoUpdateManager::updateAvailable,
+            this,
+            &InventoryQtApp::onUpdateAvailable
+        );
+
+        connect(
+            updateManager,
+            &AutoUpdateManager::updateError,
+            this,
+            [](const QString& error) {
+                qWarning() << "Update error:" << error;
+            }
+        );
+
+        connect(
+            updateManager,
+            &AutoUpdateManager::noUpdateAvailable,
+            this,
+            []() {
+                qDebug() << "No update available.";
+            }
+        );
+
+        QTimer::singleShot(
+            2000,
+            this,
+            [this]() {
+                if (!updateManager) {
+                    return;
+                }
+
+                updateManager->checkForUpdates();
+            }
+        );
+    }
+    else {
+        qDebug() << "Auto-update check disabled.";
+    }
 
     qDebug() << "Update server URL:" << updateServerUrl;
 

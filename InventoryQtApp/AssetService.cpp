@@ -3,6 +3,88 @@
 
 #include <iostream>
 
+namespace
+{
+    std::string safeString(
+        const json& item,
+        const std::string& key,
+        const std::string& fallback = ""
+    )
+    {
+        if (!item.contains(key) || item[key].is_null()) {
+            return fallback;
+        }
+
+        if (item[key].is_string()) {
+            return item[key].get<std::string>();
+        }
+
+        return fallback;
+    }
+
+    json normalizeAsset(
+        const json& item
+    )
+    {
+        json asset = item;
+
+        asset["id"] =
+            safeString(item, "id");
+
+        asset["name"] =
+            safeString(item, "name");
+
+        asset["type"] =
+            safeString(item, "type");
+
+        asset["serialCode"] =
+            safeString(item, "serialCode");
+
+        asset["status"] =
+            safeString(item, "status", "Active");
+
+        asset["description"] =
+            safeString(item, "description");
+
+        asset["createdAt"] =
+            safeString(item, "createdAt");
+
+        asset["updatedAt"] =
+            safeString(item, "updatedAt");
+
+        return asset;
+    }
+
+    json normalizeAssetsResponse(
+        const json& response
+    )
+    {
+        json assets = json::array();
+
+        json data = json::array();
+
+        if (
+            response.contains("data") &&
+            response["data"].is_array()
+            ) {
+            data = response["data"];
+        }
+        else if (response.is_array()) {
+            data = response;
+        }
+
+        for (const auto& item : data) {
+            if (item.is_object()) {
+                assets.push_back(
+                    normalizeAsset(item)
+                );
+            }
+        }
+
+        return assets;
+    }
+}
+
 AssetService::AssetService(ApiClient& apiClient)
     : api(apiClient)
 {
@@ -49,13 +131,7 @@ json AssetService::getAssets(bool forceRefresh)
     try {
         auto response = json::parse(res.text);
 
-        if (response.contains("data") && response["data"].is_array()) {
-            return response["data"];
-        }
-
-        if (response.is_array()) {
-            return response;
-        }
+        return normalizeAssetsResponse(response);
     }
     catch (const std::exception& ex) {
         std::cout << "Parse assets failed: " << ex.what() << std::endl;
@@ -96,7 +172,7 @@ bool AssetService::deleteAsset(const std::string& assetId)
 {
     auto res = api.del("/assets/" + assetId);
 
-    if (res.status_code != 200) {
+    if (res.status_code != 200 && res.status_code != 204) {
         std::cout << "Delete asset failed: " << res.text << std::endl;
         return false;
     }
@@ -123,13 +199,7 @@ json AssetService::searchAssets(const std::string& searchText)
     try {
         auto response = json::parse(res.text);
 
-        if (response.contains("data") && response["data"].is_array()) {
-            return response["data"];
-        }
-
-        if (response.is_array()) {
-            return response;
-        }
+        return normalizeAssetsResponse(response);
     }
     catch (const std::exception& ex) {
         std::cout << "Parse search assets failed: " << ex.what() << std::endl;
