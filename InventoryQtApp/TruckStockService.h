@@ -137,7 +137,10 @@ struct UseTruckItemRequest
 
 struct LowStockItemDto
 {
+    std::string itemId;
+    std::string templateId;
     std::string templateName;
+    std::string truckId;
     std::string truckNumber;
     std::string productName;
     int currentQuantity;
@@ -235,6 +238,8 @@ public:
         const std::string& assignmentId,
         const UpdateAssignmentRequest& request
     );
+
+    bool restockTruckStockItem(const std::string& itemId,int newQuantity);
 
 private:
     ApiClient& apiClient;

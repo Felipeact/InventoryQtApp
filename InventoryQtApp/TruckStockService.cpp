@@ -36,7 +36,7 @@ std::vector<TruckDto> TruckStockService::getTrucks()
             truck.truckName = item.value("truckNumber", "");
             truck.licensePlate = item.value("plateNumber", "");
             truck.status = item.value("status", "");
-            truck.updatedAt =item.value("updatedAt",item.value("createdAt", ""));
+            truck.updatedAt = item.value("updatedAt", item.value("createdAt", ""));
 
             if (item.contains("technician") && item["technician"].is_object()) {
                 truck.technicianId = item["technician"].value("id", "");
@@ -99,15 +99,27 @@ bool TruckStockService::createTruck(const CreateTruckRequest& request)
     }
 }
 
-bool TruckStockService::updateTruck(const std::string& truckId, const UpdateTruckRequest& request)
+bool TruckStockService::updateTruck(
+    const std::string& truckId,
+    const UpdateTruckRequest& request
+)
 {
     try {
         json body;
 
-        body["truckNumber"] = request.truckNumber;
-        body["plateNumber"] = request.plateNumber;
+        if (!request.truckNumber.empty()) {
+            body["truckNumber"] = request.truckNumber;
+        }
+
+        if (!request.plateNumber.empty()) {
+            body["plateNumber"] = request.plateNumber;
+        }
+
         body["technicianId"] = request.technicianId;
-        body["status"] = request.status;
+
+        if (!request.status.empty()) {
+            body["status"] = request.status;
+        }
 
         auto response = apiClient.put(
             "/truck-stock/trucks/" + truckId,
@@ -133,20 +145,15 @@ bool TruckStockService::updateTruck(const std::string& truckId, const UpdateTruc
 
         return false;
     }
-
 }
 
-bool TruckStockService::deactivateTruck(const std::string& truckId)
+bool TruckStockService::deactivateTruck(
+    const std::string& truckId
+)
 {
-    UpdateTruckRequest request;
-
-    request.truckNumber = "";
-    request.plateNumber = "";
-    request.technicianId = "";
-    request.status = "INACTIVE";
-
     try {
         json body;
+
         body["status"] = "INACTIVE";
         body["technicianId"] = "";
 
@@ -319,27 +326,7 @@ std::vector<TruckAssignmentDto> TruckStockService::getAssignments()
 
             assignment.id = item.value("id", "");
             assignment.assignedOn = item.value("createdAt", "");
-            assignment.status = "Active";
-
-            if (item.contains("truck") && item["truck"].is_object()) {
-                assignment.truckNumber =
-                    item["truck"].value("truckNumber", "");
-            }
-
-            if (item.contains("template") && item["template"].is_object()) {
-                assignment.templateName =
-                    item["template"].value("name", "");
-            }
-
-            if (item.contains("assignedBy") && item["assignedBy"].is_object()) {
-                assignment.assignedBy =
-                    item["assignedBy"].value("name", "");
-
-                if (assignment.assignedBy.empty()) {
-                    assignment.assignedBy =
-                        item["assignedBy"].value("email", "");
-                }
-            }
+            assignment.status = item.value("status", "Active");
 
             if (item.contains("truck") && item["truck"].is_object()) {
                 assignment.truckId =
@@ -355,6 +342,16 @@ std::vector<TruckAssignmentDto> TruckStockService::getAssignments()
 
                 assignment.templateName =
                     item["template"].value("name", "");
+            }
+
+            if (item.contains("assignedBy") && item["assignedBy"].is_object()) {
+                assignment.assignedBy =
+                    item["assignedBy"].value("name", "");
+
+                if (assignment.assignedBy.empty()) {
+                    assignment.assignedBy =
+                        item["assignedBy"].value("email", "");
+                }
             }
 
             assignments.push_back(assignment);
@@ -444,6 +441,24 @@ bool TruckStockService::updateTemplate(
 
         body["name"] = request.name;
         body["tradeType"] = request.tradeType;
+
+        if (!request.items.empty()) {
+            body["items"] = json::array();
+
+            for (const auto& item : request.items) {
+                json itemJson;
+
+                itemJson["productName"] = item.productName;
+                itemJson["category"] = item.category;
+                itemJson["requiredQuantity"] = item.requiredQuantity;
+                itemJson["minimumQuantity"] = item.minimumQuantity;
+                itemJson["expectedPrice"] = item.expectedPrice;
+                itemJson["unit"] = item.unit;
+                itemJson["notes"] = item.notes;
+
+                body["items"].push_back(itemJson);
+            }
+        }
 
         auto response = apiClient.put(
             "/truck-stock/templates/" + templateId,
@@ -642,9 +657,13 @@ std::vector<LowStockItemDto> TruckStockService::getLowStockItems()
         json data = json::parse(response.text);
 
         for (const auto& templateJson : data) {
+            std::string templateId =
+                templateJson.value("id", "");
+
             std::string templateName =
                 templateJson.value("name", "");
 
+            std::string truckId = "";
             std::string truckNumber = "";
 
             if (templateJson.contains("assignments") &&
@@ -656,6 +675,10 @@ std::vector<LowStockItemDto> TruckStockService::getLowStockItems()
 
                 if (firstAssignment.contains("truck") &&
                     firstAssignment["truck"].is_object()) {
+
+                    truckId =
+                        firstAssignment["truck"].value("id", "");
+
                     truckNumber =
                         firstAssignment["truck"].value("truckNumber", "");
                 }
@@ -669,8 +692,21 @@ std::vector<LowStockItemDto> TruckStockService::getLowStockItems()
             for (const auto& itemJson : templateJson["items"]) {
                 LowStockItemDto item;
 
-                item.templateName = templateName;
-                item.truckNumber = truckNumber;
+                item.itemId =
+                    itemJson.value("id", "");
+
+                item.templateId =
+                    templateId;
+
+                item.templateName =
+                    templateName;
+
+                item.truckId =
+                    truckId;
+
+                item.truckNumber =
+                    truckNumber;
+
                 item.productName =
                     itemJson.value("productName", "");
 
@@ -865,11 +901,13 @@ bool TruckStockService::createReceipt(
     }
 }
 
-
-bool TruckStockService::approveReceipt(const std::string& receiptId)
+bool TruckStockService::approveReceipt(
+    const std::string& receiptId
+)
 {
     try {
         json body;
+
         body["status"] = "APPROVED";
 
         auto response = apiClient.patch(
@@ -898,10 +936,13 @@ bool TruckStockService::approveReceipt(const std::string& receiptId)
     }
 }
 
-bool TruckStockService::rejectReceipt(const std::string& receiptId)
+bool TruckStockService::rejectReceipt(
+    const std::string& receiptId
+)
 {
     try {
         json body;
+
         body["status"] = "REJECTED";
 
         auto response = apiClient.patch(
@@ -1002,6 +1043,45 @@ bool TruckStockService::updateAssignment(
     catch (const std::exception& ex) {
         std::cerr
             << "TruckStockService::updateAssignment error: "
+            << ex.what()
+            << std::endl;
+
+        return false;
+    }
+}
+
+bool TruckStockService::restockTruckStockItem(
+    const std::string& itemId,
+    int newQuantity
+)
+{
+    try {
+        json body;
+
+        body["quantity"] = newQuantity;
+
+        auto response =
+            apiClient.patch(
+                "/truck-stock/items/" + itemId + "/quantity",
+                body.dump()
+            );
+
+        if (response.status_code != 200) {
+            std::cerr
+                << "PATCH restock item failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return false;
+        }
+
+        return true;
+    }
+    catch (const std::exception& ex) {
+        std::cerr
+            << "TruckStockService::restockTruckStockItem error: "
             << ex.what()
             << std::endl;
 
