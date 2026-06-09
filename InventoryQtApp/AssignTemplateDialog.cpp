@@ -66,6 +66,13 @@ void AssignTemplateDialog::setupConnections()
         this,
         &AssignTemplateDialog::onCloseClicked
     );
+
+    connect(
+        ui.truckComboBox,
+        QOverload<int>::of(&QComboBox::currentIndexChanged),
+        this,
+        &AssignTemplateDialog::onTruckSelectionChanged
+    );
 }
 
 void AssignTemplateDialog::setEditMode(
@@ -119,6 +126,13 @@ void AssignTemplateDialog::loadTrucks()
         ui.truckComboBox->addItem(
             QString::fromStdString(truck.truckName),
             QString::fromStdString(truck.id)
+        );
+
+        int index = ui.truckComboBox->count() - 1;
+        ui.truckComboBox->setItemData(
+            index,
+            QString::fromStdString(truck.technicianId),
+            Qt::UserRole + 1
         );
     }
 }
@@ -183,6 +197,34 @@ void AssignTemplateDialog::loadTechnicians()
             displayName,
             QString::fromStdString(user.id)
         );
+    }
+}
+
+
+void AssignTemplateDialog::onTruckSelectionChanged(
+    int index
+)
+{
+    QString technicianId =
+        ui.truckComboBox->itemData(
+            index,
+            Qt::UserRole + 1
+        ).toString();
+
+    if (technicianId.isEmpty()) {
+        ui.technicianComboBox->setEnabled(true);
+        return;
+    }
+
+    int technicianIndex =
+        ui.technicianComboBox->findData(technicianId);
+
+    if (technicianIndex >= 0) {
+        ui.technicianComboBox->setCurrentIndex(technicianIndex);
+        ui.technicianComboBox->setEnabled(false);
+    }
+    else {
+        ui.technicianComboBox->setEnabled(true);
     }
 }
 

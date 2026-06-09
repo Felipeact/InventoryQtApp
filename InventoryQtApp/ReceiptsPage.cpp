@@ -18,6 +18,35 @@
 #include <QTableWidgetItem>
 #include <QUrl>
 #include <QWidget>
+
+namespace
+{
+    QString formatIsoDateTime(const std::string& value)
+    {
+        QString text = QString::fromStdString(value).trimmed();
+
+        if (text.isEmpty()) {
+            return "N/A";
+        }
+
+        text.replace("T", " ");
+
+        int dotIndex = text.indexOf('.');
+        if (dotIndex >= 0) {
+            text = text.left(dotIndex);
+        }
+
+        if (text.endsWith("Z")) {
+            text.chop(1);
+        }
+
+        if (text.length() >= 16) {
+            return text.left(16);
+        }
+
+        return text;
+    }
+}
 #include <QThread>
 #include <QPointer>
 #include <QMetaObject>
@@ -271,7 +300,7 @@ void ReceiptsPage::populateTable()
         ui.receiptsTable->setItem(
             row,
             5,
-            new QTableWidgetItem(QString::fromStdString(receipt.createdAt))
+            new QTableWidgetItem(formatIsoDateTime(receipt.createdAt))
         );
 
         addActionButtons(

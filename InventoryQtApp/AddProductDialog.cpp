@@ -68,6 +68,22 @@ int AddProductDialog::getQuantity() const
     return ui.quantityInput->value();
 }
 
+QString AddProductDialog::getStore() const
+{
+    QString store = ui.storeComboBox->currentText().trimmed();
+
+    if (store == "Select store") {
+        return "Main Store";
+    }
+
+    return store;
+}
+
+QString AddProductDialog::getDescription() const
+{
+    return ui.descriptionInput->text().trimmed();
+}
+
 void AddProductDialog::onSaveButtonClicked()
 {
     if (viewMode) {
@@ -101,7 +117,9 @@ void AddProductDialog::onCloseButtonClicked()
 void AddProductDialog::setProductData(
     const QString& name,
     const QString& barcode,
-    int quantity
+    int quantity,
+    const QString& store,
+    const QString& description
 )
 {
     viewMode = false;
@@ -109,10 +127,18 @@ void AddProductDialog::setProductData(
     ui.productNameInput->setText(name);
     ui.barcodeInput->setText(barcode);
     ui.quantityInput->setValue(quantity);
+    ui.descriptionInput->setText(description);
+
+    int storeIndex = ui.storeComboBox->findText(store);
+    if (storeIndex >= 0) {
+        ui.storeComboBox->setCurrentIndex(storeIndex);
+    }
 
     ui.productNameInput->setReadOnly(false);
     ui.barcodeInput->setReadOnly(false);
     ui.quantityInput->setEnabled(true);
+    ui.storeComboBox->setEnabled(true);
+    ui.descriptionInput->setReadOnly(false);
 
     ui.titleLabel->setText("Edit Product");
     ui.saveButton->setText("Save");
@@ -125,7 +151,9 @@ void AddProductDialog::setProductData(
 void AddProductDialog::setViewMode(
     const QString& name,
     const QString& barcode,
-    int quantity
+    int quantity,
+    const QString& store,
+    const QString& description
 )
 {
     viewMode = true;
@@ -133,10 +161,18 @@ void AddProductDialog::setViewMode(
     ui.productNameInput->setText(name);
     ui.barcodeInput->setText(barcode);
     ui.quantityInput->setValue(quantity);
+    ui.descriptionInput->setText(description);
+
+    int storeIndex = ui.storeComboBox->findText(store);
+    if (storeIndex >= 0) {
+        ui.storeComboBox->setCurrentIndex(storeIndex);
+    }
 
     ui.productNameInput->setReadOnly(true);
     ui.barcodeInput->setReadOnly(true);
     ui.quantityInput->setEnabled(false);
+    ui.storeComboBox->setEnabled(false);
+    ui.descriptionInput->setReadOnly(true);
 
     ui.titleLabel->setText("Product Details");
     ui.saveButton->hide();

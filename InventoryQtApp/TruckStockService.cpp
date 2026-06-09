@@ -5,6 +5,68 @@
 
 using json = nlohmann::json;
 
+namespace
+{
+    std::string getStringValue(
+        const json& item,
+        const std::initializer_list<const char*>& keys,
+        const std::string& fallback = ""
+    )
+    {
+        for (const char* key : keys) {
+            if (!item.contains(key) || item[key].is_null()) {
+                continue;
+            }
+
+            if (item[key].is_string()) {
+                return item[key].get<std::string>();
+            }
+
+            if (item[key].is_number_integer()) {
+                return std::to_string(item[key].get<int>());
+            }
+
+            if (item[key].is_number_float()) {
+                return std::to_string(item[key].get<double>());
+            }
+        }
+
+        return fallback;
+    }
+
+    int getIntValue(
+        const json& item,
+        const std::initializer_list<const char*>& keys,
+        int fallback = 0
+    )
+    {
+        for (const char* key : keys) {
+            if (!item.contains(key) || item[key].is_null()) {
+                continue;
+            }
+
+            if (item[key].is_number_integer()) {
+                return item[key].get<int>();
+            }
+
+            if (item[key].is_number_float()) {
+                return static_cast<int>(item[key].get<double>());
+            }
+
+            if (item[key].is_string()) {
+                try {
+                    return std::stoi(item[key].get<std::string>());
+                }
+                catch (...) {
+                    continue;
+                }
+            }
+        }
+
+        return fallback;
+    }
+}
+
 TruckStockService::TruckStockService(ApiClient& apiClient)
     : apiClient(apiClient)
 {
@@ -32,19 +94,15 @@ std::vector<TruckDto> TruckStockService::getTrucks()
         for (const auto& item : data) {
             TruckDto truck;
 
-            truck.id = item.value("id", "");
-            truck.truckName = item.value("truckNumber", "");
-            truck.licensePlate = item.value("plateNumber", "");
-            truck.status = item.value("status", "");
-            truck.updatedAt = item.value("updatedAt", item.value("createdAt", ""));
+            truck.id = getStringValue(item, { "id" });
+            truck.truckName = getStringValue(item, { "truckNumber", "truckName", "number", "name" });
+            truck.licensePlate = getStringValue(item, { "plateNumber", "licensePlate", "plate" });
+            truck.status = getStringValue(item, { "status" }, "Active");
+            truck.updatedAt = getStringValue(item, { "updatedAt", "createdAt" });
 
             if (item.contains("technician") && item["technician"].is_object()) {
-                truck.technicianId = item["technician"].value("id", "");
-                truck.technicianName = item["technician"].value("name", "");
-
-                if (truck.technicianName.empty()) {
-                    truck.technicianName = item["technician"].value("email", "");
-                }
+                truck.technicianId = getStringValue(item["technician"], { "id" });
+                truck.technicianName = getStringValue(item["technician"], { "name", "email" });
             }
             else {
                 truck.technicianId = "";
@@ -191,16 +249,21 @@ std::vector<StockTemplateDto> TruckStockService::getTemplates()
         for (const auto& item : data) {
             StockTemplateDto stockTemplate;
 
-            stockTemplate.id = item.value("id", "");
-            stockTemplate.name = item.value("name", "");
-            stockTemplate.tradeType = item.value("tradeType", "");
+            stockTemplate.id = getStringValue(item, { "id" });
+            stockTemplate.name = getStringValue(item, { "name" });
+            stockTemplate.tradeType = getStringValue(item, { "tradeType", "type" });
 
             if (item.contains("items") && item["items"].is_array()) {
                 stockTemplate.itemCount =
                     static_cast<int>(item["items"].size());
             }
+            else if (item.contains("_count") && item["_count"].is_object()) {
+                stockTemplate.itemCount =
+                    getIntValue(item["_count"], { "items" }, 0);
+            }
             else {
-                stockTemplate.itemCount = 0;
+                stockTemplate.itemCount =
+                    getIntValue(item, { "itemCount", "itemsCount", "count" }, 0);
             }
 
             templates.push_back(stockTemplate);
@@ -324,34 +387,29 @@ std::vector<TruckAssignmentDto> TruckStockService::getAssignments()
         for (const auto& item : data) {
             TruckAssignmentDto assignment;
 
-            assignment.id = item.value("id", "");
-            assignment.assignedOn = item.value("createdAt", "");
-            assignment.status = item.value("status", "Active");
+            assignment.id = getStringValue(item, { "id" });
+            assignment.assignedOn = getStringValue(item, { "assignedOn", "createdAt", "updatedAt" });
+            assignment.status = getStringValue(item, { "status" }, "Active");
 
             if (item.contains("truck") && item["truck"].is_object()) {
                 assignment.truckId =
-                    item["truck"].value("id", "");
+                    getStringValue(item["truck"], { "id" });
 
                 assignment.truckNumber =
-                    item["truck"].value("truckNumber", "");
+                    getStringValue(item["truck"], { "truckNumber", "truckName", "number", "name" });
             }
 
             if (item.contains("template") && item["template"].is_object()) {
                 assignment.templateId =
-                    item["template"].value("id", "");
+                    getStringValue(item["template"], { "id" });
 
                 assignment.templateName =
-                    item["template"].value("name", "");
+                    getStringValue(item["template"], { "name" });
             }
 
             if (item.contains("assignedBy") && item["assignedBy"].is_object()) {
                 assignment.assignedBy =
-                    item["assignedBy"].value("name", "");
-
-                if (assignment.assignedBy.empty()) {
-                    assignment.assignedBy =
-                        item["assignedBy"].value("email", "");
-                }
+                    getStringValue(item["assignedBy"], { "name", "email" });
             }
 
             assignments.push_back(assignment);
@@ -756,25 +814,20 @@ std::vector<ReceiptDto> TruckStockService::getReceipts()
         for (const auto& item : data) {
             ReceiptDto receipt;
 
-            receipt.id = item.value("id", "");
+            receipt.id = getStringValue(item, { "id" });
             receipt.totalAmount = item.value("totalAmount", 0.0);
-            receipt.status = item.value("status", "");
-            receipt.createdAt = item.value("createdAt", "");
-            receipt.fileUrl = item.value("fileUrl", "");
+            receipt.status = getStringValue(item, { "status" });
+            receipt.createdAt = getStringValue(item, { "createdAt", "updatedAt" });
+            receipt.fileUrl = getStringValue(item, { "fileUrl", "filePath", "attachmentUrl" });
 
             if (item.contains("technician") && item["technician"].is_object()) {
                 receipt.technicianName =
-                    item["technician"].value("name", "");
-
-                if (receipt.technicianName.empty()) {
-                    receipt.technicianName =
-                        item["technician"].value("email", "");
-                }
+                    getStringValue(item["technician"], { "name", "email" });
             }
 
             if (item.contains("truck") && item["truck"].is_object()) {
                 receipt.truckNumber =
-                    item["truck"].value("truckNumber", "");
+                    getStringValue(item["truck"], { "truckNumber", "truckName", "number", "name" });
             }
 
             receipts.push_back(receipt);

@@ -15,6 +15,35 @@
 #include <QTableWidgetItem>
 #include <QWidget>
 
+namespace
+{
+    QString formatIsoDateTime(const std::string& value)
+    {
+        QString text = QString::fromStdString(value).trimmed();
+
+        if (text.isEmpty()) {
+            return "N/A";
+        }
+
+        text.replace("T", " ");
+
+        int dotIndex = text.indexOf('.');
+        if (dotIndex >= 0) {
+            text = text.left(dotIndex);
+        }
+
+        if (text.endsWith("Z")) {
+            text.chop(1);
+        }
+
+        if (text.length() >= 16) {
+            return text.left(16);
+        }
+
+        return text;
+    }
+}
+
 AssignmentsPage::AssignmentsPage(
     TruckStockService* truckStockService,
     UserService* userService,
@@ -108,7 +137,7 @@ void AssignmentsPage::setupTable()
     ui.assignmentsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui.assignmentsTable->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
 
-    ui.assignmentsTable->setColumnWidth(5, 140);
+    ui.assignmentsTable->setColumnWidth(5, 170);
     ui.assignmentsTable->verticalHeader()->setDefaultSectionSize(52);
 
     ui.assignmentsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -252,7 +281,7 @@ void AssignmentsPage::populateTable()
             row,
             3,
             new QTableWidgetItem(
-                QString::fromStdString(assignment.assignedOn)
+                formatIsoDateTime(assignment.assignedOn)
             )
         );
 
@@ -295,7 +324,7 @@ void AssignmentsPage::addActionButtons(
     editButton->setToolTip("Edit Assignment");
 
     QPushButton* unassignButton =
-        new QPushButton("❌", actionWidget);
+        new QPushButton("🗑", actionWidget);
 
     unassignButton->setObjectName("unassignButton");
     unassignButton->setToolTip("Unassign Template");

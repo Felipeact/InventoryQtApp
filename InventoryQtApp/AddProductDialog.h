@@ -19,17 +19,23 @@ public:
     QString getProductName() const;
     QString getBarcode() const;
     int getQuantity() const;
+    QString getStore() const;
+    QString getDescription() const;
 
     void setProductData(
         const QString& name,
         const QString& barcode,
-        int quantity
+        int quantity,
+        const QString& store = "Main Store",
+        const QString& description = ""
     );
 
     void setViewMode(
         const QString& name,
         const QString& barcode,
-        int quantity
+        int quantity,
+        const QString& store = "Main Store",
+        const QString& description = ""
     );
 
 private slots:

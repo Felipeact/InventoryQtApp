@@ -25,13 +25,23 @@ ProductService::ProductService(ApiClient& apiClient)
 bool ProductService::createProduct(
     const std::string& name,
     const std::string& barcode,
-    int quantity
+    int quantity,
+    const std::string& location,
+    const std::string& description,
+    int lowStockThreshold
 )
 {
     json body = {
         {"name", name},
         {"barcode", barcode},
-        {"quantity", quantity}
+        {"quantity", quantity},
+        {"location", location},
+        {"description", description},
+        {"lowStockThreshold", lowStockThreshold},
+        {"model", barcode},
+        {"type", "Product"},
+        {"project", "HQ"},
+        {"account", "Activated"}
     };
 
     auto res = api.post("/products", body.dump());
@@ -77,13 +87,23 @@ bool ProductService::updateProduct(
     const std::string& productId,
     const std::string& name,
     const std::string& barcode,
-    int quantity
+    int quantity,
+    const std::string& location,
+    const std::string& description,
+    int lowStockThreshold
 )
 {
     json body = {
         {"name", name},
         {"barcode", barcode},
-        {"quantity", quantity}
+        {"quantity", quantity},
+        {"location", location},
+        {"description", description},
+        {"lowStockThreshold", lowStockThreshold},
+        {"model", barcode},
+        {"type", "Product"},
+        {"project", "HQ"},
+        {"account", "Activated"}
     };
 
     auto res = api.put("/products/" + productId, body.dump());

@@ -261,6 +261,9 @@ void ItemsPage::populateTable(
         QString barcode =
             getProductString(product, "barcode");
 
+        QString model =
+            getProductString(product, "model", barcode);
+
         int quantity =
             getProductQuantity(product);
 
@@ -291,7 +294,7 @@ void ItemsPage::populateTable(
         ui.itemsTable->setItem(
             row,
             2,
-            new QTableWidgetItem(barcode)
+            new QTableWidgetItem(model)
         );
 
         ui.itemsTable->setItem(
@@ -381,12 +384,20 @@ void ItemsPage::populateTable(
                 int quantity =
                     getProductQuantity(product);
 
+                QString store =
+                    getProductString(product, "location", "Main Store");
+
+                QString description =
+                    getProductString(product, "description", "");
+
                 AddProductDialog dialog(this);
 
                 dialog.setProductData(
                     name,
                     barcode,
-                    quantity
+                    quantity,
+                    store,
+                    description
                 );
 
                 if (dialog.exec() == QDialog::Accepted) {
@@ -395,7 +406,9 @@ void ItemsPage::populateTable(
                             productId,
                             dialog.getProductName().toStdString(),
                             dialog.getBarcode().toStdString(),
-                            dialog.getQuantity()
+                            dialog.getQuantity(),
+                            dialog.getStore().toStdString(),
+                            dialog.getDescription().toStdString()
                         );
 
                     if (success) {
@@ -824,7 +837,9 @@ void ItemsPage::onAddItemClicked()
             productService.createProduct(
                 dialog.getProductName().toStdString(),
                 dialog.getBarcode().toStdString(),
-                dialog.getQuantity()
+                dialog.getQuantity(),
+                dialog.getStore().toStdString(),
+                dialog.getDescription().toStdString()
             );
 
         if (success) {

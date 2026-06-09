@@ -45,6 +45,7 @@ private slots:
     void onAssignClicked();
     void onCancelClicked();
     void onCloseClicked();
+    void onTruckSelectionChanged(int index);
 
 private:
     Ui::AssignTemplateDialogClass ui;

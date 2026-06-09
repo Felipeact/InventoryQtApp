@@ -78,11 +78,11 @@ void ItemDetailsDialog::loadProductDetails()
     );
 
     ui.projectValue->setText(
-        getStringValue("project", "HQ")
+        getStringValue("description", getStringValue("project", "-"))
     );
 
     ui.statusValue->setText(
-        getStringValue("status", "Activated")
+        getStringValue("status", "Active")
     );
 
     ui.imagePathValue->setText(
@@ -208,28 +208,24 @@ int ItemDetailsDialog::getQuantity() const
 
 QString ItemDetailsDialog::getImageValue() const
 {
-    if (product.contains("imageUrl")) {
-        return QString::fromStdString(
-            product.value("imageUrl", "")
-        );
-    }
+    QStringList keys;
+    keys << "imageUrl" << "image" << "photoUrl" << "thumbnailUrl";
 
-    if (product.contains("image")) {
-        return QString::fromStdString(
-            product.value("image", "")
-        );
-    }
+    for (const QString& keyName : keys) {
+        std::string key =
+            keyName.toStdString();
 
-    if (product.contains("photoUrl")) {
-        return QString::fromStdString(
-            product.value("photoUrl", "")
-        );
-    }
+        if (
+            product.contains(key) &&
+            product[key].is_string()
+            ) {
+            std::string value =
+                product.value(key, "");
 
-    if (product.contains("thumbnailUrl")) {
-        return QString::fromStdString(
-            product.value("thumbnailUrl", "")
-        );
+            if (!value.empty()) {
+                return QString::fromStdString(value);
+            }
+        }
     }
 
     return "";

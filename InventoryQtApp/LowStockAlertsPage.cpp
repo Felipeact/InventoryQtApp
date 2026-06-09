@@ -119,7 +119,7 @@ void LowStockAlertsPage::setupTable()
     ui.alertsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui.alertsTable->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Fixed);
 
-    ui.alertsTable->setColumnWidth(6, 260);
+    ui.alertsTable->setColumnWidth(6, 330);
     ui.alertsTable->verticalHeader()->setDefaultSectionSize(52);
 
     ui.alertsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -302,7 +302,7 @@ void LowStockAlertsPage::addActionButtons(
     layout->setAlignment(Qt::AlignCenter);
 
     QPushButton* restockButton =
-        new QPushButton("Restock", actionWidget);
+        new QPushButton("Add Stock", actionWidget);
 
     restockButton->setObjectName("restockButton");
 
