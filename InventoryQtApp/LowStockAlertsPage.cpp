@@ -1,5 +1,6 @@
 #include "LowStockAlertsPage.h"
 #include "Theme.h"
+#include "UploadReceiptDialog.h"
 
 #include <algorithm>
 
@@ -9,12 +10,15 @@
 #include <QFileDialog>
 #include <QFrame>
 #include <QHeaderView>
+#include <QHBoxLayout>
+#include <QInputDialog>
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QPushButton>
 #include <QTableWidget>
 #include <QTableWidgetItem>
 #include <QTextStream>
+#include <QWidget>
 
 LowStockAlertsPage::LowStockAlertsPage(
     TruckStockService* truckStockService,
@@ -83,7 +87,7 @@ void LowStockAlertsPage::setupConnections()
 
 void LowStockAlertsPage::setupTable()
 {
-    ui.alertsTable->setColumnCount(6);
+    ui.alertsTable->setColumnCount(7);
 
     ui.alertsTable->setHorizontalHeaderLabels(
         QStringList()
@@ -93,6 +97,7 @@ void LowStockAlertsPage::setupTable()
         << "Minimum Qty"
         << "Status"
         << "Template"
+        << "Actions"
     );
 
     ui.alertsTable->verticalHeader()->setVisible(false);
@@ -112,7 +117,9 @@ void LowStockAlertsPage::setupTable()
 
     ui.alertsTable->horizontalHeader()->setFixedHeight(48);
     ui.alertsTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui.alertsTable->horizontalHeader()->setSectionResizeMode(6, QHeaderView::Fixed);
 
+    ui.alertsTable->setColumnWidth(6, 260);
     ui.alertsTable->verticalHeader()->setDefaultSectionSize(52);
 
     ui.alertsTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -223,7 +230,7 @@ void LowStockAlertsPage::populateTable()
             new QTableWidgetItem("No low stock alerts found")
         );
 
-        ui.alertsTable->setSpan(0, 0, 1, 6);
+        ui.alertsTable->setSpan(0, 0, 1, 7);
 
         return;
     }
@@ -268,6 +275,280 @@ void LowStockAlertsPage::populateTable()
             row,
             5,
             new QTableWidgetItem(QString::fromStdString(item.templateName))
+        );
+
+        addActionButtons(
+            row,
+            item
+        );
+    }
+}
+
+void LowStockAlertsPage::addActionButtons(
+    int row,
+    const LowStockItemDto& alert
+)
+{
+    QWidget* actionWidget =
+        new QWidget(this);
+
+    actionWidget->setObjectName("actionContainer");
+
+    QHBoxLayout* layout =
+        new QHBoxLayout(actionWidget);
+
+    layout->setContentsMargins(0, 0, 0, 0);
+    layout->setSpacing(6);
+    layout->setAlignment(Qt::AlignCenter);
+
+    QPushButton* restockButton =
+        new QPushButton("Restock", actionWidget);
+
+    restockButton->setObjectName("restockButton");
+
+    QPushButton* receiptButton =
+        new QPushButton("Receipt", actionWidget);
+
+    receiptButton->setObjectName("receiptButton");
+
+    QPushButton* assignButton =
+        new QPushButton("Assign", actionWidget);
+
+    assignButton->setObjectName("assignButton");
+
+    layout->addWidget(restockButton);
+    layout->addWidget(receiptButton);
+    layout->addWidget(assignButton);
+
+    ui.alertsTable->setCellWidget(
+        row,
+        6,
+        actionWidget
+    );
+
+    connect(
+        restockButton,
+        &QPushButton::clicked,
+        this,
+        [this, alert]() {
+            onRestockClicked(alert);
+        }
+    );
+
+    connect(
+        receiptButton,
+        &QPushButton::clicked,
+        this,
+        [this, alert]() {
+            onCreateReceiptClicked(alert);
+        }
+    );
+
+    connect(
+        assignButton,
+        &QPushButton::clicked,
+        this,
+        [this, alert]() {
+            onCreateAssignmentClicked(alert);
+        }
+    );
+}
+
+void LowStockAlertsPage::onRestockClicked(
+    const LowStockItemDto& alert
+)
+{
+    if (!truckStockService) {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Truck stock service is unavailable."
+        );
+
+        return;
+    }
+
+    if (alert.itemId.empty()) {
+        QMessageBox::warning(
+            this,
+            "Restock Failed",
+            "This alert does not have a valid stock item ID."
+        );
+
+        return;
+    }
+
+    bool ok = false;
+
+    int suggestedQuantity =
+        (std::max)(
+            alert.minimumQuantity,
+            alert.currentQuantity + 1
+            );
+
+    int newQuantity =
+        QInputDialog::getInt(
+            this,
+            "Restock Item",
+            "Enter the new stock quantity for:\n\n" +
+            QString::fromStdString(alert.productName),
+            suggestedQuantity,
+            0,
+            1000000,
+            1,
+            &ok
+        );
+
+    if (!ok) {
+        return;
+    }
+
+    bool success =
+        truckStockService->restockTruckStockItem(
+            alert.itemId,
+            newQuantity
+        );
+
+    if (success) {
+        QMessageBox::information(
+            this,
+            "Restocked",
+            "Stock quantity updated successfully."
+        );
+
+        loadAlerts();
+    }
+    else {
+        QMessageBox::warning(
+            this,
+            "Restock Failed",
+            "Failed to update stock quantity. Check backend console."
+        );
+    }
+}
+
+void LowStockAlertsPage::onCreateReceiptClicked(
+    const LowStockItemDto& alert
+)
+{
+    if (!truckStockService) {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Truck stock service is unavailable."
+        );
+
+        return;
+    }
+
+    UploadReceiptDialog dialog(
+        truckStockService,
+        this
+    );
+
+    if (dialog.exec() != QDialog::Accepted) {
+        return;
+    }
+
+    CreateReceiptRequest request;
+
+    request.truckId =
+        dialog.getSelectedTruckId().toStdString();
+
+    if (request.truckId.empty()) {
+        request.truckId =
+            alert.truckId;
+    }
+
+    request.fileUrl =
+        dialog.getFilePath().toStdString();
+
+    request.totalAmount =
+        dialog.getTotalAmount().toDouble();
+
+    bool success =
+        truckStockService->createReceipt(request);
+
+    if (success) {
+        QMessageBox::information(
+            this,
+            "Receipt Created",
+            "Receipt created successfully."
+        );
+    }
+    else {
+        QMessageBox::warning(
+            this,
+            "Receipt Failed",
+            "Failed to create receipt. Check backend console."
+        );
+    }
+}
+
+void LowStockAlertsPage::onCreateAssignmentClicked(
+    const LowStockItemDto& alert
+)
+{
+    if (!truckStockService) {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Truck stock service is unavailable."
+        );
+
+        return;
+    }
+
+    if (alert.truckId.empty() || alert.templateId.empty()) {
+        QMessageBox::warning(
+            this,
+            "Assignment Failed",
+            "This alert does not have a valid truck ID or template ID."
+        );
+
+        return;
+    }
+
+    QMessageBox::StandardButton confirm =
+        QMessageBox::question(
+            this,
+            "Create Assignment",
+            "Create assignment for:\n\nTruck: " +
+            QString::fromStdString(alert.truckNumber) +
+            "\nTemplate: " +
+            QString::fromStdString(alert.templateName),
+            QMessageBox::Yes | QMessageBox::No
+        );
+
+    if (confirm != QMessageBox::Yes) {
+        return;
+    }
+
+    CreateAssignmentRequest request;
+
+    request.truckId =
+        alert.truckId;
+
+    request.templateId =
+        alert.templateId;
+
+    bool success =
+        truckStockService->assignTemplate(request);
+
+    if (success) {
+        QMessageBox::information(
+            this,
+            "Assignment Created",
+            "Assignment created successfully."
+        );
+
+        loadAlerts();
+    }
+    else {
+        QMessageBox::warning(
+            this,
+            "Assignment Failed",
+            "Failed to create assignment. It may already exist."
         );
     }
 }
@@ -427,6 +708,10 @@ void LowStockAlertsPage::onExportClicked()
         return;
     }
 
+    if (!filePath.endsWith(".csv", Qt::CaseInsensitive)) {
+        filePath += ".csv";
+    }
+
     QFile file(filePath);
 
     if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
@@ -440,6 +725,10 @@ void LowStockAlertsPage::onExportClicked()
     }
 
     QTextStream out(&file);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    out.setEncoding(QStringConverter::Utf8);
+#endif
 
     out << "Truck,Product,Current Quantity,Minimum Quantity,Status,Template\n";
 
@@ -473,5 +762,5 @@ void LowStockAlertsPage::applyTheme(
 
 void LowStockAlertsPage::setSearchText(const QString& text)
 {
-	ui.searchInput->setText(text);
+    ui.searchInput->setText(text);
 }

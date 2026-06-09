@@ -57,6 +57,23 @@ private:
     void updateMetrics();
     void updatePagination();
 
+    void addActionButtons(
+        int row,
+        const LowStockItemDto& alert
+    );
+
+    void onRestockClicked(
+        const LowStockItemDto& alert
+    );
+
+    void onCreateReceiptClicked(
+        const LowStockItemDto& alert
+    );
+
+    void onCreateAssignmentClicked(
+        const LowStockItemDto& alert
+    );
+
     QString escapeCsv(
         const QString& value
     ) const;
