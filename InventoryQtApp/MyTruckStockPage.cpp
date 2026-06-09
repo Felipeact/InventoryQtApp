@@ -1,8 +1,11 @@
 #include "MyTruckStockPage.h"
 #include "Theme.h"
 #include "UseTruckItemDialog.h"
+#include "TruckStockHistoryDialog.h"
 
 #include <QAbstractItemView>
+#include <QFile>
+#include <QFileDialog>
 #include <QFrame>
 #include <QHeaderView>
 #include <QHBoxLayout>
@@ -11,6 +14,7 @@
 #include <QPushButton>
 #include <QTableWidget>
 #include <QTableWidgetItem>
+#include <QTextStream>
 #include <QWidget>
 
 MyTruckStockPage::MyTruckStockPage(
@@ -40,6 +44,13 @@ void MyTruckStockPage::setupConnections()
         &QLineEdit::textChanged,
         this,
         &MyTruckStockPage::onSearchChanged
+    );
+
+    connect(
+        ui.exportCsvButton,
+        &QPushButton::clicked,
+        this,
+        &MyTruckStockPage::onExportCsvClicked
     );
 }
 
@@ -76,7 +87,7 @@ void MyTruckStockPage::setupTable()
     ui.truckStockTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
     ui.truckStockTable->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
 
-    ui.truckStockTable->setColumnWidth(5, 130);
+    ui.truckStockTable->setColumnWidth(5, 190);
     ui.truckStockTable->verticalHeader()->setDefaultSectionSize(52);
 
     ui.truckStockTable->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
@@ -198,7 +209,7 @@ void MyTruckStockPage::populateTable()
             new QTableWidgetItem(QString::fromStdString(item.status))
         );
 
-        addUseButton(row);
+        addActionButtons(row);
     }
 }
 
@@ -209,7 +220,7 @@ void MyTruckStockPage::onSearchChanged(const QString& text)
     filterStock();
 }
 
-void MyTruckStockPage::addUseButton(
+void MyTruckStockPage::addActionButtons(
     int row
 )
 {
@@ -230,13 +241,33 @@ void MyTruckStockPage::addUseButton(
 
     useButton->setObjectName("useButton");
 
+    QPushButton* historyButton =
+        new QPushButton("History", actionWidget);
+
+    historyButton->setObjectName("historyButton");
+
     layout->addWidget(useButton);
+    layout->addWidget(historyButton);
 
     ui.truckStockTable->setCellWidget(row, 5, actionWidget);
 
-    connect(useButton, &QPushButton::clicked, this, [this, row]() {
-        onUseItemClicked(row);
-        });
+    connect(
+        useButton,
+        &QPushButton::clicked,
+        this,
+        [this, row]() {
+            onUseItemClicked(row);
+        }
+    );
+
+    connect(
+        historyButton,
+        &QPushButton::clicked,
+        this,
+        [this, row]() {
+            onHistoryClicked(row);
+        }
+    );
 }
 
 void MyTruckStockPage::onUseItemClicked(
@@ -244,6 +275,16 @@ void MyTruckStockPage::onUseItemClicked(
 )
 {
     if (row < 0 || row >= static_cast<int>(filteredItems.size())) {
+        return;
+    }
+
+    if (!truckStockService) {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Truck stock service is unavailable."
+        );
+
         return;
     }
 
@@ -292,6 +333,144 @@ void MyTruckStockPage::onUseItemClicked(
     }
 }
 
+void MyTruckStockPage::onHistoryClicked(
+    int row
+)
+{
+    if (row < 0 || row >= static_cast<int>(filteredItems.size())) {
+        return;
+    }
+
+    if (!truckStockService) {
+        QMessageBox::warning(
+            this,
+            "Error",
+            "Truck stock service is unavailable."
+        );
+
+        return;
+    }
+
+    const MyTruckStockItemDto& item =
+        filteredItems[row];
+
+    std::vector<TruckStockMovementDto> movements =
+        truckStockService->getMovements();
+
+    TruckStockHistoryDialog dialog(
+        item,
+        movements,
+        this
+    );
+
+    dialog.exec();
+}
+
+void MyTruckStockPage::onExportCsvClicked()
+{
+    if (filteredItems.empty()) {
+        QMessageBox::information(
+            this,
+            "Export CSV",
+            "There is no truck stock data to export."
+        );
+
+        return;
+    }
+
+    QString filePath =
+        QFileDialog::getSaveFileName(
+            this,
+            "Export Truck Stock CSV",
+            "my_truck_stock.csv",
+            "CSV Files (*.csv)"
+        );
+
+    if (filePath.isEmpty()) {
+        return;
+    }
+
+    if (!filePath.endsWith(".csv", Qt::CaseInsensitive)) {
+        filePath += ".csv";
+    }
+
+    QFile file(filePath);
+
+    if (!file.open(QIODevice::WriteOnly | QIODevice::Text)) {
+        QMessageBox::warning(
+            this,
+            "Export Failed",
+            "Could not create the CSV file."
+        );
+
+        return;
+    }
+
+    QTextStream out(&file);
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    out.setEncoding(QStringConverter::Utf8);
+#endif
+
+    out
+        << "Truck,"
+        << escapeCsvField(QString::fromStdString(currentStock.truckNumber))
+        << "\n";
+
+    out
+        << "Plate,"
+        << escapeCsvField(QString::fromStdString(currentStock.plateNumber))
+        << "\n\n";
+
+    out
+        << "Item,"
+        << "Category,"
+        << "Current Qty,"
+        << "Minimum Qty,"
+        << "Required Qty,"
+        << "Status\n";
+
+    for (const MyTruckStockItemDto& item : filteredItems) {
+        out
+            << escapeCsvField(QString::fromStdString(item.productName)) << ","
+            << escapeCsvField(QString::fromStdString(item.category)) << ","
+            << item.currentQuantity << ","
+            << item.minimumQuantity << ","
+            << item.requiredQuantity << ","
+            << escapeCsvField(QString::fromStdString(item.status)) << "\n";
+    }
+
+    file.close();
+
+    QMessageBox::information(
+        this,
+        "Export Complete",
+        "Truck stock exported successfully."
+    );
+}
+
+QString MyTruckStockPage::escapeCsvField(
+    const QString& value
+) const
+{
+    QString escaped =
+        value;
+
+    escaped.replace("\"", "\"\"");
+
+    if (
+        escaped.contains(",") ||
+        escaped.contains("\"") ||
+        escaped.contains("\n") ||
+        escaped.contains("\r")
+        ) {
+        escaped =
+            "\"" + escaped + "\"";
+    }
+
+    return escaped;
+}
+
 void MyTruckStockPage::applyTheme(
     Theme::AppTheme theme
 )
@@ -303,5 +482,5 @@ void MyTruckStockPage::applyTheme(
 
 void MyTruckStockPage::setSearchText(const QString& text)
 {
-	ui.searchInput->setText(text);
+    ui.searchInput->setText(text);
 }

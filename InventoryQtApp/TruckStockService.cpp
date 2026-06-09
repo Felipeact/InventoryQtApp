@@ -753,6 +753,81 @@ std::vector<ReceiptDto> TruckStockService::getReceipts()
     return receipts;
 }
 
+std::vector<TruckStockMovementDto> TruckStockService::getMovements()
+{
+    std::vector<TruckStockMovementDto> movements;
+
+    try {
+        auto response =
+            apiClient.get("/truck-stock/movements");
+
+        if (response.status_code != 200) {
+            std::cerr
+                << "GET /truck-stock/movements failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+
+            return movements;
+        }
+
+        json data =
+            json::parse(response.text);
+
+        for (const auto& item : data) {
+            TruckStockMovementDto movement;
+
+            movement.id =
+                item.value("id", "");
+
+            movement.action =
+                item.value("action", "");
+
+            movement.previousQuantity =
+                item.value("previousQuantity", 0);
+
+            movement.newQuantity =
+                item.value("newQuantity", 0);
+
+            movement.notes =
+                item.value("notes", "");
+
+            movement.createdAt =
+                item.value("createdAt", "");
+
+            if (
+                item.contains("truckStockItem") &&
+                item["truckStockItem"].is_object()
+                ) {
+                movement.truckStockItemId =
+                    item["truckStockItem"].value("id", "");
+
+                movement.productName =
+                    item["truckStockItem"].value("productName", "");
+            }
+
+            if (
+                item.contains("changedBy") &&
+                item["changedBy"].is_object()
+                ) {
+                movement.changedBy =
+                    item["changedBy"].value("email", "");
+            }
+
+            movements.push_back(movement);
+        }
+    }
+    catch (const std::exception& ex) {
+        std::cerr
+            << "TruckStockService::getMovements error: "
+            << ex.what()
+            << std::endl;
+    }
+
+    return movements;
+}
+
 bool TruckStockService::createReceipt(
     const CreateReceiptRequest& request
 )

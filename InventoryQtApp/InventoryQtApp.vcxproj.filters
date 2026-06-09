@@ -208,6 +208,9 @@
     <ClCompile Include="AssetDetailsDialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TruckStockHistoryDialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="ApiClient.h">
@@ -350,6 +353,9 @@
     <QtMoc Include="AssetDetailsDialog.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="TruckStockHistoryDialog.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DashboardPage.ui">
@@ -449,6 +455,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="AssetDetailsDialog.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="TruckStockHistoryDialog.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

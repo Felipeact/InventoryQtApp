@@ -31,6 +31,8 @@ public:
 private slots:
     void onSearchChanged(const QString& text);
     void onUseItemClicked(int row);
+    void onHistoryClicked(int row);
+    void onExportCsvClicked();
 
 signals:
     void stockChanged();
@@ -46,8 +48,10 @@ private:
     void setupTable();
     void loadStock();
 
-    void addUseButton(int row);
+    void addActionButtons(int row);
 
     void filterStock();
     void populateTable();
+
+    QString escapeCsvField(const QString& value) const;
 };

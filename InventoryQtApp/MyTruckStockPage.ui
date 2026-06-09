@@ -140,6 +140,14 @@
 											</property>
 										</spacer>
 									</item>
+
+									<item>
+										<widget class="QPushButton" name="exportCsvButton">
+											<property name="text">
+												<string>Export CSV</string>
+											</property>
+										</widget>
+									</item>
 								</layout>
 							</widget>
 						</item>

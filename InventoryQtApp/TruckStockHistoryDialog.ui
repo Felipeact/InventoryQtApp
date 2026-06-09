@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+	<class>TruckStockHistoryDialogClass</class>
+
+	<widget class="QDialog" name="TruckStockHistoryDialogClass">
+		<property name="geometry">
+			<rect>
+				<x>0</x>
+				<y>0</y>
+				<width>860</width>
+				<height>560</height>
+			</rect>
+		</property>
+
+		<property name="minimumSize">
+			<size>
+				<width>860</width>
+				<height>560</height>
+			</size>
+		</property>
+
+		<property name="maximumSize">
+			<size>
+				<width>860</width>
+				<height>560</height>
+			</size>
+		</property>
+
+		<property name="windowTitle">
+			<string>Truck Stock History</string>
+		</property>
+
+		<layout class="QVBoxLayout" name="rootLayout">
+			<property name="leftMargin">
+				<number>0</number>
+			</property>
+			<property name="topMargin">
+				<number>0</number>
+			</property>
+			<property name="rightMargin">
+				<number>0</number>
+			</property>
+			<property name="bottomMargin">
+				<number>0</number>
+			</property>
+			<property name="spacing">
+				<number>0</number>
+			</property>
+
+			<item>
+				<widget class="QWidget" name="dialogCard" native="true">
+					<layout class="QVBoxLayout" name="dialogCardLayout">
+						<property name="leftMargin">
+							<number>0</number>
+						</property>
+						<property name="topMargin">
+							<number>0</number>
+						</property>
+						<property name="rightMargin">
+							<number>0</number>
+						</property>
+						<property name="bottomMargin">
+							<number>0</number>
+						</property>
+						<property name="spacing">
+							<number>0</number>
+						</property>
+
+						<item>
+							<widget class="QWidget" name="headerContainer" native="true">
+								<property name="minimumSize">
+									<size>
+										<width>0</width>
+										<height>50</height>
+									</size>
+								</property>
+
+								<layout class="QHBoxLayout" name="headerLayout">
+									<property name="leftMargin">
+										<number>24</number>
+									</property>
+									<property name="rightMargin">
+										<number>18</number>
+									</property>
+
+									<item>
+										<widget class="QLabel" name="titleLabel">
+											<property name="text">
+												<string>Stock History</string>
+											</property>
+										</widget>
+									</item>
+
+									<item>
+										<spacer name="headerSpacer">
+											<property name="orientation">
+												<enum>Qt::Horizontal</enum>
+											</property>
+										</spacer>
+									</item>
+
+									<item>
+										<widget class="QPushButton" name="closeButton">
+											<property name="minimumSize">
+												<size>
+													<width>28</width>
+													<height>28</height>
+												</size>
+											</property>
+											<property name="maximumSize">
+												<size>
+													<width>28</width>
+													<height>28</height>
+												</size>
+											</property>
+											<property name="text">
+												<string>×</string>
+											</property>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QWidget" name="contentContainer" native="true">
+								<layout class="QVBoxLayout" name="contentLayout">
+									<property name="leftMargin">
+										<number>28</number>
+									</property>
+									<property name="topMargin">
+										<number>22</number>
+									</property>
+									<property name="rightMargin">
+										<number>28</number>
+									</property>
+									<property name="bottomMargin">
+										<number>16</number>
+									</property>
+									<property name="spacing">
+										<number>14</number>
+									</property>
+
+									<item>
+										<layout class="QGridLayout" name="summaryGrid">
+											<property name="horizontalSpacing">
+												<number>28</number>
+											</property>
+											<property name="verticalSpacing">
+												<number>8</number>
+											</property>
+
+											<item row="0" column="0">
+												<widget class="QLabel" name="itemNameLabel">
+													<property name="text">
+														<string>Item</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="0" column="1">
+												<widget class="QLabel" name="currentQtyLabel">
+													<property name="text">
+														<string>Current Qty</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="0" column="2">
+												<widget class="QLabel" name="statusLabel">
+													<property name="text">
+														<string>Status</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="0" column="3">
+												<widget class="QLabel" name="historyCountLabel">
+													<property name="text">
+														<string>History Records</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="1" column="0">
+												<widget class="QLabel" name="itemNameValue">
+													<property name="text">
+														<string>-</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="1" column="1">
+												<widget class="QLabel" name="currentQtyValue">
+													<property name="text">
+														<string>0</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="1" column="2">
+												<widget class="QLabel" name="statusValue">
+													<property name="text">
+														<string>-</string>
+													</property>
+												</widget>
+											</item>
+
+											<item row="1" column="3">
+												<widget class="QLabel" name="historyCountValue">
+													<property name="text">
+														<string>0</string>
+													</property>
+												</widget>
+											</item>
+										</layout>
+									</item>
+
+									<item>
+										<widget class="QTableWidget" name="historyTable">
+											<property name="minimumSize">
+												<size>
+													<width>0</width>
+													<height>360</height>
+												</size>
+											</property>
+											<property name="rowCount">
+												<number>0</number>
+											</property>
+											<property name="columnCount">
+												<number>6</number>
+											</property>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+
+						<item>
+							<widget class="QWidget" name="footerContainer" native="true">
+								<layout class="QHBoxLayout" name="footerLayout">
+									<property name="leftMargin">
+										<number>28</number>
+									</property>
+									<property name="rightMargin">
+										<number>28</number>
+									</property>
+									<property name="bottomMargin">
+										<number>22</number>
+									</property>
+
+									<item>
+										<spacer name="footerSpacer">
+											<property name="orientation">
+												<enum>Qt::Horizontal</enum>
+											</property>
+										</spacer>
+									</item>
+
+									<item>
+										<widget class="QPushButton" name="closeBottomButton">
+											<property name="text">
+												<string>Close</string>
+											</property>
+										</widget>
+									</item>
+								</layout>
+							</widget>
+						</item>
+					</layout>
+				</widget>
+			</item>
+		</layout>
+	</widget>
+
+	<resources/>
+	<connections/>
+</ui>

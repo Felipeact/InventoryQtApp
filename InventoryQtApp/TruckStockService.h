@@ -170,6 +170,19 @@ struct UpdateAssignmentRequest
     std::string status;
 };
 
+struct TruckStockMovementDto
+{
+    std::string id;
+    std::string truckStockItemId;
+    std::string productName;
+    std::string action;
+    int previousQuantity = 0;
+    int newQuantity = 0;
+    std::string changedBy;
+    std::string notes;
+    std::string createdAt;
+};
+
 class TruckStockService
 {
 public:
@@ -204,6 +217,8 @@ public:
     std::vector<LowStockItemDto> getLowStockItems();
 
     std::vector<ReceiptDto> getReceipts();
+
+    std::vector<TruckStockMovementDto> getMovements();
 
     bool createReceipt(
         const CreateReceiptRequest& request
