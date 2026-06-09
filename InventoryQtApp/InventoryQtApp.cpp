@@ -93,35 +93,6 @@ InventoryQtApp::InventoryQtApp(QWidget* parent)
         qDebug() << "Auto-update check disabled.";
     }
 
-    qDebug() << "Update server URL:" << updateServerUrl;
-
-    updateManager = new AutoUpdateManager(updateServerUrl, this);
-
-    connect(updateManager, &AutoUpdateManager::updateAvailable,
-        this, &InventoryQtApp::onUpdateAvailable);
-
-    connect(updateManager, &AutoUpdateManager::updateError,
-        this, [this](const QString& error) {
-            qWarning() << "Update error:" << error;
-        });
-
-    connect(updateManager, &AutoUpdateManager::noUpdateAvailable,
-        this, []() {
-            qDebug() << "No update available.";
-        });
-
-    // Check for updates on startup
-    QTimer::singleShot(2000, this, [this]() {
-        qDebug() << "Starting update check timer...";
-
-        if (!updateManager) {
-            qDebug() << "Update manager is NULL";
-            return;
-        }
-
-        updateManager->checkForUpdates();
-        });
-
     connect(
         ui.loginButton, &QPushButton::clicked,
         this, &InventoryQtApp::onLoginButtonClicked

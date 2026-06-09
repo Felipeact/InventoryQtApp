@@ -424,24 +424,40 @@ void UsersPage::onAddUserClicked()
         request.status =
             dialog.getStatus().toStdString();
 
-        std::string temporaryPassword =
+        std::string inviteResult =
             userService->inviteUser(request);
 
-        if (!temporaryPassword.empty()) {
-            QMessageBox::information(
-                this,
-                "User Invited",
-                QString(
-                    "User invited successfully.\n\n"
-                    "Name: %1\n"
-                    "Email: %2\n\n"
-                    "Temporary password:\n%3\n\n"
-                    "Give this password to the user."
-                )
-                .arg(dialog.getName())
-                .arg(dialog.getEmail())
-                .arg(QString::fromStdString(temporaryPassword))
-            );
+        if (!inviteResult.empty()) {
+            if (inviteResult == "__EMAIL_SENT__") {
+                QMessageBox::information(
+                    this,
+                    "User Invited",
+                    QString(
+                        "User invited successfully.\n\n"
+                        "Name: %1\n"
+                        "Email: %2\n\n"
+                        "An email was sent with login instructions."
+                    )
+                    .arg(dialog.getName())
+                    .arg(dialog.getEmail())
+                );
+            }
+            else {
+                QMessageBox::information(
+                    this,
+                    "User Invited",
+                    QString(
+                        "User invited successfully.\n\n"
+                        "Name: %1\n"
+                        "Email: %2\n\n"
+                        "Temporary password:\n%3\n\n"
+                        "Email sending failed, so give this password to the user."
+                    )
+                    .arg(dialog.getName())
+                    .arg(dialog.getEmail())
+                    .arg(QString::fromStdString(inviteResult))
+                );
+            }
 
             loadUsers();
         }

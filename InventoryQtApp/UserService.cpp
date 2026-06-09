@@ -83,16 +83,12 @@ std::string UserService::inviteUser(const CreateUserRequest& request)
         body["role"] = request.role;
         body["status"] = request.status;
 
-        auto response =
-            apiClient.post(
-                "/users/invite",
-                body.dump()
-            );
+        auto response = apiClient.post(
+            "/users/invite",
+            body.dump()
+        );
 
-        if (
-            response.status_code != 200 &&
-            response.status_code != 201
-            ) {
+        if (response.status_code != 200 && response.status_code != 201) {
             std::cerr << "Invite user failed. Status: "
                 << response.status_code
                 << " Body: "
@@ -102,13 +98,15 @@ std::string UserService::inviteUser(const CreateUserRequest& request)
             return "";
         }
 
-        auto data =
-            json::parse(response.text);
+        auto data = json::parse(response.text);
 
-        return data.value(
-            "temporaryPassword",
-            ""
-        );
+        bool emailSent = data.value("emailSent", false);
+
+        if (emailSent) {
+            return "__EMAIL_SENT__";
+        }
+
+        return data.value("temporaryPassword", "");
     }
     catch (const std::exception& ex) {
         std::cerr << "UserService::inviteUser error: "
@@ -116,40 +114,6 @@ std::string UserService::inviteUser(const CreateUserRequest& request)
             << std::endl;
 
         return "";
-    }
-}
-
-bool UserService::createUser(const CreateUserRequest& request)
-{
-    try {
-        json body;
-
-        body["name"] = request.name;
-        body["email"] = request.email;
-        body["password"] = request.password;
-        body["role"] = request.role;
-        body["status"] = request.status;
-
-        auto response = apiClient.post("/users", body.dump());
-
-        if (response.status_code != 200 && response.status_code != 201) {
-            std::cerr << "POST /users failed. Status: "
-                << response.status_code
-                << " Body: "
-                << response.text
-                << std::endl;
-
-            return false;
-        }
-
-        return true;
-    }
-    catch (const std::exception& ex) {
-        std::cerr << "UserService::createUser error: "
-            << ex.what()
-            << std::endl;
-
-        return false;
     }
 }
 

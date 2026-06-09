@@ -19,6 +19,23 @@ public:
 
     void setUserInfo(const std::string& role, const std::string& userName);
 
+    void activateDashboard();
+    void activateItems();
+    void activateAssets();
+    void activateUsers();
+    void activateScanIn();
+    void activateScanOut();
+    void activateReports();
+    void activateSettings();
+
+    void activateTruckStockDashboard();
+    void activateTrucks();
+    void activateTemplates();
+    void activateAssignments();
+    void activateMyTruckStock();
+    void activateLowStockAlerts();
+    void activateReceipts();
+
 
 signals:
     void dashboardClicked();

@@ -22,6 +22,8 @@ SettingsPage::SettingsPage(
 {
     ui.setupUi(this);
 
+    ui.apiCard->hide();
+
     setUserInfo(
         role,
         userName

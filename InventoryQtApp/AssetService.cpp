@@ -28,29 +28,14 @@ namespace
     {
         json asset = item;
 
-        asset["id"] =
-            safeString(item, "id");
-
-        asset["name"] =
-            safeString(item, "name");
-
-        asset["type"] =
-            safeString(item, "type");
-
-        asset["serialCode"] =
-            safeString(item, "serialCode");
-
-        asset["status"] =
-            safeString(item, "status", "Active");
-
-        asset["description"] =
-            safeString(item, "description");
-
-        asset["createdAt"] =
-            safeString(item, "createdAt");
-
-        asset["updatedAt"] =
-            safeString(item, "updatedAt");
+        asset["id"] = safeString(item, "id");
+        asset["name"] = safeString(item, "name");
+        asset["type"] = safeString(item, "type");
+        asset["serialCode"] = safeString(item, "serialCode");
+        asset["status"] = safeString(item, "status", "Active");
+        asset["description"] = safeString(item, "description");
+        asset["createdAt"] = safeString(item, "createdAt");
+        asset["updatedAt"] = safeString(item, "updatedAt");
 
         return asset;
     }
@@ -60,13 +45,9 @@ namespace
     )
     {
         json assets = json::array();
-
         json data = json::array();
 
-        if (
-            response.contains("data") &&
-            response["data"].is_array()
-            ) {
+        if (response.contains("data") && response["data"].is_array()) {
             data = response["data"];
         }
         else if (response.is_array()) {
@@ -75,9 +56,7 @@ namespace
 
         for (const auto& item : data) {
             if (item.is_object()) {
-                assets.push_back(
-                    normalizeAsset(item)
-                );
+                assets.push_back(normalizeAsset(item));
             }
         }
 
@@ -130,7 +109,6 @@ json AssetService::getAssets(bool forceRefresh)
 
     try {
         auto response = json::parse(res.text);
-
         return normalizeAssetsResponse(response);
     }
     catch (const std::exception& ex) {
@@ -198,7 +176,6 @@ json AssetService::searchAssets(const std::string& searchText)
 
     try {
         auto response = json::parse(res.text);
-
         return normalizeAssetsResponse(response);
     }
     catch (const std::exception& ex) {

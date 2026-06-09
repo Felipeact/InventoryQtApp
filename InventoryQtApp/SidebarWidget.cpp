@@ -210,6 +210,82 @@ void SidebarWidget::setUserInfo(const std::string& role, const std::string& user
     );
 }
 
+
+void SidebarWidget::activateDashboard()
+{
+    setActiveButton(ui.dashboardButton);
+}
+
+void SidebarWidget::activateItems()
+{
+    setActiveButton(ui.itemsButton);
+}
+
+void SidebarWidget::activateAssets()
+{
+    setActiveButton(ui.assetsButton);
+}
+
+void SidebarWidget::activateUsers()
+{
+    setActiveButton(ui.usersButton);
+}
+
+void SidebarWidget::activateScanIn()
+{
+    setActiveButton(ui.scanInButton);
+}
+
+void SidebarWidget::activateScanOut()
+{
+    setActiveButton(ui.scanOutButton);
+}
+
+void SidebarWidget::activateReports()
+{
+    setActiveButton(ui.reportsButton);
+}
+
+void SidebarWidget::activateSettings()
+{
+    setActiveButton(ui.settingsButton);
+}
+
+void SidebarWidget::activateTruckStockDashboard()
+{
+    setActiveButton(ui.truckStockDashboardButton);
+}
+
+void SidebarWidget::activateTrucks()
+{
+    setActiveButton(ui.trucksButton);
+}
+
+void SidebarWidget::activateTemplates()
+{
+    setActiveButton(ui.templatesButton);
+}
+
+void SidebarWidget::activateAssignments()
+{
+    setActiveButton(ui.assignmentsButton);
+}
+
+void SidebarWidget::activateMyTruckStock()
+{
+    setActiveButton(ui.myTruckStockButton);
+}
+
+void SidebarWidget::activateLowStockAlerts()
+{
+    setActiveButton(ui.lowStockAlertsButton);
+}
+
+void SidebarWidget::activateReceipts()
+{
+    setActiveButton(ui.receiptsButton);
+}
+
 void SidebarWidget::applyTheme(Theme::AppTheme theme)
 {
     setStyleSheet(

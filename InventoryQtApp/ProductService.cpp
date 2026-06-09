@@ -4,6 +4,19 @@
 #include <QtGlobal>
 #include <chrono>
 
+static std::string cacheBuster()
+{
+    auto now =
+        std::chrono::system_clock::now()
+        .time_since_epoch();
+
+    auto ms =
+        std::chrono::duration_cast<std::chrono::milliseconds>(now)
+        .count();
+
+    return std::to_string(ms);
+}
+
 ProductService::ProductService(ApiClient& apiClient)
     : api(apiClient)
 {
@@ -35,7 +48,7 @@ json ProductService::getProducts(bool forceRefresh)
 {
     Q_UNUSED(forceRefresh);
 
-    auto res = api.get("/products?page=1&limit=100");
+    auto res = api.get("/products?page=1&limit=100&_=" + cacheBuster());
 
     if (res.status_code != 200) {
         std::cout << "Get products failed: " << res.text << std::endl;
@@ -97,7 +110,7 @@ bool ProductService::deleteProduct(const std::string& productId)
 
 json ProductService::searchProducts(const std::string& searchText)
 {
-    std::string endpoint = "/products?page=1&limit=100";
+    std::string endpoint = "/products?page=1&limit=100&_=" + cacheBuster();
 
     if (!searchText.empty()) {
         endpoint += "&search=" + searchText;
@@ -188,7 +201,7 @@ bool ProductService::scanOut(
 
 json ProductService::getLowStockProducts()
 {
-    auto res = api.get("/products/low-stock");
+    auto res = api.get("/products/low-stock?_=" + cacheBuster());
 
     if (res.status_code != 200) {
         std::cout << "Get low stock products failed: " << res.text << std::endl;

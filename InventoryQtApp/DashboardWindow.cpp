@@ -98,7 +98,12 @@ DashboardPage* DashboardWindow::ensureDashboardPage()
                 ItemsPage* page =
                     ensureItemsPage();
 
+                page->refreshProducts();
                 ui.mainStack->setCurrentWidget(page);
+
+                if (sidebar) {
+                    sidebar->activateItems();
+                }
             }
         );
 
@@ -107,12 +112,15 @@ DashboardPage* DashboardWindow::ensureDashboardPage()
             &DashboardPage::viewAllLowStockRequested,
             this,
             [this]() {
-                ItemsPage* page =
-                    ensureItemsPage();
+                LowStockAlertsPage* page =
+                    ensureLowStockAlertsPage();
 
-                page->setSearchText("low");
-
+                page->refreshAlerts();
                 ui.mainStack->setCurrentWidget(page);
+
+                if (sidebar) {
+                    sidebar->activateLowStockAlerts();
+                }
             }
         );
     }
@@ -218,13 +226,23 @@ TruckStockDashboardPage* DashboardWindow::ensureTruckStockDashboardPage()
         truckStockDashboardPage->applyTheme(currentTheme);
 
         connect(truckStockDashboardPage, &TruckStockDashboardPage::viewAllTrucksRequested, this, [this]() {
-            ui.mainStack->setCurrentWidget(ensureTrucksPage());
+            TrucksPage* page = ensureTrucksPage();
+            page->refreshTrucksList();
+            ui.mainStack->setCurrentWidget(page);
+
+            if (sidebar) {
+                sidebar->activateTrucks();
+            }
             });
 
         connect(truckStockDashboardPage, &TruckStockDashboardPage::viewAllLowStockRequested, this, [this]() {
             LowStockAlertsPage* page = ensureLowStockAlertsPage();
             page->refreshAlerts();
             ui.mainStack->setCurrentWidget(page);
+
+            if (sidebar) {
+                sidebar->activateLowStockAlerts();
+            }
             });
     }
     return truckStockDashboardPage;
@@ -320,9 +338,23 @@ ReportsPage* DashboardWindow::ensureReportsPage()
 void DashboardWindow::updateLoggedInUserInfo(const std::string& newUserName)
 {
     userName = newUserName;
-    if (verticalbar) verticalbar->setUserInfo(role, userName);
-    if (sidebar) sidebar->setUserInfo(role, userName);
-    if (usersPage) usersPage->setLoggedInUserName(userName);
+
+    if (verticalbar) {
+        verticalbar->setUserInfo(role, userName);
+    }
+
+    if (sidebar) {
+        sidebar->setUserInfo(role, userName);
+    }
+
+    if (usersPage) {
+        usersPage->setLoggedInUserName(userName);
+        usersPage->refreshUsers();
+    }
+
+    if (settingsPage) {
+        settingsPage->setUserInfo(role, userName);
+    }
 }
 
 void DashboardWindow::setupSidebar()
@@ -335,11 +367,15 @@ void DashboardWindow::setupSidebar()
     layout->addWidget(sidebar);
 
     connect(sidebar, &SidebarWidget::dashboardClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(ensureDashboardPage());
+        DashboardPage* page = ensureDashboardPage();
+        page->refreshDashboard();
+        ui.mainStack->setCurrentWidget(page);
         });
 
     connect(sidebar, &SidebarWidget::itemsClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(ensureItemsPage());
+        ItemsPage* page = ensureItemsPage();
+        page->refreshProducts();
+        ui.mainStack->setCurrentWidget(page);
         });
 
     connect(sidebar, &SidebarWidget::assetsClicked, this, [this]() {
@@ -369,7 +405,9 @@ void DashboardWindow::setupSidebar()
         });
 
     connect(sidebar, &SidebarWidget::trucksClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(ensureTrucksPage());
+        TrucksPage* page = ensureTrucksPage();
+        page->refreshTrucksList();
+        ui.mainStack->setCurrentWidget(page);
         });
 
     connect(sidebar, &SidebarWidget::templatesClicked, this, [this]() {
@@ -387,11 +425,23 @@ void DashboardWindow::setupSidebar()
         });
 
     connect(sidebar, &SidebarWidget::lowStockAlertsClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(ensureLowStockAlertsPage());
+        LowStockAlertsPage* page = ensureLowStockAlertsPage();
+        page->refreshAlerts();
+        ui.mainStack->setCurrentWidget(page);
+
+        if (sidebar) {
+            sidebar->activateLowStockAlerts();
+        }
         });
 
     connect(sidebar, &SidebarWidget::receiptsClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(ensureReceiptsPage());
+        ReceiptsPage* page = ensureReceiptsPage();
+        page->refreshReceipts();
+        ui.mainStack->setCurrentWidget(page);
+
+        if (sidebar) {
+            sidebar->activateReceipts();
+        }
         });
 
     connect(sidebar, &SidebarWidget::reportsClicked, this, [this]() {
@@ -473,53 +523,66 @@ void DashboardWindow::handleGlobalSearchResult(GlobalSearchDialog::SearchTarget 
     case GlobalSearchDialog::SearchTarget::Dashboard:
         ensureDashboardPage()->refreshDashboard();
         ui.mainStack->setCurrentWidget(dashboardPage);
+        if (sidebar) sidebar->activateDashboard();
         break;
     case GlobalSearchDialog::SearchTarget::Items:
         ensureItemsPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(itemsPage);
+        if (sidebar) sidebar->activateItems();
         break;
     case GlobalSearchDialog::SearchTarget::Assets:
         ensureAssetsPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(assetsPage);
+        if (sidebar) sidebar->activateAssets();
         break;
     case GlobalSearchDialog::SearchTarget::Users:
         ensureUsersPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(usersPage);
+        if (sidebar) sidebar->activateUsers();
         break;
     case GlobalSearchDialog::SearchTarget::Reports:
         ensureReportsPage()->refreshReports();
         ui.mainStack->setCurrentWidget(reportsPage);
+        if (sidebar) sidebar->activateReports();
         break;
     case GlobalSearchDialog::SearchTarget::Settings:
         ui.mainStack->setCurrentWidget(ensureSettingsPage());
+        if (sidebar) sidebar->activateSettings();
         break;
     case GlobalSearchDialog::SearchTarget::TruckDashboard:
         ensureTruckStockDashboardPage()->refreshDashboard();
         ui.mainStack->setCurrentWidget(truckStockDashboardPage);
+        if (sidebar) sidebar->activateTruckStockDashboard();
         break;
     case GlobalSearchDialog::SearchTarget::Trucks:
         ensureTrucksPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(trucksPage);
+        if (sidebar) sidebar->activateTrucks();
         break;
     case GlobalSearchDialog::SearchTarget::Templates:
         ensureStockTemplatesPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(stockTemplatesPage);
+        if (sidebar) sidebar->activateTemplates();
         break;
     case GlobalSearchDialog::SearchTarget::Assignments:
         ensureAssignmentsPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(assignmentsPage);
+        if (sidebar) sidebar->activateAssignments();
         break;
     case GlobalSearchDialog::SearchTarget::MyTruckStock:
         ensureMyTruckStockPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(myTruckStockPage);
+        if (sidebar) sidebar->activateMyTruckStock();
         break;
     case GlobalSearchDialog::SearchTarget::LowStockAlerts:
         ensureLowStockAlertsPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(lowStockAlertsPage);
+        if (sidebar) sidebar->activateLowStockAlerts();
         break;
     case GlobalSearchDialog::SearchTarget::Receipts:
         ensureReceiptsPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(receiptsPage);
+        if (sidebar) sidebar->activateReceipts();
         break;
     }
 }
@@ -538,6 +601,10 @@ void DashboardWindow::onNotificationRequested()
         ReceiptsPage* page = ensureReceiptsPage();
         page->refreshReceipts();
         ui.mainStack->setCurrentWidget(page);
+
+        if (sidebar) {
+            sidebar->activateReceipts();
+        }
         });
 
     dialog.exec();
