@@ -274,10 +274,10 @@ void ItemsPage::populateTable(
             getProductString(product, "location", "Main Store");
 
         QString project =
-            getProductString(product, "project", "HQ");
+            getProductString(product, "project", "");
 
         QString account =
-            getProductString(product, "status", "Activated");
+            getProductString(product, "account", getProductString(product, "status", "Active"));
 
         ui.itemsTable->setItem(
             row,

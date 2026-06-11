@@ -194,7 +194,7 @@ public:
     std::vector<TruckDto> getTrucks();
 
     bool createTruck(const CreateTruckRequest& request);
-    bool updateTruck(const std::string& truckId,const UpdateTruckRequest& request);
+    bool updateTruck(const std::string& truckId, const UpdateTruckRequest& request);
     bool deactivateTruck(const std::string& truckId);
 
     std::vector<StockTemplateDto> getTemplates();
@@ -223,6 +223,10 @@ public:
 
     std::vector<TruckStockMovementDto> getMovements();
 
+    std::string uploadReceiptFile(
+        const std::string& filePath
+    );
+
     bool createReceipt(
         const CreateReceiptRequest& request
     );
@@ -239,7 +243,7 @@ public:
         const UpdateAssignmentRequest& request
     );
 
-    bool restockTruckStockItem(const std::string& itemId,int newQuantity);
+    bool restockTruckStockItem(const std::string& itemId, int newQuantity);
 
 private:
     ApiClient& apiClient;

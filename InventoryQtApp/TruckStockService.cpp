@@ -2,6 +2,10 @@
 
 #include <nlohmann/json.hpp>
 #include <iostream>
+#include <QFileInfo>
+#include <QIODevice>
+#include <QFile>
+#include <QByteArray>
 
 using json = nlohmann::json;
 
@@ -981,6 +985,65 @@ std::vector<TruckStockMovementDto> TruckStockService::getMovements()
     return movements;
 }
 
+
+std::string TruckStockService::uploadReceiptFile(
+    const std::string& filePath
+)
+{
+    try {
+        QFile file(QString::fromStdString(filePath));
+
+        if (!file.exists()) {
+            return filePath;
+        }
+
+        if (!file.open(QIODevice::ReadOnly)) {
+            std::cerr << "Open receipt file failed: "
+                << filePath
+                << std::endl;
+            return "";
+        }
+
+        QByteArray fileData = file.readAll();
+        file.close();
+
+        if (fileData.isEmpty()) {
+            return "";
+        }
+
+        QFileInfo fileInfo(QString::fromStdString(filePath));
+
+        json body;
+        body["fileName"] = fileInfo.fileName().toStdString();
+        body["fileContentBase64"] = fileData.toBase64().toStdString();
+
+        auto response = apiClient.post(
+            "/truck-stock/receipts/upload",
+            body.dump()
+        );
+
+        if (response.status_code != 200 && response.status_code != 201) {
+            std::cerr << "POST receipt upload failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+            return "";
+        }
+
+        json data = json::parse(response.text);
+
+        return data.value("fileUrl", "");
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::uploadReceiptFile error: "
+            << ex.what()
+            << std::endl;
+
+        return "";
+    }
+}
+
 bool TruckStockService::createReceipt(
     const CreateReceiptRequest& request
 )
@@ -988,8 +1051,23 @@ bool TruckStockService::createReceipt(
     try {
         json body;
 
+        std::string fileUrl = request.fileUrl;
+
+        if (!fileUrl.empty()) {
+            QFile localFile(QString::fromStdString(fileUrl));
+
+            if (localFile.exists()) {
+                fileUrl = uploadReceiptFile(fileUrl);
+            }
+        }
+
+        if (fileUrl.empty()) {
+            std::cerr << "Receipt file upload failed or file URL is empty." << std::endl;
+            return false;
+        }
+
         body["truckId"] = request.truckId;
-        body["fileUrl"] = request.fileUrl;
+        body["fileUrl"] = fileUrl;
         body["totalAmount"] = request.totalAmount;
 
         auto response = apiClient.post(

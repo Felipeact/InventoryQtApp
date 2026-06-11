@@ -37,11 +37,7 @@ bool ProductService::createProduct(
         {"quantity", quantity},
         {"location", location},
         {"description", description},
-        {"lowStockThreshold", lowStockThreshold},
-        {"model", barcode},
-        {"type", "Product"},
-        {"project", "HQ"},
-        {"account", "Activated"}
+        {"lowStockThreshold", lowStockThreshold}
     };
 
     auto res = api.post("/products", body.dump());
@@ -99,11 +95,7 @@ bool ProductService::updateProduct(
         {"quantity", quantity},
         {"location", location},
         {"description", description},
-        {"lowStockThreshold", lowStockThreshold},
-        {"model", barcode},
-        {"type", "Product"},
-        {"project", "HQ"},
-        {"account", "Activated"}
+        {"lowStockThreshold", lowStockThreshold}
     };
 
     auto res = api.put("/products/" + productId, body.dump());
