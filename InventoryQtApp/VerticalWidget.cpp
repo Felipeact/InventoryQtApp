@@ -4,6 +4,7 @@
 
 #include <QLineEdit>
 #include <QPushButton>
+#include <QTimer>
 
 VerticalWidget::VerticalWidget(
     const std::string& userRole,
@@ -18,12 +19,26 @@ VerticalWidget::VerticalWidget(
 
     setUserInfo(userRole, userName);
 
+    searchDebounceTimer = new QTimer(this);
+    searchDebounceTimer->setSingleShot(true);
+    searchDebounceTimer->setInterval(400);
+
+    connect(
+        searchDebounceTimer,
+        &QTimer::timeout,
+        this,
+        [this]() {
+            emit globalSearchTextChanged(pendingSearchText);
+        }
+    );
+
     connect(
         ui.searchInput,
         &QLineEdit::textChanged,
         this,
         [this](const QString& text) {
-            emit globalSearchTextChanged(text);
+            pendingSearchText = text;
+            searchDebounceTimer->start();
         }
     );
 

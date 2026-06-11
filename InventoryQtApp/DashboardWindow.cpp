@@ -481,10 +481,12 @@ void DashboardWindow::applyTheme(Theme::AppTheme theme)
 void DashboardWindow::onGlobalSearchTextChanged(const QString& text)
 {
     QString searchText = text.trimmed();
-    if (searchText.isEmpty()) {
+
+    if (searchText.length() < 2) {
         closeGlobalSearchDialog();
         return;
     }
+
     showGlobalSearchDialog(searchText);
 }
 

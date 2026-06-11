@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QString>
+#include <QTimer>
 #include <string>
 
 #include "ui_VerticalWidget.h"
@@ -40,4 +41,7 @@ private:
 
     std::string role;
     std::string username;
+
+    QTimer* searchDebounceTimer = nullptr;
+    QString pendingSearchText;
 };
