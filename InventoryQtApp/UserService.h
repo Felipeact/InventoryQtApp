@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ApiClient.h"
+#include "IApiClient.h"
 
 #include <string>
 #include <vector>
@@ -36,7 +36,7 @@ struct UpdateUserRequest
 class UserService
 {
 public:
-    explicit UserService(ApiClient& apiClient);
+    explicit UserService(IApiClient& apiClient);
 
     std::vector<UserDto> getUsers();
     std::vector<UserDto> getTechnicians();
@@ -53,5 +53,5 @@ public:
     );
 
 private:
-    ApiClient& apiClient;
+    IApiClient& apiClient;
 };

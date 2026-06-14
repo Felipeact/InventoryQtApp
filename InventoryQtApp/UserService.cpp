@@ -7,7 +7,7 @@
 
 using json = nlohmann::json;
 
-UserService::UserService(ApiClient& apiClient)
+UserService::UserService(IApiClient& apiClient)
     : apiClient(apiClient)
 {
 }

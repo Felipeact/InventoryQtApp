@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ApiClient.h"
+#include "IApiClient.h"
 
 #include <string>
 #include <vector>
@@ -189,7 +189,7 @@ struct TruckStockMovementDto
 class TruckStockService
 {
 public:
-    explicit TruckStockService(ApiClient& apiClient);
+    explicit TruckStockService(IApiClient& apiClient);
 
     std::vector<TruckDto> getTrucks();
 
@@ -246,7 +246,7 @@ public:
     bool restockTruckStockItem(const std::string& itemId, int newQuantity);
 
 private:
-    ApiClient& apiClient;
+    IApiClient& apiClient;
 
 
 };

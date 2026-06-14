@@ -18,17 +18,17 @@ struct PasswordResetResult
 	std::string errorMessage;
 };
 
-class ApiClient;
+class IApiClient;
 
 // Service for handling user authentication and login operations
 class AuthService
 {
 private:
-	ApiClient& api;  // Reference to the API client
+	IApiClient& api;  // Reference to the API client
 
 public:
 	// Constructor that takes a reference to an ApiClient
-	AuthService(ApiClient& apiClient);
+	AuthService(IApiClient& apiClient);
 
 	// Attempts to log in with the given email and password, returns authentication token
 	LoginResult login(const std::string& email, const std::string& password);

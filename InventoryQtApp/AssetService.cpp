@@ -1,70 +1,12 @@
 // AssetService.cpp - Implementation of asset service
 #include "AssetService.h"
+#include "JsonUtils.h"
 
 #include <iostream>
 
-namespace
-{
-    std::string safeString(
-        const json& item,
-        const std::string& key,
-        const std::string& fallback = ""
-    )
-    {
-        if (!item.contains(key) || item[key].is_null()) {
-            return fallback;
-        }
+using JsonUtils::normalizeAssetsResponse;
 
-        if (item[key].is_string()) {
-            return item[key].get<std::string>();
-        }
-
-        return fallback;
-    }
-
-    json normalizeAsset(
-        const json& item
-    )
-    {
-        json asset = item;
-
-        asset["id"] = safeString(item, "id");
-        asset["name"] = safeString(item, "name");
-        asset["type"] = safeString(item, "type");
-        asset["serialCode"] = safeString(item, "serialCode");
-        asset["status"] = safeString(item, "status", "Active");
-        asset["description"] = safeString(item, "description");
-        asset["createdAt"] = safeString(item, "createdAt");
-        asset["updatedAt"] = safeString(item, "updatedAt");
-
-        return asset;
-    }
-
-    json normalizeAssetsResponse(
-        const json& response
-    )
-    {
-        json assets = json::array();
-        json data = json::array();
-
-        if (response.contains("data") && response["data"].is_array()) {
-            data = response["data"];
-        }
-        else if (response.is_array()) {
-            data = response;
-        }
-
-        for (const auto& item : data) {
-            if (item.is_object()) {
-                assets.push_back(normalizeAsset(item));
-            }
-        }
-
-        return assets;
-    }
-}
-
-AssetService::AssetService(ApiClient& apiClient)
+AssetService::AssetService(IApiClient& apiClient)
     : api(apiClient)
 {
 }

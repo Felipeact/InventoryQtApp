@@ -1,6 +1,6 @@
 // ProductService.h - Service for product operations
 #pragma once
-#include "ApiClient.h"
+#include "IApiClient.h"
 #include <nlohmann/json.hpp>
 #include <string>
 using json = nlohmann::json;
@@ -10,11 +10,11 @@ using json = nlohmann::json;
 class ProductService
 {
 private:
-    ApiClient& api;
+    IApiClient& api;
 
 
 public:
-    ProductService(ApiClient& apiClient);
+    ProductService(IApiClient& apiClient);
 
     bool createProduct(
         const std::string& name,

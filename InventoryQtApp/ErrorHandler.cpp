@@ -1,6 +1,6 @@
 #include "ErrorHandler.h"
 
-std::string ErrorHandler::getErrorMessage(const cpr::Response& response)
+std::string ErrorHandler::getErrorMessage(const HttpResponse& response)
 {
     if (response.status_code == 0) {
         // Network error or connection refused
@@ -54,7 +54,7 @@ std::string ErrorHandler::getErrorMessage(const cpr::Response& response)
     }
 }
 
-bool ErrorHandler::isServerUnavailable(const cpr::Response& response)
+bool ErrorHandler::isServerUnavailable(const HttpResponse& response)
 {
     return response.status_code == 0 || 
            response.status_code == 502 || 
@@ -62,17 +62,17 @@ bool ErrorHandler::isServerUnavailable(const cpr::Response& response)
            response.status_code == 504;
 }
 
-bool ErrorHandler::isNetworkError(const cpr::Response& response)
+bool ErrorHandler::isNetworkError(const HttpResponse& response)
 {
     return response.status_code == 0;
 }
 
-bool ErrorHandler::isAuthenticationError(const cpr::Response& response)
+bool ErrorHandler::isAuthenticationError(const HttpResponse& response)
 {
     return response.status_code == 401 || response.status_code == 403;
 }
 
-std::string ErrorHandler::getDetailedErrorInfo(const cpr::Response& response)
+std::string ErrorHandler::getDetailedErrorInfo(const HttpResponse& response)
 {
     std::string info = "Status Code: " + std::to_string(response.status_code) + "\n";
     info += "User Message: " + getErrorMessage(response) + "\n";

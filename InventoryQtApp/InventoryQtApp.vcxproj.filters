@@ -216,6 +216,15 @@
     <ClInclude Include="ApiClient.h">
       <Filter>Header Files\services</Filter>
     </ClInclude>
+    <ClInclude Include="IApiClient.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
+    <ClInclude Include="HttpResponse.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
+    <ClInclude Include="JsonUtils.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
     <ClInclude Include="AuthService.h">
       <Filter>Header Files\services</Filter>
     </ClInclude>

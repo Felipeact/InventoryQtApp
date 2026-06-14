@@ -71,7 +71,7 @@ namespace
     }
 }
 
-TruckStockService::TruckStockService(ApiClient& apiClient)
+TruckStockService::TruckStockService(IApiClient& apiClient)
     : apiClient(apiClient)
 {
 }

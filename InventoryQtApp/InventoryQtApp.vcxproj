@@ -204,6 +204,9 @@
     <QtMoc Include="AddEditTemplateDialog.h" />
     <QtMoc Include="AddEditTruckDialog.h" />
     <ClInclude Include="ApiClient.h" />
+    <ClInclude Include="HttpResponse.h" />
+    <ClInclude Include="IApiClient.h" />
+    <ClInclude Include="JsonUtils.h" />
     <ClInclude Include="AssetService.h" />
     <QtMoc Include="AssetsPage.h" />
     <QtMoc Include="AssignmentsPage.h" />

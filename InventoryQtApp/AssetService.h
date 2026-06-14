@@ -1,6 +1,6 @@
 // AssetService.h - Service for asset operations
 #pragma once
-#include "ApiClient.h"
+#include "IApiClient.h"
 #include <nlohmann/json.hpp>
 #include <string>
 #include <QtGlobal>
@@ -12,11 +12,11 @@ using json = nlohmann::json;
 class AssetService
 {
 private:
-    ApiClient& api;
+    IApiClient& api;
     json cachedAssets = json::array();
 
 public:
-    AssetService(ApiClient& apiClient);
+    AssetService(IApiClient& apiClient);
 
     bool createAsset(const std::string& name, const std::string& type, const std::string& serialCode, const std::string& status, const std::string& description = "");
     json getAssets(bool forceRefresh = false);

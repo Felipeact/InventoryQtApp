@@ -17,7 +17,7 @@ static std::string cacheBuster()
     return std::to_string(ms);
 }
 
-ProductService::ProductService(ApiClient& apiClient)
+ProductService::ProductService(IApiClient& apiClient)
     : api(apiClient)
 {
 }

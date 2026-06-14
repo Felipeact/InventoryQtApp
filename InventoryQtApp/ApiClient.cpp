@@ -5,6 +5,20 @@
 
 using json = nlohmann::json;
 
+namespace
+{
+    // Converts a cpr response into the transport-agnostic HttpResponse used by
+    // the rest of the application. This is the single point where cpr types
+    // cross into the application.
+    HttpResponse toHttp(const cpr::Response& res)
+    {
+        HttpResponse out;
+        out.status_code = res.status_code;
+        out.text = res.text;
+        return out;
+    }
+}
+
 ApiClient::ApiClient(const std::string& baseUrl)
     : baseUrl(baseUrl)
 {
@@ -47,7 +61,7 @@ void ApiClient::clearTokens()
     refreshToken.clear();
 }
 
-cpr::Response ApiClient::get(const std::string& endpoint)
+HttpResponse ApiClient::get(const std::string& endpoint)
 {
     auto res = cpr::Get(
         cpr::Url{ baseUrl + endpoint },
@@ -65,10 +79,10 @@ cpr::Response ApiClient::get(const std::string& endpoint)
         );
     }
 
-    return res;
+    return toHttp(res);
 }
 
-cpr::Response ApiClient::post(const std::string& endpoint, const std::string& body)
+HttpResponse ApiClient::post(const std::string& endpoint, const std::string& body)
 {
 
 
@@ -112,10 +126,10 @@ cpr::Response ApiClient::post(const std::string& endpoint, const std::string& bo
         );
     }
 
-    return res;
+    return toHttp(res);
 }
 
-cpr::Response ApiClient::put(const std::string& endpoint, const std::string& body)
+HttpResponse ApiClient::put(const std::string& endpoint, const std::string& body)
 {
     auto res = cpr::Put(
         cpr::Url{ baseUrl + endpoint },
@@ -141,10 +155,10 @@ cpr::Response ApiClient::put(const std::string& endpoint, const std::string& bod
         );
     }
 
-    return res;
+    return toHttp(res);
 }
 
-cpr::Response ApiClient::patch(const std::string& endpoint, const std::string& body)
+HttpResponse ApiClient::patch(const std::string& endpoint, const std::string& body)
 {
     auto res = cpr::Patch(
         cpr::Url{ baseUrl + endpoint },
@@ -170,10 +184,10 @@ cpr::Response ApiClient::patch(const std::string& endpoint, const std::string& b
         );
     }
 
-    return res;
+    return toHttp(res);
 }
 
-cpr::Response ApiClient::del(const std::string& endpoint)
+HttpResponse ApiClient::del(const std::string& endpoint)
 {
     auto res = cpr::Delete(
         cpr::Url{ baseUrl + endpoint },
@@ -191,7 +205,7 @@ cpr::Response ApiClient::del(const std::string& endpoint)
         );
     }
 
-    return res;
+    return toHttp(res);
 }
 
 bool ApiClient::validateToken(std::string& role, std::vector<std::string>& permissions)
@@ -246,16 +260,21 @@ bool ApiClient::refreshAccessToken()
         return false;
     }
 
-    auto data = json::parse(res.text);
+    try {
+        auto data = json::parse(res.text);
 
-    if (data.contains("accessToken")) {
-        accessToken = data["accessToken"].get<std::string>();
-        return true;
+        if (data.contains("accessToken")) {
+            accessToken = data["accessToken"].get<std::string>();
+            return true;
+        }
+
+        if (data.contains("token")) {
+            accessToken = data["token"].get<std::string>();
+            return true;
+        }
     }
-
-    if (data.contains("token")) {
-        accessToken = data["token"].get<std::string>();
-        return true;
+    catch (const std::exception&) {
+        // Fall through to clearing tokens on malformed payloads.
     }
 
     clearTokens();
