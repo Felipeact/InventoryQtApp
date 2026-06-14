@@ -237,6 +237,9 @@
     <ClInclude Include="CredentialStore.h">
       <Filter>Header Files\services</Filter>
     </ClInclude>
+    <ClInclude Include="AsyncTask.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
     <ClInclude Include="AuthService.h">
       <Filter>Header Files\services</Filter>
     </ClInclude>

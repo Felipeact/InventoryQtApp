@@ -1,62 +1,73 @@
-# Migrating UI pages to non-blocking API calls
+# Non-blocking API calls — status & migration guide
 
-## Why
+## The problem
 
-Every `ApiClient`/service call is **synchronous** and uses `cpr`, which blocks
-the calling thread until the HTTP request completes (or times out, currently
-5 s). When these are invoked directly from the GUI thread — which is how the
-pages do it today — the entire UI freezes while the request is in flight. On a
-slow or unreachable server this is a multi-second hang per action.
+Service calls (`productService.getProducts()`, etc.) are **synchronous**: they
+block the calling thread for the full duration of the HTTP request (up to the
+5 s timeout). When invoked on the GUI thread, the UI freezes for that time.
 
-`AsyncApi` (`AsyncApi.h`) removes the freeze: it runs the call on a background
-thread and delivers the result to a callback **on the GUI thread**, so widget
-code stays simple and thread-safe.
+## Actual state (survey)
 
-## The pattern
+Threading is currently **inconsistent** across the UI:
 
-Before (blocking — freezes the UI):
+- **Already offloaded** to a worker thread (do not freeze): `ItemsPage`,
+  `AssetsPage`, `DashboardPage`, `ReportsPage`, `TruckStockDashboardPage`,
+  `TrucksPage`, `ReceiptsPage`, `UsersPage` — but typically only their *main
+  refresh*; secondary actions (create/update/delete) often still run on the GUI
+  thread.
+- **Fully blocking** the GUI thread (highest priority to fix):
+  `GlobalSearchDialog` (8 call sites), `StockTemplatesPage` (6),
+  `AssignmentsPage`, `LowStockAlertsPage`, `MyTruckStockPage`, `ScanPage`,
+  `AssignTemplateDialog`, `NotificationDialog`, `TruckDetailsDialog`,
+  `SettingsPage`, `UploadReceiptDialog`, `AddEditTruckDialog`.
+
+The pages that *do* offload use a verbose hand-rolled pattern
+(`QThread::create` + `QPointer` + `QMetaObject::invokeMethod`) that spawns a new
+OS thread per call.
+
+## The primitive
+
+`AsyncTask::run` (`AsyncTask.h`) replaces both the blocking calls and the
+hand-rolled threading. It runs work on Qt's pooled threads and delivers the
+result on the caller's (GUI) thread, and is a no-op if the page is destroyed
+first. It is unit-tested in `tests/tst_asynctask.cpp`.
 
 ```cpp
+#include "AsyncTask.h"
+
 void ItemsPage::refreshProducts()
 {
-    json products = productService.getProducts();   // blocks the GUI thread
-    populateTable(products);
+    AsyncTask::run(this,
+        [&svc = productService]() { return svc.getProducts(true); }, // worker thread
+        [this](json products) {                                      // GUI thread
+            currentProducts = products;
+            applyFilters();
+        });
 }
 ```
 
-After (non-blocking):
+(`AsyncApi` is a thinner, typed variant for code that holds an `IApiClient`
+directly and works in terms of `HttpResponse`.)
 
-```cpp
-// Construct once, parented to the page so it lives on the GUI thread:
-//   asyncApi_ = new AsyncApi(apiClient, this);
+## Migration recipe
 
-void ItemsPage::refreshProducts()
-{
-    setBusy(true);
-    asyncApi_->get("/products?page=1&limit=100", [this](const HttpResponse& res) {
-        setBusy(false);                  // runs on the GUI thread
-        if (res.status_code != 200) {
-            showError(ErrorHandler::getErrorMessage(res));
-            return;
-        }
-        populateTable(json::parse(res.text, nullptr, false));
-    });
-}
-```
+1. `#include "AsyncTask.h"`.
+2. Move the blocking service call into the `work` lambda; capture the service by
+   reference (it is owned by the window and outlives the page) — **not** widgets.
+3. Move the UI update into the `onResult` lambda; it runs on the GUI thread, so
+   touching widgets is safe. No `QPointer` needed (the callback is skipped if
+   the page is gone).
+4. For actions, disable the triggering control before the call and re-enable it
+   in the callback so the user gets feedback and can't double-submit.
 
-## Guidelines
+## Done so far
 
-- Create one `AsyncApi` per page (or share one owned by the window), parented to
-  a `QObject` that lives on the GUI thread.
-- Capture `this` only when the page outlives the request; otherwise guard with
-  `QPointer`.
-- Do not issue overlapping *writes* through the same underlying `ApiClient`
-  concurrently — token refresh on 401 mutates shared state. Serialize writes, or
-  give independent flows their own client.
-- The callback always runs on the GUI thread, so it is safe to touch widgets.
+- `ItemsPage::refreshProducts` and `ItemsPage::loadProducts` converted to
+  `AsyncTask::run` (replacing the raw-`QThread` pattern) as the reference
+  implementation.
 
-## Adoption status
+## Recommended order for the rest
 
-`AsyncApi` is unit-tested (`tests/tst_asyncapi.cpp`) and ready. Pages should be
-migrated incrementally, starting with the highest-traffic refresh paths
-(`ItemsPage`, `DashboardPage`, `ReportsPage`, `TruckStockDashboardPage`).
+`GlobalSearchDialog` → `StockTemplatesPage` → `MyTruckStockPage` /
+`LowStockAlertsPage` / `ScanPage` → remaining dialogs → secondary
+(create/update/delete) actions on the list pages.

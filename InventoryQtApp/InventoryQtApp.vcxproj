@@ -211,6 +211,7 @@
     <ClInclude Include="JsonUtils.h" />
     <ClInclude Include="UrlUtils.h" />
     <ClInclude Include="CredentialStore.h" />
+    <ClInclude Include="AsyncTask.h" />
     <ClInclude Include="AssetService.h" />
     <QtMoc Include="AsyncApi.h" />
     <QtMoc Include="AssetsPage.h" />

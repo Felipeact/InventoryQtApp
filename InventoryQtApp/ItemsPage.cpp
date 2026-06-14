@@ -1,6 +1,7 @@
 #include "ItemsPage.h"
 #include "Theme.h"
 #include "ItemDetailsDialog.h"
+#include "AsyncTask.h"
 
 #include <algorithm>
 
@@ -104,39 +105,14 @@ void ItemsPage::setupConnections()
 
 void ItemsPage::refreshProducts()
 {
-    QPointer<ItemsPage> self(this);
-
-    QThread* worker =
-        QThread::create([self]() {
-        if (!self) {
-            return;
-        }
-
-        json products =
-            self->productService.getProducts(true);
-
-        QMetaObject::invokeMethod(
-            self,
-            [self, products]() {
-                if (!self) {
-                    return;
-                }
-
-                self->currentProducts = products;
-                self->applyFilters();
-            },
-            Qt::QueuedConnection
-        );
-            });
-
-    connect(
-        worker,
-        &QThread::finished,
-        worker,
-        &QObject::deleteLater
-    );
-
-    worker->start();
+    // Runs off the GUI thread; the result callback fires on the GUI thread and
+    // is skipped automatically if this page is destroyed first.
+    AsyncTask::run(this,
+        [&svc = productService]() { return svc.getProducts(true); },
+        [this](json products) {
+            currentProducts = products;
+            applyFilters();
+        });
 }
 
 void ItemsPage::setupTable()
@@ -184,39 +160,12 @@ void ItemsPage::setupTable()
 
 void ItemsPage::loadProducts()
 {
-    QPointer<ItemsPage> self(this);
-
-    QThread* worker =
-        QThread::create([self]() {
-        if (!self) {
-            return;
-        }
-
-        json products =
-            self->productService.getProducts();
-
-        QMetaObject::invokeMethod(
-            self,
-            [self, products]() {
-                if (!self) {
-                    return;
-                }
-
-                self->currentProducts = products;
-                self->applyFilters();
-            },
-            Qt::QueuedConnection
-        );
-            });
-
-    connect(
-        worker,
-        &QThread::finished,
-        worker,
-        &QObject::deleteLater
-    );
-
-    worker->start();
+    AsyncTask::run(this,
+        [&svc = productService]() { return svc.getProducts(); },
+        [this](json products) {
+            currentProducts = products;
+            applyFilters();
+        });
 }
 
 void ItemsPage::populateTable(
