@@ -18,7 +18,11 @@ the `IApiClient` interface, and the tests substitute an in-memory
 | `tst_services`        | `AssetService`, `AuthService`, `ProductService`, `ReportService` via `FakeApiClient` |
 | `tst_config`          | `Config` API-URL resolution (env var > QSettings > default) |
 | `tst_credentialstore` | `CredentialStore` token encrypt/decrypt round-trip and legacy migration |
+| `tst_asyncapi`        | `AsyncApi` runs calls off-thread, non-blocking, callback on caller thread |
 | `tst_exportutility`   | `ExportUtility` CSV escaping, Excel fallback, file-size formatting |
+
+CI runs this suite on **Linux (GCC)** and **Windows (MSVC)** — the Windows job
+exercises the platform-specific `CredentialStore` DPAPI code path.
 
 ## Running
 

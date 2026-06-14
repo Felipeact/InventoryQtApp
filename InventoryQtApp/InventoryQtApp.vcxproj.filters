@@ -118,6 +118,9 @@
     <ClCompile Include="AssetService.cpp">
       <Filter>Source Files\services</Filter>
     </ClCompile>
+    <ClCompile Include="AsyncApi.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
     <ClCompile Include="ReportService.cpp">
       <Filter>Source Files\services</Filter>
     </ClCompile>
@@ -274,6 +277,9 @@
     </QtMoc>
     <QtMoc Include="ItemsPage.h">
       <Filter>Header Files\Pages</Filter>
+    </QtMoc>
+    <QtMoc Include="AsyncApi.h">
+      <Filter>Header Files\services</Filter>
     </QtMoc>
     <QtMoc Include="AssetsPage.h">
       <Filter>Header Files\Pages</Filter>

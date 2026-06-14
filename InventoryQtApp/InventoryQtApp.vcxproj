@@ -37,12 +37,12 @@
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
     <QtInstall>6.11.0_msvc2022_64</QtInstall>
-    <QtModules>core;gui;network;widgets</QtModules>
+    <QtModules>core;gui;network;widgets;concurrent</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
     <QtInstall>6.11.0_msvc2022_64</QtInstall>
-    <QtModules>core;gui;widgets</QtModules>
+    <QtModules>core;gui;widgets;concurrent</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
   <Target Name="QtMsBuildNotFound" BeforeTargets="CustomBuild;ClCompile" Condition="!Exists('$(QtMsBuild)\qt.targets') or !Exists('$(QtMsBuild)\qt.props')">
@@ -100,6 +100,7 @@
     <ClCompile Include="AddProductDialog.cpp" />
     <ClCompile Include="AssetDetailsDialog.cpp" />
     <ClCompile Include="AssetService.cpp" />
+    <ClCompile Include="AsyncApi.cpp" />
     <ClCompile Include="AssetsPage.cpp" />
     <ClCompile Include="AssignmentsPage.cpp" />
     <ClCompile Include="AssignTemplateDialog.cpp" />
@@ -211,6 +212,7 @@
     <ClInclude Include="UrlUtils.h" />
     <ClInclude Include="CredentialStore.h" />
     <ClInclude Include="AssetService.h" />
+    <QtMoc Include="AsyncApi.h" />
     <QtMoc Include="AssetsPage.h" />
     <QtMoc Include="AssignmentsPage.h" />
     <QtMoc Include="AssignTemplateDialog.h" />

@@ -4,8 +4,19 @@
 # exercise the service layer through the IApiClient seam (via FakeApiClient),
 # the pure JSON helpers, the error mapping, and the export/config utilities.
 
-find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Test)
-find_package(nlohmann_json REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Core Gui Widgets PrintSupport Concurrent Test)
+
+# Prefer a system/package-provided nlohmann/json; fall back to fetching the
+# single-header release so the tests build on platforms without it installed
+# (e.g. Windows CI).
+find_package(nlohmann_json QUIET)
+if(NOT nlohmann_json_FOUND)
+    include(FetchContent)
+    FetchContent_Declare(nlohmann_json
+        URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
+    )
+    FetchContent_MakeAvailable(nlohmann_json)
+endif()
 
 set(APP_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../InventoryQtApp)
 
@@ -21,6 +32,7 @@ add_library(sut STATIC
     ${APP_DIR}/ReportService.cpp
     ${APP_DIR}/TruckStockService.cpp
     ${APP_DIR}/CredentialStore.cpp
+    ${APP_DIR}/AsyncApi.cpp
 )
 target_include_directories(sut PUBLIC ${APP_DIR})
 target_link_libraries(sut PUBLIC
@@ -28,6 +40,7 @@ target_link_libraries(sut PUBLIC
     Qt6::Gui
     Qt6::Widgets
     Qt6::PrintSupport
+    Qt6::Concurrent
     nlohmann_json::nlohmann_json
 )
 
@@ -49,4 +62,5 @@ add_qt_test(tst_urlutils FALSE)
 add_qt_test(tst_services FALSE)
 add_qt_test(tst_config FALSE)
 add_qt_test(tst_credentialstore FALSE)
+add_qt_test(tst_asyncapi FALSE)
 add_qt_test(tst_exportutility TRUE)

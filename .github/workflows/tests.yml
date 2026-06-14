@@ -6,10 +6,9 @@ on:
   pull_request:
 
 jobs:
-  unit-tests:
+  linux-tests:
     name: Build & run unit tests (Linux)
     runs-on: ubuntu-24.04
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,3 +27,30 @@ jobs:
 
       - name: Run tests
         run: ctest --test-dir build --output-on-failure
+
+  windows-tests:
+    name: Build & run unit tests (Windows / MSVC)
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Validates the Windows-only code paths -- notably CredentialStore's
+      # DPAPI implementation -- against the real MSVC toolchain. nlohmann/json
+      # is pulled in by the test CMake via FetchContent on this platform.
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.6.3'
+          host: windows
+          target: desktop
+          arch: win64_msvc2019_64
+
+      - name: Configure
+        run: cmake -S . -B build
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Run tests
+        run: ctest --test-dir build -C Release --output-on-failure
