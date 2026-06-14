@@ -12,11 +12,13 @@ the `IApiClient` interface, and the tests substitute an in-memory
 
 | Suite | Under test |
 |-------|------------|
-| `tst_errorhandler` | `ErrorHandler` status-code → message mapping and classifiers |
-| `tst_jsonutils`    | `JsonUtils` safe field access, asset normalization, user-name resolution |
-| `tst_services`     | `AssetService`, `AuthService`, `ProductService`, `ReportService` via `FakeApiClient` |
-| `tst_config`       | `Config` API-URL resolution (env var > QSettings > default) |
-| `tst_exportutility`| `ExportUtility` CSV escaping, Excel fallback, file-size formatting |
+| `tst_errorhandler`    | `ErrorHandler` status-code → message mapping and classifiers |
+| `tst_jsonutils`       | `JsonUtils` safe field access, asset normalization, user-name resolution |
+| `tst_urlutils`        | `UrlUtils` query percent-encoding (search-term safety) |
+| `tst_services`        | `AssetService`, `AuthService`, `ProductService`, `ReportService` via `FakeApiClient` |
+| `tst_config`          | `Config` API-URL resolution (env var > QSettings > default) |
+| `tst_credentialstore` | `CredentialStore` token encrypt/decrypt round-trip and legacy migration |
+| `tst_exportutility`   | `ExportUtility` CSV escaping, Excel fallback, file-size formatting |
 
 ## Running
 

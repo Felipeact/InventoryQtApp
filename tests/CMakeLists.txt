@@ -20,6 +20,7 @@ add_library(sut STATIC
     ${APP_DIR}/UserService.cpp
     ${APP_DIR}/ReportService.cpp
     ${APP_DIR}/TruckStockService.cpp
+    ${APP_DIR}/CredentialStore.cpp
 )
 target_include_directories(sut PUBLIC ${APP_DIR})
 target_link_libraries(sut PUBLIC
@@ -44,6 +45,8 @@ endfunction()
 
 add_qt_test(tst_errorhandler FALSE)
 add_qt_test(tst_jsonutils FALSE)
+add_qt_test(tst_urlutils FALSE)
 add_qt_test(tst_services FALSE)
 add_qt_test(tst_config FALSE)
+add_qt_test(tst_credentialstore FALSE)
 add_qt_test(tst_exportutility TRUE)

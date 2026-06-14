@@ -1,6 +1,7 @@
 // AssetService.cpp - Implementation of asset service
 #include "AssetService.h"
 #include "JsonUtils.h"
+#include "UrlUtils.h"
 
 #include <iostream>
 
@@ -106,7 +107,7 @@ json AssetService::searchAssets(const std::string& searchText)
     std::string endpoint = "/assets?page=1&limit=100";
 
     if (!searchText.empty()) {
-        endpoint += "&search=" + searchText;
+        endpoint += "&search=" + UrlUtils::encodeQueryValue(searchText);
     }
 
     auto res = api.get(endpoint);

@@ -1,4 +1,5 @@
 #include "ProductService.h"
+#include "UrlUtils.h"
 
 #include <iostream>
 #include <QtGlobal>
@@ -125,7 +126,7 @@ json ProductService::searchProducts(const std::string& searchText)
     std::string endpoint = "/products?page=1&limit=100&_=" + cacheBuster();
 
     if (!searchText.empty()) {
-        endpoint += "&search=" + searchText;
+        endpoint += "&search=" + UrlUtils::encodeQueryValue(searchText);
     }
 
     auto res = api.get(endpoint);

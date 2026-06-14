@@ -103,6 +103,19 @@ private slots:
         QCOMPARE(api.lastRequest().method, std::string("DELETE"));
     }
 
+    void asset_search_encodesQueryValue()
+    {
+        FakeApiClient api;
+        api.setResponse(200, "[]");
+        AssetService svc(api);
+
+        svc.searchAssets("a b&c");
+        const std::string ep = api.lastRequest().endpoint;
+        QVERIFY2(ep.find("search=a%20b%26c") != std::string::npos, ep.c_str());
+        // The injected '&' must not appear raw (which would split the query).
+        QVERIFY(ep.find("&c") == std::string::npos);
+    }
+
     // --- AuthService ------------------------------------------------------
     void auth_login_succeedsAndExtractsName()
     {

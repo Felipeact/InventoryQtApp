@@ -152,6 +152,7 @@
     <QtUic Include="InventoryQtApp.ui" />
     <QtMoc Include="InventoryQtApp.h" />
     <ClCompile Include="ApiClient.cpp" />
+    <ClCompile Include="CredentialStore.cpp" />
     <ClCompile Include="AuthService.cpp" />
     <ClCompile Include="InventoryQtApp.cpp" />
     <ClCompile Include="main.cpp" />
@@ -207,6 +208,8 @@
     <ClInclude Include="HttpResponse.h" />
     <ClInclude Include="IApiClient.h" />
     <ClInclude Include="JsonUtils.h" />
+    <ClInclude Include="UrlUtils.h" />
+    <ClInclude Include="CredentialStore.h" />
     <ClInclude Include="AssetService.h" />
     <QtMoc Include="AssetsPage.h" />
     <QtMoc Include="AssignmentsPage.h" />

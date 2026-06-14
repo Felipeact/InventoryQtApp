@@ -76,6 +76,9 @@
     <ClCompile Include="ApiClient.cpp">
       <Filter>Source Files\services</Filter>
     </ClCompile>
+    <ClCompile Include="CredentialStore.cpp">
+      <Filter>Source Files\services</Filter>
+    </ClCompile>
     <ClCompile Include="AuthService.cpp">
       <Filter>Source Files\services</Filter>
     </ClCompile>
@@ -223,6 +226,12 @@
       <Filter>Header Files\services</Filter>
     </ClInclude>
     <ClInclude Include="JsonUtils.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
+    <ClInclude Include="UrlUtils.h">
+      <Filter>Header Files\services</Filter>
+    </ClInclude>
+    <ClInclude Include="CredentialStore.h">
       <Filter>Header Files\services</Filter>
     </ClInclude>
     <ClInclude Include="AuthService.h">

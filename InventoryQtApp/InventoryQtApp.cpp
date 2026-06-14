@@ -4,6 +4,7 @@
 #include "Theme.h"
 #include "ErrorHandler.h"
 #include "Config.h"
+#include "CredentialStore.h"
 
 #include <QMessageBox>
 #include <QSettings>
@@ -239,18 +240,16 @@ void InventoryQtApp::saveCredentials(const QString& email, const QString& access
     QSettings settings("InventorySystem", "InventoryQtApp");
 
     settings.setValue("login/email", email);
-    settings.setValue("login/accessToken", accessToken);
+    settings.setValue("login/accessToken", CredentialStore::protect(accessToken));
     settings.setValue("login/userName", userName.isEmpty() ? email : userName);
 
     if (!apiClient.getRefreshToken().empty()) {
         settings.setValue("login/refreshToken",
-            QString::fromStdString(apiClient.getRefreshToken()));
+            CredentialStore::protect(QString::fromStdString(apiClient.getRefreshToken())));
     }
 
     settings.setValue("login/rememberMe", true);
     settings.sync();
-
-    qDebug() << "Credentials saved for:" << email;
 }
 
 void InventoryQtApp::loadSavedCredentials()
@@ -261,16 +260,14 @@ void InventoryQtApp::loadSavedCredentials()
 
     if (rememberMe) {
         QString savedEmail = settings.value("login/email", "").toString();
-        QString savedAccessToken = settings.value("login/accessToken", "").toString();
-        QString savedRefreshToken = settings.value("login/refreshToken", "").toString();
+        QString savedAccessToken = CredentialStore::unprotect(settings.value("login/accessToken", "").toString());
+        QString savedRefreshToken = CredentialStore::unprotect(settings.value("login/refreshToken", "").toString());
 
         if (!savedEmail.isEmpty() &&
             (!savedAccessToken.isEmpty() || !savedRefreshToken.isEmpty())) {
 
             ui.emailInput->setText(savedEmail);
             ui.rememberCheck->setChecked(true);
-
-            qDebug() << "Loading saved credentials for:" << savedEmail;
 
             if (!savedAccessToken.isEmpty()) {
                 apiClient.setAccessToken(savedAccessToken.toStdString());
