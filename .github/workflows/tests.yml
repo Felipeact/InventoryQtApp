@@ -28,6 +28,29 @@ jobs:
       - name: Run tests
         run: ctest --test-dir build --output-on-failure
 
+  linux-app-build:
+    name: Build full application (Linux)
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Compiles and links the entire GUI application (all pages/dialogs,
+      # ApiClient, CredentialStore, async code) so a build break is caught in
+      # CI. cpr is fetched by CMake and linked against the system libcurl;
+      # QXlsx is omitted (Excel export falls back to CSV).
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            qt6-base-dev nlohmann-json3-dev libcurl4-openssl-dev cmake ninja-build g++
+
+      - name: Configure
+        run: cmake -S . -B build-app -G Ninja -DBUILD_APP=ON
+
+      - name: Build application
+        run: cmake --build build-app --target InventoryApp
+
   windows-tests:
     name: Build & run unit tests (Windows / MSVC)
     runs-on: windows-latest

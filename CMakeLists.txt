@@ -15,3 +15,12 @@ set(CMAKE_AUTOMOC ON)
 enable_testing()
 
 add_subdirectory(tests)
+
+# Optionally build the full GUI application. This verifies that the entire app
+# (all pages/dialogs, ApiClient, credential storage, async conversions) compiles
+# and links. It requires cpr (fetched automatically) and a system libcurl.
+# QXlsx remains optional; without it the Excel export falls back to CSV.
+option(BUILD_APP "Build the full GUI application" OFF)
+if(BUILD_APP)
+    add_subdirectory(app)
+endif()

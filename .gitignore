@@ -363,3 +363,4 @@ MigrationBackup/
 FodyWeavers.xsd
 # CMake out-of-source build (unit tests)
 /build/
+/build-app/
