@@ -1,4 +1,5 @@
 #include "LowStockAlertsPage.h"
+#include "AsyncTask.h"
 #include "Theme.h"
 #include "UploadReceiptDialog.h"
 
@@ -151,10 +152,14 @@ void LowStockAlertsPage::loadAlerts()
         return;
     }
 
-    currentAlerts =
-        truckStockService->getLowStockItems();
+    TruckStockService* svc = truckStockService;
 
-    filterAlerts();
+    AsyncTask::run(this,
+        [svc]() { return svc->getLowStockItems(); },
+        [this](auto alerts) {
+            currentAlerts = alerts;
+            filterAlerts();
+        });
 }
 
 void LowStockAlertsPage::refreshAlerts()

@@ -1,4 +1,5 @@
 ﻿#include "ScanPage.h"
+#include "AsyncTask.h"
 
 #include <QDateTime>
 #include <QPushButton>
@@ -79,49 +80,47 @@ void ScanPage::onSubmitClicked()
         return;
     }
 
-    bool success = false;
+    ui.statusLabel->setText("Submitting…");
 
-    if (mode == ScanMode::ScanIn) {
-        success = productService.scanIn(
-            barcode.toStdString(),
-            quantity
-        );
-    }
-    else {
-        success = productService.scanOut(
-            barcode.toStdString(),
-            quantity
-        );
-    }
+    ProductService* svc = &productService;
+    ScanMode submitMode = mode;
+    std::string barcodeStd = barcode.toStdString();
 
-    if (!success) {
-        ui.statusLabel->setText("Operation failed.");
-        return;
-    }
+    // Perform the scan and the follow-up name lookup off the GUI thread, then
+    // update the UI on the GUI thread.
+    AsyncTask::run(this,
+        [svc, submitMode, barcodeStd, quantity]() {
+            bool ok = (submitMode == ScanMode::ScanIn)
+                ? svc->scanIn(barcodeStd, quantity)
+                : svc->scanOut(barcodeStd, quantity);
 
-    QString productName =
-        QString::fromStdString(
-            productService.getProductNameByBarcode(
-                barcode.toStdString()
-            )
-        );
+            std::string name = ok ? svc->getProductNameByBarcode(barcodeStd) : std::string();
+            return std::make_pair(ok, name);
+        },
+        [this, barcode, quantity](std::pair<bool, std::string> result) {
+            if (!result.first) {
+                ui.statusLabel->setText("Operation failed.");
+                return;
+            }
 
-    if (productName.trimmed().isEmpty()) {
-        productName = "Unknown Product";
-    }
+            QString productName = QString::fromStdString(result.second);
+            if (productName.trimmed().isEmpty()) {
+                productName = "Unknown Product";
+            }
 
-    ui.statusLabel->setText("Stock updated successfully.");
+            ui.statusLabel->setText("Stock updated successfully.");
 
-    addRecentScan(
-        barcode,
-        productName,
-        quantity
-    );
+            addRecentScan(
+                barcode,
+                productName,
+                quantity
+            );
 
-    ui.barcodeInput->clear();
-    ui.quantityInput->setValue(1);
+            ui.barcodeInput->clear();
+            ui.quantityInput->setValue(1);
 
-    emit stockChanged();
+            emit stockChanged();
+        });
 }
 
 void ScanPage::onMinusClicked()

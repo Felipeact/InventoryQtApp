@@ -1,6 +1,7 @@
 #include "StockTemplatesPage.h"
 #include "Theme.h"
 #include "AddEditTemplateDialog.h"
+#include "AsyncTask.h"
 
 #include <algorithm>
 
@@ -117,10 +118,14 @@ void StockTemplatesPage::loadTemplates()
         return;
     }
 
-    currentTemplates =
-        truckStockService->getTemplates();
+    TruckStockService* svc = truckStockService;
 
-    filterTemplates();
+    AsyncTask::run(this,
+        [svc]() { return svc->getTemplates(); },
+        [this](std::vector<StockTemplateDto> templates) {
+            currentTemplates = templates;
+            filterTemplates();
+        });
 }
 
 void StockTemplatesPage::refreshTemplatesList()

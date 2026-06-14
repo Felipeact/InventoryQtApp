@@ -60,14 +60,32 @@ directly and works in terms of `HttpResponse`.)
 4. For actions, disable the triggering control before the call and re-enable it
    in the callback so the user gets feedback and can't double-submit.
 
-## Done so far
+## Done
 
-- `ItemsPage::refreshProducts` and `ItemsPage::loadProducts` converted to
-  `AsyncTask::run` (replacing the raw-`QThread` pattern) as the reference
-  implementation.
+Non-modal pages — their primary load/refresh (and `ScanPage`'s submit) now run
+through `AsyncTask::run` and no longer block the GUI thread:
 
-## Recommended order for the rest
+- `ItemsPage` (`loadProducts`, `refreshProducts`)
+- `StockTemplatesPage` (`loadTemplates`)
+- `MyTruckStockPage` (`loadStock`)
+- `LowStockAlertsPage` (`loadAlerts`)
+- `AssignmentsPage` (`loadAssignments`)
+- `ScanPage` (`onSubmitClicked` — scan + name lookup off-thread)
+- `GlobalSearchDialog` (`runSearch` — gathers 8 sources off-thread, builds the
+  tree on the GUI thread, with a generation guard against stale keystrokes)
 
-`GlobalSearchDialog` → `StockTemplatesPage` → `MyTruckStockPage` /
-`LowStockAlertsPage` / `ScanPage` → remaining dialogs → secondary
-(create/update/delete) actions on the list pages.
+## Intentionally left synchronous
+
+**Modal dialogs** (`AssignTemplateDialog`, `AddEditTruckDialog`,
+`UploadReceiptDialog`, `AddEditUserDialog`, …) keep their on-open combo loads
+synchronous. They block interaction by design, open with only a brief bounded
+pause, and several preselect combo values in `setEditMode` immediately after
+loading — making them sensitive to load ordering. The risk/benefit there does
+not favor async.
+
+## Remaining (optional)
+
+Secondary write actions (create/update/delete) on the list pages still run on
+the GUI thread. They are single, user-initiated operations; convert them with
+the `AsyncTask::run` recipe above plus a disable-control-during-call guard if
+their momentary pause becomes a concern.

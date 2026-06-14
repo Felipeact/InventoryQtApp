@@ -1,4 +1,5 @@
 #include "MyTruckStockPage.h"
+#include "AsyncTask.h"
 #include "Theme.h"
 #include "UseTruckItemDialog.h"
 #include "TruckStockHistoryDialog.h"
@@ -107,10 +108,14 @@ void MyTruckStockPage::loadStock()
         return;
     }
 
-    currentStock =
-        truckStockService->getMyTruckStock();
+    TruckStockService* svc = truckStockService;
 
-    filterStock();
+    AsyncTask::run(this,
+        [svc]() { return svc->getMyTruckStock(); },
+        [this](auto stock) {
+            currentStock = stock;
+            filterStock();
+        });
 }
 
 void MyTruckStockPage::refreshStock()

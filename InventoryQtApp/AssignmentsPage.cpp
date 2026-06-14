@@ -1,4 +1,5 @@
 #include "AssignmentsPage.h"
+#include "AsyncTask.h"
 #include "Theme.h"
 #include "AssignTemplateDialog.h"
 
@@ -156,10 +157,14 @@ void AssignmentsPage::loadAssignments()
         return;
     }
 
-    currentAssignments =
-        truckStockService->getAssignments();
+    TruckStockService* svc = truckStockService;
 
-    filterAssignments();
+    AsyncTask::run(this,
+        [svc]() { return svc->getAssignments(); },
+        [this](auto assignments) {
+            currentAssignments = assignments;
+            filterAssignments();
+        });
 }
 
 void AssignmentsPage::refreshAssignments()

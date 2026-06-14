@@ -1,4 +1,5 @@
 #include "GlobalSearchDialog.h"
+#include "AsyncTask.h"
 
 #include <algorithm>
 
@@ -120,6 +121,56 @@ void GlobalSearchDialog::runSearch(
         return;
     }
 
+    ui.summaryLabel->setText("Searching…");
+
+    // Service pointers are owned by the parent window and outlive this dialog.
+    ProductService* ps = productService;
+    AssetService* as = assetService;
+    UserService* us = userService;
+    TruckStockService* tss = truckStockService;
+
+    const int generation = ++searchGeneration;
+
+    // Gather all data off the GUI thread, then build the tree on the GUI
+    // thread. A newer keystroke supersedes this one via the generation guard.
+    AsyncTask::run(this,
+        [ps, as, us, tss]() {
+            GlobalSearchData data;
+
+            if (ps) {
+                data.products = ps->getProducts();
+            }
+            if (as) {
+                data.assets = as->getAssets();
+            }
+            if (us) {
+                data.users = us->getUsers();
+            }
+            if (tss) {
+                data.trucks = tss->getTrucks();
+                data.templates = tss->getTemplates();
+                data.assignments = tss->getAssignments();
+                data.lowStockItems = tss->getLowStockItems();
+                data.receipts = tss->getReceipts();
+            }
+
+            return data;
+        },
+        [this, searchText, generation](GlobalSearchData data) {
+            if (generation != searchGeneration) {
+                return; // a newer search has started
+            }
+            buildResults(searchText, data);
+        });
+}
+
+void GlobalSearchDialog::buildResults(
+    const QString& searchText,
+    const GlobalSearchData& data
+)
+{
+    clearResults();
+
     int totalResults = 0;
 
     addPageResults(searchText);
@@ -134,8 +185,7 @@ void GlobalSearchDialog::runSearch(
     if (productService) {
         addGroup("Items");
 
-        json products =
-            productService->getProducts();
+        const json& products = data.products;
 
         int count = 0;
 
@@ -178,8 +228,7 @@ void GlobalSearchDialog::runSearch(
     if (assetService) {
         addGroup("Assets");
 
-        json assets =
-            assetService->getAssets();
+        const json& assets = data.assets;
 
         int count = 0;
 
@@ -222,8 +271,7 @@ void GlobalSearchDialog::runSearch(
     if (userService) {
         addGroup("Users");
 
-        std::vector<UserDto> users =
-            userService->getUsers();
+        const std::vector<UserDto>& users = data.users;
 
         int count = 0;
 
@@ -266,8 +314,7 @@ void GlobalSearchDialog::runSearch(
     if (truckStockService) {
         addGroup("Trucks");
 
-        std::vector<TruckDto> trucks =
-            truckStockService->getTrucks();
+        const std::vector<TruckDto>& trucks = data.trucks;
 
         int truckCount = 0;
 
@@ -308,8 +355,7 @@ void GlobalSearchDialog::runSearch(
 
         addGroup("Templates");
 
-        std::vector<StockTemplateDto> templates =
-            truckStockService->getTemplates();
+        const std::vector<StockTemplateDto>& templates = data.templates;
 
         int templateCount = 0;
 
@@ -346,8 +392,7 @@ void GlobalSearchDialog::runSearch(
 
         addGroup("Assignments");
 
-        std::vector<TruckAssignmentDto> assignments =
-            truckStockService->getAssignments();
+        const std::vector<TruckAssignmentDto>& assignments = data.assignments;
 
         int assignmentCount = 0;
 
@@ -388,8 +433,7 @@ void GlobalSearchDialog::runSearch(
 
         addGroup("Low Stock Alerts");
 
-        std::vector<LowStockItemDto> lowStockItems =
-            truckStockService->getLowStockItems();
+        const std::vector<LowStockItemDto>& lowStockItems = data.lowStockItems;
 
         int lowStockCount = 0;
 
@@ -432,8 +476,7 @@ void GlobalSearchDialog::runSearch(
 
         addGroup("Receipts");
 
-        std::vector<ReceiptDto> receipts =
-            truckStockService->getReceipts();
+        const std::vector<ReceiptDto>& receipts = data.receipts;
 
         int receiptCount = 0;
 
