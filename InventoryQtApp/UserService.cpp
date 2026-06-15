@@ -1,7 +1,7 @@
 #include "UserService.h"
+#include "Logging.h"
 
 #include <algorithm>
-#include <iostream>
 
 #include <nlohmann/json.hpp>
 
@@ -20,18 +20,32 @@ std::vector<UserDto> UserService::getUsers()
         auto response = apiClient.get("/users");
 
         if (response.status_code != 200) {
-            std::cerr << "GET /users failed. Status: "
-                << response.status_code
-                << " Body: "
-                << response.text
-                << std::endl;
+            inv::logWarning(
+                "GET /users failed. Status: "
+                + std::to_string(response.status_code)
+                + " Body: " + response.text
+            );
 
             return users;
         }
 
-        json data = json::parse(response.text);
+        json parsed = json::parse(response.text);
+
+        // The API may return a bare array or a { "data": [...] } envelope.
+        const json& data =
+            (parsed.contains("data") && parsed["data"].is_array())
+            ? parsed["data"]
+            : parsed;
+
+        if (!data.is_array()) {
+            return users;
+        }
 
         for (const auto& item : data) {
+            if (!item.is_object()) {
+                continue;
+            }
+
             UserDto user;
 
             user.id = item.value("id", "");
@@ -51,9 +65,7 @@ std::vector<UserDto> UserService::getUsers()
         }
     }
     catch (const std::exception& ex) {
-        std::cerr << "UserService::getUsers error: "
-            << ex.what()
-            << std::endl;
+        inv::logWarning(std::string("UserService::getUsers error: ") + ex.what());
     }
 
     return users;
@@ -89,11 +101,11 @@ std::string UserService::inviteUser(const CreateUserRequest& request)
         );
 
         if (response.status_code != 200 && response.status_code != 201) {
-            std::cerr << "Invite user failed. Status: "
-                << response.status_code
-                << " Body: "
-                << response.text
-                << std::endl;
+            inv::logWarning(
+                "Invite user failed. Status: "
+                + std::to_string(response.status_code)
+                + " Body: " + response.text
+            );
 
             return "";
         }
@@ -109,9 +121,7 @@ std::string UserService::inviteUser(const CreateUserRequest& request)
         return data.value("temporaryPassword", "");
     }
     catch (const std::exception& ex) {
-        std::cerr << "UserService::inviteUser error: "
-            << ex.what()
-            << std::endl;
+        inv::logWarning(std::string("UserService::inviteUser error: ") + ex.what());
 
         return "";
     }
@@ -137,11 +147,11 @@ bool UserService::updateUser(
         auto response = apiClient.put("/users/" + userId, body.dump());
 
         if (response.status_code != 200) {
-            std::cerr << "PUT /users failed. Status: "
-                << response.status_code
-                << " Body: "
-                << response.text
-                << std::endl;
+            inv::logWarning(
+                "PUT /users failed. Status: "
+                + std::to_string(response.status_code)
+                + " Body: " + response.text
+            );
 
             return false;
         }
@@ -149,9 +159,7 @@ bool UserService::updateUser(
         return true;
     }
     catch (const std::exception& ex) {
-        std::cerr << "UserService::updateUser error: "
-            << ex.what()
-            << std::endl;
+        inv::logWarning(std::string("UserService::updateUser error: ") + ex.what());
 
         return false;
     }
@@ -163,11 +171,11 @@ bool UserService::deleteUser(const std::string& userId)
         auto response = apiClient.del("/users/" + userId);
 
         if (response.status_code != 200 && response.status_code != 204) {
-            std::cerr << "DELETE /users failed. Status: "
-                << response.status_code
-                << " Body: "
-                << response.text
-                << std::endl;
+            inv::logWarning(
+                "DELETE /users failed. Status: "
+                + std::to_string(response.status_code)
+                + " Body: " + response.text
+            );
 
             return false;
         }
@@ -175,9 +183,7 @@ bool UserService::deleteUser(const std::string& userId)
         return true;
     }
     catch (const std::exception& ex) {
-        std::cerr << "UserService::deleteUser error: "
-            << ex.what()
-            << std::endl;
+        inv::logWarning(std::string("UserService::deleteUser error: ") + ex.what());
 
         return false;
     }
@@ -207,18 +213,16 @@ bool UserService::updateCurrentUserProfile(const std::string& name)
             return true;
         }
 
-        std::cerr << "Update current profile failed. Status: "
-            << response.status_code
-            << " Body: "
-            << response.text
-            << std::endl;
+        inv::logWarning(
+            "Update current profile failed. Status: "
+            + std::to_string(response.status_code)
+            + " Body: " + response.text
+        );
 
         return false;
     }
     catch (const std::exception& ex) {
-        std::cerr << "UserService::updateCurrentUserProfile error: "
-            << ex.what()
-            << std::endl;
+        inv::logWarning(std::string("UserService::updateCurrentUserProfile error: ") + ex.what());
 
         return false;
     }

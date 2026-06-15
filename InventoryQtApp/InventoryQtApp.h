@@ -35,6 +35,7 @@ private slots:
 	void onLoginButtonClicked();
 	void onForgotPasswordClicked();
 	void onUpdateAvailable(const UpdateInfo& info);
+	void onUpdateDownloadFinished(const QString& filePath);
 
 private:
 	Ui::InventoryQtAppClass ui;      // UI components
@@ -50,12 +51,19 @@ private:
 
 	DashboardWindow* dashboardWindow = nullptr;  // Main dashboard window after login	
 
+	// Completes login on the UI thread after the network call finishes on a worker.
+	void onLoginFinished(
+		const LoginResult& result,
+		const std::string& role,
+		const std::vector<std::string>& permissions,
+		bool validated
+	);
+
 	// Remember Me functionality
 	void saveCredentials(const QString& email, const QString& accessToken, const QString& userName);
 	void openDashboard(const std::string& role, const std::vector<std::string>& permissions, const std::string& userName);
 	void handleLogout();
 	void loadSavedCredentials();
 	void clearSavedCredentials();
-	QString getEncryptedToken() const;
 };
 

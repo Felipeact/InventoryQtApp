@@ -1,4 +1,5 @@
 #include "ReportService.h"
+#include "Logging.h"
 
 
 ReportService::ReportService(ApiClient& apiClient) : api(apiClient)
@@ -13,7 +14,13 @@ json ReportService::getInventorySummary()
         return json::object();
     }
 
-    return json::parse(res.text);
+    try {
+        return json::parse(res.text);
+    }
+    catch (const std::exception& ex) {
+        inv::logWarning(std::string("Parse inventory summary failed: ") + ex.what());
+        return json::object();
+    }
 }
 
 json ReportService::getAssetsSummary()
@@ -24,7 +31,11 @@ json ReportService::getAssetsSummary()
         return json::object();
     }
 
-    return json::parse(res.text);
+    try {
+        return json::parse(res.text);
+    }
+    catch (const std::exception& ex) {
+        inv::logWarning(std::string("Parse assets summary failed: ") + ex.what());
+        return json::object();
+    }
 }
-
-

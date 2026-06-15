@@ -2,21 +2,36 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <mutex>
 #include <cpr/cpr.h>
 
-// HTTP client for making API requests with token-based authentication
+// HTTP client for making API requests with token-based authentication.
+//
+// Thread-safety: instances are shared across the UI thread and the background
+// worker threads that pages spawn for network calls. All access to the cached
+// tokens is therefore serialized with tokenMutex, and token refresh is
+// single-flighted with refreshMutex so concurrent 401s trigger at most one
+// refresh.
 class ApiClient
 {
 private:
-	std::string baseUrl;  // Base URL for API endpoints
-	std::string accessToken; // Authentication token for API requests
-	std::string refreshToken; // Refresh token for obtaining new access tokens
+	std::string baseUrl;        // Base URL for API endpoints (immutable after construction)
+	std::string accessToken;    // Guarded by tokenMutex
+	std::string refreshToken;   // Guarded by tokenMutex
 
-	cpr::Header authHeader() const; // Helper function to construct the Authorization header
+	mutable std::mutex tokenMutex;  // Protects accessToken / refreshToken
+	std::mutex refreshMutex;        // Serializes refreshAccessToken (single-flight)
+
+	// Builds an Authorization header for the supplied bearer token.
+	static cpr::Header makeAuthHeader(const std::string& token);
+
+	// Refreshes the access token, but only if it still matches the token that
+	// produced the 401 (avoids redundant refreshes when several requests race).
+	bool refreshAccessToken(const std::string& usedToken);
 
 public:
 	// Constructor with base URL
-	ApiClient(const std::string& baseUrl);
+	explicit ApiClient(const std::string& baseUrl);
 
 	// Sets the authentication token for subsequent requests
 	void setAccessToken(const std::string& token);
@@ -35,7 +50,4 @@ public:
 
 	// Validates the current token and retrieves user role and permissions
 	bool validateToken(std::string& role, std::vector<std::string>& permissions);
-
-	bool refreshAccessToken(); // Refreshes the access token using the refresh token
-
 };

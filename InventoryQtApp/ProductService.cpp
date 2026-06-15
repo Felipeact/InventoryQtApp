@@ -1,6 +1,6 @@
 #include "ProductService.h"
+#include "Logging.h"
 
-#include <iostream>
 #include <QtGlobal>
 #include <chrono>
 
@@ -43,7 +43,7 @@ bool ProductService::createProduct(
     auto res = api.post("/products", body.dump());
 
     if (res.status_code != 200 && res.status_code != 201) {
-        std::cout << "Create product failed: " << res.text << std::endl;
+        inv::logDebug("Create product failed: " + res.text);
         return false;
     }
 
@@ -57,7 +57,7 @@ json ProductService::getProducts(bool forceRefresh)
     auto res = api.get("/products?page=1&limit=100&_=" + cacheBuster());
 
     if (res.status_code != 200) {
-        std::cout << "Get products failed: " << res.text << std::endl;
+        inv::logDebug("Get products failed: " + res.text);
         return json::array();
     }
 
@@ -73,7 +73,7 @@ json ProductService::getProducts(bool forceRefresh)
         }
     }
     catch (const std::exception& ex) {
-        std::cout << "Parse products failed: " << ex.what() << std::endl;
+        inv::logDebug(std::string("Parse products failed: ") + ex.what());
     }
 
     return json::array();
@@ -101,7 +101,7 @@ bool ProductService::updateProduct(
     auto res = api.put("/products/" + productId, body.dump());
 
     if (res.status_code != 200) {
-        std::cout << "Update product failed: " << res.text << std::endl;
+        inv::logDebug("Update product failed: " + res.text);
         return false;
     }
 
@@ -113,7 +113,7 @@ bool ProductService::deleteProduct(const std::string& productId)
     auto res = api.del("/products/" + productId);
 
     if (res.status_code != 200) {
-        std::cout << "Delete product failed: " << res.text << std::endl;
+        inv::logDebug("Delete product failed: " + res.text);
         return false;
     }
 
@@ -131,7 +131,7 @@ json ProductService::searchProducts(const std::string& searchText)
     auto res = api.get(endpoint);
 
     if (res.status_code != 200) {
-        std::cout << "Search products failed: " << res.text << std::endl;
+        inv::logDebug("Search products failed: " + res.text);
         return json::array();
     }
 
@@ -147,7 +147,7 @@ json ProductService::searchProducts(const std::string& searchText)
         }
     }
     catch (const std::exception& ex) {
-        std::cout << "Parse search products failed: " << ex.what() << std::endl;
+        inv::logDebug(std::string("Parse search products failed: ") + ex.what());
     }
 
     return json::array();
@@ -184,7 +184,7 @@ bool ProductService::scanIn(
     auto res = api.post("/products/scan-in", body.dump());
 
     if (res.status_code != 200) {
-        std::cout << "Scan in failed: " << res.text << std::endl;
+        inv::logDebug("Scan in failed: " + res.text);
         return false;
     }
 
@@ -204,7 +204,7 @@ bool ProductService::scanOut(
     auto res = api.post("/products/scan-out", body.dump());
 
     if (res.status_code != 200) {
-        std::cout << "Scan out failed: " << res.text << std::endl;
+        inv::logDebug("Scan out failed: " + res.text);
         return false;
     }
 
@@ -216,7 +216,7 @@ json ProductService::getLowStockProducts()
     auto res = api.get("/products/low-stock?_=" + cacheBuster());
 
     if (res.status_code != 200) {
-        std::cout << "Get low stock products failed: " << res.text << std::endl;
+        inv::logDebug("Get low stock products failed: " + res.text);
         return json::array();
     }
 
@@ -232,7 +232,7 @@ json ProductService::getLowStockProducts()
         }
     }
     catch (const std::exception& ex) {
-        std::cout << "Parse low stock products failed: " << ex.what() << std::endl;
+        inv::logDebug(std::string("Parse low stock products failed: ") + ex.what());
     }
 
     return json::array();

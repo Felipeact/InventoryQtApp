@@ -5,6 +5,8 @@
 #include <algorithm>
 
 #include <QAbstractItemView>
+#include <QThread>
+#include <QPointer>
 #include <QFrame>
 #include <QHeaderView>
 #include <QHBoxLayout>
@@ -117,10 +119,27 @@ void StockTemplatesPage::loadTemplates()
         return;
     }
 
-    currentTemplates =
-        truckStockService->getTemplates();
+    QPointer<StockTemplatesPage> self(this);
 
-    filterTemplates();
+    QThread* worker = QThread::create([self]() {
+        if (!self) {
+            return;
+        }
+
+        auto templates = self->truckStockService->getTemplates();
+
+        QMetaObject::invokeMethod(self, [self, templates]() {
+            if (!self) {
+                return;
+            }
+
+            self->currentTemplates = templates;
+            self->filterTemplates();
+        }, Qt::QueuedConnection);
+    });
+
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void StockTemplatesPage::refreshTemplatesList()

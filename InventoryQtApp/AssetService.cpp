@@ -1,7 +1,6 @@
 // AssetService.cpp - Implementation of asset service
 #include "AssetService.h"
-
-#include <iostream>
+#include "Logging.h"
 
 namespace
 {
@@ -88,7 +87,7 @@ bool AssetService::createAsset(
     auto res = api.post("/assets", body.dump());
 
     if (res.status_code != 200 && res.status_code != 201) {
-        std::cout << "Create asset failed: " << res.text << std::endl;
+        inv::logDebug("Create asset failed: " + res.text);
         return false;
     }
 
@@ -103,7 +102,7 @@ json AssetService::getAssets(bool forceRefresh)
     auto res = api.get("/assets?page=1&limit=100");
 
     if (res.status_code != 200) {
-        std::cout << "Get assets failed: " << res.text << std::endl;
+        inv::logDebug("Get assets failed: " + res.text);
         return json::array();
     }
 
@@ -112,7 +111,7 @@ json AssetService::getAssets(bool forceRefresh)
         return normalizeAssetsResponse(response);
     }
     catch (const std::exception& ex) {
-        std::cout << "Parse assets failed: " << ex.what() << std::endl;
+        inv::logDebug(std::string("Parse assets failed: ") + ex.what());
     }
 
     return json::array();
@@ -138,7 +137,7 @@ bool AssetService::updateAsset(
     auto res = api.put("/assets/" + assetId, body.dump());
 
     if (res.status_code != 200) {
-        std::cout << "Update asset failed: " << res.text << std::endl;
+        inv::logDebug("Update asset failed: " + res.text);
         return false;
     }
 
@@ -151,7 +150,7 @@ bool AssetService::deleteAsset(const std::string& assetId)
     auto res = api.del("/assets/" + assetId);
 
     if (res.status_code != 200 && res.status_code != 204) {
-        std::cout << "Delete asset failed: " << res.text << std::endl;
+        inv::logDebug("Delete asset failed: " + res.text);
         return false;
     }
 
@@ -170,7 +169,7 @@ json AssetService::searchAssets(const std::string& searchText)
     auto res = api.get(endpoint);
 
     if (res.status_code != 200) {
-        std::cout << "Search assets failed: " << res.text << std::endl;
+        inv::logDebug("Search assets failed: " + res.text);
         return json::array();
     }
 
@@ -179,7 +178,7 @@ json AssetService::searchAssets(const std::string& searchText)
         return normalizeAssetsResponse(response);
     }
     catch (const std::exception& ex) {
-        std::cout << "Parse search assets failed: " << ex.what() << std::endl;
+        inv::logDebug(std::string("Parse search assets failed: ") + ex.what());
     }
 
     return json::array();

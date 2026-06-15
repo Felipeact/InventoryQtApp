@@ -4,6 +4,7 @@
 #include "Theme.h"
 #include "ErrorHandler.h"
 #include "Config.h"
+#include "SecureStore.h"
 
 #include <QMessageBox>
 #include <QSettings>
@@ -11,6 +12,11 @@
 #include <QUrl>
 #include <QTimer>
 #include <QDebug>
+#include <QFileInfo>
+#include <QProcess>
+#include <QApplication>
+#include <QThread>
+#include <QPointer>
 
 // Constructor initializes the login window and sets up API client
 InventoryQtApp::InventoryQtApp(QWidget* parent)
@@ -57,6 +63,13 @@ InventoryQtApp::InventoryQtApp(QWidget* parent)
             &AutoUpdateManager::updateAvailable,
             this,
             &InventoryQtApp::onUpdateAvailable
+        );
+
+        connect(
+            updateManager,
+            &AutoUpdateManager::updateDownloadFinished,
+            this,
+            &InventoryQtApp::onUpdateDownloadFinished
         );
 
         connect(
@@ -129,14 +142,56 @@ void InventoryQtApp::onLoginButtonClicked()
     }
 
     ui.statusLabel->setText("Logging in...");
+    ui.loginButton->setEnabled(false);
 
-    LoginResult loginResult = authService.login(
-        email.toStdString(),
-        password.toStdString()
-    );
+    // Run the blocking network calls on a worker thread so the UI stays
+    // responsive, then finish on the UI thread in onLoginFinished().
+    QPointer<InventoryQtApp> self(this);
 
-    if (!loginResult.success) {
-        QString errorMsg = QString::fromStdString(loginResult.errorMessage);
+    QThread* worker = QThread::create([self, email, password]() {
+        if (!self) {
+            return;
+        }
+
+        LoginResult result = self->authService.login(
+            email.toStdString(),
+            password.toStdString()
+        );
+
+        std::string role;
+        std::vector<std::string> permissions;
+        bool validated = false;
+
+        if (result.success) {
+            self->apiClient.setAccessToken(result.accessToken);
+            self->apiClient.setRefreshToken(result.refreshToken);
+            validated = self->apiClient.validateToken(role, permissions);
+        }
+
+        QMetaObject::invokeMethod(self, [self, result, role, permissions, validated]() {
+            if (!self) {
+                return;
+            }
+
+            self->onLoginFinished(result, role, permissions, validated);
+        }, Qt::QueuedConnection);
+    });
+
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
+}
+
+void InventoryQtApp::onLoginFinished(
+    const LoginResult& result,
+    const std::string& role,
+    const std::vector<std::string>& permissions,
+    bool validated
+)
+{
+    ui.loginButton->setEnabled(true);
+
+    if (!result.success) {
+        QString errorMsg = QString::fromStdString(result.errorMessage);
         ui.statusLabel->setText("Login failed: " + errorMsg);
 
         if (errorMsg.contains("connect") || errorMsg.contains("offline")) {
@@ -150,28 +205,25 @@ void InventoryQtApp::onLoginButtonClicked()
         return;
     }
 
-    if (ui.rememberCheck->isChecked()) {
-        apiClient.setAccessToken(loginResult.accessToken);
-        apiClient.setRefreshToken(loginResult.refreshToken);
-        saveCredentials(email, QString::fromStdString(loginResult.accessToken), QString::fromStdString(loginResult.userName));
-    }
-    else {
-        clearSavedCredentials();
-    }
-
-    apiClient.setAccessToken(loginResult.accessToken);
-    apiClient.setRefreshToken(loginResult.refreshToken);
-
-    std::string role;
-    std::vector<std::string> permissions;
-
-    if (!apiClient.validateToken(role, permissions)) {
+    if (!validated) {
         ui.statusLabel->setText("Token validation failed.");
         QMessageBox::warning(this, "Error", "Token validation failed.");
         return;
     }
 
-    openDashboard(role, permissions, loginResult.userName);
+    // Tokens were already applied to the API client on the worker thread.
+    if (ui.rememberCheck->isChecked()) {
+        saveCredentials(
+            ui.emailInput->text(),
+            QString::fromStdString(result.accessToken),
+            QString::fromStdString(result.userName)
+        );
+    }
+    else {
+        clearSavedCredentials();
+    }
+
+    openDashboard(role, permissions, result.userName);
 }
 
 void InventoryQtApp::openDashboard(
@@ -239,12 +291,12 @@ void InventoryQtApp::saveCredentials(const QString& email, const QString& access
     QSettings settings("InventorySystem", "InventoryQtApp");
 
     settings.setValue("login/email", email);
-    settings.setValue("login/accessToken", accessToken);
+    settings.setValue("login/accessToken", SecureStore::encrypt(accessToken));
     settings.setValue("login/userName", userName.isEmpty() ? email : userName);
 
     if (!apiClient.getRefreshToken().empty()) {
         settings.setValue("login/refreshToken",
-            QString::fromStdString(apiClient.getRefreshToken()));
+            SecureStore::encrypt(QString::fromStdString(apiClient.getRefreshToken())));
     }
 
     settings.setValue("login/rememberMe", true);
@@ -261,8 +313,22 @@ void InventoryQtApp::loadSavedCredentials()
 
     if (rememberMe) {
         QString savedEmail = settings.value("login/email", "").toString();
-        QString savedAccessToken = settings.value("login/accessToken", "").toString();
-        QString savedRefreshToken = settings.value("login/refreshToken", "").toString();
+
+        // Stored tokens are DPAPI-encrypted. If decryption fails the value is
+        // legacy plaintext from an older build, so fall back to it and let the
+        // next save re-encrypt it.
+        QString rawAccessToken = settings.value("login/accessToken", "").toString();
+        QString rawRefreshToken = settings.value("login/refreshToken", "").toString();
+
+        QString savedAccessToken = SecureStore::decrypt(rawAccessToken);
+        if (savedAccessToken.isEmpty()) {
+            savedAccessToken = rawAccessToken;
+        }
+
+        QString savedRefreshToken = SecureStore::decrypt(rawRefreshToken);
+        if (savedRefreshToken.isEmpty()) {
+            savedRefreshToken = rawRefreshToken;
+        }
 
         if (!savedEmail.isEmpty() &&
             (!savedAccessToken.isEmpty() || !savedRefreshToken.isEmpty())) {
@@ -313,12 +379,6 @@ void InventoryQtApp::clearSavedCredentials()
     qDebug() << "Credentials cleared";
 }
 
-QString InventoryQtApp::getEncryptedToken() const
-{
-    QSettings settings("InventorySystem", "InventoryQtApp");
-    return settings.value("login/accessToken", "").toString();
-}
-
 void InventoryQtApp::onForgotPasswordClicked()
 {
     QString email = ui.emailInput->text();
@@ -360,7 +420,36 @@ void InventoryQtApp::onUpdateAvailable(const UpdateInfo& info)
         updateManager->downloadAndInstallUpdate(info);
 
         QMessageBox::information(this, "Downloading Update",
-            "The update will be downloaded in the background.\n"
-            "The application will restart once the download is complete.");
+            "The update is being downloaded in the background.\n"
+            "You will be prompted to install it once the download is complete.");
+    }
+}
+
+void InventoryQtApp::onUpdateDownloadFinished(const QString& filePath)
+{
+    QFileInfo info(filePath);
+
+    if (!info.exists() || info.size() == 0) {
+        QMessageBox::warning(this, "Update",
+            "The update download did not complete successfully. Please try again later.");
+        return;
+    }
+
+    int reply = QMessageBox::question(this, "Install Update",
+        "The update has been downloaded.\n\n"
+        "The application needs to close to complete the installation. Install now?",
+        QMessageBox::Yes | QMessageBox::No);
+
+    if (reply != QMessageBox::Yes) {
+        return;
+    }
+
+    if (QProcess::startDetached(filePath, QStringList())) {
+        QApplication::quit();
+    }
+    else {
+        QMessageBox::warning(this, "Update",
+            "Could not launch the installer automatically.\n\n"
+            "You can run it manually from:\n" + filePath);
     }
 }

@@ -4,6 +4,8 @@
 #include "TruckStockHistoryDialog.h"
 
 #include <QAbstractItemView>
+#include <QThread>
+#include <QPointer>
 #include <QFile>
 #include <QFileDialog>
 #include <QFrame>
@@ -107,10 +109,27 @@ void MyTruckStockPage::loadStock()
         return;
     }
 
-    currentStock =
-        truckStockService->getMyTruckStock();
+    QPointer<MyTruckStockPage> self(this);
 
-    filterStock();
+    QThread* worker = QThread::create([self]() {
+        if (!self) {
+            return;
+        }
+
+        auto stock = self->truckStockService->getMyTruckStock();
+
+        QMetaObject::invokeMethod(self, [self, stock]() {
+            if (!self) {
+                return;
+            }
+
+            self->currentStock = stock;
+            self->filterStock();
+        }, Qt::QueuedConnection);
+    });
+
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void MyTruckStockPage::refreshStock()

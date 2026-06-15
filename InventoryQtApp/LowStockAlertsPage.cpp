@@ -5,6 +5,8 @@
 #include <algorithm>
 
 #include <QAbstractItemView>
+#include <QThread>
+#include <QPointer>
 #include <QComboBox>
 #include <QFile>
 #include <QFileDialog>
@@ -151,10 +153,27 @@ void LowStockAlertsPage::loadAlerts()
         return;
     }
 
-    currentAlerts =
-        truckStockService->getLowStockItems();
+    QPointer<LowStockAlertsPage> self(this);
 
-    filterAlerts();
+    QThread* worker = QThread::create([self]() {
+        if (!self) {
+            return;
+        }
+
+        auto alerts = self->truckStockService->getLowStockItems();
+
+        QMetaObject::invokeMethod(self, [self, alerts]() {
+            if (!self) {
+                return;
+            }
+
+            self->currentAlerts = alerts;
+            self->filterAlerts();
+        }, Qt::QueuedConnection);
+    });
+
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void LowStockAlertsPage::refreshAlerts()

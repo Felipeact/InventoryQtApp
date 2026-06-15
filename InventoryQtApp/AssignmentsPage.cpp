@@ -5,6 +5,8 @@
 #include <algorithm>
 
 #include <QAbstractItemView>
+#include <QThread>
+#include <QPointer>
 #include <QFrame>
 #include <QHeaderView>
 #include <QHBoxLayout>
@@ -156,10 +158,27 @@ void AssignmentsPage::loadAssignments()
         return;
     }
 
-    currentAssignments =
-        truckStockService->getAssignments();
+    QPointer<AssignmentsPage> self(this);
 
-    filterAssignments();
+    QThread* worker = QThread::create([self]() {
+        if (!self) {
+            return;
+        }
+
+        auto assignments = self->truckStockService->getAssignments();
+
+        QMetaObject::invokeMethod(self, [self, assignments]() {
+            if (!self) {
+                return;
+            }
+
+            self->currentAssignments = assignments;
+            self->filterAssignments();
+        }, Qt::QueuedConnection);
+    });
+
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }
 
 void AssignmentsPage::refreshAssignments()

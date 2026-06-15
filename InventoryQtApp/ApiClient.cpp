@@ -1,9 +1,16 @@
 #include "ApiClient.h"
+#include "Logging.h"
+
 #include <nlohmann/json.hpp>
-#include <iostream>
 #include <cpr/timeout.h>
 
 using json = nlohmann::json;
+
+namespace
+{
+    // Network timeout for every request, in milliseconds.
+    constexpr long kRequestTimeoutMs = 5000;
+}
 
 ApiClient::ApiClient(const std::string& baseUrl)
     : baseUrl(baseUrl)
@@ -12,56 +19,63 @@ ApiClient::ApiClient(const std::string& baseUrl)
 
 void ApiClient::setAccessToken(const std::string& token)
 {
+    std::lock_guard<std::mutex> lock(tokenMutex);
     accessToken = token;
 }
 
 void ApiClient::setRefreshToken(const std::string& token)
 {
+    std::lock_guard<std::mutex> lock(tokenMutex);
     refreshToken = token;
 }
 
 std::string ApiClient::getAccessToken() const
 {
+    std::lock_guard<std::mutex> lock(tokenMutex);
     return accessToken;
 }
 
 std::string ApiClient::getRefreshToken() const
 {
+    std::lock_guard<std::mutex> lock(tokenMutex);
     return refreshToken;
-}
-
-cpr::Header ApiClient::authHeader() const
-{
-    if (accessToken.empty()) {
-        return cpr::Header{};
-    }
-
-    return cpr::Header{
-        {"Authorization", "Bearer " + accessToken}
-    };
 }
 
 void ApiClient::clearTokens()
 {
+    std::lock_guard<std::mutex> lock(tokenMutex);
     accessToken.clear();
     refreshToken.clear();
 }
 
+cpr::Header ApiClient::makeAuthHeader(const std::string& token)
+{
+    if (token.empty()) {
+        return cpr::Header{};
+    }
+
+    return cpr::Header{
+        {"Authorization", "Bearer " + token}
+    };
+}
+
 cpr::Response ApiClient::get(const std::string& endpoint)
 {
+    std::string token = getAccessToken();
+
     auto res = cpr::Get(
         cpr::Url{ baseUrl + endpoint },
-        authHeader(),
-        cpr::Timeout{ 5000 }
+        makeAuthHeader(token),
+        cpr::Timeout{ kRequestTimeoutMs }
     );
 
-    std::cout << "GET " << endpoint << " -> " << res.status_code << std::endl;
+    inv::logDebug("GET " + endpoint + " -> " + std::to_string(res.status_code));
 
-    if (res.status_code == 401 && refreshAccessToken()) {
+    if (res.status_code == 401 && refreshAccessToken(token)) {
         res = cpr::Get(
             cpr::Url{ baseUrl + endpoint },
-            authHeader(),
-            cpr::Timeout{ 5000 }
+            makeAuthHeader(getAccessToken()),
+            cpr::Timeout{ kRequestTimeoutMs }
         );
     }
 
@@ -70,45 +84,39 @@ cpr::Response ApiClient::get(const std::string& endpoint)
 
 cpr::Response ApiClient::post(const std::string& endpoint, const std::string& body)
 {
+    const bool isAuthEndpoint =
+        (endpoint == "/auth/login" || endpoint == "/auth/refresh");
 
+    std::string token = getAccessToken();
 
     cpr::Header headers{
         {"Content-Type", "application/json"}
     };
 
-    if (
-        endpoint != "/auth/login" &&
-        endpoint != "/auth/refresh" &&
-        !accessToken.empty()
-        ) {
-        headers["Authorization"] = "Bearer " + accessToken;
+    if (!isAuthEndpoint && !token.empty()) {
+        headers["Authorization"] = "Bearer " + token;
     }
 
     auto res = cpr::Post(
         cpr::Url{ baseUrl + endpoint },
         headers,
         cpr::Body{ body },
-        cpr::Timeout{ 5000 }
+        cpr::Timeout{ kRequestTimeoutMs }
     );
 
-    std::cout << "POST " << endpoint << " -> " << res.status_code << std::endl;
+    inv::logDebug("POST " + endpoint + " -> " + std::to_string(res.status_code));
 
-    if (
-        res.status_code == 401 &&
-        endpoint != "/auth/login" &&
-        endpoint != "/auth/refresh" &&
-        refreshAccessToken()
-        ) {
+    if (res.status_code == 401 && !isAuthEndpoint && refreshAccessToken(token)) {
         cpr::Header retryHeaders{
             {"Content-Type", "application/json"},
-            {"Authorization", "Bearer " + accessToken}
+            {"Authorization", "Bearer " + getAccessToken()}
         };
 
         res = cpr::Post(
             cpr::Url{ baseUrl + endpoint },
             retryHeaders,
             cpr::Body{ body },
-            cpr::Timeout{ 5000 }
+            cpr::Timeout{ kRequestTimeoutMs }
         );
     }
 
@@ -117,27 +125,36 @@ cpr::Response ApiClient::post(const std::string& endpoint, const std::string& bo
 
 cpr::Response ApiClient::put(const std::string& endpoint, const std::string& body)
 {
+    std::string token = getAccessToken();
+
+    cpr::Header headers{
+        {"Content-Type", "application/json"}
+    };
+
+    if (!token.empty()) {
+        headers["Authorization"] = "Bearer " + token;
+    }
+
     auto res = cpr::Put(
         cpr::Url{ baseUrl + endpoint },
-        cpr::Header{
-            {"Content-Type", "application/json"},
-            {"Authorization", "Bearer " + accessToken}
-        },
+        headers,
         cpr::Body{ body },
-        cpr::Timeout{ 5000 }
+        cpr::Timeout{ kRequestTimeoutMs }
     );
 
-    std::cout << "PUT " << endpoint << " -> " << res.status_code << std::endl;
+    inv::logDebug("PUT " + endpoint + " -> " + std::to_string(res.status_code));
 
-    if (res.status_code == 401 && refreshAccessToken()) {
+    if (res.status_code == 401 && refreshAccessToken(token)) {
+        cpr::Header retryHeaders{
+            {"Content-Type", "application/json"},
+            {"Authorization", "Bearer " + getAccessToken()}
+        };
+
         res = cpr::Put(
             cpr::Url{ baseUrl + endpoint },
-            cpr::Header{
-                {"Content-Type", "application/json"},
-                {"Authorization", "Bearer " + accessToken}
-            },
+            retryHeaders,
             cpr::Body{ body },
-            cpr::Timeout{ 5000 }
+            cpr::Timeout{ kRequestTimeoutMs }
         );
     }
 
@@ -146,27 +163,36 @@ cpr::Response ApiClient::put(const std::string& endpoint, const std::string& bod
 
 cpr::Response ApiClient::patch(const std::string& endpoint, const std::string& body)
 {
+    std::string token = getAccessToken();
+
+    cpr::Header headers{
+        {"Content-Type", "application/json"}
+    };
+
+    if (!token.empty()) {
+        headers["Authorization"] = "Bearer " + token;
+    }
+
     auto res = cpr::Patch(
         cpr::Url{ baseUrl + endpoint },
-        cpr::Header{
-            {"Content-Type", "application/json"},
-            {"Authorization", "Bearer " + accessToken}
-        },
+        headers,
         cpr::Body{ body },
-        cpr::Timeout{ 5000 }
+        cpr::Timeout{ kRequestTimeoutMs }
     );
 
-    std::cout << "PATCH " << endpoint << " -> " << res.status_code << std::endl;
+    inv::logDebug("PATCH " + endpoint + " -> " + std::to_string(res.status_code));
 
-    if (res.status_code == 401 && refreshAccessToken()) {
+    if (res.status_code == 401 && refreshAccessToken(token)) {
+        cpr::Header retryHeaders{
+            {"Content-Type", "application/json"},
+            {"Authorization", "Bearer " + getAccessToken()}
+        };
+
         res = cpr::Patch(
             cpr::Url{ baseUrl + endpoint },
-            cpr::Header{
-                {"Content-Type", "application/json"},
-                {"Authorization", "Bearer " + accessToken}
-            },
+            retryHeaders,
             cpr::Body{ body },
-            cpr::Timeout{ 5000 }
+            cpr::Timeout{ kRequestTimeoutMs }
         );
     }
 
@@ -175,19 +201,21 @@ cpr::Response ApiClient::patch(const std::string& endpoint, const std::string& b
 
 cpr::Response ApiClient::del(const std::string& endpoint)
 {
+    std::string token = getAccessToken();
+
     auto res = cpr::Delete(
         cpr::Url{ baseUrl + endpoint },
-        authHeader(),
-        cpr::Timeout{ 5000 }
+        makeAuthHeader(token),
+        cpr::Timeout{ kRequestTimeoutMs }
     );
 
-    std::cout << "DELETE " << endpoint << " -> " << res.status_code << std::endl;
+    inv::logDebug("DELETE " + endpoint + " -> " + std::to_string(res.status_code));
 
-    if (res.status_code == 401 && refreshAccessToken()) {
+    if (res.status_code == 401 && refreshAccessToken(token)) {
         res = cpr::Delete(
             cpr::Url{ baseUrl + endpoint },
-            authHeader(),
-            cpr::Timeout{ 5000 }
+            makeAuthHeader(getAccessToken()),
+            cpr::Timeout{ kRequestTimeoutMs }
         );
     }
 
@@ -205,13 +233,21 @@ bool ApiClient::validateToken(std::string& role, std::vector<std::string>& permi
 
         auto data = json::parse(res.text);
 
-        role = data["user"]["role"].get<std::string>();
+        if (!data.contains("user") || !data["user"].is_object()) {
+            return false;
+        }
+
+        const auto& user = data["user"];
+
+        role = user.value("role", "");
 
         permissions.clear();
 
-        if (data["user"].contains("permissions")) {
-            for (const auto& permission : data["user"]["permissions"]) {
-                permissions.push_back(permission.get<std::string>());
+        if (user.contains("permissions") && user["permissions"].is_array()) {
+            for (const auto& permission : user["permissions"]) {
+                if (permission.is_string()) {
+                    permissions.push_back(permission.get<std::string>());
+                }
             }
         }
 
@@ -222,14 +258,30 @@ bool ApiClient::validateToken(std::string& role, std::vector<std::string>& permi
     }
 }
 
-bool ApiClient::refreshAccessToken()
+bool ApiClient::refreshAccessToken(const std::string& usedToken)
 {
-    if (refreshToken.empty()) {
-        return false;
+    // Single-flight: only one refresh runs at a time.
+    std::lock_guard<std::mutex> refreshLock(refreshMutex);
+
+    std::string currentRefresh;
+    {
+        std::lock_guard<std::mutex> lock(tokenMutex);
+
+        // A concurrent request already refreshed the token after this request
+        // was sent, so the caller can simply retry with the new token.
+        if (!accessToken.empty() && accessToken != usedToken) {
+            return true;
+        }
+
+        if (refreshToken.empty()) {
+            return false;
+        }
+
+        currentRefresh = refreshToken;
     }
 
     json body = {
-        {"refreshToken", refreshToken}
+        {"refreshToken", currentRefresh}
     };
 
     auto res = cpr::Post(
@@ -238,7 +290,7 @@ bool ApiClient::refreshAccessToken()
             {"Content-Type", "application/json"}
         },
         cpr::Body{ body.dump() },
-        cpr::Timeout{ 5000 }
+        cpr::Timeout{ kRequestTimeoutMs }
     );
 
     if (res.status_code != 200) {
@@ -246,18 +298,35 @@ bool ApiClient::refreshAccessToken()
         return false;
     }
 
-    auto data = json::parse(res.text);
+    try {
+        auto data = json::parse(res.text);
 
-    if (data.contains("accessToken")) {
-        accessToken = data["accessToken"].get<std::string>();
+        std::string newAccess;
+        if (data.contains("accessToken") && data["accessToken"].is_string()) {
+            newAccess = data["accessToken"].get<std::string>();
+        }
+        else if (data.contains("token") && data["token"].is_string()) {
+            newAccess = data["token"].get<std::string>();
+        }
+
+        if (newAccess.empty()) {
+            clearTokens();
+            return false;
+        }
+
+        std::lock_guard<std::mutex> lock(tokenMutex);
+        accessToken = newAccess;
+
+        // Honour refresh-token rotation if the server issues a new one.
+        if (data.contains("refreshToken") && data["refreshToken"].is_string()) {
+            refreshToken = data["refreshToken"].get<std::string>();
+        }
+
         return true;
     }
-
-    if (data.contains("token")) {
-        accessToken = data["token"].get<std::string>();
-        return true;
+    catch (const std::exception& ex) {
+        inv::logWarning(std::string("Token refresh parse error: ") + ex.what());
+        clearTokens();
+        return false;
     }
-
-    clearTokens();
-    return false;
 }
