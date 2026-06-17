@@ -1,0 +1,211 @@
+# Inventory Mobile
+
+A field-technician companion app for the **Inventory & Truck-Stock** SaaS
+platform, built with Flutter (iOS + Android). Technicians manage their assigned
+truck stock, scan products in/out, capture purchase receipts, and watch low
+stock alerts; admins/managers additionally manage the product catalog, assets,
+trucks and stock templates.
+
+---
+
+## Quick start
+
+```bash
+# 1. Fetch dependencies
+flutter pub get
+
+# 2. Scaffold any missing native pieces (see "Platform folders" below)
+flutter create .
+
+# 3. Run on a connected device / emulator
+flutter run
+```
+
+> Flutter SDK constraint: `>=3.4.0 <4.0.0` (Dart 3, null-safe). Material 3.
+
+### Configuring the API URL
+
+The backend base URL is **configurable at runtime** and persisted with
+`shared_preferences`. It defaults to:
+
+```
+https://orange-robot-5x4pq4vr5vw3p9g-3000.app.github.dev
+```
+
+Change it from **Settings → Server configuration → API base URL** (also
+reachable from the login screen via *Configure server*). The value is loaded in
+`main()` before the first network call, so the session-restore on launch uses
+the configured host.
+
+---
+
+## Architecture
+
+```
+lib/
+  main.dart                 App entrypoint; loads config, locks orientation.
+  app.dart                  MultiProvider + MaterialApp + theme + routing.
+  config/
+    app_config.dart         Runtime config (API base URL) + ConfigStore.
+    theme.dart              Material 3 theme, brand palette, status colors.
+    routes.dart             Route names + onGenerateRoute table.
+  models/                   Immutable data classes with fromJson/toJson/copyWith.
+    user, auth_session, product, asset, truck, truck_stock_item,
+    truck_stock_template, truck_stock_assignment, receipt, stock_movement
+  services/
+    api_client.dart         Dio singleton; bearer injection + 401 refresh+retry.
+    token_storage.dart      Secure token/session persistence.
+    auth_service.dart       /auth/*
+    product_service.dart    /products/*
+    asset_service.dart      /assets/*
+    truck_stock_service.dart /truck-stock/*
+    report_service.dart     /reports/*
+  providers/                provider (ChangeNotifier) state management.
+    auth_provider.dart      Session, login/logout, role -> permission mapping.
+    products_provider.dart  Catalog, search, low-stock, scan in/out.
+    truck_stock_provider.dart  My stock, low stock, movements, receipts, trucks,
+                               templates.
+  widgets/                  Reusable UI: app_drawer, stat_card, loading_indicator,
+                            empty_state, error_view, primary_button.
+  screens/                  One folder/file per feature screen (see below).
+```
+
+### State management — `provider`
+
+- **AuthProvider** holds the `AuthSession`, exposes `login/register/logout/
+  changePassword`, the `roleName`, and a `permissions` set derived from the
+  role. UI uses `auth.can(Permissions.X)` for gating.
+- **ProductsProvider** and **TruckStockProvider** own their lists plus
+  loading/error state and mutation helpers (optimistic local updates after a
+  successful API call).
+
+### Networking — `dio`
+
+`ApiClient` is a singleton wrapping a configured `Dio`. An interceptor:
+
+1. injects `Authorization: Bearer <accessToken>` on every protected request,
+2. on a `401`, calls `POST /auth/refresh` **once** (concurrent calls are
+   deduplicated), replays the original request with the new token, and
+3. if refresh fails, fires an `onUnauthorized` callback wired to `AuthProvider`,
+   which clears the session and routes back to login.
+
+Responses are raw JSON (no envelope). All list parsers are defensive and also
+accept `{ "<key>": [...] }` / `{ "data": [...] }` shapes. `Product.quantity`
+is read from either a flat `quantity` or a nested `inventory.quantity`.
+
+Tokens are stored with `flutter_secure_storage`; the API URL with
+`shared_preferences`.
+
+---
+
+## Screens & features
+
+| Screen | File | What it does |
+|---|---|---|
+| Splash | `screens/splash_screen.dart` | Restores the saved session, routes to home / change-password / login. |
+| Login / Register | `screens/login_screen.dart` | Email+password sign-in, register with invite code, request password reset. |
+| Change password | `screens/change_password_screen.dart` | Forced when `mustChangePassword`; also reachable from Settings. |
+| Home shell | `screens/home_shell.dart` | Bottom nav (Home, My Stock, Scan, Receipts, More) + drawer. |
+| Dashboard | `screens/dashboard_screen.dart` | Greeting, stat cards, **fl_chart** stock-health pie/bar, quick actions. |
+| Products | `screens/products/products_screen.dart` | Searchable, pull-to-refresh catalog. |
+| Product detail | `screens/products/product_detail_screen.dart` | Full metadata, stock figures, edit/delete (admin). |
+| Add/Edit product | `screens/products/add_edit_product_screen.dart` | Validated create/update form. |
+| Scan | `screens/scan/scan_screen.dart` | **mobile_scanner** camera with Scan-In/Scan-Out toggle, qty confirm, manual entry. |
+| My truck stock | `screens/truck_stock/my_truck_stock_screen.dart` | Assigned items grouped by category; adjust quantity + use item. |
+| Low stock | `screens/truck_stock/low_stock_screen.dart` | Truck items at/under minimum, with shortfall. |
+| Use item | `screens/truck_stock/use_item_screen.dart` | Record consumption (decrement via `use-item`). |
+| Trucks | `screens/truck_stock/trucks_screen.dart` | List + add trucks (admin/manager). |
+| Templates | `screens/truck_stock/templates_screen.dart` | Stock templates + per-template item breakdown. |
+| Receipts | `screens/receipts/receipts_screen.dart` | Uploaded receipts list with status. |
+| Upload receipt | `screens/receipts/upload_receipt_screen.dart` | **image_picker** photo -> base64 upload -> create receipt. |
+| Assets | `screens/assets/assets_screen.dart` | List + add/delete trackable assets (admin). |
+| Settings | `screens/settings/settings_screen.dart` | API URL config, profile/role, change password, sign out. |
+
+All list screens implement **loading / error / empty** states and
+**pull-to-refresh**; forms validate input; success/failure surface via
+snackbars.
+
+---
+
+## Roles & permission gating
+
+Login only returns a **role name** (e.g. `Admin`, `Manager`, `Technician`), so
+the app maps the role to a permission set heuristically in `AuthProvider`:
+
+- **Admin / Manager / Owner** → *all* permissions.
+- **Technician / Field** (and any unknown role, conservatively) → the field
+  subset.
+
+> TODO: when a `/auth/me` endpoint exposes a concrete permission list, load it
+> and replace this heuristic for precise gating. (Marked in
+> `lib/providers/auth_provider.dart`.)
+
+Permission identifiers (from the backend) and the screens they gate:
+
+| Permission | Gates |
+|---|---|
+| `ADD_PRODUCT` | Add/Edit product, product delete, dashboard "Add product" action |
+| `VIEW_STOCK` | Products list, dashboard product metrics |
+| `SCAN_IN` / `SCAN_OUT` | Scan tab + Scan In / Scan Out toggle segments |
+| `VIEW_ASSIGNED_TRUCK_STOCK` | My Truck Stock tab/screen |
+| `UPLOAD_RECEIPT` | Receipts tab, Upload receipt |
+| `VIEW_LOW_STOCK_ALERTS` | Low Stock Alerts |
+| `MANAGE_TRUCK_STOCK` | Stock Templates, Trucks |
+| `APPROVE_RECEIPTS` | Receipt approval indicator (admin); approve action is a TODO pending an endpoint |
+| `VIEW_ALL_TRUCKS` / `VIEW_TRUCK_STOCK` | Trucks |
+
+Net effect:
+
+- **Technicians** primarily see **My Stock**, **Scan**, **Low Stock**,
+  **Receipts/Upload**, and read-only **Products**.
+- **Admins/Managers** additionally see **Assets**, **Trucks**, **Stock
+  Templates**, product management and the full dashboard.
+
+The bottom-nav "More" button opens the role-gated `AppDrawer`.
+
+---
+
+## Backend endpoints used
+
+`/auth/login`, `/auth/register`, `/auth/refresh`, `/auth/logout`,
+`/auth/change-password`, `/auth/request-reset`,
+`/products` (+ `/low-stock`, `/scan-in`, `/scan-out`, `/:id`),
+`/assets` (+ `/:id`),
+`/truck-stock/trucks`, `/truck-stock/templates` (+ `/:id`),
+`/truck-stock/assignments`, `/truck-stock/my-stock`, `/truck-stock/low-stock`,
+`/truck-stock/items/:itemId/quantity`, `/truck-stock/use-item`,
+`/truck-stock/transfer-to-truck`, `/truck-stock/movements`,
+`/truck-stock/receipts` (+ `/upload`), `/reports/inventory`, `/reports/assets`.
+
+---
+
+## Platform folders
+
+The `android/` and `ios/` folders here contain only the **essentials** that
+must be hand-authored:
+
+- **Android**: `AndroidManifest.xml` (INTERNET + CAMERA + READ_MEDIA_IMAGES,
+  label "Inventory", app id `com.inventorysystem.mobile`), `MainActivity.kt`,
+  the Gradle files (`build.gradle`, `settings.gradle`, `gradle.properties`),
+  and launch theme resources.
+- **iOS**: `Info.plist` (display name "Inventory", `NSCameraUsageDescription`,
+  `NSPhotoLibraryUsageDescription`) and `AppDelegate.swift`.
+
+Run **`flutter create .`** in the project root to scaffold the remaining native
+pieces (Gradle wrapper jar/scripts, `Runner.xcodeproj`/`Podfile`, launch
+storyboards, icons, `GeneratedPluginRegistrant`, etc.). It will not overwrite
+the files provided here.
+
+### Permissions required at runtime
+
+- **Camera** — barcode scanning (`mobile_scanner`) and receipt photos
+  (`image_picker`).
+- **Photo library** — picking an existing receipt image (iOS).
+
+---
+
+## Dependencies
+
+`provider`, `dio`, `flutter_secure_storage`, `shared_preferences`,
+`mobile_scanner`, `image_picker`, `intl`, `fl_chart`, `cupertino_icons`
+(+ `flutter_lints` for analysis).
