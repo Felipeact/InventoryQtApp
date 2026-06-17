@@ -100,7 +100,7 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: AppTheme.brand.withOpacity(0.1),
+                  color: AppTheme.brand.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(Icons.checklist_rtl, color: AppTheme.brand),

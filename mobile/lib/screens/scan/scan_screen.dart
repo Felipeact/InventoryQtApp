@@ -520,7 +520,7 @@ class _ScannerError extends StatelessWidget {
                 'Grant camera permission to scan barcodes, or enter the code '
                 'manually below.',
                 textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.white.withOpacity(0.7)),
+                style: TextStyle(color: Colors.white.withValues(alpha: 0.7)),
               ),
             ],
           ),

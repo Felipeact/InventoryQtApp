@@ -80,7 +80,7 @@ class _UseItemScreenState extends State<UseItemScreen> {
                         width: 52,
                         height: 52,
                         decoration: BoxDecoration(
-                          color: AppTheme.brand.withOpacity(0.1),
+                          color: AppTheme.brand.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: const Icon(Icons.handyman_outlined,

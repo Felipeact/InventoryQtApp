@@ -205,7 +205,7 @@ class _Greeting extends StatelessWidget {
                 Text(
                   '$_timeOfDay,',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.85),
+                    color: Colors.white.withValues(alpha: 0.85),
                     fontSize: 14,
                   ),
                 ),
@@ -223,7 +223,7 @@ class _Greeting extends StatelessWidget {
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.2),
+                    color: Colors.white.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -511,35 +511,35 @@ class _QuickActions extends StatelessWidget {
   Widget build(BuildContext context) {
     final List<_Action> actions = <_Action>[
       if (auth.canAny(<String>[Permissions.scanIn, Permissions.scanOut]))
-        _Action(
+        const _Action(
           icon: Icons.qr_code_scanner,
           label: 'Scan',
           color: AppTheme.brand,
           route: AppRoutes.scan,
         ),
       if (auth.can(Permissions.viewLowStockAlerts))
-        _Action(
+        const _Action(
           icon: Icons.warning_amber_rounded,
           label: 'Low stock',
           color: AppTheme.warning,
           route: AppRoutes.lowStock,
         ),
       if (auth.can(Permissions.uploadReceipt))
-        _Action(
+        const _Action(
           icon: Icons.upload_file,
           label: 'Upload receipt',
           color: AppTheme.info,
           route: AppRoutes.uploadReceipt,
         ),
       if (auth.can(Permissions.addProduct))
-        _Action(
+        const _Action(
           icon: Icons.add_box_outlined,
           label: 'Add product',
           color: AppTheme.success,
           route: AppRoutes.addProduct,
         ),
       if (auth.can(Permissions.viewAssignedTruckStock))
-        _Action(
+        const _Action(
           icon: Icons.local_shipping_outlined,
           label: 'My stock',
           color: AppTheme.brandDark,
@@ -596,7 +596,7 @@ class _ActionTile extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: action.color.withOpacity(0.12),
+                  color: action.color.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(14),
                 ),
                 child: Icon(action.icon, color: action.color, size: 24),

@@ -208,7 +208,7 @@ class _TrucksScreenState extends State<TrucksScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: AppTheme.brand.withOpacity(0.1),
+                  color: AppTheme.brand.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child:
@@ -232,7 +232,7 @@ class _TrucksScreenState extends State<TrucksScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 10, vertical: 4),
                       decoration: BoxDecoration(
-                        color: statusColor.withOpacity(0.12),
+                        color: statusColor.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Text(

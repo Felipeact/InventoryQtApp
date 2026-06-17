@@ -132,9 +132,9 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                   const SizedBox(height: 6),
-                  Text(
+                  const Text(
                     'Default: ${AppConfig.defaultBaseUrl}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 11,
                       color: AppTheme.slate400,
                     ),
@@ -196,10 +196,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
             ),
           ],
           const SizedBox(height: 24),
-          Center(
+          const Center(
             child: Text(
               'Inventory Mobile • v1.0.0',
-              style: const TextStyle(color: AppTheme.slate400, fontSize: 12),
+              style: TextStyle(color: AppTheme.slate400, fontSize: 12),
             ),
           ),
           const SizedBox(height: 24),
@@ -224,7 +224,7 @@ class _ProfileCard extends StatelessWidget {
           children: <Widget>[
             CircleAvatar(
               radius: 32,
-              backgroundColor: AppTheme.brand.withOpacity(0.12),
+              backgroundColor: AppTheme.brand.withValues(alpha: 0.12),
               child: Text(
                 user.initials,
                 style: const TextStyle(
@@ -257,7 +257,7 @@ class _ProfileCard extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 10, vertical: 4),
                     decoration: BoxDecoration(
-                      color: AppTheme.brand.withOpacity(0.1),
+                      color: AppTheme.brand.withValues(alpha: 0.1),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Text(

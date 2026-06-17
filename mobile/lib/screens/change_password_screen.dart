@@ -85,10 +85,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       padding: const EdgeInsets.all(14),
                       margin: const EdgeInsets.only(bottom: 20),
                       decoration: BoxDecoration(
-                        color: AppTheme.warning.withOpacity(0.12),
+                        color: AppTheme.warning.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(12),
                         border: Border.all(
-                            color: AppTheme.warning.withOpacity(0.4)),
+                            color: AppTheme.warning.withValues(alpha: 0.4)),
                       ),
                       child: const Row(
                         children: <Widget>[

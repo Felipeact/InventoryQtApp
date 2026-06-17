@@ -25,20 +25,20 @@ class AppDrawer extends StatelessWidget {
               child: ListView(
                 padding: const EdgeInsets.symmetric(vertical: 8),
                 children: <Widget>[
-                  _DrawerItem(
+                  const _DrawerItem(
                     icon: Icons.dashboard_outlined,
                     label: 'Dashboard',
                     route: AppRoutes.home,
                     onNavigate: _goHome,
                   ),
                   if (auth.can(Permissions.viewAssignedTruckStock))
-                    _DrawerItem(
+                    const _DrawerItem(
                       icon: Icons.local_shipping_outlined,
                       label: 'My Truck Stock',
                       route: AppRoutes.myStock,
                     ),
                   if (auth.can(Permissions.viewLowStockAlerts))
-                    _DrawerItem(
+                    const _DrawerItem(
                       icon: Icons.warning_amber_rounded,
                       label: 'Low Stock Alerts',
                       route: AppRoutes.lowStock,
@@ -47,26 +47,26 @@ class AppDrawer extends StatelessWidget {
                     Permissions.scanIn,
                     Permissions.scanOut,
                   ]))
-                    _DrawerItem(
+                    const _DrawerItem(
                       icon: Icons.qr_code_scanner,
                       label: 'Scan In / Out',
                       route: AppRoutes.scan,
                     ),
                   if (auth.can(Permissions.uploadReceipt))
-                    _DrawerItem(
+                    const _DrawerItem(
                       icon: Icons.receipt_long_outlined,
                       label: 'Receipts',
                       route: AppRoutes.receipts,
                     ),
                   const _SectionLabel('Inventory'),
                   if (auth.can(Permissions.viewStock))
-                    _DrawerItem(
+                    const _DrawerItem(
                       icon: Icons.inventory_2_outlined,
                       label: 'Products',
                       route: AppRoutes.products,
                     ),
                   if (auth.isAdmin)
-                    _DrawerItem(
+                    const _DrawerItem(
                       icon: Icons.devices_other_outlined,
                       label: 'Assets',
                       route: AppRoutes.assets,
@@ -75,19 +75,19 @@ class AppDrawer extends StatelessWidget {
                     Permissions.viewAllTrucks,
                     Permissions.manageTruckStock,
                   ]))
-                    _DrawerItem(
+                    const _DrawerItem(
                       icon: Icons.fire_truck_outlined,
                       label: 'Trucks',
                       route: AppRoutes.trucks,
                     ),
                   if (auth.can(Permissions.manageTruckStock))
-                    _DrawerItem(
+                    const _DrawerItem(
                       icon: Icons.checklist_rtl_outlined,
                       label: 'Stock Templates',
                       route: AppRoutes.templates,
                     ),
                   const _SectionLabel('Account'),
-                  _DrawerItem(
+                  const _DrawerItem(
                     icon: Icons.settings_outlined,
                     label: 'Settings',
                     route: AppRoutes.settings,
@@ -198,13 +198,13 @@ class _Header extends StatelessWidget {
           const SizedBox(height: 2),
           Text(
             user?.email ?? '',
-            style: TextStyle(color: Colors.white.withOpacity(0.85), fontSize: 13),
+            style: TextStyle(color: Colors.white.withValues(alpha: 0.85), fontSize: 13),
           ),
           const SizedBox(height: 10),
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Colors.white.withValues(alpha: 0.2),
               borderRadius: BorderRadius.circular(20),
             ),
             child: Text(
@@ -249,7 +249,7 @@ class _DrawerItem extends StatelessWidget {
         ),
       ),
       selected: selected,
-      selectedTileColor: AppTheme.brand.withOpacity(0.08),
+      selectedTileColor: AppTheme.brand.withValues(alpha: 0.08),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
       onTap: () {

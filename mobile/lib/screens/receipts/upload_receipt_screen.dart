@@ -235,7 +235,7 @@ class _UploadReceiptScreenState extends State<UploadReceiptScreen> {
       return Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
-          color: AppTheme.danger.withOpacity(0.08),
+          color: AppTheme.danger.withValues(alpha: 0.08),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -268,7 +268,7 @@ class _UploadReceiptScreenState extends State<UploadReceiptScreen> {
     }
 
     return DropdownButtonFormField<String>(
-      value: _selectedTruckId,
+      initialValue: _selectedTruckId,
       decoration: const InputDecoration(
         prefixIcon: Icon(Icons.local_shipping_outlined),
       ),
@@ -317,7 +317,7 @@ class _ImagePreview extends StatelessWidget {
                   Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
-                      color: AppTheme.brand.withOpacity(0.1),
+                      color: AppTheme.brand.withValues(alpha: 0.1),
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(

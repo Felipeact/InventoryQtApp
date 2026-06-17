@@ -283,7 +283,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                 width: 48,
                 height: 48,
                 decoration: BoxDecoration(
-                  color: AppTheme.brand.withOpacity(0.1),
+                  color: AppTheme.brand.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Icon(Icons.devices_other, color: AppTheme.brand),
@@ -310,7 +310,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 8, vertical: 3),
                       decoration: BoxDecoration(
-                        color: statusColor.withOpacity(0.12),
+                        color: statusColor.withValues(alpha: 0.12),
                         borderRadius: BorderRadius.circular(6),
                       ),
                       child: Text(
