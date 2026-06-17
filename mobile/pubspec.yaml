@@ -39,6 +39,29 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  # Generates platform launcher icons from assets/icon/* (run after pub get):
+  #   dart run flutter_launcher_icons
+  flutter_launcher_icons: ^0.14.1
 
 flutter:
   uses-material-design: true
+
+# App launcher icon generation. Source art lives in assets/icon/ and is produced
+# by tool/generate_icons.py. Regenerate platform icons with:
+#   dart run flutter_launcher_icons
+flutter_launcher_icons:
+  image_path: "assets/icon/app_icon.png"
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  min_sdk_android: 21
+  # Android 8+ adaptive icon (foreground art on the brand gradient background).
+  adaptive_icon_background: "assets/icon/app_icon_background.png"
+  adaptive_icon_foreground: "assets/icon/app_icon_foreground.png"
+  web:
+    generate: false
+  windows:
+    generate: false
+  macos:
+    generate: false
+
