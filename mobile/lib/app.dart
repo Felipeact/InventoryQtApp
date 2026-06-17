@@ -14,10 +14,8 @@ class InventoryApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-      providers: <ChangeNotifierProvider<dynamic>>[
-        ChangeNotifierProvider<AuthProvider>(
-          create: (_) => AuthProvider(),
-        ),
+      providers: <SingleChildWidget>[
+        ChangeNotifierProvider<AuthProvider>(create: (_) => AuthProvider()),
         ChangeNotifierProvider<ProductsProvider>(
           create: (_) => ProductsProvider(),
         ),
