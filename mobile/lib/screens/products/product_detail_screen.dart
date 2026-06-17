@@ -5,6 +5,7 @@ import '../../config/theme.dart';
 import '../../models/product.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/products_provider.dart';
+import '../../services/api_client.dart';
 import '../../services/product_service.dart';
 import '../../widgets/error_view.dart';
 import '../../widgets/loading_indicator.dart';

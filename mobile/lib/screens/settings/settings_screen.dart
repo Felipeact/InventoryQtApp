@@ -106,7 +106,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         children: <Widget>[
           if (user != null) _ProfileCard(user: user, role: auth.roleName),
           const SizedBox(height: 20),
-          _SectionTitle('Server configuration'),
+          const _SectionTitle('Server configuration'),
           const SizedBox(height: 8),
           Card(
             child: Padding(
@@ -166,7 +166,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
           const SizedBox(height: 20),
           if (user != null) ...<Widget>[
-            _SectionTitle('Account'),
+            const _SectionTitle('Account'),
             const SizedBox(height: 8),
             Card(
               child: Column(
