@@ -10,7 +10,7 @@ class AppConfig {
 
   /// The default backend base URL. Can be overridden from Settings.
   static const String defaultBaseUrl =
-      'https://orange-robot-5x4pq4vr5vw3p9g-3000.app.github.dev';
+      'inventory-system-api-production.up.railway.app';
 
   String _baseUrl = defaultBaseUrl;
 
