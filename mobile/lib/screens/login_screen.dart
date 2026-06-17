@@ -101,6 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
 
+    if (!mounted) return;
     if (send == true && resetEmail.text.trim().isNotEmpty) {
       try {
         await context.read<AuthProvider>().requestReset(resetEmail.text);

@@ -84,6 +84,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       ),
     );
     if (ok != true) return;
+    if (!mounted) return;
     try {
       await context.read<ProductsProvider>().delete(widget.productId);
       if (mounted) {

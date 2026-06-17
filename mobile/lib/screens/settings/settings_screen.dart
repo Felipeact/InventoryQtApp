@@ -82,6 +82,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ],
       ),
     );
+    if (!mounted) return;
     if (ok == true) {
       await context.read<AuthProvider>().logout();
       if (mounted) {

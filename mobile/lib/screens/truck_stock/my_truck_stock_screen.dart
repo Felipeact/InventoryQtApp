@@ -89,6 +89,7 @@ class _MyTruckStockScreenState extends State<MyTruckStockScreen> {
     );
 
     if (value == null) return;
+    if (!mounted) return;
     try {
       await context.read<TruckStockProvider>().updateItemQuantity(
             itemId: item.id,
