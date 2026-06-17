@@ -209,3 +209,21 @@ the files provided here.
 `provider`, `dio`, `flutter_secure_storage`, `shared_preferences`,
 `mobile_scanner`, `image_picker`, `intl`, `fl_chart`, `cupertino_icons`
 (+ `flutter_lints` for analysis).
+
+---
+
+## Extracting to its own repo
+
+This app is self-contained in the `mobile/` folder of the `inventoryqtapp`
+repo, alongside the Qt desktop client. To move it into a standalone repository
+(e.g. `inventory-mobile-app`):
+
+```bash
+# from the InventoryQtApp repo root
+git subtree split --prefix=mobile -b mobile-only
+# create an empty repo on GitHub, then:
+git push git@github.com:<you>/inventory-mobile-app.git mobile-only:main
+```
+
+After pushing, clone the new repo and run `flutter create .` once to regenerate
+any native scaffolding, then `flutter pub get`.
