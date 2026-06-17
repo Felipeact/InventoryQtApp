@@ -22,8 +22,6 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  bool _loaded = false;
-
   @override
   void initState() {
     super.initState();
@@ -40,8 +38,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
     if (auth.can(Permissions.viewAssignedTruckStock)) {
       jobs.add(context.read<TruckStockProvider>().loadMyStock());
     }
+    // The build method watches both providers, so it rebuilds automatically as
+    // their data arrives; no extra setState is required here.
     await Future.wait<void>(jobs);
-    if (mounted) setState(() => _loaded = true);
   }
 
   @override
@@ -80,11 +79,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     .clamp(0, 1 << 31),
                 low: products.lowStockCount,
                 out: products.outOfStockCount,
-                loaded: _loaded,
               ),
             if (auth.can(Permissions.viewAssignedTruckStock) &&
                 !auth.can(Permissions.viewStock))
-              _TruckHealthCard(truck: truck, loaded: _loaded),
+              _TruckHealthCard(truck: truck),
             const SizedBox(height: 20),
             const Text(
               'Quick actions',
@@ -253,13 +251,11 @@ class _StockHealthCard extends StatelessWidget {
     required this.inStock,
     required this.low,
     required this.out,
-    required this.loaded,
   });
 
   final int inStock;
   final int low;
   final int out;
-  final bool loaded;
 
   @override
   Widget build(BuildContext context) {
@@ -358,10 +354,9 @@ class _StockHealthCard extends StatelessWidget {
 }
 
 class _TruckHealthCard extends StatelessWidget {
-  const _TruckHealthCard({required this.truck, required this.loaded});
+  const _TruckHealthCard({required this.truck});
 
   final TruckStockProvider truck;
-  final bool loaded;
 
   @override
   Widget build(BuildContext context) {
