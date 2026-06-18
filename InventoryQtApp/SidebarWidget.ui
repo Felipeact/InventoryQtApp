@@ -49,7 +49,7 @@
 			<item>
 				<widget class="QLabel" name="logoLabel">
 					<property name="text">
-						<string>💙  Inventory</string>
+						<string>◆  StockPilot</string>
 					</property>
 				</widget>
 			</item>

@@ -11,7 +11,7 @@
 			</rect>
 		</property>
 		<property name="windowTitle">
-			<string>Inventory Dashboard</string>
+			<string>StockPilot</string>
 		</property>
 		<property name="styleSheet">
 			<string notr="true"/>

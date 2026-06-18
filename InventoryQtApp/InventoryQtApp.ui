@@ -23,7 +23,7 @@
 			</size>
 		</property>
 		<property name="windowTitle">
-			<string>Inventory - Sign In</string>
+			<string>StockPilot — Sign in</string>
 		</property>
 		<widget class="QWidget" name="centralWidget">
 			<layout class="QVBoxLayout" name="outerVerticalLayout">
@@ -142,7 +142,7 @@
 													<item>
 														<widget class="QLabel" name="titleLabel">
 															<property name="text">
-																<string>Inventory</string>
+																<string>StockPilot</string>
 															</property>
 														</widget>
 													</item>
@@ -308,7 +308,7 @@
 									<item>
 										<widget class="QLabel" name="footerLabel">
 											<property name="text">
-												<string>© 2026 Inventory. All rights reserved.</string>
+												<string>© 2026 StockPilot. All rights reserved.</string>
 											</property>
 											<property name="alignment">
 												<set>Qt::AlignmentFlag::AlignCenter</set>

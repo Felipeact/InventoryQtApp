@@ -25,7 +25,7 @@ class InventoryApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Inventory',
+        title: 'StockPilot',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,

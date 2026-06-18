@@ -30,7 +30,7 @@ DashboardWindow::DashboardWindow(
 {
     ui.setupUi(this);
 
-    setWindowTitle("Inventory Dashboard");
+    setWindowTitle("StockPilot");
     resize(1440, 900);
     setMinimumSize(1100, 720);
 

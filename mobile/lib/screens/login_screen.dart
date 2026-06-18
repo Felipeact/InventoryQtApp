@@ -152,7 +152,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       size: 38,
                     ),
                   ),
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'StockPilot',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      color: AppTheme.brand,
+                      letterSpacing: -0.5,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
                   Text(
                     _registerMode ? 'Create your account' : 'Welcome back',
                     style: const TextStyle(

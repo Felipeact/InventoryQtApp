@@ -403,19 +403,21 @@ QFrame, QWidget#loginCard, QWidget#card {
 }
 
 QLabel { color: #1E293B; background: transparent; }
+QLabel#titleLabel { font-size: 28px; font-weight: 800; color: #4F46E5; }
+QLabel#subtitleLabel { color: #64748B; font-size: 13px; }
 
 QLineEdit {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 8px;
+    border-radius: 10px;
     color: #1E293B;
-    padding: 8px 12px;
-    min-height: 36px;
+    padding: 10px 14px;
+    min-height: 38px;
     selection-background-color: #4F46E5;
     selection-color: #FFFFFF;
 }
 QLineEdit:hover { border: 1px solid #CBD5E1; }
-QLineEdit:focus { border: 2px solid #4F46E5; padding: 7px 11px; }
+QLineEdit:focus { border: 2px solid #4F46E5; padding: 9px 13px; }
 
 QPushButton#loginButton, QPushButton {
     background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #6366F1, stop:1 #4F46E5);
