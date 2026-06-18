@@ -1,0 +1,14 @@
+# Release signing configuration for the Android app.
+#
+# 1. Copy this file to `android/key.properties` (which is gitignored — NEVER commit it).
+# 2. Generate an upload keystore:
+#      keytool -genkey -v -keystore upload-keystore.jks \
+#        -keyalg RSA -keysize 2048 -validity 10000 -alias upload
+# 3. Fill in the values below. `storeFile` is resolved relative to the `android/` folder.
+#
+# When this file is absent the release build falls back to debug signing (not publishable).
+
+storePassword=your-keystore-password
+keyPassword=your-key-password
+keyAlias=upload
+storeFile=upload-keystore.jks

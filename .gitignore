@@ -361,3 +361,15 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+# ── Inventory Qt app build & deploy artifacts ──
+# CMake build trees
+/build/
+/out/build/
+# deploy.ps1 staging output
+/deploy/
+# Inno Setup installer output
+/installer/Output/
+Output/
+# Release signing material (must never be committed)
+*.jks
+*.keystore

@@ -1,0 +1,11 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "inventory-qt-app",
+  "version-string": "1.0.0",
+  "description": "Native (non-Qt) third-party dependencies for the Inventory Qt desktop app.",
+  "dependencies": [
+    "cpr",
+    "nlohmann-json",
+    "qxlsx"
+  ]
+}

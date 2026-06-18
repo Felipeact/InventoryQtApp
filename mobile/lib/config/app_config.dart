@@ -9,17 +9,22 @@ class AppConfig {
   static final AppConfig instance = AppConfig._();
 
   /// The default backend base URL. Can be overridden from Settings.
+  ///
+  /// MUST include the scheme — Dio cannot resolve a bare host, so a missing
+  /// `https://` here makes every request (including login) fail on a fresh install.
   static const String defaultBaseUrl =
-      'inventory-system-api-production.up.railway.app';
+      'https://inventory-system-api-production.up.railway.app';
 
   String _baseUrl = defaultBaseUrl;
 
-  /// Current API base URL (no trailing slash).
+  /// Current API base URL (no trailing slash, always scheme-qualified).
   String get baseUrl => _baseUrl;
 
   /// Loads the persisted base URL (if any). Call once at startup.
   Future<void> load() async {
-    _baseUrl = await ConfigStore.readBaseUrl() ?? defaultBaseUrl;
+    final String? stored = await ConfigStore.readBaseUrl();
+    // Normalize on read too, so any legacy/schemeless persisted value is repaired.
+    _baseUrl = stored == null ? defaultBaseUrl : _normalize(stored);
   }
 
   /// Updates and persists the base URL. Strips a trailing slash for safety.
@@ -37,6 +42,13 @@ class AppConfig {
 
   static String _normalize(String url) {
     String cleaned = url.trim();
+    // Guarantee an absolute, scheme-qualified URL. Default to HTTPS when the
+    // user typed a bare host (e.g. "api.example.com").
+    if (cleaned.isNotEmpty &&
+        !cleaned.startsWith('http://') &&
+        !cleaned.startsWith('https://')) {
+      cleaned = 'https://$cleaned';
+    }
     while (cleaned.endsWith('/')) {
       cleaned = cleaned.substring(0, cleaned.length - 1);
     }

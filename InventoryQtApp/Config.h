@@ -13,11 +13,14 @@
 
 namespace Config
 {
+    // Production defaults. Override at runtime via the INVENTORY_APP_API_URL /
+    // INVENTORY_APP_UPDATE_URL environment variables or the QSettings keys
+    // api/baseUrl and updates/checkUrl. Must be HTTPS and scheme-qualified.
     const std::string DEFAULT_API_BASE_URL =
-        "https://orange-robot-5x4pq4vr5vw3p9g-3000.app.github.dev";
+        "https://inventory-system-api-production.up.railway.app";
 
     const std::string DEFAULT_UPDATE_SERVER_URL =
-        "https://orange-robot-5x4pq4vr5vw3p9g-3000.app.github.dev/updates/latest";
+        "https://inventory-system-api-production.up.railway.app/updates/latest";
 
     inline std::string getEnvironmentValue(
         const char* key

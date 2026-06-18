@@ -24,6 +24,19 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0.0'
 }
 
+// Release signing material is read from android/key.properties (NOT committed to git).
+// Create it from key.properties.example and point it at your upload keystore before
+// building a Play Store release. When it is absent we fall back to debug signing so
+// `flutter run --release` and CI still work.
+def keystoreProperties = new Properties()
+def keystorePropertiesFile = rootProject.file('key.properties')
+def hasReleaseKeystore = keystorePropertiesFile.exists()
+if (hasReleaseKeystore) {
+    keystorePropertiesFile.withReader('UTF-8') { reader ->
+        keystoreProperties.load(reader)
+    }
+}
+
 android {
     namespace = "com.inventorysystem.mobile"
     compileSdk = 34
@@ -48,11 +61,27 @@ android {
         versionName = flutterVersionName
     }
 
+    signingConfigs {
+        release {
+            if (hasReleaseKeystore) {
+                keyAlias = keystoreProperties['keyAlias']
+                keyPassword = keystoreProperties['keyPassword']
+                storeFile = keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+                storePassword = keystoreProperties['storePassword']
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // Signing with debug keys so `flutter run --release` works out of
-            // the box. Replace with a real keystore before publishing.
-            signingConfig = signingConfigs.debug
+            // Use the real upload keystore when key.properties is present; otherwise
+            // fall back to debug signing so non-publishing builds still succeed.
+            signingConfig = hasReleaseKeystore ? signingConfigs.release : signingConfigs.debug
+            // Shrink + obfuscate the (thin) Java/Kotlin layer. Flutter itself is AOT
+            // compiled; keep rules for plugins live in proguard-rules.pro.
+            minifyEnabled = true
+            shrinkResources = true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
 }
