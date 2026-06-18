@@ -116,7 +116,7 @@ QPushButton:disabled {
 QTableWidget, QTreeWidget, QListWidget {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
     color: #F8FAFC;
     gridline-color: #1E2942;
     selection-background-color: #4F46E5;
@@ -250,7 +250,8 @@ QTextEdit:hover, QPlainTextEdit:hover, QDateEdit:hover {
 
 QLineEdit:focus, QComboBox:focus, QSpinBox:focus, QDoubleSpinBox:focus,
 QTextEdit:focus, QPlainTextEdit:focus, QDateEdit:focus {
-    border: 1px solid #4F46E5;
+    border: 2px solid #4F46E5;
+    padding: 8px 11px;
 }
 
 QComboBox::drop-down { border: none; width: 22px; }
@@ -277,18 +278,19 @@ QPushButton {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
     border-radius: 8px;
-    color: #1E293B;
+    color: #334155;
     padding: 9px 16px;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 QPushButton:hover {
-    background-color: #EFF6FF;
+    background-color: #F8FAFC;
     border-color: #CBD5E1;
+    color: #0F172A;
 }
 
 QPushButton:pressed {
-    background-color: #EEF2FF;
+    background-color: #F1F5F9;
 }
 
 QPushButton:checked {
@@ -306,30 +308,30 @@ QPushButton:disabled {
 QTableWidget, QTreeWidget, QListWidget {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
     color: #1E293B;
-    gridline-color: #E2E8F0;
-    selection-background-color: #4F46E5;
-    selection-color: #FFFFFF;
-    alternate-background-color: #F8FAFC;
+    gridline-color: #EFF2F6;
+    selection-background-color: #EEF2FF;
+    selection-color: #312E81;
+    alternate-background-color: #FBFCFE;
     outline: 0;
 }
 
-QTableWidget::item, QTreeWidget::item, QListWidget::item { padding: 7px 8px; border: none; }
+QTableWidget::item, QTreeWidget::item, QListWidget::item { padding: 11px 12px; border: none; }
 QTableWidget::item:hover, QTreeWidget::item:hover, QListWidget::item:hover {
-    background-color: #EFF6FF;
+    background-color: #F5F7FB;
 }
 QTableWidget::item:selected, QTreeWidget::item:selected, QListWidget::item:selected {
-    background-color: #4F46E5;
-    color: #FFFFFF;
+    background-color: #EEF2FF;
+    color: #312E81;
 }
 
 QHeaderView::section {
     background-color: #F8FAFC;
-    color: #64748B;
+    color: #475569;
     border: none;
     border-bottom: 1px solid #E2E8F0;
-    padding: 10px 8px;
+    padding: 12px 12px;
     font-weight: 700;
 }
 QTableCornerButton::section { background-color: #F8FAFC; border: none; }
@@ -413,7 +415,7 @@ QLineEdit {
     selection-color: #FFFFFF;
 }
 QLineEdit:hover { border: 1px solid #CBD5E1; }
-QLineEdit:focus { border: 1px solid #4F46E5; }
+QLineEdit:focus { border: 2px solid #4F46E5; padding: 7px 11px; }
 
 QPushButton#loginButton, QPushButton {
     background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #6366F1, stop:1 #4F46E5);
@@ -554,24 +556,24 @@ QFrame#lineDivider, QFrame#lineDivider2 {
 
 QPushButton {
     text-align: left;
-    padding: 10px 12px;
-    border-radius: 8px;
+    padding: 11px 14px;
+    border-radius: 10px;
     border: none;
     background: transparent;
     color: #475569;
-    font-weight: 650;
+    font-weight: 600;
 }
-QPushButton:hover { background-color: #EFF6FF; color: #4F46E5; }
+QPushButton:hover { background-color: #F1F5F9; color: #0F172A; }
 QPushButton:checked {
-    background-color: #4F46E5;
-    color: #FFFFFF;
-    font-weight: 800;
+    background-color: #EEF2FF;
+    color: #4338CA;
+    font-weight: 700;
 }
 
 QFrame#userCard {
     background-color: #F8FAFC;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#avatarLabel {
@@ -644,7 +646,7 @@ QPushButton:checked {
 QFrame#userCard {
     background-color: #121C30;
     border: 1px solid #2A3953;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#avatarLabel {
@@ -806,7 +808,7 @@ QWidget#totalItemsCard, QWidget#totalAssetsCard, QWidget#quantityInHandCard, QWi
 QWidget#itemSummaryCard, QWidget#assetSummaryCard, QWidget#recentItemsCard, QWidget#lowStockCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel { color: #1E293B; }
@@ -870,7 +872,7 @@ QWidget#totalItemsCard, QWidget#totalAssetsCard, QWidget#quantityInHandCard, QWi
 QWidget#itemSummaryCard, QWidget#assetSummaryCard, QWidget#recentItemsCard, QWidget#lowStockCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel { color: #FFFFFF; }
@@ -933,7 +935,7 @@ QWidget#SettingsPageClass { background-color: #F8FAFC; }
 QWidget#profileCard, QWidget#appearanceCard, QWidget#sessionCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#titleLabel {
@@ -973,7 +975,7 @@ QWidget#SettingsPageClass { background-color: #0A1020; }
 QWidget#profileCard, QWidget#appearanceCard, QWidget#sessionCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#titleLabel {
@@ -1025,7 +1027,7 @@ QWidget#scanCard,
 QWidget#recentScansCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitleLabel {
@@ -1153,7 +1155,7 @@ QWidget#scanCard,
 QWidget#recentScansCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitleLabel {
@@ -1293,7 +1295,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -1372,7 +1374,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -1454,7 +1456,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -1533,7 +1535,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -1615,7 +1617,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -1697,7 +1699,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -1798,7 +1800,7 @@ QWidget#recentItemsCard,
 QWidget#lowStockCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QWidget#miniSummaryBox1,
@@ -2015,7 +2017,7 @@ QWidget#recentItemsCard,
 QWidget#lowStockCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QWidget#miniSummaryBox1,
@@ -2212,7 +2214,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -2277,7 +2279,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -2345,7 +2347,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -2410,7 +2412,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -2477,7 +2479,7 @@ QWidget#toolbarContainer {
 QWidget#tableCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -2531,7 +2533,7 @@ QWidget#toolbarContainer {
 QWidget#tableCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -2589,7 +2591,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -2645,7 +2647,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -2706,7 +2708,7 @@ QWidget#metricCard2,
 QWidget#metricCard3 {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
     min-height: 105px;
 }
 
@@ -2720,7 +2722,7 @@ QWidget#metricCard3 QLabel {
 QWidget#tableCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -2831,7 +2833,7 @@ QWidget#metricCard2,
 QWidget#metricCard3 {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
     min-height: 105px;
 }
 
@@ -2845,7 +2847,7 @@ QWidget#metricCard3 QLabel {
 QWidget#tableCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -2957,7 +2959,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -3027,7 +3029,7 @@ QWidget#searchContainer {
 QWidget#tableCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle {
@@ -3175,7 +3177,7 @@ QWidget#pageCard, QWidget#card, QWidget#tableCard, QWidget#toolbarCard, QWidget#
 QFrame#pageCard, QFrame#card, QFrame#tableCard, QFrame#toolbarCard, QFrame#formCard, QFrame#summaryCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel { color: #1E293B; }
@@ -3315,7 +3317,7 @@ QWidget#pageCard, QWidget#card, QWidget#tableCard, QWidget#toolbarCard, QWidget#
 QFrame#pageCard, QFrame#card, QFrame#tableCard, QFrame#toolbarCard, QFrame#formCard, QFrame#summaryCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel { color: #FFFFFF; }
@@ -3460,7 +3462,7 @@ QDialog {
 QWidget#dialogCard {
     background-color: #FFFFFF;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QWidget#headerContainer {
@@ -3581,7 +3583,7 @@ QDialog {
 QWidget#dialogCard {
     background-color: #121C30;
     border: none;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QWidget#headerContainer {
@@ -3745,7 +3747,7 @@ QWidget#miniSummaryBox3,
 QWidget#miniSummaryBox4 {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel {
@@ -3922,7 +3924,7 @@ QWidget#miniSummaryBox3,
 QWidget#miniSummaryBox4 {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel {
@@ -4032,7 +4034,7 @@ QWidget#summaryCard,
 QFrame#summaryCard {
     background-color: #FFFFFF;
     border: 1px solid #E2E8F0;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle,
@@ -4151,7 +4153,7 @@ QWidget#summaryCard,
 QFrame#summaryCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 12px;
+    border-radius: 14px;
 }
 
 QLabel#pageTitle,
