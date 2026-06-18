@@ -81,7 +81,7 @@ void SettingsPage::loadSettings()
     QString savedTheme =
         settings.value(
             "appearance/theme",
-            "Dark"
+            "Light"
         ).toString();
 
     int themeIndex =

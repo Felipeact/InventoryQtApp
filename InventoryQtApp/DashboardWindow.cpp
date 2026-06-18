@@ -50,8 +50,8 @@ DashboardWindow::~DashboardWindow()
 void DashboardWindow::loadSavedTheme()
 {
     QSettings settings("InventorySystem", "InventoryQtApp");
-    QString savedTheme = settings.value("appearance/theme", "Dark").toString();
-    currentTheme = savedTheme == "Light" ? Theme::AppTheme::Light : Theme::AppTheme::Dark;
+    QString savedTheme = settings.value("appearance/theme", "Light").toString();
+    currentTheme = savedTheme == "Dark" ? Theme::AppTheme::Dark : Theme::AppTheme::Light;
     Theme::applyTheme(currentTheme);
     applyTheme(currentTheme);
 }

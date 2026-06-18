@@ -21,7 +21,7 @@ public:
     static QString darkStyleSheet();
     static QString lightStyleSheet();
 
-    static QString loginStyle(AppTheme theme = AppTheme::Dark);
+    static QString loginStyle(AppTheme theme = AppTheme::Light);
 
     static QString shellStyle(AppTheme theme);
     static QString sidebarStyle(AppTheme theme);

@@ -98,7 +98,7 @@ private:
     ReceiptsPage* receiptsPage = nullptr;
     ReportsPage* reportsPage = nullptr;
 
-    Theme::AppTheme currentTheme = Theme::AppTheme::Dark;
+    Theme::AppTheme currentTheme = Theme::AppTheme::Light;
 
     void setupSidebar();
     void setupVerticalbar();
