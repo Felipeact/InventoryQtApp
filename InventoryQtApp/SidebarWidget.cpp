@@ -165,15 +165,18 @@ void SidebarWidget::applyPermissions()
     );
 
 
+    // Reports endpoints require VIEW_STOCK (summaries/movements); audit logs
+    // additionally require MANAGE_USERS. Mirror the web app, which gates the
+    // Reports nav item on VIEW_STOCK. (There is no VIEW_REPORTS permission.)
     ui.reportsButton->setVisible(
-        hasPermission("VIEW_REPORTS") ||
+        hasPermission("VIEW_STOCK") ||
         hasPermission("MANAGE_USERS")
     );
 
-    ui.settingsButton->setVisible(
-        hasPermission("MANAGE_SETTINGS") ||
-        hasPermission("MANAGE_USERS")
-    );
+    // Settings (profile, change password, appearance, sign out) is available to
+    // every authenticated user, regardless of role. (There is no
+    // MANAGE_SETTINGS permission.)
+    ui.settingsButton->setVisible(true);
 }
 
 void SidebarWidget::resetButtonStates()

@@ -22,10 +22,12 @@
 
 AssetsPage::AssetsPage(
     AssetService& assetService,
+    const std::vector<std::string>& permissions,
     QWidget* parent
 )
     : QWidget(parent),
-    assetService(assetService)
+    assetService(assetService),
+    permissions(permissions)
 {
     ui.setupUi(this);
 
@@ -39,6 +41,10 @@ AssetsPage::AssetsPage(
 
     setupTable();
     loadAssets();
+
+    // Adding assets requires ADD_ASSET; viewing only needs VIEW_ASSET. Hide the
+    // create action for users who can view but not add assets.
+    ui.addAssetButton->setVisible(hasPermission("ADD_ASSET"));
 
     connect(
         ui.addAssetButton,
@@ -152,6 +158,10 @@ void AssetsPage::populateTable(const json& assets)
     ui.assetsTable->setUpdatesEnabled(false);
     ui.assetsTable->clearContents();
     ui.assetsTable->setRowCount(static_cast<int>(assets.size()));
+
+    // Edit/Delete are gated on EDIT_ASSET / DELETE_ASSET respectively.
+    const bool canEditAssets = hasPermission("EDIT_ASSET");
+    const bool canDeleteAssets = hasPermission("DELETE_ASSET");
 
     for (int row = 0; row < static_cast<int>(assets.size()); row++) {
         auto asset = assets[row];
@@ -301,6 +311,14 @@ void AssetsPage::populateTable(const json& assets)
                 );
             }
             });
+
+        if (!canEditAssets) {
+            editButton->hide();
+        }
+
+        if (!canDeleteAssets) {
+            deleteButton->hide();
+        }
 
         actionLayout->addWidget(viewButton);
         actionLayout->addWidget(editButton);
@@ -506,6 +524,17 @@ void AssetsPage::onPageSizeChanged(int index)
 
     populateTable(getCurrentPageAssets());
     updatePagination();
+}
+
+bool AssetsPage::hasPermission(
+    const std::string& permission
+) const
+{
+    return std::find(
+        permissions.begin(),
+        permissions.end(),
+        permission
+    ) != permissions.end();
 }
 
 void AssetsPage::applyTheme(Theme::AppTheme theme)

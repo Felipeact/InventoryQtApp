@@ -26,10 +26,12 @@
 
 ItemsPage::ItemsPage(
     ProductService& productService,
+    const std::vector<std::string>& permissions,
     QWidget* parent
 )
     : QWidget(parent),
-    productService(productService)
+    productService(productService),
+    permissions(permissions)
 {
     ui.setupUi(this);
 
@@ -43,7 +45,24 @@ ItemsPage::ItemsPage(
 
     setupTable();
     setupConnections();
+
+    // Creating, editing and deleting products all require ADD_PRODUCT on the
+    // backend; viewing only needs VIEW_STOCK. Hide write actions for users
+    // (e.g. WAREHOUSE) who can view stock but not manage it.
+    ui.addItemButton->setVisible(hasPermission("ADD_PRODUCT"));
+
     loadProducts();
+}
+
+bool ItemsPage::hasPermission(
+    const std::string& permission
+) const
+{
+    return std::find(
+        permissions.begin(),
+        permissions.end(),
+        permission
+    ) != permissions.end();
 }
 
 ItemsPage::~ItemsPage()
@@ -247,6 +266,8 @@ void ItemsPage::populateTable(
     }
 
     ui.itemsTable->setRowCount(rowCount);
+
+    const bool canManageProducts = hasPermission("ADD_PRODUCT");
 
     for (int row = 0; row < rowCount; row++) {
         json product =
@@ -466,6 +487,11 @@ void ItemsPage::populateTable(
                 }
             }
         );
+
+        if (!canManageProducts) {
+            editButton->hide();
+            deleteButton->hide();
+        }
 
         actionLayout->addWidget(viewButton);
         actionLayout->addWidget(editButton);

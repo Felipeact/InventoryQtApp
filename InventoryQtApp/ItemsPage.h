@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QWidget>
+#include <string>
+#include <vector>
 
 #include "ui_ItemsPage.h"
 #include "AddProductDialog.h"
@@ -15,6 +17,7 @@ class ItemsPage : public QWidget
 public:
     ItemsPage(
         ProductService& productService,
+        const std::vector<std::string>& permissions,
         QWidget* parent = nullptr
     );
 
@@ -34,6 +37,9 @@ private:
     Ui::ItemsPageClass ui;
 
     ProductService& productService;
+
+    std::vector<std::string> permissions;
+    bool hasPermission(const std::string& permission) const;
 
     json currentProducts;
     json filteredProducts;

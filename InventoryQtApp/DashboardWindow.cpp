@@ -130,7 +130,7 @@ DashboardPage* DashboardWindow::ensureDashboardPage()
 ItemsPage* DashboardWindow::ensureItemsPage()
 {
     if (!itemsPage) {
-        itemsPage = new ItemsPage(*productService, this);
+        itemsPage = new ItemsPage(*productService, permissions, this);
         ui.mainStack->addWidget(itemsPage);
         itemsPage->applyTheme(currentTheme);
         connect(itemsPage, &ItemsPage::productsChanged, this, [this]() {
@@ -143,7 +143,7 @@ ItemsPage* DashboardWindow::ensureItemsPage()
 AssetsPage* DashboardWindow::ensureAssetsPage()
 {
     if (!assetsPage) {
-        assetsPage = new AssetsPage(*assetService, this);
+        assetsPage = new AssetsPage(*assetService, permissions, this);
         ui.mainStack->addWidget(assetsPage);
         assetsPage->applyTheme(currentTheme);
         connect(assetsPage, &AssetsPage::assetsChanged, this, [this]() {

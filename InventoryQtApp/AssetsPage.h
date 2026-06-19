@@ -2,6 +2,8 @@
 #pragma once
 
 #include <QWidget>
+#include <string>
+#include <vector>
 #include "ui_AssetsPage.h"
 #include "AddAssetDialog.h"
 #include "AssetService.h"
@@ -16,7 +18,7 @@ public:
 
     void applyTheme(Theme::AppTheme theme);
     // Constructor
-    AssetsPage(AssetService& assetService, QWidget* parent = nullptr);
+    AssetsPage(AssetService& assetService, const std::vector<std::string>& permissions, QWidget* parent = nullptr);
     // Destructor
     ~AssetsPage();
 
@@ -40,6 +42,10 @@ private slots:
 private:
     Ui::AssetsPageClass ui;  // UI components
     AssetService& assetService;  // Reference to asset service for API interactions
+
+    std::vector<std::string> permissions;
+    bool hasPermission(const std::string& permission) const;
+
     json currentAssets;  // Cache for asset data
 
     QString currentTypeFilter;
