@@ -233,7 +233,7 @@ TruckStockDashboardPage* DashboardWindow::ensureTruckStockDashboardPage()
             ui.mainStack->setCurrentWidget(page);
 
             if (sidebar) {
-                sidebar->activateTrucks();
+                sidebar->activateFleet();
             }
             });
 
@@ -432,22 +432,10 @@ void DashboardWindow::setupSidebar()
         ui.mainStack->setCurrentWidget(page);
         });
 
-    connect(sidebar, &SidebarWidget::trucksClicked, this, [this]() {
+    connect(sidebar, &SidebarWidget::fleetClicked, this, [this]() {
         FleetPage* page = ensureFleetPage();
         page->showTrucks();
         if (page->trucksPage()) page->trucksPage()->refreshTrucksList();
-        ui.mainStack->setCurrentWidget(page);
-        });
-
-    connect(sidebar, &SidebarWidget::templatesClicked, this, [this]() {
-        FleetPage* page = ensureFleetPage();
-        page->showTemplates();
-        ui.mainStack->setCurrentWidget(page);
-        });
-
-    connect(sidebar, &SidebarWidget::assignmentsClicked, this, [this]() {
-        FleetPage* page = ensureFleetPage();
-        page->showAssignments();
         ui.mainStack->setCurrentWidget(page);
         });
 
@@ -593,19 +581,19 @@ void DashboardWindow::handleGlobalSearchResult(GlobalSearchDialog::SearchTarget 
         ensureFleetPage()->showTrucks();
         if (fleetPage->trucksPage()) fleetPage->trucksPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(fleetPage);
-        if (sidebar) sidebar->activateTrucks();
+        if (sidebar) sidebar->activateFleet();
         break;
     case GlobalSearchDialog::SearchTarget::Templates:
         ensureFleetPage()->showTemplates();
         if (fleetPage->templatesPage()) fleetPage->templatesPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(fleetPage);
-        if (sidebar) sidebar->activateTemplates();
+        if (sidebar) sidebar->activateFleet();
         break;
     case GlobalSearchDialog::SearchTarget::Assignments:
         ensureFleetPage()->showAssignments();
         if (fleetPage->assignmentsPage()) fleetPage->assignmentsPage()->setSearchText(value);
         ui.mainStack->setCurrentWidget(fleetPage);
-        if (sidebar) sidebar->activateAssignments();
+        if (sidebar) sidebar->activateFleet();
         break;
     case GlobalSearchDialog::SearchTarget::MyTruckStock:
         ensureMyTruckStockPage()->setSearchText(value);

@@ -189,31 +189,9 @@
 			</item>
 
 			<item>
-				<widget class="QPushButton" name="trucksButton">
+				<widget class="QPushButton" name="fleetButton">
 					<property name="text">
-						<string>🚛  Trucks</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="templatesButton">
-					<property name="text">
-						<string>📋  Templates</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="assignmentsButton">
-					<property name="text">
-						<string>🔗  Assignments</string>
+						<string>🚛  Fleet</string>
 					</property>
 					<property name="checkable">
 						<bool>true</bool>

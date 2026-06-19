@@ -29,9 +29,7 @@ public:
     void activateSettings();
 
     void activateTruckStockDashboard();
-    void activateTrucks();
-    void activateTemplates();
-    void activateAssignments();
+    void activateFleet();
     void activateMyTruckStock();
     void activateLowStockAlerts();
     void activateReceipts();
@@ -48,9 +46,7 @@ signals:
     void settingsClicked();
 
     void truckStockDashboardClicked();
-    void trucksClicked();
-    void templatesClicked();
-    void assignmentsClicked();
+    void fleetClicked();
     void myTruckStockClicked();
     void lowStockAlertsClicked();
     void receiptsClicked();

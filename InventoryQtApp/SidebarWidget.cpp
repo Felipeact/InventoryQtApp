@@ -64,19 +64,9 @@ SidebarWidget::SidebarWidget(
         emit truckStockDashboardClicked();
         });
 
-    connect(ui.trucksButton, &QPushButton::clicked, this, [this]() {
-        setActiveButton(ui.trucksButton);
-        emit trucksClicked();
-        });
-
-    connect(ui.templatesButton, &QPushButton::clicked, this, [this]() {
-        setActiveButton(ui.templatesButton);
-        emit templatesClicked();
-        });
-
-    connect(ui.assignmentsButton, &QPushButton::clicked, this, [this]() {
-        setActiveButton(ui.assignmentsButton);
-        emit assignmentsClicked();
+    connect(ui.fleetButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.fleetButton);
+        emit fleetClicked();
         });
 
     connect(ui.myTruckStockButton, &QPushButton::clicked, this, [this]() {
@@ -138,16 +128,12 @@ void SidebarWidget::applyPermissions()
         hasPermission("MANAGE_TRUCK_STOCK")
     );
 
-    ui.trucksButton->setVisible(
+    // Fleet groups Trucks, Templates and Assignments under one tabbed page.
+    // Show it to anyone who could reach any of those screens (union of the
+    // permissions the three separate nav items used to require).
+    ui.fleetButton->setVisible(
         hasPermission("VIEW_ALL_TRUCKS") ||
-        hasPermission("MANAGE_TRUCK_STOCK")
-    );
-
-    ui.templatesButton->setVisible(
-        hasPermission("MANAGE_TRUCK_STOCK")
-    );
-
-    ui.assignmentsButton->setVisible(
+        hasPermission("MANAGE_TRUCK_STOCK") ||
         hasPermission("ASSIGN_TRUCK_STOCK")
     );
 
@@ -259,19 +245,9 @@ void SidebarWidget::activateTruckStockDashboard()
     setActiveButton(ui.truckStockDashboardButton);
 }
 
-void SidebarWidget::activateTrucks()
+void SidebarWidget::activateFleet()
 {
-    setActiveButton(ui.trucksButton);
-}
-
-void SidebarWidget::activateTemplates()
-{
-    setActiveButton(ui.templatesButton);
-}
-
-void SidebarWidget::activateAssignments()
-{
-    setActiveButton(ui.assignmentsButton);
+    setActiveButton(ui.fleetButton);
 }
 
 void SidebarWidget::activateMyTruckStock()
