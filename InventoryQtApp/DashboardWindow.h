@@ -16,6 +16,7 @@
 #include <TrucksPage.h>
 #include <StockTemplatesPage.h>
 #include <AssignmentsPage.h>
+#include <FleetPage.h>
 #include <MyTruckStockPage.h>
 #include <LowStockAlertsPage.h>
 #include <ReceiptsPage.h>
@@ -93,6 +94,7 @@ private:
     TrucksPage* trucksPage = nullptr;
     StockTemplatesPage* stockTemplatesPage = nullptr;
     AssignmentsPage* assignmentsPage = nullptr;
+    FleetPage* fleetPage = nullptr;
     MyTruckStockPage* myTruckStockPage = nullptr;
     LowStockAlertsPage* lowStockAlertsPage = nullptr;
     ReceiptsPage* receiptsPage = nullptr;
@@ -117,6 +119,7 @@ private:
     TrucksPage* ensureTrucksPage();
     StockTemplatesPage* ensureStockTemplatesPage();
     AssignmentsPage* ensureAssignmentsPage();
+    FleetPage* ensureFleetPage();
     MyTruckStockPage* ensureMyTruckStockPage();
     LowStockAlertsPage* ensureLowStockAlertsPage();
     ReceiptsPage* ensureReceiptsPage();

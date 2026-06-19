@@ -110,6 +110,7 @@
     <ClCompile Include="DashboardWindow.cpp" />
     <ClCompile Include="ErrorHandler.cpp" />
     <ClCompile Include="ExportUtility.cpp" />
+    <ClCompile Include="FleetPage.cpp" />
     <ClCompile Include="GlobalSearchDialog.cpp" />
     <ClCompile Include="ItemAdvancedFilterDialog.cpp" />
     <ClCompile Include="ItemDetailsDialog.cpp" />
@@ -187,6 +188,7 @@
     <QtMoc Include="AutoUpdateManager.h" />
     <QtMoc Include="AssetDetailsDialog.h" />
     <ClInclude Include="ErrorHandler.h" />
+    <ClInclude Include="FleetPage.h" />
     <QtMoc Include="ReportsPage.h" />
     <ClInclude Include="ExportUtility.h" />
     <QtMoc Include="NotificationDialog.h" />

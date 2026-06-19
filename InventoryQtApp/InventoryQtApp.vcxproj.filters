@@ -184,6 +184,9 @@
     <ClCompile Include="ExportUtility.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FleetPage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="AutoUpdateManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -241,6 +244,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ErrorHandler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="FleetPage.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="ExportUtility.h">

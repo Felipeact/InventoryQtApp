@@ -72,6 +72,7 @@ void DashboardWindow::applyThemeToLoadedPages()
     if (trucksPage) trucksPage->applyTheme(currentTheme);
     if (stockTemplatesPage) stockTemplatesPage->applyTheme(currentTheme);
     if (assignmentsPage) assignmentsPage->applyTheme(currentTheme);
+    if (fleetPage) fleetPage->applyTheme(currentTheme);
     if (myTruckStockPage) myTruckStockPage->applyTheme(currentTheme);
     if (lowStockAlertsPage) lowStockAlertsPage->applyTheme(currentTheme);
     if (receiptsPage) receiptsPage->applyTheme(currentTheme);
@@ -226,8 +227,9 @@ TruckStockDashboardPage* DashboardWindow::ensureTruckStockDashboardPage()
         truckStockDashboardPage->applyTheme(currentTheme);
 
         connect(truckStockDashboardPage, &TruckStockDashboardPage::viewAllTrucksRequested, this, [this]() {
-            TrucksPage* page = ensureTrucksPage();
-            page->refreshTrucksList();
+            FleetPage* page = ensureFleetPage();
+            page->showTrucks();
+            if (page->trucksPage()) page->trucksPage()->refreshTrucksList();
             ui.mainStack->setCurrentWidget(page);
 
             if (sidebar) {
@@ -284,6 +286,32 @@ AssignmentsPage* DashboardWindow::ensureAssignmentsPage()
             });
     }
     return assignmentsPage;
+}
+
+FleetPage* DashboardWindow::ensureFleetPage()
+{
+    if (!fleetPage) {
+        fleetPage = new FleetPage(truckStockService, userService, permissions, this);
+        ui.mainStack->addWidget(fleetPage);
+        fleetPage->applyTheme(currentTheme);
+
+        // Re-wire the child pages' refresh signals (previously connected in the
+        // individual ensure* methods) now that the pages live inside FleetPage.
+        if (fleetPage->trucksPage()) {
+            connect(fleetPage->trucksPage(), &TrucksPage::trucksChanged, this, [this]() {
+                if (truckStockDashboardPage) truckStockDashboardPage->refreshDashboard();
+                });
+        }
+
+        if (fleetPage->assignmentsPage()) {
+            connect(fleetPage->assignmentsPage(), &AssignmentsPage::assignmentsChanged, this, [this]() {
+                if (truckStockDashboardPage) truckStockDashboardPage->refreshDashboard();
+                if (myTruckStockPage) myTruckStockPage->refreshStock();
+                if (lowStockAlertsPage) lowStockAlertsPage->refreshAlerts();
+                });
+        }
+    }
+    return fleetPage;
 }
 
 MyTruckStockPage* DashboardWindow::ensureMyTruckStockPage()
@@ -405,17 +433,22 @@ void DashboardWindow::setupSidebar()
         });
 
     connect(sidebar, &SidebarWidget::trucksClicked, this, [this]() {
-        TrucksPage* page = ensureTrucksPage();
-        page->refreshTrucksList();
+        FleetPage* page = ensureFleetPage();
+        page->showTrucks();
+        if (page->trucksPage()) page->trucksPage()->refreshTrucksList();
         ui.mainStack->setCurrentWidget(page);
         });
 
     connect(sidebar, &SidebarWidget::templatesClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(ensureStockTemplatesPage());
+        FleetPage* page = ensureFleetPage();
+        page->showTemplates();
+        ui.mainStack->setCurrentWidget(page);
         });
 
     connect(sidebar, &SidebarWidget::assignmentsClicked, this, [this]() {
-        ui.mainStack->setCurrentWidget(ensureAssignmentsPage());
+        FleetPage* page = ensureFleetPage();
+        page->showAssignments();
+        ui.mainStack->setCurrentWidget(page);
         });
 
     connect(sidebar, &SidebarWidget::myTruckStockClicked, this, [this]() {
@@ -557,18 +590,21 @@ void DashboardWindow::handleGlobalSearchResult(GlobalSearchDialog::SearchTarget 
         if (sidebar) sidebar->activateTruckStockDashboard();
         break;
     case GlobalSearchDialog::SearchTarget::Trucks:
-        ensureTrucksPage()->setSearchText(value);
-        ui.mainStack->setCurrentWidget(trucksPage);
+        ensureFleetPage()->showTrucks();
+        if (fleetPage->trucksPage()) fleetPage->trucksPage()->setSearchText(value);
+        ui.mainStack->setCurrentWidget(fleetPage);
         if (sidebar) sidebar->activateTrucks();
         break;
     case GlobalSearchDialog::SearchTarget::Templates:
-        ensureStockTemplatesPage()->setSearchText(value);
-        ui.mainStack->setCurrentWidget(stockTemplatesPage);
+        ensureFleetPage()->showTemplates();
+        if (fleetPage->templatesPage()) fleetPage->templatesPage()->setSearchText(value);
+        ui.mainStack->setCurrentWidget(fleetPage);
         if (sidebar) sidebar->activateTemplates();
         break;
     case GlobalSearchDialog::SearchTarget::Assignments:
-        ensureAssignmentsPage()->setSearchText(value);
-        ui.mainStack->setCurrentWidget(assignmentsPage);
+        ensureFleetPage()->showAssignments();
+        if (fleetPage->assignmentsPage()) fleetPage->assignmentsPage()->setSearchText(value);
+        ui.mainStack->setCurrentWidget(fleetPage);
         if (sidebar) sidebar->activateAssignments();
         break;
     case GlobalSearchDialog::SearchTarget::MyTruckStock:
