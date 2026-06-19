@@ -87,7 +87,7 @@
 			<item>
 				<widget class="QPushButton" name="itemsButton">
 					<property name="text">
-						<string>▣  Items</string>
+						<string>📦  Items</string>
 					</property>
 					<property name="checkable">
 						<bool>true</bool>
@@ -98,7 +98,7 @@
 			<item>
 				<widget class="QPushButton" name="assetsButton">
 					<property name="text">
-						<string>▧  Assets</string>
+						<string>🛠️  Assets</string>
 					</property>
 					<property name="checkable">
 						<bool>true</bool>
@@ -109,7 +109,7 @@
 			<item>
 				<widget class="QPushButton" name="usersButton">
 					<property name="text">
-						<string>⚙  Users</string>
+						<string>👥  Users</string>
 					</property>
 					<property name="checkable">
 						<bool>true</bool>
@@ -120,7 +120,7 @@
 			<item>
 				<widget class="QPushButton" name="scanInButton">
 					<property name="text">
-						<string>⟳  Scan In</string>
+						<string>📥  Scan In</string>
 					</property>
 					<property name="checkable">
 						<bool>true</bool>
@@ -131,7 +131,7 @@
 			<item>
 				<widget class="QPushButton" name="scanOutButton">
 					<property name="text">
-						<string>↯  Scan Out</string>
+						<string>📤  Scan Out</string>
 					</property>
 					<property name="checkable">
 						<bool>true</bool>
@@ -142,7 +142,7 @@
 			<item>
 				<widget class="QPushButton" name="reportsButton">
 					<property name="text">
-						<string>▤  Reports</string>
+						<string>📊  Reports</string>
 					</property>
 					<property name="checkable">
 						<bool>true</bool>
@@ -202,7 +202,7 @@
 			<item>
 				<widget class="QPushButton" name="templatesButton">
 					<property name="text">
-						<string>📦  Templates</string>
+						<string>📋  Templates</string>
 					</property>
 					<property name="checkable">
 						<bool>true</bool>
@@ -213,7 +213,7 @@
 			<item>
 				<widget class="QPushButton" name="assignmentsButton">
 					<property name="text">
-						<string>📋  Assignments</string>
+						<string>🔗  Assignments</string>
 					</property>
 					<property name="checkable">
 						<bool>true</bool>
