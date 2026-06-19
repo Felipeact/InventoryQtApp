@@ -814,16 +814,32 @@ QString Theme::dashboardPageStyle(AppTheme theme)
 {
     if (theme == AppTheme::Light) {
         return R"(
-QWidget#DashboardPageClass { background-color: #F8FAFC; }
+QWidget#DashboardPageClass { background-color: #EAEEF6; }
 
 QWidget#pageCard, QWidget#summaryCard,
-QFrame#totalItemsCard, QFrame#totalAssetsCard, QFrame#quantityInHandCard, QFrame#receivedCard,
 QFrame#itemSummaryCard, QFrame#assetSummaryCard, QFrame#recentItemsCard, QFrame#lowStockCard,
-QWidget#totalItemsCard, QWidget#totalAssetsCard, QWidget#quantityInHandCard, QWidget#receivedCard,
 QWidget#itemSummaryCard, QWidget#assetSummaryCard, QWidget#recentItemsCard, QWidget#lowStockCard {
     background-color: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    border-radius: 14px;
+    border: 1px solid #E6EAF2;
+    border-radius: 18px;
+}
+
+/* KPI cards carry a subtle accent gradient matching their metric colour. */
+QFrame#totalItemsCard, QWidget#totalItemsCard,
+QFrame#totalAssetsCard, QWidget#totalAssetsCard {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:1 #F3F3FE);
+    border: 1px solid #E1E2FA;
+    border-radius: 18px;
+}
+QFrame#quantityInHandCard, QWidget#quantityInHandCard {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:1 #EFFBF3);
+    border: 1px solid #CCEFD8;
+    border-radius: 18px;
+}
+QFrame#receivedCard, QWidget#receivedCard {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:1 #FFF8EC);
+    border: 1px solid #FAE8C2;
+    border-radius: 18px;
 }
 
 QLabel { color: #1E293B; }
@@ -834,9 +850,13 @@ QLabel#itemLeftLabel, QLabel#itemRightLabel, QLabel#assetActiveLabel, QLabel#ass
     font-size: 12px;
 }
 
-QLabel#totalItemsValue, QLabel#totalAssetsValue, QLabel#quantityInHandValue, QLabel#toBeReceivedValue,
+QLabel#totalItemsValue, QLabel#totalAssetsValue, QLabel#quantityInHandValue, QLabel#toBeReceivedValue {
+    color: #0F172A;
+    font-weight: 800;
+    font-size: 26px;
+}
 QLabel#itemQuantityValue, QLabel#itemReceivedValue, QLabel#assetActiveValue, QLabel#assetInactiveValue {
-    color: #1E293B;
+    color: #0F172A;
     font-weight: 800;
 }
 
@@ -881,13 +901,29 @@ QLabel#assetChartRed { color: #DC2626; }
 QWidget#DashboardPageClass { background-color: #0A1020; }
 
 QWidget#pageCard, QWidget#summaryCard,
-QFrame#totalItemsCard, QFrame#totalAssetsCard, QFrame#quantityInHandCard, QFrame#receivedCard,
 QFrame#itemSummaryCard, QFrame#assetSummaryCard, QFrame#recentItemsCard, QFrame#lowStockCard,
-QWidget#totalItemsCard, QWidget#totalAssetsCard, QWidget#quantityInHandCard, QWidget#receivedCard,
 QWidget#itemSummaryCard, QWidget#assetSummaryCard, QWidget#recentItemsCard, QWidget#lowStockCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 14px;
+    border-radius: 18px;
+}
+
+/* KPI cards carry a subtle accent gradient matching their metric colour. */
+QFrame#totalItemsCard, QWidget#totalItemsCard,
+QFrame#totalAssetsCard, QWidget#totalAssetsCard {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #141E36, stop:1 #18183A);
+    border: 1px solid #353A6B;
+    border-radius: 18px;
+}
+QFrame#quantityInHandCard, QWidget#quantityInHandCard {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #141E36, stop:1 #11271E);
+    border: 1px solid #244B39;
+    border-radius: 18px;
+}
+QFrame#receivedCard, QWidget#receivedCard {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #141E36, stop:1 #2A2310);
+    border: 1px solid #4A3A1C;
+    border-radius: 18px;
 }
 
 QLabel { color: #FFFFFF; }
@@ -898,7 +934,11 @@ QLabel#itemLeftLabel, QLabel#itemRightLabel, QLabel#assetActiveLabel, QLabel#ass
     font-size: 12px;
 }
 
-QLabel#totalItemsValue, QLabel#totalAssetsValue, QLabel#quantityInHandValue, QLabel#toBeReceivedValue,
+QLabel#totalItemsValue, QLabel#totalAssetsValue, QLabel#quantityInHandValue, QLabel#toBeReceivedValue {
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 26px;
+}
 QLabel#itemQuantityValue, QLabel#itemReceivedValue, QLabel#assetActiveValue, QLabel#assetInactiveValue {
     color: #FFFFFF;
     font-weight: 800;
@@ -1784,7 +1824,7 @@ QString Theme::truckStockDashboardPageStyle(AppTheme theme)
 }
 
 QWidget#TruckStockDashboardPageClass {
-    background-color: #F8FAFC;
+    background-color: #EAEEF6;
     color: #1E293B;
 }
 
@@ -1805,17 +1845,35 @@ QLabel#subtitleLabel {
     font-size: 12px;
 }
 
-QWidget#metricCard1,
-QWidget#metricCard2,
-QWidget#metricCard3,
-QWidget#metricCard4,
 QWidget#itemSummaryCard,
 QWidget#assetSummaryCard,
 QWidget#recentItemsCard,
 QWidget#lowStockCard {
     background-color: #FFFFFF;
-    border: 1px solid #E2E8F0;
-    border-radius: 14px;
+    border: 1px solid #E6EAF2;
+    border-radius: 18px;
+}
+
+/* Four truck KPI cards, each with its own accent gradient. */
+QWidget#metricCard1 {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:1 #F3F3FE);
+    border: 1px solid #E1E2FA;
+    border-radius: 18px;
+}
+QWidget#metricCard2 {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:1 #EFFBF3);
+    border: 1px solid #CCEFD8;
+    border-radius: 18px;
+}
+QWidget#metricCard3 {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:1 #FFF8EC);
+    border: 1px solid #FAE8C2;
+    border-radius: 18px;
+}
+QWidget#metricCard4 {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #FFFFFF, stop:1 #EEF7FF);
+    border: 1px solid #CFE6FB;
+    border-radius: 18px;
 }
 
 QWidget#miniSummaryBox1,
@@ -2022,17 +2080,35 @@ QLabel#subtitleLabel {
     font-size: 12px;
 }
 
-QWidget#metricCard1,
-QWidget#metricCard2,
-QWidget#metricCard3,
-QWidget#metricCard4,
 QWidget#itemSummaryCard,
 QWidget#assetSummaryCard,
 QWidget#recentItemsCard,
 QWidget#lowStockCard {
     background-color: #121C30;
     border: 1px solid #2E3D5B;
-    border-radius: 14px;
+    border-radius: 18px;
+}
+
+/* Four truck KPI cards, each with its own accent gradient. */
+QWidget#metricCard1 {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #141E36, stop:1 #18183A);
+    border: 1px solid #353A6B;
+    border-radius: 18px;
+}
+QWidget#metricCard2 {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #141E36, stop:1 #11271E);
+    border: 1px solid #244B39;
+    border-radius: 18px;
+}
+QWidget#metricCard3 {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #141E36, stop:1 #2A2310);
+    border: 1px solid #4A3A1C;
+    border-radius: 18px;
+}
+QWidget#metricCard4 {
+    background-color: qlineargradient(x1:0, y1:0, x2:0, y2:1, stop:0 #141E36, stop:1 #102536);
+    border: 1px solid #1E466A;
+    border-radius: 18px;
 }
 
 QWidget#miniSummaryBox1,
