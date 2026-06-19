@@ -25,10 +25,12 @@
 
 LowStockAlertsPage::LowStockAlertsPage(
     TruckStockService* truckStockService,
+    const std::vector<std::string>& permissions,
     QWidget* parent
 )
     : QWidget(parent),
-    truckStockService(truckStockService)
+    truckStockService(truckStockService),
+    permissions(permissions)
 {
     ui.setupUi(this);
 
@@ -37,6 +39,17 @@ LowStockAlertsPage::LowStockAlertsPage(
     setupTable();
     setupConnections();
     loadAlerts();
+}
+
+bool LowStockAlertsPage::hasPermission(
+    const std::string& permission
+) const
+{
+    return std::find(
+        permissions.begin(),
+        permissions.end(),
+        permission
+    ) != permissions.end();
 }
 
 LowStockAlertsPage::~LowStockAlertsPage()
@@ -352,6 +365,15 @@ void LowStockAlertsPage::addActionButtons(
 
     assignButton->setObjectName("assignButton");
     assignButton->setFixedWidth(76);
+
+    // Each action maps to a distinct backend permission, so a viewer
+    // (VIEW_LOW_STOCK_ALERTS) only sees the actions they can actually perform:
+    //   Restock -> PATCH item quantity   (TRANSFER_STOCK_TO_TRUCK)
+    //   Receipt -> create receipt        (UPLOAD_RECEIPT)
+    //   Assign  -> create assignment     (ASSIGN_TRUCK_STOCK)
+    restockButton->setVisible(hasPermission("TRANSFER_STOCK_TO_TRUCK"));
+    receiptButton->setVisible(hasPermission("UPLOAD_RECEIPT"));
+    assignButton->setVisible(hasPermission("ASSIGN_TRUCK_STOCK"));
 
     layout->addWidget(restockButton);
     layout->addWidget(receiptButton);

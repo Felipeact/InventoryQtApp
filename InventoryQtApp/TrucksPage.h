@@ -18,6 +18,7 @@ public:
     explicit TrucksPage(
         TruckStockService* truckStockService,
         UserService* userService,
+        const std::vector<std::string>& permissions,
         QWidget* parent = nullptr
     );
 
@@ -47,6 +48,9 @@ private:
 
     TruckStockService* truckStockService = nullptr;
     UserService* userService = nullptr;
+
+    std::vector<std::string> permissions;
+    bool hasPermission(const std::string& permission) const;
 
     std::vector<TruckDto> currentTrucks;
     std::vector<TruckDto> filteredTrucks;

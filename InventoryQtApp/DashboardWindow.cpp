@@ -251,7 +251,7 @@ TruckStockDashboardPage* DashboardWindow::ensureTruckStockDashboardPage()
 TrucksPage* DashboardWindow::ensureTrucksPage()
 {
     if (!trucksPage) {
-        trucksPage = new TrucksPage(truckStockService, userService, this);
+        trucksPage = new TrucksPage(truckStockService, userService, permissions, this);
         ui.mainStack->addWidget(trucksPage);
         trucksPage->applyTheme(currentTheme);
         connect(trucksPage, &TrucksPage::trucksChanged, this, [this]() {
@@ -303,7 +303,7 @@ MyTruckStockPage* DashboardWindow::ensureMyTruckStockPage()
 LowStockAlertsPage* DashboardWindow::ensureLowStockAlertsPage()
 {
     if (!lowStockAlertsPage) {
-        lowStockAlertsPage = new LowStockAlertsPage(truckStockService, this);
+        lowStockAlertsPage = new LowStockAlertsPage(truckStockService, permissions, this);
         ui.mainStack->addWidget(lowStockAlertsPage);
         lowStockAlertsPage->applyTheme(currentTheme);
     }

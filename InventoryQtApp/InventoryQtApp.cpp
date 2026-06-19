@@ -274,6 +274,10 @@ void InventoryQtApp::handleLogout()
     ui.passwordInput->clear();
     ui.rememberCheck->setChecked(false);
 
+    // Re-apply in case the user changed the appearance preference during the
+    // session, so the login screen returns in the currently selected theme.
+    Theme::applyLogin(this);
+
     this->show();
     this->raise();
     this->activateWindow();

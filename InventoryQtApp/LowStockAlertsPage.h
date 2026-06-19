@@ -3,6 +3,7 @@
 #include <QWidget>
 #include <QString>
 #include <vector>
+#include <string>
 
 #include "ui_LowStockAlertsPage.h"
 #include "TruckStockService.h"
@@ -15,6 +16,7 @@ class LowStockAlertsPage : public QWidget
 public:
     explicit LowStockAlertsPage(
         TruckStockService* truckStockService,
+        const std::vector<std::string>& permissions,
         QWidget* parent = nullptr
     );
 
@@ -41,6 +43,9 @@ private:
     Ui::LowStockAlertsPageClass ui;
 
     TruckStockService* truckStockService = nullptr;
+
+    std::vector<std::string> permissions;
+    bool hasPermission(const std::string& permission) const;
 
     std::vector<LowStockItemDto> currentAlerts;
     std::vector<LowStockItemDto> filteredAlerts;

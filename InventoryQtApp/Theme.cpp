@@ -1,6 +1,8 @@
 #include "Theme.h"
 
 #include <QApplication>
+#include <QSettings>
+#include <QString>
 
 void Theme::applyApplication(QApplication& app)
 {
@@ -14,7 +16,15 @@ void Theme::applyLogin(QWidget* widget)
         return;
     }
 
-    widget->setStyleSheet(loginStyle(AppTheme::Light));
+    // Honor the user's saved appearance preference so the login screen matches
+    // the rest of the app (the dashboard reads the same key). Defaults to Light.
+    QSettings settings("InventorySystem", "InventoryQtApp");
+    const QString savedTheme =
+        settings.value("appearance/theme", "Light").toString();
+    const AppTheme theme =
+        savedTheme == "Dark" ? AppTheme::Dark : AppTheme::Light;
+
+    widget->setStyleSheet(loginStyle(theme));
 }
 
 void Theme::applyTheme(AppTheme theme)

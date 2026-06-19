@@ -22,11 +22,13 @@
 TrucksPage::TrucksPage(
     TruckStockService* truckStockService,
     UserService* userService,
+    const std::vector<std::string>& permissions,
     QWidget* parent
 )
     : QWidget(parent),
     truckStockService(truckStockService),
-    userService(userService)
+    userService(userService),
+    permissions(permissions)
 {
     ui.setupUi(this);
 
@@ -34,7 +36,23 @@ TrucksPage::TrucksPage(
 
     setupTable();
     setupConnections();
+
+    // Creating/editing/deactivating trucks requires MANAGE_TRUCK_STOCK; the page
+    // itself only needs VIEW_ALL_TRUCKS. Hide the create action for view-only users.
+    ui.addTruckButton->setVisible(hasPermission("MANAGE_TRUCK_STOCK"));
+
     loadTrucks();
+}
+
+bool TrucksPage::hasPermission(
+    const std::string& permission
+) const
+{
+    return std::find(
+        permissions.begin(),
+        permissions.end(),
+        permission
+    ) != permissions.end();
 }
 
 TrucksPage::~TrucksPage()
@@ -411,6 +429,12 @@ void TrucksPage::addActionButtons(
         new QPushButton("🗑", actionWidget);
 
     deleteButton->setObjectName("deleteButton");
+
+    // Edit and deactivate both require MANAGE_TRUCK_STOCK.
+    if (!hasPermission("MANAGE_TRUCK_STOCK")) {
+        editButton->hide();
+        deleteButton->hide();
+    }
 
     layout->addWidget(viewButton);
     layout->addWidget(editButton);
