@@ -1,5 +1,6 @@
 // AssetsPage.cpp - Implementation of the assets management page
 #include "AssetsPage.h"
+#include "IconUtil.h"
 #include "Theme.h"
 #include "AssetDetailsDialog.h"
 
@@ -225,12 +226,15 @@ void AssetsPage::populateTable(const json& assets)
 
         QPushButton* viewButton = new QPushButton("👁");
         viewButton->setObjectName("viewButton");
+        IconUtil::iconifyActionButton(viewButton);
 
         QPushButton* editButton = new QPushButton("✎");
         editButton->setObjectName("editButton");
+        IconUtil::iconifyActionButton(editButton);
 
         QPushButton* deleteButton = new QPushButton("🗑");
         deleteButton->setObjectName("deleteButton");
+        IconUtil::iconifyActionButton(deleteButton);
 
         connect(viewButton, &QPushButton::clicked, this, [this, asset]() {
             AssetDetailsDialog dialog(

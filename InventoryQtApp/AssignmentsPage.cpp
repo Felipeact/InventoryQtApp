@@ -1,4 +1,5 @@
 #include "AssignmentsPage.h"
+#include "IconUtil.h"
 #include "Theme.h"
 #include "AssignTemplateDialog.h"
 
@@ -340,6 +341,7 @@ void AssignmentsPage::addActionButtons(
         new QPushButton("✎", actionWidget);
 
     editButton->setObjectName("editButton");
+    IconUtil::iconifyActionButton(editButton);
     editButton->setToolTip("Edit Assignment");
 
     QPushButton* unassignButton =

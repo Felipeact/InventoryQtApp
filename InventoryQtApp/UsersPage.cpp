@@ -1,4 +1,5 @@
 #include "UsersPage.h"
+#include "IconUtil.h"
 #include "Theme.h"
 
 #include <algorithm>
@@ -558,16 +559,19 @@ void UsersPage::addActionButtons(
         new QPushButton("👁", actionWidget);
 
     viewButton->setObjectName("viewButton");
+    IconUtil::iconifyActionButton(viewButton);
 
     QPushButton* editButton =
         new QPushButton("✎", actionWidget);
 
     editButton->setObjectName("editButton");
+    IconUtil::iconifyActionButton(editButton);
 
     QPushButton* deleteButton =
         new QPushButton("🗑", actionWidget);
 
     deleteButton->setObjectName("deleteButton");
+    IconUtil::iconifyActionButton(deleteButton);
 
     actionLayout->addWidget(viewButton);
     actionLayout->addWidget(editButton);
@@ -595,6 +599,7 @@ void UsersPage::addActionButtons(
         new QPushButton("🔑", securityWidget);
 
     resetButton->setObjectName("resetButton");
+    IconUtil::iconifyActionButton(resetButton);
     resetButton->setToolTip("Reset Password");
 
     securityLayout->addWidget(resetButton);

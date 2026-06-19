@@ -1,333 +1,188 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-	<class>SidebarWidgetClass</class>
-	<widget class="QWidget" name="SidebarWidgetClass">
-		<property name="geometry">
-			<rect>
-				<x>0</x>
-				<y>0</y>
-				<width>190</width>
-				<height>760</height>
-			</rect>
-		</property>
-
-		<property name="minimumSize">
-			<size>
-				<width>190</width>
-				<height>0</height>
-			</size>
-		</property>
-
-		<property name="maximumSize">
-			<size>
-				<width>190</width>
-				<height>16777215</height>
-			</size>
-		</property>
-
-		<property name="styleSheet">
-			<string notr="true"/>
-		</property>
-
-		<layout class="QVBoxLayout" name="mainLayout">
-			<property name="spacing">
-				<number>7</number>
-			</property>
-			<property name="leftMargin">
-				<number>12</number>
-			</property>
-			<property name="topMargin">
-				<number>18</number>
-			</property>
-			<property name="rightMargin">
-				<number>12</number>
-			</property>
-			<property name="bottomMargin">
-				<number>12</number>
-			</property>
-
-			<item>
-				<widget class="QLabel" name="logoLabel">
-					<property name="text">
-						<string>◆  StockPilot</string>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QFrame" name="lineDivider">
-					<property name="frameShape">
-						<enum>QFrame::HLine</enum>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QLabel" name="sectionLabel">
-					<property name="text">
-						<string>MAIN</string>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="dashboardButton">
-					<property name="text">
-						<string>🏠  Dashboard</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-					<property name="checked">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="itemsButton">
-					<property name="text">
-						<string>📦  Items</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="assetsButton">
-					<property name="text">
-						<string>🛠️  Assets</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="usersButton">
-					<property name="text">
-						<string>👥  Users</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="scanInButton">
-					<property name="text">
-						<string>📥  Scan In</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="scanOutButton">
-					<property name="text">
-						<string>📤  Scan Out</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="reportsButton">
-					<property name="text">
-						<string>📊  Reports</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="settingsButton">
-					<property name="text">
-						<string>⚙  Settings</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QFrame" name="lineDivider2">
-					<property name="frameShape">
-						<enum>QFrame::HLine</enum>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QLabel" name="sectionLabel2">
-					<property name="text">
-						<string>TRUCK STOCK</string>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="truckStockDashboardButton">
-					<property name="text">
-						<string>🚚  Truck Dashboard</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="fleetButton">
-					<property name="text">
-						<string>🚛  Fleet</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="myTruckStockButton">
-					<property name="text">
-						<string>🧰  My Truck Stock</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="lowStockAlertsButton">
-					<property name="text">
-						<string>⚠️  Low Stock</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="receiptsButton">
-					<property name="text">
-						<string>🧾  Receipts</string>
-					</property>
-					<property name="checkable">
-						<bool>true</bool>
-					</property>
-				</widget>
-			</item>
-
-			<item>
-				<spacer name="middleSpacer">
-					<property name="orientation">
-						<enum>Qt::Vertical</enum>
-					</property>
-					<property name="sizeType">
-						<enum>QSizePolicy::Expanding</enum>
-					</property>
-				</spacer>
-			</item>
-
-			<item>
-				<widget class="QFrame" name="userCard">
-					<layout class="QHBoxLayout" name="userCardLayout">
-						<property name="leftMargin">
-							<number>10</number>
-						</property>
-						<property name="topMargin">
-							<number>8</number>
-						</property>
-						<property name="rightMargin">
-							<number>10</number>
-						</property>
-						<property name="bottomMargin">
-							<number>8</number>
-						</property>
-
-						<item>
-							<widget class="QLabel" name="avatarLabel">
-								<property name="minimumSize">
-									<size>
-										<width>28</width>
-										<height>28</height>
-									</size>
-								</property>
-								<property name="maximumSize">
-									<size>
-										<width>28</width>
-										<height>28</height>
-									</size>
-								</property>
-								<property name="styleSheet">
-									<string notr="true"/>
-								</property>
-								<property name="text">
-									<string>A</string>
-								</property>
-								<property name="alignment">
-									<set>Qt::AlignCenter</set>
-								</property>
-							</widget>
-						</item>
-
-						<item>
-							<layout class="QVBoxLayout" name="userTextLayout">
-								<property name="spacing">
-									<number>0</number>
-								</property>
-
-								<item>
-									<widget class="QLabel" name="userNameLabel">
-										<property name="styleSheet">
-											<string notr="true"/>
-										</property>
-										<property name="text">
-											<string>Admin</string>
-										</property>
-									</widget>
-								</item>
-
-								<item>
-									<widget class="QLabel" name="userRoleLabel">
-										<property name="styleSheet">
-											<string notr="true"/>
-										</property>
-										<property name="text">
-											<string>Administrator</string>
-										</property>
-									</widget>
-								</item>
-							</layout>
-						</item>
-					</layout>
-				</widget>
-			</item>
-
-			<item>
-				<widget class="QPushButton" name="logoutButton">
-					<property name="text">
-						<string>🚪  Logout</string>
-					</property>
-				</widget>
-			</item>
-		</layout>
-	</widget>
-
-	<resources/>
-	<connections/>
+ <class>SidebarWidgetClass</class>
+ <widget class="QWidget" name="SidebarWidgetClass">
+  <property name="geometry">
+   <rect><x>0</x><y>0</y><width>240</width><height>820</height></rect>
+  </property>
+  <property name="minimumSize"><size><width>240</width><height>0</height></size></property>
+  <property name="maximumSize"><size><width>240</width><height>16777215</height></size></property>
+  <layout class="QVBoxLayout" name="mainLayout">
+   <property name="spacing"><number>4</number></property>
+   <property name="leftMargin"><number>14</number></property>
+   <property name="topMargin"><number>22</number></property>
+   <property name="rightMargin"><number>14</number></property>
+   <property name="bottomMargin"><number>16</number></property>
+   <!-- Brand -->
+   <item>
+    <widget class="QLabel" name="logoLabel">
+     <property name="text"><string>◆  StockPilot</string></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="lineDivider">
+     <property name="frameShape"><enum>QFrame::HLine</enum></property>
+    </widget>
+   </item>
+   <!-- Workspace group -->
+   <item>
+    <widget class="QLabel" name="sectionLabel">
+     <property name="text"><string>WORKSPACE</string></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="dashboardButton">
+     <property name="text"><string>Dashboard</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="checked"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="itemsButton">
+     <property name="text"><string>Items</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="assetsButton">
+     <property name="text"><string>Assets</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="usersButton">
+     <property name="text"><string>Users</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="scanInButton">
+     <property name="text"><string>Scan In</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="scanOutButton">
+     <property name="text"><string>Scan Out</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="reportsButton">
+     <property name="text"><string>Reports</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="settingsButton">
+     <property name="text"><string>Settings</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QFrame" name="lineDivider2">
+     <property name="frameShape"><enum>QFrame::HLine</enum></property>
+    </widget>
+   </item>
+   <!-- Fleet group -->
+   <item>
+    <widget class="QLabel" name="sectionLabel2">
+     <property name="text"><string>FLEET</string></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="truckStockDashboardButton">
+     <property name="text"><string>Truck Dashboard</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="fleetButton">
+     <property name="text"><string>Fleet</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="myTruckStockButton">
+     <property name="text"><string>My Truck Stock</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="lowStockAlertsButton">
+     <property name="text"><string>Low Stock</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="receiptsButton">
+     <property name="text"><string>Receipts</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
+    <spacer name="middleSpacer">
+     <property name="orientation"><enum>Qt::Vertical</enum></property>
+     <property name="sizeType"><enum>QSizePolicy::Expanding</enum></property>
+     <property name="sizeHint" stdset="0"><size><width>0</width><height>20</height></size></property>
+    </spacer>
+   </item>
+   <!-- Account card -->
+   <item>
+    <widget class="QFrame" name="userCard">
+     <layout class="QHBoxLayout" name="userCardLayout">
+      <property name="leftMargin"><number>10</number></property>
+      <property name="topMargin"><number>9</number></property>
+      <property name="rightMargin"><number>10</number></property>
+      <property name="bottomMargin"><number>9</number></property>
+      <property name="spacing"><number>10</number></property>
+      <item>
+       <widget class="QLabel" name="avatarLabel">
+        <property name="minimumSize"><size><width>30</width><height>30</height></size></property>
+        <property name="maximumSize"><size><width>30</width><height>30</height></size></property>
+        <property name="text"><string>A</string></property>
+        <property name="alignment"><set>Qt::AlignCenter</set></property>
+       </widget>
+      </item>
+      <item>
+       <layout class="QVBoxLayout" name="userTextLayout">
+        <property name="spacing"><number>1</number></property>
+        <item>
+         <widget class="QLabel" name="userNameLabel">
+          <property name="text"><string>Admin</string></property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="userRoleLabel">
+          <property name="text"><string>Administrator</string></property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
+   </item>
+   <item>
+    <widget class="QPushButton" name="logoutButton">
+     <property name="text"><string>Log out</string></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>

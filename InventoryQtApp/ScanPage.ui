@@ -1,418 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-	<class>ScanPageClass</class>
-
-	<widget class="QWidget" name="ScanPageClass">
-		<property name="geometry">
-			<rect>
-				<x>0</x>
-				<y>0</y>
-				<width>1280</width>
-				<height>820</height>
-			</rect>
-		</property>
-
-		<property name="windowTitle">
-			<string>ScanPage</string>
-		</property>
-
-		<property name="styleSheet">
-			<string notr="true"/>
-		</property>
-
-		<layout class="QVBoxLayout" name="rootLayout">
-			<property name="leftMargin">
-				<number>14</number>
-			</property>
-			<property name="topMargin">
-				<number>14</number>
-			</property>
-			<property name="rightMargin">
-				<number>14</number>
-			</property>
-			<property name="bottomMargin">
-				<number>14</number>
-			</property>
-			<property name="spacing">
-				<number>12</number>
-			</property>
-
-			<item>
-				<widget class="QWidget" name="pageCard" native="true">
-					<layout class="QVBoxLayout" name="pageLayout">
-						<property name="leftMargin">
-							<number>18</number>
-						</property>
-						<property name="topMargin">
-							<number>18</number>
-						</property>
-						<property name="rightMargin">
-							<number>18</number>
-						</property>
-						<property name="bottomMargin">
-							<number>18</number>
-						</property>
-						<property name="spacing">
-							<number>16</number>
-						</property>
-
-						<item>
-							<layout class="QVBoxLayout" name="headerLayout">
-								<property name="spacing">
-									<number>4</number>
-								</property>
-
-								<item>
-									<widget class="QLabel" name="pageTitleLabel">
-										<property name="text">
-											<string>Scan In</string>
-										</property>
-									</widget>
-								</item>
-
-								<item>
-									<widget class="QLabel" name="breadcrumbLabel">
-										<property name="text">
-											<string>Dashboard  &gt;  Scan In</string>
-										</property>
-									</widget>
-								</item>
-							</layout>
-						</item>
-
-						<item>
-							<widget class="QWidget" name="scanCard" native="true">
-								<property name="maximumSize">
-									<size>
-										<width>16777215</width>
-										<height>310</height>
-									</size>
-								</property>
-
-								<layout class="QVBoxLayout" name="scanCardLayout">
-									<property name="leftMargin">
-										<number>28</number>
-									</property>
-									<property name="topMargin">
-										<number>18</number>
-									</property>
-									<property name="rightMargin">
-										<number>28</number>
-									</property>
-									<property name="bottomMargin">
-										<number>18</number>
-									</property>
-									<property name="spacing">
-										<number>10</number>
-									</property>
-
-									<item>
-										<widget class="QLabel" name="titleLabel">
-											<property name="alignment">
-												<set>Qt::AlignCenter</set>
-											</property>
-											<property name="text">
-												<string>Scan Item</string>
-											</property>
-										</widget>
-									</item>
-
-									<item>
-										<widget class="QLabel" name="subtitleLabel">
-											<property name="alignment">
-												<set>Qt::AlignCenter</set>
-											</property>
-											<property name="text">
-												<string>Scan barcode or enter manually</string>
-											</property>
-										</widget>
-									</item>
-
-									<item>
-										<layout class="QHBoxLayout" name="barcodeLayout">
-											<property name="spacing">
-												<number>0</number>
-											</property>
-
-											<item>
-												<widget class="QLineEdit" name="barcodeInput">
-													<property name="placeholderText">
-														<string>Enter or scan barcode</string>
-													</property>
-												</widget>
-											</item>
-
-											<item>
-												<widget class="QLabel" name="barcodeIconLabel">
-													<property name="minimumSize">
-														<size>
-															<width>42</width>
-															<height>44</height>
-														</size>
-													</property>
-													<property name="maximumSize">
-														<size>
-															<width>42</width>
-															<height>44</height>
-														</size>
-													</property>
-													<property name="alignment">
-														<set>Qt::AlignCenter</set>
-													</property>
-													<property name="text">
-														<string>▥</string>
-													</property>
-												</widget>
-											</item>
-										</layout>
-									</item>
-
-									<item>
-										<widget class="QLabel" name="quantityLabel">
-											<property name="text">
-												<string>Quantity</string>
-											</property>
-										</widget>
-									</item>
-
-									<item>
-										<layout class="QHBoxLayout" name="quantityControlLayout">
-											<property name="spacing">
-												<number>0</number>
-											</property>
-
-											<item>
-												<widget class="QPushButton" name="minusButton">
-													<property name="minimumSize">
-														<size>
-															<width>58</width>
-															<height>44</height>
-														</size>
-													</property>
-													<property name="text">
-														<string>−</string>
-													</property>
-												</widget>
-											</item>
-
-											<item>
-												<widget class="QSpinBox" name="quantityInput">
-													<property name="minimumSize">
-														<size>
-															<width>0</width>
-															<height>44</height>
-														</size>
-													</property>
-													<property name="minimum">
-														<number>1</number>
-													</property>
-													<property name="maximum">
-														<number>999999</number>
-													</property>
-													<property name="value">
-														<number>1</number>
-													</property>
-													<property name="alignment">
-														<set>Qt::AlignCenter</set>
-													</property>
-												</widget>
-											</item>
-
-											<item>
-												<widget class="QPushButton" name="plusButton">
-													<property name="minimumSize">
-														<size>
-															<width>58</width>
-															<height>44</height>
-														</size>
-													</property>
-													<property name="text">
-														<string>+</string>
-													</property>
-												</widget>
-											</item>
-										</layout>
-									</item>
-
-									<item>
-										<widget class="QPushButton" name="submitButton">
-											<property name="minimumSize">
-												<size>
-													<width>0</width>
-													<height>46</height>
-												</size>
-											</property>
-											<property name="text">
-												<string>⟳  Add Stock</string>
-											</property>
-										</widget>
-									</item>
-
-									<item>
-										<widget class="QLabel" name="statusLabel">
-											<property name="alignment">
-												<set>Qt::AlignCenter</set>
-											</property>
-											<property name="text">
-												<string/>
-											</property>
-										</widget>
-									</item>
-								</layout>
-							</widget>
-						</item>
-
-						<item>
-							<widget class="QWidget" name="recentScansCard" native="true">
-								<property name="maximumSize">
-									<size>
-										<width>16777215</width>
-										<height>160</height>
-									</size>
-								</property>
-
-								<layout class="QVBoxLayout" name="recentScansLayout">
-									<property name="leftMargin">
-										<number>20</number>
-									</property>
-									<property name="topMargin">
-										<number>14</number>
-									</property>
-									<property name="rightMargin">
-										<number>20</number>
-									</property>
-									<property name="bottomMargin">
-										<number>14</number>
-									</property>
-									<property name="spacing">
-										<number>12</number>
-									</property>
-
-									<item>
-										<widget class="QLabel" name="recentTitleLabel">
-											<property name="text">
-												<string>Recent Scans</string>
-											</property>
-										</widget>
-									</item>
-
-									<item>
-										<layout class="QGridLayout" name="recentGridLayout">
-											<property name="horizontalSpacing">
-												<number>18</number>
-											</property>
-											<property name="verticalSpacing">
-												<number>10</number>
-											</property>
-
-											<item row="0" column="0">
-												<widget class="QLabel" name="recentCodeLabel">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="0" column="1">
-												<widget class="QLabel" name="recentNameLabel">
-													<property name="text">
-														<string>No scan yet</string>
-													</property>
-												</widget>
-											</item>
-											<item row="0" column="2">
-												<widget class="QLabel" name="recentQtyLabel">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="0" column="3">
-												<widget class="QLabel" name="recentDateLabel">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-
-											<item row="1" column="0">
-												<widget class="QLabel" name="recentCodeLabel_2">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="1" column="1">
-												<widget class="QLabel" name="recentNameLabel_2">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="1" column="2">
-												<widget class="QLabel" name="recentQtyLabel_2">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="1" column="3">
-												<widget class="QLabel" name="recentDateLabel_2">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-
-											<item row="2" column="0">
-												<widget class="QLabel" name="recentCodeLabel_3">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="2" column="1">
-												<widget class="QLabel" name="recentNameLabel_3">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="2" column="2">
-												<widget class="QLabel" name="recentQtyLabel_3">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="2" column="3">
-												<widget class="QLabel" name="recentDateLabel_3">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-										</layout>
-									</item>
-								</layout>
-							</widget>
-						</item>
-
-						<item>
-							<spacer name="bottomSpacer">
-								<property name="orientation">
-									<enum>Qt::Vertical</enum>
-								</property>
-								<property name="sizeType">
-									<enum>QSizePolicy::Expanding</enum>
-								</property>
-							</spacer>
-						</item>
-					</layout>
-				</widget>
-			</item>
-		</layout>
-	</widget>
-
-	<resources/>
-	<connections/>
+ <class>ScanPageClass</class>
+ <widget class="QWidget" name="ScanPageClass">
+  <property name="geometry">
+   <rect><x>0</x><y>0</y><width>1280</width><height>820</height></rect>
+  </property>
+  <property name="windowTitle"><string>ScanPage</string></property>
+  <layout class="QVBoxLayout" name="rootLayout">
+   <property name="leftMargin"><number>24</number></property>
+   <property name="topMargin"><number>22</number></property>
+   <property name="rightMargin"><number>24</number></property>
+   <property name="bottomMargin"><number>22</number></property>
+   <property name="spacing"><number>0</number></property>
+   <item>
+    <widget class="QWidget" name="pageCard" native="true">
+     <layout class="QVBoxLayout" name="pageLayout">
+      <property name="leftMargin"><number>0</number></property>
+      <property name="topMargin"><number>0</number></property>
+      <property name="rightMargin"><number>0</number></property>
+      <property name="bottomMargin"><number>0</number></property>
+      <property name="spacing"><number>16</number></property>
+      <item>
+       <layout class="QVBoxLayout" name="headerLayout">
+        <property name="spacing"><number>2</number></property>
+        <item><widget class="QLabel" name="pageTitleLabel"><property name="text"><string>Scan In</string></property></widget></item>
+        <item><widget class="QLabel" name="breadcrumbLabel"><property name="text"><string>Workspace  ›  Scan In</string></property></widget></item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="centerRow">
+        <property name="spacing"><number>0</number></property>
+        <item><spacer name="centerLeftSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property></spacer></item>
+        <item>
+         <widget class="QWidget" name="scanColumn" native="true">
+          <property name="minimumSize"><size><width>460</width><height>0</height></size></property>
+          <property name="maximumSize"><size><width>560</width><height>16777215</height></size></property>
+          <layout class="QVBoxLayout" name="scanColumnLayout">
+           <property name="leftMargin"><number>0</number></property>
+           <property name="topMargin"><number>0</number></property>
+           <property name="rightMargin"><number>0</number></property>
+           <property name="bottomMargin"><number>0</number></property>
+           <property name="spacing"><number>16</number></property>
+           <item>
+            <widget class="QWidget" name="scanCard" native="true">
+             <layout class="QVBoxLayout" name="scanCardLayout">
+              <property name="leftMargin"><number>28</number></property>
+              <property name="topMargin"><number>24</number></property>
+              <property name="rightMargin"><number>28</number></property>
+              <property name="bottomMargin"><number>24</number></property>
+              <property name="spacing"><number>12</number></property>
+              <item><widget class="QLabel" name="titleLabel"><property name="alignment"><set>Qt::AlignCenter</set></property><property name="text"><string>Scan Item</string></property></widget></item>
+              <item><widget class="QLabel" name="subtitleLabel"><property name="alignment"><set>Qt::AlignCenter</set></property><property name="text"><string>Scan a barcode or enter it manually</string></property></widget></item>
+              <item>
+               <layout class="QHBoxLayout" name="barcodeLayout">
+                <property name="spacing"><number>0</number></property>
+                <item><widget class="QLineEdit" name="barcodeInput"><property name="placeholderText"><string>Enter or scan barcode</string></property></widget></item>
+                <item>
+                 <widget class="QLabel" name="barcodeIconLabel">
+                  <property name="minimumSize"><size><width>44</width><height>44</height></size></property>
+                  <property name="maximumSize"><size><width>44</width><height>44</height></size></property>
+                  <property name="alignment"><set>Qt::AlignCenter</set></property>
+                  <property name="text"><string>▥</string></property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+              <item><widget class="QLabel" name="quantityLabel"><property name="text"><string>Quantity</string></property></widget></item>
+              <item>
+               <layout class="QHBoxLayout" name="quantityControlLayout">
+                <property name="spacing"><number>0</number></property>
+                <item><widget class="QPushButton" name="minusButton"><property name="minimumSize"><size><width>58</width><height>44</height></size></property><property name="text"><string>−</string></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property></widget></item>
+                <item><widget class="QSpinBox" name="quantityInput"><property name="minimumSize"><size><width>0</width><height>44</height></size></property><property name="minimum"><number>1</number></property><property name="maximum"><number>999999</number></property><property name="value"><number>1</number></property><property name="alignment"><set>Qt::AlignCenter</set></property></widget></item>
+                <item><widget class="QPushButton" name="plusButton"><property name="minimumSize"><size><width>58</width><height>44</height></size></property><property name="text"><string>+</string></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property></widget></item>
+               </layout>
+              </item>
+              <item><widget class="QPushButton" name="submitButton"><property name="minimumSize"><size><width>0</width><height>48</height></size></property><property name="text"><string>⟳  Add Stock</string></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property></widget></item>
+              <item><widget class="QLabel" name="statusLabel"><property name="alignment"><set>Qt::AlignCenter</set></property><property name="text"><string/></property></widget></item>
+             </layout>
+            </widget>
+           </item>
+           <item>
+            <widget class="QWidget" name="recentScansCard" native="true">
+             <layout class="QVBoxLayout" name="recentScansLayout">
+              <property name="leftMargin"><number>20</number></property>
+              <property name="topMargin"><number>16</number></property>
+              <property name="rightMargin"><number>20</number></property>
+              <property name="bottomMargin"><number>16</number></property>
+              <property name="spacing"><number>12</number></property>
+              <item><widget class="QLabel" name="recentTitleLabel"><property name="text"><string>Recent Scans</string></property></widget></item>
+              <item>
+               <layout class="QGridLayout" name="recentGridLayout">
+                <property name="horizontalSpacing"><number>18</number></property>
+                <property name="verticalSpacing"><number>10</number></property>
+                <item row="0" column="0"><widget class="QLabel" name="recentCodeLabel"><property name="text"><string>—</string></property></widget></item>
+                <item row="0" column="1"><widget class="QLabel" name="recentNameLabel"><property name="text"><string>No scans yet</string></property></widget></item>
+                <item row="0" column="2"><widget class="QLabel" name="recentQtyLabel"><property name="text"><string>—</string></property></widget></item>
+                <item row="0" column="3"><widget class="QLabel" name="recentDateLabel"><property name="text"><string>—</string></property></widget></item>
+                <item row="1" column="0"><widget class="QLabel" name="recentCodeLabel_2"><property name="text"><string>—</string></property></widget></item>
+                <item row="1" column="1"><widget class="QLabel" name="recentNameLabel_2"><property name="text"><string>—</string></property></widget></item>
+                <item row="1" column="2"><widget class="QLabel" name="recentQtyLabel_2"><property name="text"><string>—</string></property></widget></item>
+                <item row="1" column="3"><widget class="QLabel" name="recentDateLabel_2"><property name="text"><string>—</string></property></widget></item>
+                <item row="2" column="0"><widget class="QLabel" name="recentCodeLabel_3"><property name="text"><string>—</string></property></widget></item>
+                <item row="2" column="1"><widget class="QLabel" name="recentNameLabel_3"><property name="text"><string>—</string></property></widget></item>
+                <item row="2" column="2"><widget class="QLabel" name="recentQtyLabel_3"><property name="text"><string>—</string></property></widget></item>
+                <item row="2" column="3"><widget class="QLabel" name="recentDateLabel_3"><property name="text"><string>—</string></property></widget></item>
+               </layout>
+              </item>
+             </layout>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item><spacer name="centerRightSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property></spacer></item>
+       </layout>
+      </item>
+      <item>
+       <spacer name="bottomSpacer"><property name="orientation"><enum>Qt::Vertical</enum></property><property name="sizeType"><enum>QSizePolicy::Expanding</enum></property><property name="sizeHint" stdset="0"><size><width>20</width><height>40</height></size></property></spacer>
+      </item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>

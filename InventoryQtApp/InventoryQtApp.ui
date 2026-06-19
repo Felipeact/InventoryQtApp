@@ -1,363 +1,182 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-	<class>InventoryQtAppClass</class>
-	<widget class="QMainWindow" name="InventoryQtAppClass">
-		<property name="geometry">
-			<rect>
-				<x>0</x>
-				<y>0</y>
-				<width>360</width>
-				<height>520</height>
-			</rect>
-		</property>
-		<property name="minimumSize">
-			<size>
-				<width>360</width>
-				<height>520</height>
-			</size>
-		</property>
-		<property name="maximumSize">
-			<size>
-				<width>360</width>
-				<height>520</height>
-			</size>
-		</property>
-		<property name="windowTitle">
-			<string>StockPilot — Sign in</string>
-		</property>
-		<widget class="QWidget" name="centralWidget">
-			<layout class="QVBoxLayout" name="outerVerticalLayout">
-				<property name="spacing">
-					<number>0</number>
-				</property>
-				<property name="leftMargin">
-					<number>0</number>
-				</property>
-				<property name="topMargin">
-					<number>0</number>
-				</property>
-				<property name="rightMargin">
-					<number>0</number>
-				</property>
-				<property name="bottomMargin">
-					<number>0</number>
-				</property>
-				<item>
-					<spacer name="topSpacer">
-						<property name="orientation">
-							<enum>Qt::Orientation::Vertical</enum>
-						</property>
-						<property name="sizeHint" stdset="0">
-							<size>
-								<width>20</width>
-								<height>30</height>
-							</size>
-						</property>
-					</spacer>
-				</item>
-				<item>
-					<layout class="QHBoxLayout" name="centerHorizontalLayout">
-						<item>
-							<spacer name="leftSpacer">
-								<property name="orientation">
-									<enum>Qt::Orientation::Horizontal</enum>
-								</property>
-								<property name="sizeHint" stdset="0">
-									<size>
-										<width>40</width>
-										<height>20</height>
-									</size>
-								</property>
-							</spacer>
-						</item>
-						<item>
-							<widget class="QFrame" name="loginCard">
-								<property name="minimumSize">
-									<size>
-										<width>280</width>
-										<height>430</height>
-									</size>
-								</property>
-								<property name="maximumSize">
-									<size>
-										<width>280</width>
-										<height>430</height>
-									</size>
-								</property>
-								<property name="frameShape">
-									<enum>QFrame::Shape::StyledPanel</enum>
-								</property>
-								<property name="frameShadow">
-									<enum>QFrame::Shadow::Raised</enum>
-								</property>
-								<layout class="QVBoxLayout" name="loginCardLayout">
-									<property name="spacing">
-										<number>12</number>
-									</property>
-									<property name="leftMargin">
-										<number>26</number>
-									</property>
-									<property name="topMargin">
-										<number>28</number>
-									</property>
-									<property name="rightMargin">
-										<number>26</number>
-									</property>
-									<property name="bottomMargin">
-										<number>18</number>
-									</property>
-									<item>
-										<layout class="QVBoxLayout" name="brandLayout">
-											<property name="spacing">
-												<number>5</number>
-											</property>
-											<item>
-												<layout class="QHBoxLayout" name="brandTitleLayout">
-													<property name="spacing">
-														<number>8</number>
-													</property>
-													<item>
-														<spacer name="brandLeftSpacer">
-															<property name="orientation">
-																<enum>Qt::Orientation::Horizontal</enum>
-															</property>
-															<property name="sizeHint" stdset="0">
-																<size>
-																	<width>20</width>
-																	<height>20</height>
-																</size>
-															</property>
-														</spacer>
-													</item>
-													<item>
-														<widget class="QLabel" name="logoLabel">
-															<property name="text">
-																<string/>
-															</property>
-															<property name="alignment">
-																<set>Qt::AlignmentFlag::AlignCenter</set>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<widget class="QLabel" name="titleLabel">
-															<property name="text">
-																<string>StockPilot</string>
-															</property>
-														</widget>
-													</item>
-													<item>
-														<spacer name="brandRightSpacer">
-															<property name="orientation">
-																<enum>Qt::Orientation::Horizontal</enum>
-															</property>
-															<property name="sizeHint" stdset="0">
-																<size>
-																	<width>20</width>
-																	<height>20</height>
-																</size>
-															</property>
-														</spacer>
-													</item>
-												</layout>
-											</item>
-											<item>
-												<widget class="QLabel" name="subtitleLabel">
-													<property name="text">
-														<string>Sign in to your account</string>
-													</property>
-													<property name="alignment">
-														<set>Qt::AlignmentFlag::AlignCenter</set>
-													</property>
-												</widget>
-											</item>
-										</layout>
-									</item>
-									<item>
-										<spacer name="formTopSpacer">
-											<property name="orientation">
-												<enum>Qt::Orientation::Vertical</enum>
-											</property>
-											<property name="sizeHint" stdset="0">
-												<size>
-													<width>20</width>
-													<height>12</height>
-												</size>
-											</property>
-										</spacer>
-									</item>
-									<item>
-										<widget class="QLabel" name="emailLabel">
-											<property name="text">
-												<string>Email</string>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<widget class="QLineEdit" name="emailInput">
-											<property name="minimumSize">
-												<size>
-													<width>0</width>
-													<height>36</height>
-												</size>
-											</property>
-											<property name="placeholderText">
-												<string>Enter your email</string>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<widget class="QLabel" name="passwordLabel">
-											<property name="text">
-												<string>Password</string>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<widget class="QLineEdit" name="passwordInput">
-											<property name="minimumSize">
-												<size>
-													<width>0</width>
-													<height>36</height>
-												</size>
-											</property>
-											<property name="echoMode">
-												<enum>QLineEdit::EchoMode::Password</enum>
-											</property>
-											<property name="placeholderText">
-												<string>Enter your password</string>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<layout class="QHBoxLayout" name="optionsLayout">
-											<property name="spacing">
-												<number>4</number>
-											</property>
-											<item>
-												<widget class="QCheckBox" name="rememberCheck">
-													<property name="text">
-														<string>Remember me</string>
-													</property>
-													<property name="checked">
-														<bool>true</bool>
-													</property>
-												</widget>
-											</item>
-											<item>
-												<spacer name="optionSpacer">
-													<property name="orientation">
-														<enum>Qt::Orientation::Horizontal</enum>
-													</property>
-													<property name="sizeHint" stdset="0">
-														<size>
-															<width>20</width>
-															<height>20</height>
-														</size>
-													</property>
-												</spacer>
-											</item>
-											<item>
-												<widget class="QPushButton" name="forgotPasswordButton">
-													<property name="text">
-														<string>Forgot password?</string>
-													</property>
-													<property name="flat">
-														<bool>true</bool>
-													</property>
-												</widget>
-											</item>
-										</layout>
-									</item>
-									<item>
-										<widget class="QPushButton" name="loginButton">
-											<property name="minimumSize">
-												<size>
-													<width>0</width>
-													<height>40</height>
-												</size>
-											</property>
-											<property name="text">
-												<string>Sign In</string>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<widget class="QLabel" name="statusLabel">
-											<property name="text">
-												<string/>
-											</property>
-											<property name="alignment">
-												<set>Qt::AlignmentFlag::AlignCenter</set>
-											</property>
-										</widget>
-									</item>
-									<item>
-										<spacer name="footerSpacer">
-											<property name="orientation">
-												<enum>Qt::Orientation::Vertical</enum>
-											</property>
-											<property name="sizeHint" stdset="0">
-												<size>
-													<width>20</width>
-													<height>20</height>
-												</size>
-											</property>
-										</spacer>
-									</item>
-									<item>
-										<widget class="QLabel" name="footerLabel">
-											<property name="text">
-												<string>© 2026 StockPilot. All rights reserved.</string>
-											</property>
-											<property name="alignment">
-												<set>Qt::AlignmentFlag::AlignCenter</set>
-											</property>
-										</widget>
-									</item>
-								</layout>
-							</widget>
-						</item>
-						<item>
-							<spacer name="rightSpacer">
-								<property name="orientation">
-									<enum>Qt::Orientation::Horizontal</enum>
-								</property>
-								<property name="sizeHint" stdset="0">
-									<size>
-										<width>40</width>
-										<height>20</height>
-									</size>
-								</property>
-							</spacer>
-						</item>
-					</layout>
-				</item>
-				<item>
-					<spacer name="bottomSpacer">
-						<property name="orientation">
-							<enum>Qt::Orientation::Vertical</enum>
-						</property>
-						<property name="sizeHint" stdset="0">
-							<size>
-								<width>20</width>
-								<height>30</height>
-							</size>
-						</property>
-					</spacer>
-				</item>
-			</layout>
-		</widget>
-	</widget>
-	<tabstops>
-		<tabstop>emailInput</tabstop>
-		<tabstop>passwordInput</tabstop>
-		<tabstop>rememberCheck</tabstop>
-		<tabstop>forgotPasswordButton</tabstop>
-		<tabstop>loginButton</tabstop>
-	</tabstops>
-	<resources>
-		<include location="InventoryQtApp.qrc"/>
-	</resources>
-	<connections/>
+ <class>InventoryQtAppClass</class>
+ <widget class="QMainWindow" name="InventoryQtAppClass">
+  <property name="geometry">
+   <rect><x>0</x><y>0</y><width>360</width><height>520</height></rect>
+  </property>
+  <property name="minimumSize"><size><width>360</width><height>520</height></size></property>
+  <property name="maximumSize"><size><width>360</width><height>520</height></size></property>
+  <property name="windowTitle"><string>StockPilot — Sign in</string></property>
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QVBoxLayout" name="outerVerticalLayout">
+    <property name="spacing"><number>0</number></property>
+    <property name="leftMargin"><number>28</number></property>
+    <property name="topMargin"><number>0</number></property>
+    <property name="rightMargin"><number>28</number></property>
+    <property name="bottomMargin"><number>0</number></property>
+    <item>
+     <spacer name="topSpacer">
+      <property name="orientation"><enum>Qt::Vertical</enum></property>
+      <property name="sizeHint" stdset="0"><size><width>20</width><height>24</height></size></property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QFrame" name="loginCard">
+      <property name="frameShape"><enum>QFrame::StyledPanel</enum></property>
+      <layout class="QVBoxLayout" name="loginCardLayout">
+       <property name="spacing"><number>10</number></property>
+       <property name="leftMargin"><number>4</number></property>
+       <property name="topMargin"><number>0</number></property>
+       <property name="rightMargin"><number>4</number></property>
+       <property name="bottomMargin"><number>0</number></property>
+       <!-- Brand -->
+       <item>
+        <layout class="QHBoxLayout" name="brandTitleLayout">
+         <property name="spacing"><number>8</number></property>
+         <item>
+          <spacer name="brandLeftSpacer">
+           <property name="orientation"><enum>Qt::Horizontal</enum></property>
+           <property name="sizeHint" stdset="0"><size><width>10</width><height>20</height></size></property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QLabel" name="logoLabel">
+           <property name="text"><string>◆</string></property>
+           <property name="alignment"><set>Qt::AlignCenter</set></property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QLabel" name="titleLabel">
+           <property name="text"><string>StockPilot</string></property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="brandRightSpacer">
+           <property name="orientation"><enum>Qt::Horizontal</enum></property>
+           <property name="sizeHint" stdset="0"><size><width>10</width><height>20</height></size></property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <widget class="QLabel" name="subtitleLabel">
+         <property name="text"><string>Sign in to your account</string></property>
+         <property name="alignment"><set>Qt::AlignCenter</set></property>
+        </widget>
+       </item>
+       <item>
+        <spacer name="formTopSpacer">
+         <property name="orientation"><enum>Qt::Vertical</enum></property>
+         <property name="sizeType"><enum>QSizePolicy::Fixed</enum></property>
+         <property name="sizeHint" stdset="0"><size><width>20</width><height>14</height></size></property>
+        </spacer>
+       </item>
+       <!-- Email -->
+       <item>
+        <widget class="QLabel" name="emailLabel">
+         <property name="text"><string>Email</string></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="emailInput">
+         <property name="minimumSize"><size><width>0</width><height>40</height></size></property>
+         <property name="placeholderText"><string>you@company.com</string></property>
+        </widget>
+       </item>
+       <!-- Password -->
+       <item>
+        <widget class="QLabel" name="passwordLabel">
+         <property name="text"><string>Password</string></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLineEdit" name="passwordInput">
+         <property name="minimumSize"><size><width>0</width><height>40</height></size></property>
+         <property name="echoMode"><enum>QLineEdit::Password</enum></property>
+         <property name="placeholderText"><string>Enter your password</string></property>
+        </widget>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="optionsLayout">
+         <property name="spacing"><number>4</number></property>
+         <item>
+          <widget class="QCheckBox" name="rememberCheck">
+           <property name="text"><string>Remember me</string></property>
+           <property name="checked"><bool>true</bool></property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="optionSpacer">
+           <property name="orientation"><enum>Qt::Horizontal</enum></property>
+           <property name="sizeHint" stdset="0"><size><width>20</width><height>20</height></size></property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="QPushButton" name="forgotPasswordButton">
+           <property name="text"><string>Forgot password?</string></property>
+           <property name="flat"><bool>true</bool></property>
+           <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="ctaTopSpacer">
+         <property name="orientation"><enum>Qt::Vertical</enum></property>
+         <property name="sizeType"><enum>QSizePolicy::Fixed</enum></property>
+         <property name="sizeHint" stdset="0"><size><width>20</width><height>6</height></size></property>
+        </spacer>
+       </item>
+       <item>
+        <widget class="QPushButton" name="loginButton">
+         <property name="minimumSize"><size><width>0</width><height>44</height></size></property>
+         <property name="text"><string>Sign In</string></property>
+         <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QLabel" name="statusLabel">
+         <property name="text"><string/></property>
+         <property name="alignment"><set>Qt::AlignCenter</set></property>
+         <property name="wordWrap"><bool>true</bool></property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </item>
+    <item>
+     <spacer name="footerTopSpacer">
+      <property name="orientation"><enum>Qt::Vertical</enum></property>
+      <property name="sizeType"><enum>QSizePolicy::Expanding</enum></property>
+      <property name="sizeHint" stdset="0"><size><width>20</width><height>12</height></size></property>
+     </spacer>
+    </item>
+    <item>
+     <widget class="QLabel" name="footerLabel">
+      <property name="text"><string>© 2026 StockPilot. All rights reserved.</string></property>
+      <property name="alignment"><set>Qt::AlignCenter</set></property>
+     </widget>
+    </item>
+    <item>
+     <spacer name="bottomSpacer">
+      <property name="orientation"><enum>Qt::Vertical</enum></property>
+      <property name="sizeType"><enum>QSizePolicy::Fixed</enum></property>
+      <property name="sizeHint" stdset="0"><size><width>20</width><height>16</height></size></property>
+     </spacer>
+    </item>
+   </layout>
+  </widget>
+ </widget>
+ <tabstops>
+  <tabstop>emailInput</tabstop>
+  <tabstop>passwordInput</tabstop>
+  <tabstop>rememberCheck</tabstop>
+  <tabstop>forgotPasswordButton</tabstop>
+  <tabstop>loginButton</tabstop>
+ </tabstops>
+ <resources>
+  <include location="InventoryQtApp.qrc"/>
+ </resources>
+ <connections/>
 </ui>

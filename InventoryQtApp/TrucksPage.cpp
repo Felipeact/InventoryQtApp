@@ -1,4 +1,5 @@
 #include "TrucksPage.h"
+#include "IconUtil.h"
 #include "Theme.h"
 #include "AddEditTruckDialog.h"
 #include "TruckDetailsDialog.h"
@@ -419,16 +420,19 @@ void TrucksPage::addActionButtons(
         new QPushButton("👁", actionWidget);
 
     viewButton->setObjectName("viewButton");
+    IconUtil::iconifyActionButton(viewButton);
 
     QPushButton* editButton =
         new QPushButton("✎", actionWidget);
 
     editButton->setObjectName("editButton");
+    IconUtil::iconifyActionButton(editButton);
 
     QPushButton* deleteButton =
         new QPushButton("🗑", actionWidget);
 
     deleteButton->setObjectName("deleteButton");
+    IconUtil::iconifyActionButton(deleteButton);
 
     // Edit and deactivate both require MANAGE_TRUCK_STOCK.
     if (!hasPermission("MANAGE_TRUCK_STOCK")) {

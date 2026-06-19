@@ -1,4 +1,5 @@
 #include "StockTemplatesPage.h"
+#include "IconUtil.h"
 #include "Theme.h"
 #include "AddEditTemplateDialog.h"
 
@@ -317,16 +318,19 @@ void StockTemplatesPage::addActionButtons(
         new QPushButton("👁", actionWidget);
 
     viewButton->setObjectName("viewButton");
+    IconUtil::iconifyActionButton(viewButton);
 
     QPushButton* editButton =
         new QPushButton("✎", actionWidget);
 
     editButton->setObjectName("editButton");
+    IconUtil::iconifyActionButton(editButton);
 
     QPushButton* deleteButton =
         new QPushButton("🗑", actionWidget);
 
     deleteButton->setObjectName("deleteButton");
+    IconUtil::iconifyActionButton(deleteButton);
 
     layout->addWidget(viewButton);
     layout->addWidget(editButton);

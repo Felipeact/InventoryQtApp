@@ -1,4 +1,5 @@
 #include "AddEditTemplateDialog.h"
+#include "IconUtil.h"
 #include "AddEditTemplateItemDialog.h"
 
 #include <QAbstractItemView>
@@ -338,6 +339,7 @@ void AddEditTemplateDialog::addItemActionButtons(
         new QPushButton("✎", actionWidget);
 
     editButton->setObjectName("editButton");
+    IconUtil::iconifyActionButton(editButton);
     editButton->setFixedSize(28, 28);
     editButton->setToolTip("Edit");
 
@@ -345,6 +347,7 @@ void AddEditTemplateDialog::addItemActionButtons(
         new QPushButton("🗑", actionWidget);
 
     deleteButton->setObjectName("deleteButton");
+    IconUtil::iconifyActionButton(deleteButton);
     deleteButton->setFixedSize(28, 28);
     deleteButton->setToolTip("Delete");
 

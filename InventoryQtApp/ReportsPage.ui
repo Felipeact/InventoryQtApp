@@ -1,212 +1,91 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-    <class>ReportsPageClass</class>
-
-    <widget class="QWidget" name="ReportsPageClass">
-        <property name="geometry">
-            <rect>
-                <x>0</x>
-                <y>0</y>
-                <width>1280</width>
-                <height>820</height>
-            </rect>
-        </property>
-
-        <property name="windowTitle">
-            <string>Reports</string>
-        </property>
-
-        <property name="styleSheet">
-            <string notr="true"/>
-        </property>
-
-        <layout class="QVBoxLayout" name="rootLayout">
-            <property name="leftMargin">
-                <number>14</number>
-            </property>
-            <property name="topMargin">
-                <number>14</number>
-            </property>
-            <property name="rightMargin">
-                <number>14</number>
-            </property>
-            <property name="bottomMargin">
-                <number>14</number>
-            </property>
-            <property name="spacing">
-                <number>12</number>
-            </property>
-
-            <item>
-                <widget class="QWidget" name="pageContainer" native="true">
-                    <layout class="QVBoxLayout" name="pageLayout">
-                        <property name="spacing">
-                            <number>12</number>
-                        </property>
-
-                        <item>
-                            <layout class="QVBoxLayout" name="titleLayout">
-                                <item>
-                                    <widget class="QLabel" name="pageTitle">
-                                        <property name="text">
-                                            <string>Reports</string>
-                                        </property>
-                                        <property name="styleSheet">
-                                            <string notr="true">font-size: 18pt; font-weight: bold;</string>
-                                        </property>
-                                    </widget>
-                                </item>
-                            </layout>
-                        </item>
-
-                        <item>
-                            <layout class="QHBoxLayout" name="controlLayout">
-                                <property name="spacing">
-                                    <number>10</number>
-                                </property>
-
-                                <item>
-                                    <widget class="QPushButton" name="inventorySummaryBtn">
-                                        <property name="text">
-                                            <string>Inventory Summary</string>
-                                        </property>
-                                    </widget>
-                                </item>
-
-                                <item>
-                                    <widget class="QPushButton" name="assetsSummaryBtn">
-                                        <property name="text">
-                                            <string>Assets Summary</string>
-                                        </property>
-                                    </widget>
-                                </item>
-
-								<item>
-									<widget class="QPushButton" name="truckSummaryBtn">
-										<property name="text">
-											<string>Truck Summary</string>
-										</property>
-									</widget>
-								</item>
-
-								<item>
-									<widget class="QPushButton" name="templatesSummaryBtn">
-										<property name="text">
-											<string>Templates</string>
-										</property>
-									</widget>
-								</item>
-
-								<item>
-									<widget class="QPushButton" name="assignmentsSummaryBtn">
-										<property name="text">
-											<string>Assignments</string>
-										</property>
-									</widget>
-								</item>
-
-								<item>
-									<widget class="QPushButton" name="receiptsSummaryBtn">
-										<property name="text">
-											<string>Receipts</string>
-										</property>
-									</widget>
-								</item>
-
-								<item>
-									<widget class="QPushButton" name="lowStockSummaryBtn">
-										<property name="text">
-											<string>Low Stock</string>
-										</property>
-									</widget>
-								</item>
-
-								<item>
-									<widget class="QPushButton" name="technicianStockSummaryBtn">
-										<property name="text">
-											<string>Technician Stock</string>
-										</property>
-									</widget>
-								</item>
-
-                                <item>
-                                    <spacer name="horizontalSpacer">
-                                        <property name="orientation">
-                                            <enum>Qt::Horizontal</enum>
-                                        </property>
-                                        <property name="sizeHint" stdset="0">
-                                            <size>
-                                                <width>40</width>
-                                                <height>20</height>
-                                            </size>
-                                        </property>
-                                    </spacer>
-                                </item>
-
-                                <item>
-                                    <widget class="QPushButton" name="exportPdfBtn">
-                                        <property name="text">
-                                            <string>Export PDF</string>
-                                        </property>
-                                    </widget>
-                                </item>
-
-                                <item>
-                                    <widget class="QPushButton" name="exportExcelBtn">
-                                        <property name="text">
-                                            <string>Export Excel</string>
-                                        </property>
-                                    </widget>
-                                </item>
-
-                                <item>
-                                    <widget class="QPushButton" name="exportCsvBtn">
-                                        <property name="text">
-                                            <string>Export CSV</string>
-                                        </property>
-                                    </widget>
-                                </item>
-
-                                <item>
-                                    <widget class="QPushButton" name="refreshBtn">
-                                        <property name="text">
-                                            <string>Refresh</string>
-                                        </property>
-                                    </widget>
-                                </item>
-                            </layout>
-                        </item>
-
-                        <item>
-                            <widget class="QTableWidget" name="reportTable">
-                                <property name="columnCount">
-                                    <number>4</number>
-                                </property>
-                                <column>
-                                    <property name="text">
-                                        <string>Item</string>
-                                    </property>
-                                </column>
-                                <column>
-                                    <property name="text">
-                                        <string>Value</string>
-                                    </property>
-                                </column>
-                                <column>
-                                    <property name="text">
-                                        <string>Status</string>
-                                    </property>
-                                </column>
-                                <column>
-                                    <property name="text">
-                                        <string>Details</string>
-                                    </property>
-                                </column>
-                            </widget>
-                        </item>
-                    </layout>
-                </widget>
-            </item>
+ <class>ReportsPageClass</class>
+ <widget class="QWidget" name="ReportsPageClass">
+  <property name="geometry">
+   <rect><x>0</x><y>0</y><width>1280</width><height>820</height></rect>
+  </property>
+  <property name="windowTitle"><string>Reports</string></property>
+  <layout class="QVBoxLayout" name="rootLayout">
+   <property name="leftMargin"><number>24</number></property>
+   <property name="topMargin"><number>22</number></property>
+   <property name="rightMargin"><number>24</number></property>
+   <property name="bottomMargin"><number>22</number></property>
+   <property name="spacing"><number>16</number></property>
+   <item>
+    <widget class="QWidget" name="pageContainer" native="true">
+     <layout class="QVBoxLayout" name="pageLayout">
+      <property name="leftMargin"><number>0</number></property>
+      <property name="topMargin"><number>0</number></property>
+      <property name="rightMargin"><number>0</number></property>
+      <property name="bottomMargin"><number>0</number></property>
+      <property name="spacing"><number>16</number></property>
+      <item>
+       <layout class="QVBoxLayout" name="titleLayout">
+        <property name="spacing"><number>2</number></property>
+        <item><widget class="QLabel" name="pageTitle"><property name="text"><string>Reports</string></property></widget></item>
+        <item><widget class="QLabel" name="breadcrumbLabel"><property name="text"><string>Insights  ›  Reports</string></property></widget></item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QWidget" name="reportTypeCard" native="true">
+        <layout class="QVBoxLayout" name="reportTypeLayout">
+         <property name="leftMargin"><number>18</number></property>
+         <property name="topMargin"><number>16</number></property>
+         <property name="rightMargin"><number>18</number></property>
+         <property name="bottomMargin"><number>16</number></property>
+         <property name="spacing"><number>12</number></property>
+         <item><widget class="QLabel" name="reportTypeLabel"><property name="text"><string>Choose a report</string></property></widget></item>
+         <item>
+          <layout class="QGridLayout" name="summaryGrid">
+           <property name="horizontalSpacing"><number>10</number></property>
+           <property name="verticalSpacing"><number>10</number></property>
+           <item row="0" column="0"><widget class="QPushButton" name="inventorySummaryBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="checkable"><bool>true</bool></property><property name="checked"><bool>true</bool></property><property name="autoExclusive"><bool>true</bool></property><property name="text"><string>Inventory Summary</string></property></widget></item>
+           <item row="0" column="1"><widget class="QPushButton" name="assetsSummaryBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="checkable"><bool>true</bool></property><property name="autoExclusive"><bool>true</bool></property><property name="text"><string>Assets Summary</string></property></widget></item>
+           <item row="0" column="2"><widget class="QPushButton" name="truckSummaryBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="checkable"><bool>true</bool></property><property name="autoExclusive"><bool>true</bool></property><property name="text"><string>Truck Summary</string></property></widget></item>
+           <item row="0" column="3"><widget class="QPushButton" name="templatesSummaryBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="checkable"><bool>true</bool></property><property name="autoExclusive"><bool>true</bool></property><property name="text"><string>Templates</string></property></widget></item>
+           <item row="1" column="0"><widget class="QPushButton" name="assignmentsSummaryBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="checkable"><bool>true</bool></property><property name="autoExclusive"><bool>true</bool></property><property name="text"><string>Assignments</string></property></widget></item>
+           <item row="1" column="1"><widget class="QPushButton" name="receiptsSummaryBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="checkable"><bool>true</bool></property><property name="autoExclusive"><bool>true</bool></property><property name="text"><string>Receipts</string></property></widget></item>
+           <item row="1" column="2"><widget class="QPushButton" name="lowStockSummaryBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="checkable"><bool>true</bool></property><property name="autoExclusive"><bool>true</bool></property><property name="text"><string>Low Stock</string></property></widget></item>
+           <item row="1" column="3"><widget class="QPushButton" name="technicianStockSummaryBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="checkable"><bool>true</bool></property><property name="autoExclusive"><bool>true</bool></property><property name="text"><string>Technician Stock</string></property></widget></item>
+          </layout>
+         </item>
         </layout>
+       </widget>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="exportRow">
+        <property name="spacing"><number>10</number></property>
+        <item><widget class="QLabel" name="exportHintLabel"><property name="text"><string>Export the current report</string></property></widget></item>
+        <item><spacer name="exportSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property></spacer></item>
+        <item><widget class="QPushButton" name="refreshBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="text"><string>Refresh</string></property></widget></item>
+        <item><widget class="QPushButton" name="exportCsvBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="text"><string>Export CSV</string></property></widget></item>
+        <item><widget class="QPushButton" name="exportExcelBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="text"><string>Export Excel</string></property></widget></item>
+        <item><widget class="QPushButton" name="exportPdfBtn"><property name="minimumSize"><size><width>0</width><height>40</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="text"><string>Export PDF</string></property><property name="variant" stdset="0"><string>primary</string></property></widget></item>
+       </layout>
+      </item>
+      <item>
+       <widget class="QTableWidget" name="reportTable">
+        <property name="frameShape"><enum>QFrame::NoFrame</enum></property>
+        <property name="editTriggers"><set>QAbstractItemView::NoEditTriggers</set></property>
+        <property name="alternatingRowColors"><bool>true</bool></property>
+        <property name="selectionBehavior"><enum>QAbstractItemView::SelectRows</enum></property>
+        <property name="showGrid"><bool>false</bool></property>
+        <property name="columnCount"><number>4</number></property>
+        <attribute name="horizontalHeaderStretchLastSection"><bool>true</bool></attribute>
+        <attribute name="horizontalHeaderHighlightSections"><bool>false</bool></attribute>
+        <attribute name="verticalHeaderVisible"><bool>false</bool></attribute>
+        <column><property name="text"><string>Item</string></property></column>
+        <column><property name="text"><string>Value</string></property></column>
+        <column><property name="text"><string>Status</string></property></column>
+        <column><property name="text"><string>Details</string></property></column>
+       </widget>
+      </item>
+     </layout>
     </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>

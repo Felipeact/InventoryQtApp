@@ -8,6 +8,7 @@
 #include <QPainter>
 #include <QPixmap>
 #include <QPushButton>
+#include <QRectF>
 #include <QSize>
 #include <QSvgRenderer>
 
@@ -42,7 +43,7 @@ QIcon makeNavIcon(const QString& body, const QColor& color)
 
     QSvgRenderer renderer(svg.toUtf8());
 
-    const int side = 20;
+    const int side = 18;
     const qreal dpr = 2.0;
     QPixmap pm(int(side * dpr), int(side * dpr));
     pm.setDevicePixelRatio(dpr);
@@ -50,7 +51,10 @@ QIcon makeNavIcon(const QString& body, const QColor& color)
 
     QPainter painter(&pm);
     painter.setRenderHint(QPainter::Antialiasing, true);
-    renderer.render(&painter);
+    // Render into an explicit logical rect (0,0,side,side) so the 24x24 viewBox
+    // scales to fit exactly. Without the rect, render() uses the device-pixel
+    // viewport as logical coordinates and draws the icon at 2x, clipped.
+    renderer.render(&painter, QRectF(0, 0, side, side));
     painter.end();
 
     return QIcon(pm);
@@ -324,13 +328,16 @@ void SidebarWidget::applyTheme(Theme::AppTheme theme)
         Theme::sidebarStyle(theme)
     );
 
-    // Recolour the nav icons for the active theme. One slate tone per theme
-    // stays legible on both the normal background and the indigo selected state.
+    // Recolour the nav icons per theme: a dark slate on the light sidebar, a
+    // light slate on the dark sidebar, so they stay legible in both the normal
+    // and the amber-accented active (selected) state.
     const QColor iconColor = (theme == Theme::AppTheme::Light)
-        ? QColor("#475569")
+        ? QColor("#52647A")
         : QColor("#C7D2E4");
-    const QColor logoutColor("#DC2626");
-    const QSize iconSize(20, 20);
+    const QColor logoutColor = (theme == Theme::AppTheme::Light)
+        ? QColor("#D7263D")
+        : QColor("#F2566A");
+    const QSize iconSize(18, 18);
 
     auto apply = [&](QPushButton* button, const QString& body,
                      const QString& label, const QColor& color) {

@@ -1,4 +1,5 @@
 #include "ReceiptsPage.h"
+#include "IconUtil.h"
 #include "Theme.h"
 #include "UploadReceiptDialog.h"
 #include "ReceiptDetailsDialog.h"
@@ -393,6 +394,7 @@ void ReceiptsPage::addActionButtons(
         new QPushButton("👁", actionWidget);
 
     viewButton->setObjectName("viewButton");
+    IconUtil::iconifyActionButton(viewButton);
 
     QPushButton* approveButton =
         new QPushButton("✓", actionWidget);

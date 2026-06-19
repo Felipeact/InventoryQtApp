@@ -1,317 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
-	<class>ItemDetailsDialogClass</class>
-
-	<widget class="QDialog" name="ItemDetailsDialogClass">
-		<property name="geometry">
-			<rect>
-				<x>0</x>
-				<y>0</y>
-				<width>760</width>
-				<height>560</height>
-			</rect>
-		</property>
-
-		<property name="windowTitle">
-			<string>Item Details</string>
-		</property>
-
-		<layout class="QVBoxLayout" name="rootLayout">
-			<property name="leftMargin">
-				<number>0</number>
-			</property>
-			<property name="topMargin">
-				<number>0</number>
-			</property>
-			<property name="rightMargin">
-				<number>0</number>
-			</property>
-			<property name="bottomMargin">
-				<number>0</number>
-			</property>
-
-			<item>
-				<widget class="QWidget" name="dialogCard" native="true">
-					<layout class="QVBoxLayout" name="dialogCardLayout">
-						<property name="spacing">
-							<number>0</number>
-						</property>
-						<property name="leftMargin">
-							<number>0</number>
-						</property>
-						<property name="topMargin">
-							<number>0</number>
-						</property>
-						<property name="rightMargin">
-							<number>0</number>
-						</property>
-						<property name="bottomMargin">
-							<number>0</number>
-						</property>
-
-						<item>
-							<widget class="QWidget" name="headerContainer" native="true">
-								<property name="minimumSize">
-									<size>
-										<width>0</width>
-										<height>50</height>
-									</size>
-								</property>
-
-								<layout class="QHBoxLayout" name="headerLayout">
-									<property name="leftMargin">
-										<number>24</number>
-									</property>
-									<property name="rightMargin">
-										<number>18</number>
-									</property>
-
-									<item>
-										<widget class="QLabel" name="titleLabel">
-											<property name="text">
-												<string>Item Details</string>
-											</property>
-										</widget>
-									</item>
-
-									<item>
-										<spacer name="headerSpacer">
-											<property name="orientation">
-												<enum>Qt::Horizontal</enum>
-											</property>
-										</spacer>
-									</item>
-
-									<item>
-										<widget class="QPushButton" name="closeButton">
-											<property name="maximumSize">
-												<size>
-													<width>28</width>
-													<height>28</height>
-												</size>
-											</property>
-											<property name="text">
-												<string>×</string>
-											</property>
-										</widget>
-									</item>
-								</layout>
-							</widget>
-						</item>
-
-						<item>
-							<widget class="QWidget" name="contentContainer" native="true">
-								<layout class="QVBoxLayout" name="contentLayout">
-									<property name="leftMargin">
-										<number>28</number>
-									</property>
-									<property name="topMargin">
-										<number>22</number>
-									</property>
-									<property name="rightMargin">
-										<number>28</number>
-									</property>
-									<property name="bottomMargin">
-										<number>14</number>
-									</property>
-									<property name="spacing">
-										<number>14</number>
-									</property>
-
-									<item>
-										<layout class="QGridLayout" name="detailsGrid">
-											<property name="horizontalSpacing">
-												<number>24</number>
-											</property>
-											<property name="verticalSpacing">
-												<number>8</number>
-											</property>
-
-											<item row="0" column="0">
-												<widget class="QLabel" name="nameLabel">
-													<property name="text">
-														<string>Name</string>
-													</property>
-												</widget>
-											</item>
-											<item row="0" column="1">
-												<widget class="QLabel" name="barcodeLabel">
-													<property name="text">
-														<string>Barcode</string>
-													</property>
-												</widget>
-											</item>
-											<item row="0" column="2">
-												<widget class="QLabel" name="quantityLabel">
-													<property name="text">
-														<string>Quantity</string>
-													</property>
-												</widget>
-											</item>
-
-											<item row="1" column="0">
-												<widget class="QLabel" name="nameValue">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="1" column="1">
-												<widget class="QLabel" name="barcodeValue">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="1" column="2">
-												<widget class="QLabel" name="quantityValue">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-
-											<item row="2" column="0">
-												<widget class="QLabel" name="locationLabel">
-													<property name="text">
-														<string>Store</string>
-													</property>
-												</widget>
-											</item>
-											<item row="2" column="1">
-												<widget class="QLabel" name="typeLabel">
-													<property name="text">
-														<string>Type</string>
-													</property>
-												</widget>
-											</item>
-											<item row="2" column="2">
-												<widget class="QLabel" name="projectLabel">
-													<property name="text">
-														<string>Project</string>
-													</property>
-												</widget>
-											</item>
-
-											<item row="3" column="0">
-												<widget class="QLabel" name="locationValue">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="3" column="1">
-												<widget class="QLabel" name="typeValue">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-											<item row="3" column="2">
-												<widget class="QLabel" name="projectValue">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-
-											<item row="4" column="0">
-												<widget class="QLabel" name="statusLabel">
-													<property name="text">
-														<string>Status</string>
-													</property>
-												</widget>
-											</item>
-
-											<item row="5" column="0">
-												<widget class="QLabel" name="statusValue">
-													<property name="text">
-														<string>-</string>
-													</property>
-												</widget>
-											</item>
-
-											<item row="6" column="0" colspan="3">
-												<widget class="QLabel" name="imagePathLabel">
-													<property name="text">
-														<string>Image Path / URL</string>
-													</property>
-												</widget>
-											</item>
-
-											<item row="7" column="0" colspan="3">
-												<widget class="QLabel" name="imagePathValue">
-													<property name="text">
-														<string>-</string>
-													</property>
-													<property name="wordWrap">
-														<bool>true</bool>
-													</property>
-												</widget>
-											</item>
-										</layout>
-									</item>
-
-									<item>
-										<widget class="QLabel" name="imagePreviewLabel">
-											<property name="minimumSize">
-												<size>
-													<width>0</width>
-													<height>220</height>
-												</size>
-											</property>
-											<property name="text">
-												<string>No image available.</string>
-											</property>
-											<property name="alignment">
-												<set>Qt::AlignCenter</set>
-											</property>
-											<property name="wordWrap">
-												<bool>true</bool>
-											</property>
-										</widget>
-									</item>
-								</layout>
-							</widget>
-						</item>
-
-						<item>
-							<widget class="QWidget" name="footerContainer" native="true">
-								<layout class="QHBoxLayout" name="footerLayout">
-									<property name="leftMargin">
-										<number>28</number>
-									</property>
-									<property name="rightMargin">
-										<number>28</number>
-									</property>
-									<property name="bottomMargin">
-										<number>22</number>
-									</property>
-
-									<item>
-										<spacer name="footerSpacer">
-											<property name="orientation">
-												<enum>Qt::Horizontal</enum>
-											</property>
-										</spacer>
-									</item>
-
-									<item>
-										<widget class="QPushButton" name="closeBottomButton">
-											<property name="text">
-												<string>Close</string>
-											</property>
-										</widget>
-									</item>
-								</layout>
-							</widget>
-						</item>
-					</layout>
-				</widget>
-			</item>
-		</layout>
-	</widget>
-
-	<resources/>
-	<connections/>
+ <class>ItemDetailsDialogClass</class>
+ <widget class="QDialog" name="ItemDetailsDialogClass">
+  <property name="geometry"><rect><x>0</x><y>0</y><width>600</width><height>620</height></rect></property>
+  <property name="minimumSize"><size><width>600</width><height>620</height></size></property>
+  <property name="windowTitle"><string>Item Details</string></property>
+  <layout class="QVBoxLayout" name="rootLayout">
+   <property name="leftMargin"><number>0</number></property><property name="topMargin"><number>0</number></property>
+   <property name="rightMargin"><number>0</number></property><property name="bottomMargin"><number>0</number></property>
+   <property name="spacing"><number>0</number></property>
+   <item>
+    <widget class="QWidget" name="dialogCard" native="true">
+     <layout class="QVBoxLayout" name="dialogCardLayout">
+      <property name="leftMargin"><number>0</number></property><property name="topMargin"><number>0</number></property>
+      <property name="rightMargin"><number>0</number></property><property name="bottomMargin"><number>0</number></property>
+      <property name="spacing"><number>0</number></property>
+      <item>
+       <widget class="QWidget" name="headerContainer" native="true">
+        <layout class="QHBoxLayout" name="headerLayout">
+         <property name="leftMargin"><number>24</number></property><property name="topMargin"><number>0</number></property>
+         <property name="rightMargin"><number>14</number></property><property name="bottomMargin"><number>0</number></property>
+         <item><widget class="QLabel" name="titleLabel"><property name="text"><string>Item Details</string></property></widget></item>
+         <item><spacer name="headerSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property></spacer></item>
+         <item><widget class="QPushButton" name="closeButton"><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="text"><string>X</string></property></widget></item>
+        </layout>
+       </widget>
+      </item>
+      <item>
+       <widget class="QWidget" name="formContainer" native="true">
+        <layout class="QVBoxLayout" name="formLayout">
+         <property name="leftMargin"><number>24</number></property><property name="topMargin"><number>22</number></property>
+         <property name="rightMargin"><number>24</number></property><property name="bottomMargin"><number>12</number></property>
+         <property name="spacing"><number>14</number></property>
+         <item><layout class="QHBoxLayout" name="imageRow"><item><spacer name="imgL"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item><item><widget class="QLabel" name="imagePreviewLabel"><property name="minimumSize"><size><width>120</width><height>120</height></size></property><property name="maximumSize"><size><width>120</width><height>120</height></size></property><property name="alignment"><set>Qt::AlignCenter</set></property><property name="text"><string>No image</string></property></widget></item><item><spacer name="imgR"><property name="orientation"><enum>Qt::Horizontal</enum></property></spacer></item></layout></item><item><layout class="QHBoxLayout" name="row_nameValue"><property name="spacing"><number>12</number></property><item><widget class="QLabel" name="nameValueCap"><property name="minimumSize"><size><width>140</width><height>0</height></size></property><property name="maximumSize"><size><width>140</width><height>16777215</height></size></property><property name="text"><string>Name</string></property></widget></item><item><widget class="QLabel" name="nameValue"><property name="text"><string>-</string></property></widget></item></layout></item><item><layout class="QHBoxLayout" name="row_barcodeValue"><property name="spacing"><number>12</number></property><item><widget class="QLabel" name="barcodeValueCap"><property name="minimumSize"><size><width>140</width><height>0</height></size></property><property name="maximumSize"><size><width>140</width><height>16777215</height></size></property><property name="text"><string>Barcode</string></property></widget></item><item><widget class="QLabel" name="barcodeValue"><property name="text"><string>-</string></property></widget></item></layout></item><item><layout class="QHBoxLayout" name="row_typeValue"><property name="spacing"><number>12</number></property><item><widget class="QLabel" name="typeValueCap"><property name="minimumSize"><size><width>140</width><height>0</height></size></property><property name="maximumSize"><size><width>140</width><height>16777215</height></size></property><property name="text"><string>Type</string></property></widget></item><item><widget class="QLabel" name="typeValue"><property name="text"><string>-</string></property></widget></item></layout></item><item><layout class="QHBoxLayout" name="row_quantityValue"><property name="spacing"><number>12</number></property><item><widget class="QLabel" name="quantityValueCap"><property name="minimumSize"><size><width>140</width><height>0</height></size></property><property name="maximumSize"><size><width>140</width><height>16777215</height></size></property><property name="text"><string>Quantity</string></property></widget></item><item><widget class="QLabel" name="quantityValue"><property name="text"><string>-</string></property></widget></item></layout></item><item><layout class="QHBoxLayout" name="row_locationValue"><property name="spacing"><number>12</number></property><item><widget class="QLabel" name="locationValueCap"><property name="minimumSize"><size><width>140</width><height>0</height></size></property><property name="maximumSize"><size><width>140</width><height>16777215</height></size></property><property name="text"><string>Location</string></property></widget></item><item><widget class="QLabel" name="locationValue"><property name="text"><string>-</string></property></widget></item></layout></item><item><layout class="QHBoxLayout" name="row_projectValue"><property name="spacing"><number>12</number></property><item><widget class="QLabel" name="projectValueCap"><property name="minimumSize"><size><width>140</width><height>0</height></size></property><property name="maximumSize"><size><width>140</width><height>16777215</height></size></property><property name="text"><string>Project</string></property></widget></item><item><widget class="QLabel" name="projectValue"><property name="text"><string>-</string></property></widget></item></layout></item><item><layout class="QHBoxLayout" name="row_statusValue"><property name="spacing"><number>12</number></property><item><widget class="QLabel" name="statusValueCap"><property name="minimumSize"><size><width>140</width><height>0</height></size></property><property name="maximumSize"><size><width>140</width><height>16777215</height></size></property><property name="text"><string>Status</string></property></widget></item><item><widget class="QLabel" name="statusValue"><property name="text"><string>-</string></property></widget></item></layout></item><item><layout class="QHBoxLayout" name="row_imagePathValue"><property name="spacing"><number>12</number></property><item><widget class="QLabel" name="imagePathValueCap"><property name="minimumSize"><size><width>140</width><height>0</height></size></property><property name="maximumSize"><size><width>140</width><height>16777215</height></size></property><property name="text"><string>Image Path</string></property></widget></item><item><widget class="QLabel" name="imagePathValue"><property name="text"><string>-</string></property></widget></item></layout></item>
+        </layout>
+       </widget>
+      </item>
+      <item><widget class="QWidget" name="footerContainer" native="true"><layout class="QHBoxLayout" name="footerLayout"><property name="leftMargin"><number>24</number></property><property name="topMargin"><number>14</number></property><property name="rightMargin"><number>24</number></property><property name="bottomMargin"><number>22</number></property><property name="spacing"><number>10</number></property><item><spacer name="footerSpacer"><property name="orientation"><enum>Qt::Horizontal</enum></property><property name="sizeHint" stdset="0"><size><width>40</width><height>20</height></size></property></spacer></item><item><widget class="QPushButton" name="closeBottomButton"><property name="minimumSize"><size><width>110</width><height>36</height></size></property><property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property><property name="text"><string>Close</string></property><property name="variant" stdset="0"><string>primary</string></property></widget></item></layout></widget></item>
+     </layout>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
 </ui>
