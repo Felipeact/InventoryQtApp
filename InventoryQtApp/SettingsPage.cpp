@@ -22,6 +22,10 @@ SettingsPage::SettingsPage(
 {
     ui.setupUi(this);
 
+    // The backend API endpoint is an internal configuration detail. Users must not
+    // see or change it, so keep the API Connection card out of the Settings UI.
+    ui.apiCard->hide();
+
     setUserInfo(
         role,
         userName

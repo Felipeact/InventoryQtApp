@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../config/app_config.dart';
 import '../../config/routes.dart';
 import '../../config/theme.dart';
 import '../../models/user.dart';
 import '../../providers/auth_provider.dart';
-import '../../widgets/primary_button.dart';
-import '../home_shell.dart';
 
-/// Settings: configure the API base URL, view the current profile/role, change
-/// password, and sign out.
+/// Settings: view the current profile/role, change password, and sign out.
+///
+/// The backend API endpoint is an internal configuration detail and is
+/// intentionally not surfaced here — end users neither see nor change it.
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
@@ -19,50 +18,6 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class _SettingsScreenState extends State<SettingsScreen> {
-  late final TextEditingController _urlController;
-  bool _savingUrl = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _urlController =
-        TextEditingController(text: AppConfig.instance.baseUrl);
-  }
-
-  @override
-  void dispose() {
-    _urlController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _saveUrl() async {
-    final String value = _urlController.text.trim();
-    if (value.isEmpty) {
-      showErrorSnack(context, 'API URL cannot be empty.');
-      return;
-    }
-    final Uri? uri = Uri.tryParse(value);
-    if (uri == null || !uri.hasScheme || !(uri.isScheme('http') || uri.isScheme('https'))) {
-      showErrorSnack(context, 'Enter a valid http(s) URL.');
-      return;
-    }
-    setState(() => _savingUrl = true);
-    await AppConfig.instance.setBaseUrl(value);
-    if (!mounted) return;
-    setState(() {
-      _savingUrl = false;
-      _urlController.text = AppConfig.instance.baseUrl;
-    });
-    showSuccessSnack(context, 'API URL updated.');
-  }
-
-  Future<void> _resetUrl() async {
-    await AppConfig.instance.resetBaseUrl();
-    if (!mounted) return;
-    setState(() => _urlController.text = AppConfig.instance.baseUrl);
-    showSuccessSnack(context, 'Reset to default API URL.');
-  }
-
   Future<void> _logout() async {
     final bool? ok = await showDialog<bool>(
       context: context,
@@ -105,65 +60,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
         padding: const EdgeInsets.all(16),
         children: <Widget>[
           if (user != null) _ProfileCard(user: user, role: auth.roleName),
-          const SizedBox(height: 20),
-          const _SectionTitle('Server configuration'),
-          const SizedBox(height: 8),
-          Card(
-            child: Padding(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  const Text(
-                    'API base URL',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: AppTheme.slate700,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  TextField(
-                    controller: _urlController,
-                    keyboardType: TextInputType.url,
-                    autocorrect: false,
-                    decoration: const InputDecoration(
-                      prefixIcon: Icon(Icons.link),
-                      hintText: 'https://api.example.com',
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  const Text(
-                    'Default: ${AppConfig.defaultBaseUrl}',
-                    style: TextStyle(
-                      fontSize: 11,
-                      color: AppTheme.slate400,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Row(
-                    children: <Widget>[
-                      Expanded(
-                        child: PrimaryButton(
-                          label: 'Save',
-                          icon: Icons.save_outlined,
-                          loading: _savingUrl,
-                          onPressed: _saveUrl,
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: OutlinedButton.icon(
-                          onPressed: _resetUrl,
-                          icon: const Icon(Icons.restore),
-                          label: const Text('Reset'),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
           const SizedBox(height: 20),
           if (user != null) ...<Widget>[
             const _SectionTitle('Account'),

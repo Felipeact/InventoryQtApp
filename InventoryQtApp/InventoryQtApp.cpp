@@ -199,8 +199,8 @@ void InventoryQtApp::onLoginFinished(
                 "Unable to connect to the server.\n\n"
                 "Please check:\n"
                 "1. Your internet connection\n"
-                "2. The API server address in settings\n"
-                "3. Firewall/network restrictions");
+                "2. Firewall/network restrictions\n\n"
+                "If the problem persists, contact your administrator.");
         }
         return;
     }

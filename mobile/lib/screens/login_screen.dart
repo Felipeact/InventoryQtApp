@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../config/app_config.dart';
 import '../config/routes.dart';
 import '../config/theme.dart';
 import '../providers/auth_provider.dart';
@@ -292,16 +291,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     ],
                   ),
                   const SizedBox(height: 8),
-                  Center(
-                    child: Text(
-                      'API: ${AppConfig.instance.baseUrl}',
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 11,
-                        color: AppTheme.slate400,
-                      ),
-                    ),
-                  ),
                   TextButton.icon(
                     onPressed: () =>
                         Navigator.of(context).pushNamed(AppRoutes.settings),
