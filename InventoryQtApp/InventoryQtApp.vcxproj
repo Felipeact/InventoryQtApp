@@ -123,6 +123,8 @@
     <ClCompile Include="ReceiptsPage.cpp" />
     <ClCompile Include="ReportService.cpp" />
     <ClCompile Include="ReportsPage.cpp" />
+    <ClCompile Include="AiService.cpp" />
+    <ClCompile Include="AiAssistantPage.cpp" />
     <ClCompile Include="ScanPage.cpp" />
     <ClCompile Include="SettingsPage.cpp" />
     <ClCompile Include="SidebarWidget.cpp" />
@@ -190,6 +192,7 @@
     <ClInclude Include="ErrorHandler.h" />
     <ClInclude Include="FleetPage.h" />
     <QtMoc Include="ReportsPage.h" />
+    <QtMoc Include="AiAssistantPage.h" />
     <ClInclude Include="ExportUtility.h" />
     <QtMoc Include="NotificationDialog.h" />
     <QtMoc Include="GlobalSearchDialog.h" />
@@ -225,6 +228,7 @@
     <ClInclude Include="ProductService.h" />
     <QtMoc Include="SidebarWidget.h" />
     <ClInclude Include="ReportService.h" />
+    <ClInclude Include="AiService.h" />
     <QtMoc Include="ScanPage.h" />
     <QtMoc Include="StockTemplatesPage.h" />
     <ClInclude Include="Theme.h" />

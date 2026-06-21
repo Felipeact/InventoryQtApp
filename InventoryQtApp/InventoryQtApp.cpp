@@ -246,7 +246,8 @@ void InventoryQtApp::openDashboard(
         assetService,
         userService,
         reportService,
-        truckStockService
+        truckStockService,
+        aiService
     );
 
     connect(dashboardWindow, &DashboardWindow::logoutRequested, this, &InventoryQtApp::handleLogout);

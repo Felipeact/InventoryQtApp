@@ -16,6 +16,7 @@ DashboardWindow::DashboardWindow(
     UserService& userService,
     ReportService& reportService,
     TruckStockService& truckStockService,
+    AiService& aiService,
     QWidget* parent
 )
     : QMainWindow(parent),
@@ -26,7 +27,8 @@ DashboardWindow::DashboardWindow(
     assetService(&assetService),
     userService(&userService),
     reportService(&reportService),
-    truckStockService(&truckStockService)
+    truckStockService(&truckStockService),
+    aiService(&aiService)
 {
     ui.setupUi(this);
 
@@ -77,6 +79,7 @@ void DashboardWindow::applyThemeToLoadedPages()
     if (lowStockAlertsPage) lowStockAlertsPage->applyTheme(currentTheme);
     if (receiptsPage) receiptsPage->applyTheme(currentTheme);
     if (reportsPage) reportsPage->applyTheme(currentTheme);
+    if (aiAssistantPage) aiAssistantPage->applyTheme(currentTheme);
 }
 
 void DashboardWindow::setupPages()
@@ -363,6 +366,16 @@ ReportsPage* DashboardWindow::ensureReportsPage()
     return reportsPage;
 }
 
+AiAssistantPage* DashboardWindow::ensureAiAssistantPage()
+{
+    if (!aiAssistantPage) {
+        aiAssistantPage = new AiAssistantPage(aiService, this);
+        ui.mainStack->addWidget(aiAssistantPage);
+        aiAssistantPage->applyTheme(currentTheme);
+    }
+    return aiAssistantPage;
+}
+
 void DashboardWindow::updateLoggedInUserInfo(const std::string& newUserName)
 {
     userName = newUserName;
@@ -398,6 +411,10 @@ void DashboardWindow::setupSidebar()
         DashboardPage* page = ensureDashboardPage();
         page->refreshDashboard();
         ui.mainStack->setCurrentWidget(page);
+        });
+
+    connect(sidebar, &SidebarWidget::aiAssistantClicked, this, [this]() {
+        ui.mainStack->setCurrentWidget(ensureAiAssistantPage());
         });
 
     connect(sidebar, &SidebarWidget::itemsClicked, this, [this]() {

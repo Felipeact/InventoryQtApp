@@ -20,6 +20,7 @@ public:
     void setUserInfo(const std::string& role, const std::string& userName);
 
     void activateDashboard();
+    void activateAiAssistant();
     void activateItems();
     void activateAssets();
     void activateUsers();
@@ -37,6 +38,7 @@ public:
 
 signals:
     void dashboardClicked();
+    void aiAssistantClicked();
     void itemsClicked();
     void assetsClicked();
     void usersClicked();

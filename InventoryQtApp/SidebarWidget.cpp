@@ -20,6 +20,7 @@ namespace {
 // theme's stroke colour so a single source recolours for light/dark and stays
 // legible in both the normal and selected (checked) button states.
 const char* const kIconHome      = R"(<path d='M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z'/><path d='M9 22V12h6v10'/>)";
+const char* const kIconSparkle   = R"(<path d='M12 3l1.9 4.8L18.7 9l-4.8 1.9L12 15.7l-1.9-4.8L5.3 9l4.8-1.2L12 3z'/><path d='M19 14l.8 2.2L22 17l-2.2.8L19 20l-.8-2.2L16 17l2.2-.8L19 14z'/>)";
 const char* const kIconPackage   = R"(<path d='M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z'/><path d='M3.27 6.96 12 12.01l8.73-5.05'/><path d='M12 22.08V12'/>)";
 const char* const kIconWrench    = R"(<path d='M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z'/>)";
 const char* const kIconUsers     = R"(<path d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'/><circle cx='9' cy='7' r='4'/><path d='M22 21v-2a4 4 0 0 0-3-3.87'/><path d='M16 3.13a4 4 0 0 1 0 7.75'/>)";
@@ -79,6 +80,11 @@ SidebarWidget::SidebarWidget(
     connect(ui.dashboardButton, &QPushButton::clicked, this, [this]() {
         setActiveButton(ui.dashboardButton);
         emit dashboardClicked();
+        });
+
+    connect(ui.aiAssistantButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.aiAssistantButton);
+        emit aiAssistantClicked();
         });
 
     connect(ui.itemsButton, &QPushButton::clicked, this, [this]() {
@@ -220,6 +226,10 @@ void SidebarWidget::applyPermissions()
     // every authenticated user, regardless of role. (There is no
     // MANAGE_SETTINGS permission.)
     ui.settingsButton->setVisible(true);
+
+    // The AI assistant acts with the signed-in user's own permissions (the server
+    // enforces them per tool), so it is available to every authenticated user.
+    ui.aiAssistantButton->setVisible(true);
 }
 
 void SidebarWidget::resetButtonStates()
@@ -260,6 +270,11 @@ void SidebarWidget::setUserInfo(const std::string& role, const std::string& user
 void SidebarWidget::activateDashboard()
 {
     setActiveButton(ui.dashboardButton);
+}
+
+void SidebarWidget::activateAiAssistant()
+{
+    setActiveButton(ui.aiAssistantButton);
 }
 
 void SidebarWidget::activateItems()
@@ -350,6 +365,7 @@ void SidebarWidget::applyTheme(Theme::AppTheme theme)
     };
 
     apply(ui.dashboardButton, kIconHome, QStringLiteral("Dashboard"), iconColor);
+    apply(ui.aiAssistantButton, kIconSparkle, QStringLiteral("AI Assistant"), iconColor);
     apply(ui.itemsButton, kIconPackage, QStringLiteral("Items"), iconColor);
     apply(ui.assetsButton, kIconWrench, QStringLiteral("Assets"), iconColor);
     apply(ui.usersButton, kIconUsers, QStringLiteral("Users"), iconColor);

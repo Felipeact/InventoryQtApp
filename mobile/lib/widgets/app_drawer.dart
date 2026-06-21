@@ -31,6 +31,13 @@ class AppDrawer extends StatelessWidget {
                     route: AppRoutes.home,
                     onNavigate: _goHome,
                   ),
+                  // Available to every signed-in user; the server enforces what
+                  // the assistant may actually do per the user's permissions.
+                  const _DrawerItem(
+                    icon: Icons.auto_awesome_outlined,
+                    label: 'AI Assistant',
+                    route: AppRoutes.aiAssistant,
+                  ),
                   if (auth.can(Permissions.viewAssignedTruckStock))
                     const _DrawerItem(
                       icon: Icons.local_shipping_outlined,

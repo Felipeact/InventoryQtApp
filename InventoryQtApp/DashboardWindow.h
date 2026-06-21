@@ -23,6 +23,8 @@
 #include <ReportsPage.h>
 #include <TruckStockService.h>
 #include <SettingsPage.h>
+#include "AiService.h"
+#include "AiAssistantPage.h"
 
 #include <QMainWindow>
 #include <QString>
@@ -51,6 +53,7 @@ public:
         UserService& userService,
         ReportService& reportService,
         TruckStockService& truckStockService,
+        AiService& aiService,
         QWidget* parent = nullptr
     );
 
@@ -80,6 +83,7 @@ private:
     UserService* userService = nullptr;
     ReportService* reportService = nullptr;
     TruckStockService* truckStockService = nullptr;
+    AiService* aiService = nullptr;
 
     DashboardPage* dashboardPage = nullptr;
     ItemsPage* itemsPage = nullptr;
@@ -99,6 +103,7 @@ private:
     LowStockAlertsPage* lowStockAlertsPage = nullptr;
     ReceiptsPage* receiptsPage = nullptr;
     ReportsPage* reportsPage = nullptr;
+    AiAssistantPage* aiAssistantPage = nullptr;
 
     Theme::AppTheme currentTheme = Theme::AppTheme::Light;
 
@@ -124,6 +129,7 @@ private:
     LowStockAlertsPage* ensureLowStockAlertsPage();
     ReceiptsPage* ensureReceiptsPage();
     ReportsPage* ensureReportsPage();
+    AiAssistantPage* ensureAiAssistantPage();
 
     void showGlobalSearchDialog(const QString& text);
     void closeGlobalSearchDialog();

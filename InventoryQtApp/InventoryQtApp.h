@@ -14,6 +14,7 @@
 #include "UserService.h"
 #include "ReportService.h"
 #include "TruckStockService.h"
+#include "AiService.h"
 #include "Theme.h"
 #include "AutoUpdateManager.h"
 
@@ -47,6 +48,7 @@ private:
 	UserService userService{ apiClient }; // Service for user operations
 	ReportService reportService{ apiClient }; // Service for report operations	
 	TruckStockService truckStockService{ apiClient }; // Service for truck stock operation
+	AiService aiService{ apiClient }; // Service for the AI assistant
 	AutoUpdateManager* updateManager = nullptr; // Auto-update manager
 
 	DashboardWindow* dashboardWindow = nullptr;  // Main dashboard window after login	

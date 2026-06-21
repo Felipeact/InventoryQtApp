@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../screens/ai/ai_assistant_screen.dart';
 import '../screens/assets/assets_screen.dart';
 import '../screens/change_password_screen.dart';
 import '../screens/dashboard_screen.dart';
@@ -25,6 +26,7 @@ class AppRoutes {
   static const String login = '/login';
   static const String changePassword = '/change-password';
   static const String home = '/home';
+  static const String aiAssistant = '/ai';
   static const String dashboard = '/dashboard';
   static const String products = '/products';
   static const String addProduct = '/products/add';
@@ -48,6 +50,8 @@ class AppRoutes {
         return _page(const ChangePasswordScreen(), settings);
       case home:
         return _page(const HomeShell(), settings);
+      case aiAssistant:
+        return _page(const AiAssistantScreen(), settings);
       case dashboard:
         return _page(const DashboardScreen(), settings);
       case products:

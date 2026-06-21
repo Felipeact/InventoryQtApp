@@ -39,6 +39,13 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="aiAssistantButton">
+     <property name="text"><string>AI Assistant</string></property>
+     <property name="checkable"><bool>true</bool></property>
+     <property name="cursor"><cursorShape>PointingHandCursor</cursorShape></property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="itemsButton">
      <property name="text"><string>Items</string></property>
      <property name="checkable"><bool>true</bool></property>
