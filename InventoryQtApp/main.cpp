@@ -3,6 +3,7 @@
 #include "Version.h"
 
 #include <QtWidgets/QApplication>
+#include <QIcon>
 #include <QSettings>
 #include <QStandardPaths>
 #include <QDir>
@@ -93,6 +94,10 @@ int main(int argc, char* argv[])
     QApplication::setOrganizationName(QStringLiteral("InventorySystem"));
     QApplication::setApplicationName(QStringLiteral("InventoryQtApp"));
     QApplication::setApplicationVersion(QStringLiteral(INVENTORY_APP_VERSION));
+
+    // Brand icon (same mark as the web and mobile apps), used for the window title
+    // bar and taskbar. The Windows .exe icon comes from app_icon.rc at link time.
+    QApplication::setWindowIcon(QIcon(QStringLiteral(":/InventoryQtApp/app_icon.png")));
 
     installFileLogger();
 

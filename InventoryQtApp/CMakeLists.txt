@@ -33,12 +33,20 @@ file(GLOB APP_HEADERS CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
 file(GLOB APP_FORMS   CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.ui")
 file(GLOB APP_RES     CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.qrc")
 
+# Windows executable icon (compiled from app_icon.rc → app_icon.ico). Windows-only;
+# MSVC enables the RC language automatically.
+set(APP_WIN_RC "")
+if(WIN32)
+    set(APP_WIN_RC "${CMAKE_CURRENT_SOURCE_DIR}/app_icon.rc")
+endif()
+
 # WIN32 => GUI subsystem (no console window) on Windows.
 add_executable(InventoryQtApp WIN32
     ${APP_SOURCES}
     ${APP_HEADERS}
     ${APP_FORMS}
     ${APP_RES}
+    ${APP_WIN_RC}
 )
 
 target_link_libraries(InventoryQtApp PRIVATE

@@ -141,6 +141,7 @@
     <ClCompile Include="UseTruckItemDialog.cpp" />
     <ClCompile Include="VerticalWidget.cpp" />
     <QtRcc Include="InventoryQtApp.qrc" />
+    <ResourceCompile Include="app_icon.rc" />
     <QtUic Include="AddAssetDialog.ui" />
     <QtUic Include="AddEditTemplateDialog.ui" />
     <QtUic Include="AddEditTemplateItemDialog.ui" />

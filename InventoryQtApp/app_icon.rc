@@ -1,0 +1,3 @@
+// Windows executable icon (the .exe icon shown in Explorer and the taskbar).
+// IDI_ICON1 is the lowest-numbered icon, which Windows uses as the app icon.
+IDI_ICON1 ICON "app_icon.ico"

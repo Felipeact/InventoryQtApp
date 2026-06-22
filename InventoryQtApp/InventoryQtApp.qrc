@@ -1,4 +1,5 @@
 <RCC>
     <qresource prefix="InventoryQtApp">
+        <file>app_icon.png</file>
     </qresource>
 </RCC>

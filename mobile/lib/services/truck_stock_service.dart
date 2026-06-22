@@ -64,7 +64,28 @@ class TruckStockService {
 
   Future<List<TruckStockItem>> fetchLowStock() async {
     final dynamic data = await _client.get('/truck-stock/low-stock');
-    return _list(data, 'items', TruckStockItem.fromJson);
+    // The API returns an array of templates, each with its own low `items` list.
+    // Flatten those into a single list of items (a bare list of items is also
+    // tolerated, in case the shape changes).
+    final List<TruckStockItem> items = <TruckStockItem>[];
+    if (data is List) {
+      for (final dynamic entry in data) {
+        if (entry is! Map) continue;
+        final dynamic nested = entry['items'];
+        if (nested is List) {
+          // Template wrapper → take its items.
+          for (final dynamic item in nested) {
+            if (item is Map) {
+              items.add(TruckStockItem.fromJson(Map<String, dynamic>.from(item)));
+            }
+          }
+        } else {
+          // Already a flat item.
+          items.add(TruckStockItem.fromJson(Map<String, dynamic>.from(entry)));
+        }
+      }
+    }
+    return items;
   }
 
   // ---- Mutations -----------------------------------------------------------
