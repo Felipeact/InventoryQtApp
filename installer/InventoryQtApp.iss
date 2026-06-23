@@ -5,7 +5,7 @@
 ; (matches the InventoryQtApp-<version>.exe name AutoUpdateManager downloads).
 
 #ifndef AppVersion
-  #define AppVersion "1.0.0"
+  #define AppVersion "1.2.0"
 #endif
 #define AppName "StockPilot"
 #define AppPublisher "StockPilot"

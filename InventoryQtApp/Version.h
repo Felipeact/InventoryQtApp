@@ -6,4 +6,4 @@
 // latest release returned by the update server.
 #pragma once
 
-#define INVENTORY_APP_VERSION "1.0.0"
+#define INVENTORY_APP_VERSION "1.2.0"

@@ -9,7 +9,7 @@
 #>
 [CmdletBinding()]
 param(
-    [string]$Version = "1.0.0",
+    [string]$Version = "1.2.0",
     [string]$QtDir   = "C:\Qt\6.11.0\msvc2022_64",
     [switch]$SkipBuild
 )
