@@ -23,11 +23,21 @@ GlobalSearchDialog::GlobalSearchDialog(
 {
     ui.setupUi(this);
 
+    // Behave like a dropdown anchored under the top-bar search box, not a separate
+    // window: frameless, no taskbar entry, and shown WITHOUT stealing focus so the
+    // user keeps typing in the top bar (which drives this via setSearchText).
     setModal(false);
-    setWindowFlag(Qt::Tool, true);
+    setWindowFlags(Qt::FramelessWindowHint | Qt::Tool | Qt::NoDropShadowWindowHint);
+    setAttribute(Qt::WA_ShowWithoutActivating);
+    setAttribute(Qt::WA_DeleteOnClose);
+
+    // The top bar is the single search box — hide this dialog's duplicate input and
+    // its Open/Close buttons; results open on a single click or Enter.
+    ui.searchInput->hide();
+    ui.openButton->hide();
+    ui.closeButton->hide();
 
     ui.searchInput->setText(searchText);
-    ui.searchInput->selectAll();
 
     ui.resultsTree->setColumnCount(2);
     ui.resultsTree->setHeaderLabels(
@@ -61,6 +71,19 @@ void GlobalSearchDialog::setupConnections()
         this,
         [this]() {
             onResultDoubleClicked();
+        }
+    );
+
+    // Single click opens a result — it's a dropdown, not a form.
+    connect(
+        ui.resultsTree,
+        &QTreeWidget::itemClicked,
+        this,
+        [this](QTreeWidgetItem* item, int) {
+            if (item && item->childCount() == 0) {
+                ui.resultsTree->setCurrentItem(item);
+                openSelectedResult();
+            }
         }
     );
 
@@ -479,11 +502,62 @@ void GlobalSearchDialog::runSearch(
 
     ui.resultsTree->expandAll();
 
+    // Pre-select the first result so Enter (from the top bar) opens it immediately.
+    selectFirstResult();
+
     ui.summaryLabel->setText(
         QString("%1 result(s) found for \"%2\"")
         .arg(totalResults)
         .arg(searchText)
     );
+}
+
+QList<QTreeWidgetItem*> GlobalSearchDialog::selectableItems() const
+{
+    QList<QTreeWidgetItem*> items;
+    for (int i = 0; i < ui.resultsTree->topLevelItemCount(); ++i) {
+        QTreeWidgetItem* group = ui.resultsTree->topLevelItem(i);
+        if (!group) continue;
+        for (int j = 0; j < group->childCount(); ++j) {
+            QTreeWidgetItem* child = group->child(j);
+            if (child && (child->flags() & Qt::ItemIsSelectable)) {
+                items.append(child);
+            }
+        }
+    }
+    return items;
+}
+
+void GlobalSearchDialog::selectFirstResult()
+{
+    const QList<QTreeWidgetItem*> items = selectableItems();
+    if (!items.isEmpty()) {
+        ui.resultsTree->setCurrentItem(items.first());
+    }
+}
+
+void GlobalSearchDialog::moveSelection(int delta)
+{
+    const QList<QTreeWidgetItem*> items = selectableItems();
+    if (items.isEmpty()) return;
+
+    int index = items.indexOf(ui.resultsTree->currentItem());
+    if (index < 0) {
+        index = (delta >= 0) ? 0 : items.size() - 1;
+    } else {
+        index += delta;
+        if (index < 0) index = 0;
+        if (index >= items.size()) index = items.size() - 1;
+    }
+
+    QTreeWidgetItem* target = items.at(index);
+    ui.resultsTree->setCurrentItem(target);
+    ui.resultsTree->scrollToItem(target);
+}
+
+void GlobalSearchDialog::activateCurrent()
+{
+    openSelectedResult();
 }
 
 void GlobalSearchDialog::addPageResults(

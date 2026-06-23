@@ -138,6 +138,9 @@ private:
         const QString& value
     );
 
+    /** Refresh the bell badge with the current low-stock + pending-receipt count. */
+    void refreshNotificationBadge();
+
 private slots:
     void onGlobalSearchTextChanged(const QString& text);
     void onNotificationRequested();

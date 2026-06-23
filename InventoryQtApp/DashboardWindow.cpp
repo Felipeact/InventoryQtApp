@@ -6,6 +6,9 @@
 #include <QString>
 #include <QSettings>
 #include <QPoint>
+#include <QRect>
+#include <QThread>
+#include <QPointer>
 
 DashboardWindow::DashboardWindow(
     const std::string& role,
@@ -503,12 +506,26 @@ void DashboardWindow::setupVerticalbar()
     connect(verticalbar, &VerticalWidget::globalSearchTextChanged, this, &DashboardWindow::onGlobalSearchTextChanged);
     connect(verticalbar, &VerticalWidget::notificationRequested, this, &DashboardWindow::onNotificationRequested);
 
+    // Keyboard control of the search-results dropdown (focus stays in the search box).
+    connect(verticalbar, &VerticalWidget::searchNavigated, this, [this](int delta) {
+        if (globalSearchDialog) globalSearchDialog->moveSelection(delta);
+    });
+    connect(verticalbar, &VerticalWidget::searchActivated, this, [this]() {
+        if (globalSearchDialog) globalSearchDialog->activateCurrent();
+    });
+    connect(verticalbar, &VerticalWidget::searchDismissed, this, [this]() {
+        closeGlobalSearchDialog();
+    });
+
     QVBoxLayout* layout = new QVBoxLayout(ui.verticalContainer);
     layout->setContentsMargins(0, 0, 0, 0);
     layout->setSpacing(0);
     layout->addWidget(verticalbar);
 
     verticalbar->applyTheme(currentTheme);
+
+    // Populate the bell badge shortly after the shell is up (off the UI thread).
+    refreshNotificationBadge();
 }
 
 void DashboardWindow::applyTheme(Theme::AppTheme theme)
@@ -536,14 +553,18 @@ void DashboardWindow::showGlobalSearchDialog(const QString& text)
         connect(globalSearchDialog, &GlobalSearchDialog::resultSelected, this, &DashboardWindow::handleGlobalSearchResult);
         connect(globalSearchDialog, &QObject::destroyed, this, [this]() { globalSearchDialog = nullptr; });
 
-        QPoint globalPos = ui.verticalContainer->mapToGlobal(QPoint(0, ui.verticalContainer->height()));
-        globalSearchDialog->move(globalPos.x() + 260, globalPos.y() + 6);
-        globalSearchDialog->show();
+        // Anchor it directly under the search field and match its width — it reads as
+        // a dropdown, not a floating window.
+        const QRect anchor = verticalbar
+            ? verticalbar->searchFieldGlobalRect()
+            : QRect(ui.verticalContainer->mapToGlobal(QPoint(260, ui.verticalContainer->height())), QSize(460, 0));
+        globalSearchDialog->resize(qMax(anchor.width(), 460), globalSearchDialog->sizeHint().height());
+        globalSearchDialog->move(anchor.left(), anchor.top() + 6);
+        globalSearchDialog->show(); // WA_ShowWithoutActivating keeps focus in the search box
     }
 
     globalSearchDialog->setSearchText(text);
-    globalSearchDialog->raise();
-    globalSearchDialog->activateWindow();
+    globalSearchDialog->raise(); // bring forward WITHOUT stealing focus (no activateWindow)
 }
 
 void DashboardWindow::closeGlobalSearchDialog()
@@ -651,4 +672,40 @@ void DashboardWindow::onNotificationRequested()
         });
 
     dialog.exec();
+
+    // Counts may have changed (a receipt approved, stock used) — refresh the badge.
+    refreshNotificationBadge();
+}
+
+void DashboardWindow::refreshNotificationBadge()
+{
+    if (!truckStockService || !verticalbar) {
+        return;
+    }
+
+    QPointer<DashboardWindow> self(this);
+
+    QThread* worker = QThread::create([self]() {
+        if (!self) return;
+
+        const int lowStock = static_cast<int>(self->truckStockService->getLowStockItems().size());
+
+        int pendingReceipts = 0;
+        for (const ReceiptDto& receipt : self->truckStockService->getReceipts()) {
+            if (QString::fromStdString(receipt.status).compare("PENDING", Qt::CaseInsensitive) == 0) {
+                pendingReceipts++;
+            }
+        }
+
+        const int total = lowStock + pendingReceipts;
+
+        QMetaObject::invokeMethod(self, [self, total]() {
+            if (self && self->verticalbar) {
+                self->verticalbar->setNotificationCount(total);
+            }
+        }, Qt::QueuedConnection);
+    });
+
+    connect(worker, &QThread::finished, worker, &QObject::deleteLater);
+    worker->start();
 }

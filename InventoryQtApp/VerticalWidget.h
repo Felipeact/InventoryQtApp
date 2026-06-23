@@ -4,10 +4,13 @@
 #include <QWidget>
 #include <QString>
 #include <QTimer>
+#include <QRect>
 #include <string>
 
 #include "ui_VerticalWidget.h"
 #include "Theme.h"
+
+class QLabel;
 
 class VerticalWidget : public QWidget
 {
@@ -32,9 +35,23 @@ public:
     void clearSearch();
     void focusSearch();
 
+    /** Global-screen rect just below the search field, to anchor the results dropdown. */
+    QRect searchFieldGlobalRect() const;
+
+    /** Show a small badge with the number of pending notifications (0 hides it). */
+    void setNotificationCount(int count);
+
 signals:
     void globalSearchTextChanged(const QString& text);
     void notificationRequested();
+
+    // Keyboard control forwarded from the search box to the results dropdown.
+    void searchNavigated(int delta); // +1 = down, -1 = up
+    void searchActivated();          // Enter
+    void searchDismissed();          // Escape / cancel
+
+protected:
+    bool eventFilter(QObject* watched, QEvent* event) override;
 
 private:
     Ui::VerticalWidget ui;
@@ -44,4 +61,6 @@ private:
 
     QTimer* searchDebounceTimer = nullptr;
     QString pendingSearchText;
+
+    QLabel* notificationBadge = nullptr;
 };
