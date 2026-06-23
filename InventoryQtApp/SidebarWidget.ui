@@ -16,7 +16,7 @@
    <!-- Brand -->
    <item>
     <widget class="QLabel" name="logoLabel">
-     <property name="text"><string>◆  StockPilot</string></property>
+     <property name="text"><string>◆  Vantori</string></property>
     </widget>
    </item>
    <item>

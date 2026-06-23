@@ -1,4 +1,4 @@
-"""Generate StockPilot/Inventory app launcher icons.
+"""Generate Vantori/Inventory app launcher icons.
 
 Renders the brand mark (a 3D box wireframe, matching the web logo) in white on
 the indigo brand gradient. Outputs three assets used by flutter_launcher_icons:

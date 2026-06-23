@@ -7,7 +7,7 @@
   </property>
   <property name="minimumSize"><size><width>360</width><height>520</height></size></property>
   <property name="maximumSize"><size><width>360</width><height>520</height></size></property>
-  <property name="windowTitle"><string>StockPilot — Sign in</string></property>
+  <property name="windowTitle"><string>Vantori — Sign in</string></property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QVBoxLayout" name="outerVerticalLayout">
     <property name="spacing"><number>0</number></property>
@@ -48,7 +48,7 @@
          </item>
          <item>
           <widget class="QLabel" name="titleLabel">
-           <property name="text"><string>StockPilot</string></property>
+           <property name="text"><string>Vantori</string></property>
           </widget>
          </item>
          <item>
@@ -154,7 +154,7 @@
     </item>
     <item>
      <widget class="QLabel" name="footerLabel">
-      <property name="text"><string>© 2026 StockPilot. All rights reserved.</string></property>
+      <property name="text"><string>© 2026 Vantori. All rights reserved.</string></property>
       <property name="alignment"><set>Qt::AlignCenter</set></property>
      </widget>
     </item>
