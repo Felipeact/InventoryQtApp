@@ -814,3 +814,52 @@ cmake -S InventoryQtApp -B build -DCMAKE_TOOLCHAIN_FILE=<vcpkg.cmake> -DCMAKE_PR
 cmake --build build --config Release
 ISCC.exe /DAppVersion=1.0.0 installer\InventoryQtApp.iss
 ```
+
+---
+
+# 8. Operating Costs & Hosting
+
+Approximate cost of running Stockvio (API + web + mobile + desktop). Figures are mid-2026
+list prices and shift over time; most services have a free tier that covers early, low
+usage. Two columns are shown: a **lean / launch** budget and a **scale** budget for once
+the product is in commercial use with real traffic.
+
+## 8.1 Monthly (recurring)
+
+| Service | Purpose | Lean / launch | When you scale |
+|---------|---------|--------------:|---------------:|
+| Railway | API + PostgreSQL hosting | $5 (Hobby, incl. $5 usage) | $20–50 |
+| Vercel | Web front-end (Next.js) | $0 (Hobby)* | $20 (Pro) |
+| Cloudinary | Receipt / image storage | $0 (free tier, 25 credits) | $89 (Plus) |
+| Email (Resend / SendGrid / SES) | Sign-up & notification email | $0 (free ≈ 3k/mo) | $20 |
+| GitHub | Source hosting (2 repos) | $0 (free private repos) | $4 / user (Team) |
+| **Monthly subtotal** | | **≈ $5** | **≈ $150–180** |
+
+\* Vercel's free **Hobby** plan is non-commercial. A commercial SaaS should run on **Pro
+($20/mo)** — budget for it from launch.
+
+## 8.2 Yearly (recurring)
+
+| Service | Purpose | Cost |
+|---------|---------|-----:|
+| Domain `stockvio.app` | Product URL (`.app` forces HTTPS) | ~$16/yr (`.com` ≈ $12/yr) |
+| Apple Developer Program | Required to publish the **iOS** app | $99/yr |
+| Windows code-signing certificate | Removes the "unknown publisher" warning on the desktop installer (optional) | ~$100–300/yr (OV) |
+
+## 8.3 One-time
+
+| Service | Purpose | Cost |
+|---------|---------|-----:|
+| Google Play Developer | Required to publish the **Android** app | $25 (once) |
+
+## 8.4 Bottom line
+
+- **Bare minimum to go live (year 1):** ~$5/mo + $16 domain + $99 Apple + $25 Play ≈
+  **~$200 for the whole first year** (≈ $75 if you skip iOS and installer signing).
+- **Comfortable, growing setup:** ~**$150–180/mo** (≈ $1,800–2,200/yr) once on paid
+  Vercel + Cloudinary + email + scaled Railway, plus the yearly domain / Apple / signing.
+- **Almost everything has a free tier** for early usage; **iOS ($99/yr)** and **Android
+  ($25 once)** apply only when publishing to the app stores — Android can be sideloaded
+  free for internal field use.
+- **Not included:** any AI/LLM API usage (billed per-token on top) if AI features are
+  added.
