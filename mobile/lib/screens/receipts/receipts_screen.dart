@@ -14,8 +14,8 @@ import '../../widgets/loading_indicator.dart';
 import '../home_shell.dart';
 import 'upload_receipt_screen.dart';
 
-/// Lists uploaded receipts. Technicians can upload new ones; admins also see an
-/// approval-status indicator (approval action is a TODO pending an endpoint).
+/// Lists uploaded receipts. Technicians can upload new ones; users with the
+/// APPROVE_RECEIPTS permission can approve or reject pending receipts inline.
 class ReceiptsScreen extends StatefulWidget {
   const ReceiptsScreen({super.key, this.embedded = false});
 
@@ -56,6 +56,28 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
       MaterialPageRoute<bool>(builder: (_) => const UploadReceiptScreen()),
     );
     if (created == true) _load();
+  }
+
+  /// Approves or rejects a receipt via the API and surfaces the result.
+  Future<void> _setStatus(Receipt receipt, String status) async {
+    try {
+      await context
+          .read<TruckStockProvider>()
+          .updateReceiptStatus(receipt.id, status);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Receipt ${status.toLowerCase()}')),
+      );
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.message)));
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to update receipt.')),
+      );
+    }
   }
 
   @override
@@ -118,18 +140,26 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
         itemCount: provider.receipts.length,
         separatorBuilder: (_, __) => const SizedBox(height: 10),
-        itemBuilder: (BuildContext context, int i) =>
-            _ReceiptCard(receipt: provider.receipts[i], isAdmin: auth.isAdmin),
+        itemBuilder: (BuildContext context, int i) => _ReceiptCard(
+          receipt: provider.receipts[i],
+          canApprove: auth.can(Permissions.approveReceipts),
+          onStatusChange: _setStatus,
+        ),
       ),
     );
   }
 }
 
 class _ReceiptCard extends StatelessWidget {
-  const _ReceiptCard({required this.receipt, required this.isAdmin});
+  const _ReceiptCard({
+    required this.receipt,
+    required this.canApprove,
+    required this.onStatusChange,
+  });
 
   final Receipt receipt;
-  final bool isAdmin;
+  final bool canApprove;
+  final Future<void> Function(Receipt receipt, String status) onStatusChange;
 
   @override
   Widget build(BuildContext context) {
@@ -201,18 +231,41 @@ class _ReceiptCard extends StatelessWidget {
                       color: AppTheme.slate500,
                     ),
                   ),
-                  if (isAdmin &&
+                  if (canApprove &&
                       (receipt.status ?? 'PENDING').toUpperCase() ==
                           'PENDING') ...<Widget>[
-                    const SizedBox(height: 6),
-                    // TODO: Wire up an approve/reject endpoint when available.
-                    const Text(
-                      'Awaiting approval',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: AppTheme.warning,
-                        fontStyle: FontStyle.italic,
-                      ),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: OutlinedButton.icon(
+                            onPressed: () =>
+                                onStatusChange(receipt, 'REJECTED'),
+                            icon: const Icon(Icons.close, size: 16),
+                            label: const Text('Reject'),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: AppTheme.danger,
+                              side: const BorderSide(color: AppTheme.danger),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 6),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: FilledButton.icon(
+                            onPressed: () =>
+                                onStatusChange(receipt, 'APPROVED'),
+                            icon: const Icon(Icons.check, size: 16),
+                            label: const Text('Approve'),
+                            style: FilledButton.styleFrom(
+                              backgroundColor: AppTheme.success,
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 6),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ],

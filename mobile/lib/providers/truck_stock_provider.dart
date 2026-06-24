@@ -182,6 +182,20 @@ class TruckStockProvider extends ChangeNotifier {
     return receipt;
   }
 
+  /// Approves, rejects, or flags a receipt for review and replaces it in the
+  /// local list with the server's updated copy. Requires APPROVE_RECEIPTS.
+  Future<Receipt> updateReceiptStatus(String receiptId, String status) async {
+    final Receipt updated = await _service.updateReceiptStatus(
+      receiptId: receiptId,
+      status: status,
+    );
+    _receipts = _receipts
+        .map((Receipt r) => r.id == updated.id ? updated : r)
+        .toList(growable: false);
+    notifyListeners();
+    return updated;
+  }
+
   void _applyLocalQuantity(String itemId, int quantity) {
     _myStock = _myStock.map((TruckStockItem i) {
       return i.id == itemId ? i.copyWith(currentQuantity: quantity) : i;

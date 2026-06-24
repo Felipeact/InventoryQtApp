@@ -166,6 +166,20 @@ class TruckStockService {
     return _list(data, 'receipts', Receipt.fromJson);
   }
 
+  /// Approves, rejects, or flags a receipt for review. Requires the
+  /// APPROVE_RECEIPTS permission server-side. Returns the updated receipt.
+  /// [status] must be one of: APPROVED, REJECTED, NEEDS_REVIEW.
+  Future<Receipt> updateReceiptStatus({
+    required String receiptId,
+    required String status,
+  }) async {
+    final dynamic data = await _client.patch(
+      '/truck-stock/receipts/$receiptId/status',
+      body: <String, dynamic>{'status': status},
+    );
+    return Receipt.fromJson(_asMap(data));
+  }
+
   // ---- Helpers -------------------------------------------------------------
 
   List<T> _list<T>(
