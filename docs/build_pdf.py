@@ -19,7 +19,7 @@ OUT_FILE = HERE / "Inventory-System-Documentation.pdf"
 COVER = """
 <div class="cover">
   <div class="glyph">◆</div>
-  <h1>Inventory &amp; Truck-Stock<br>Management Platform</h1>
+  <h1>Vantori<br>Inventory &amp; Truck-Stock<br>Management Platform</h1>
   <div class="sub">Technical Documentation — Architecture, Build &amp; Run Guides, and
   Production-Readiness Report for the Back-End API, Web Front-End, Flutter Mobile App,
   and Qt Desktop App.</div>
@@ -32,7 +32,7 @@ COVER = """
   <div class="meta">
     <strong>Repositories:</strong> felipeact/inventory-system-api &nbsp;·&nbsp;
     felipeact/InventoryQtApp<br>
-    <strong>Generated:</strong> {date} &nbsp;·&nbsp; <strong>Version:</strong> 1.0
+    <strong>Generated:</strong> {date} &nbsp;·&nbsp; <strong>Version:</strong> 1.1
   </div>
 </div>
 """

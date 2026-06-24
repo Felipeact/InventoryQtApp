@@ -221,6 +221,24 @@ Override any value with `SEED_SUPER_ADMIN_EMAIL`, `SEED_SUPER_ADMIN_PASSWORD`,
 `SEED_ACTIVATION_MAX_PRODUCTS`. Re-running never duplicates or overwrites existing rows.
 Then register at `/register` with the code (default `TEST-2026`).
 
+### Option D — Demo / test company (`npm run seed:demo`)
+
+For demos and QA, a second idempotent seed provisions a **self-contained demonstration
+company** — *"Vantori Demo Co."* (PRO) — with three role logins (admin / warehouse /
+technician), a realistic product catalogue with inventory (incl. low-stock items), sample
+assets, and trucks with a stock template. Because every record is scoped by `companyId`,
+it is fully isolated from real tenants, and re-running resets it to a known-good state.
+
+```bash
+npm run seed:demo        # local (ts-node)
+# Admin demo@vantori.app · Warehouse warehouse@vantori.app · Technician tech@vantori.app
+```
+
+On production this runs automatically after migrations (`railway.json` /
+`docker-compose.yml`, compiled `seed:demo:prod`), so the demo company is always present.
+It is **non-fatal** (never blocks boot) and the password is overridable via
+`SEED_DEMO_PASSWORD` to keep it private.
+
 ### Option C — Raw API (curl)
 
 ```bash
@@ -317,11 +335,11 @@ Router).
 
 | Concern | Choice |
 |---------|--------|
-| Framework | Next.js 15 (App Router) + React 18 |
+| Framework | Next.js 15.5 (App Router) + React 18 |
 | Language | TypeScript 5 (`strict`, zero `any`) |
 | Styling | Tailwind CSS 3 |
 | Data | Typed `fetch` wrapper (`src/lib/api.ts`) with auto token-refresh |
-| Charts / UI | recharts, framer-motion, lucide-react |
+| Charts / UI | recharts, lucide-react |
 
 ## 3.2 Routes
 
@@ -329,13 +347,35 @@ Router).
 |-------|--------|
 | Marketing | `/`, `/features`, `/pricing`, `/request-demo` |
 | Auth | `/login`, `/register`, `/forgot-password` |
-| App (guarded) | `/dashboard`, `/products`, `/assets`, `/trucks`, `/reports`, `/settings` |
+| App (guarded) | `/dashboard`, `/products`, `/assets`, `/trucks`, `/my-truck`, `/receipts`, `/truck-costs`, `/reports`, `/assistant`, `/users`, `/billing`, `/settings` |
 | Operator (super-admin) | `/admin/setup`, `/admin/login`, `/admin` (activation codes + tenants) |
 | Generated | `/robots.txt`, `/sitemap.xml`, `/icon.svg`, `/_not-found` |
 
 > The `/admin/*` console uses a separate super-admin token (stored under its own key,
 > 12-hour expiry, `noindex`). It is how operators mint activation codes and manage
 > tenants — see §2.9.
+
+## 3.3 Role-aware dashboards & analytics
+
+The sidebar and the landing page adapt to the signed-in user's permissions, so no role
+is shown — or routed to — a page it cannot use:
+
+- **Navigation** is filtered by permission: each item declares the permission it needs
+  (`src/components/app/Sidebar.tsx`), so e.g. *Products*, *Truck Costs*, and *Team* never
+  appear for a technician.
+- **`/dashboard` is role-aware** (`dashboard/page.tsx`): users with `VIEW_STOCK`
+  (admin / warehouse) get the **company dashboard** (inventory KPIs, low stock, fleet);
+  technicians get a **personal spending dashboard** instead of the inventory view they
+  can't load.
+- **Admin — Truck Costs** (`/truck-costs`): how much each truck is costing the company
+  from uploaded receipts. A fleet-wide overview (total/avg/highest spend, spend-by-truck
+  chart) plus a **per-truck drill-down** — pick a truck (e.g. *Truck 01*) for its spend,
+  receipt count, and a receipt table (date · technician · status · amount).
+- **Technician — spending dashboard**: the tech's own spend over the period, backed by the
+  scoped `GET /truck-stock/receipts/mine` endpoint (`UPLOAD_RECEIPT`, filtered to that
+  technician).
+- **Time navigation**: a reusable month/year **period selector** (`lib/period.ts`,
+  `PeriodSelector.tsx`) with previous / current / next, shared by both analytics views.
 
 ## 3.3 Prerequisites
 
@@ -398,6 +438,8 @@ disables the `X-Powered-By` header (see `next.config.mjs`).
 # 4. Mobile App
 
 Flutter app for field technicians — truck stock, scanning, receipts, and assignments.
+Approvers can also **approve / reject** uploaded receipts inline (gated by
+`APPROVE_RECEIPTS`, via `PATCH /truck-stock/receipts/:id/status`), matching the web app.
 
 ## 4.1 Technology stack
 
@@ -709,6 +751,23 @@ full QA. They are documented here as the next steps toward a hardened release.
 
 *Verification: back-end `typecheck` + 26 tests pass; web `lint` + `typecheck` + production
 `build` pass.*
+
+## 6.5 Brand, security & analytics (latest pass)
+
+| Area | Change |
+|------|--------|
+| Brand | Platform rebranded to **Vantori** across web (marketing, SEO, brand config), mobile, desktop, and the installer |
+| Web security | `next` **15.0.x → 15.5.19** (latest 15.x; clears the React Server Components & middleware advisories) and `postcss` pinned via `overrides` — `npm audit` now reports **0 vulnerabilities** |
+| Web cleanup | Removed unused `framer-motion` dependency and a dead `Permission` type export |
+| Role-aware UX | `/dashboard` now renders a **company** or **technician spending** view by permission; navigation is permission-filtered so no role sees a page it can't use (see §3.3) |
+| Admin analytics | New **Truck Costs** page (`/truck-costs`): fleet-wide spend plus per-truck drill-down, navigable by month/year |
+| Technician analytics | Personal spending dashboard, backed by the scoped `GET /truck-stock/receipts/mine` endpoint |
+| Receipt approval | Approve / reject wired up on **mobile** (`PATCH /truck-stock/receipts/:id/status`), matching the web app |
+| Demo company | Added `npm run seed:demo` — an isolated, idempotent demonstration tenant that auto-seeds on every production deploy (see §2.9, Option D) |
+
+*Verification: web `typecheck` + production `build` pass with 0 audit vulnerabilities;
+API build `typecheck` passes; the demo seed was run against a throwaway PostgreSQL under
+`NODE_ENV=production` (idempotent across runs).*
 
 ---
 
