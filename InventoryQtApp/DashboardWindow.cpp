@@ -35,7 +35,7 @@ DashboardWindow::DashboardWindow(
 {
     ui.setupUi(this);
 
-    setWindowTitle("Vantori");
+    setWindowTitle("Stockvio");
     resize(1440, 900);
     setMinimumSize(1100, 720);
 

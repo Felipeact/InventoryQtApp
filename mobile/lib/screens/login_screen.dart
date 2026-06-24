@@ -153,7 +153,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   const SizedBox(height: 16),
                   const Text(
-                    'Vantori',
+                    'Stockvio',
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,

@@ -6,7 +6,7 @@
    <rect><x>0</x><y>0</y><width>1440</width><height>900</height></rect>
   </property>
   <property name="windowTitle">
-   <string>Vantori</string>
+   <string>Stockvio</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="rootLayout">

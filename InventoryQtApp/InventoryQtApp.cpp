@@ -27,7 +27,7 @@ InventoryQtApp::InventoryQtApp(QWidget* parent)
 {
     ui.setupUi(this);
 
-    this->setWindowTitle("Vantori — Sign in");
+    this->setWindowTitle("Stockvio — Sign in");
     Theme::applyLogin(this);
     this->resize(420, 320);
     this->setMaximumSize(420, 320);
@@ -415,7 +415,7 @@ void InventoryQtApp::onForgotPasswordClicked()
 void InventoryQtApp::onUpdateAvailable(const UpdateInfo& info)
 {
     int reply = QMessageBox::question(this, "Update Available",
-        "A new version of Vantori is available.\n\n"
+        "A new version of Stockvio is available.\n\n"
         "Version: " + info.version + "\n\n"
         "Release Notes:\n" + info.releaseNotes + "\n\n"
         "Would you like to download and install the update now?",

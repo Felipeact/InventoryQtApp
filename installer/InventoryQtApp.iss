@@ -7,8 +7,8 @@
 #ifndef AppVersion
   #define AppVersion "1.2.0"
 #endif
-#define AppName "Vantori"
-#define AppPublisher "Vantori"
+#define AppName "Stockvio"
+#define AppPublisher "Stockvio"
 #define StageDir "..\deploy\InventoryQtApp"
 
 [Setup]

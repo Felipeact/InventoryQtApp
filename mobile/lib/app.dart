@@ -25,7 +25,7 @@ class InventoryApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        title: 'Vantori',
+        title: 'Stockvio',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,
         darkTheme: AppTheme.dark,

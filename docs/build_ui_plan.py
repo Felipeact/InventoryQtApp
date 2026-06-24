@@ -9,16 +9,16 @@ from pygments.formatters import HtmlFormatter
 from weasyprint import HTML, CSS
 
 HERE = Path(__file__).parent
-MD_FILE = HERE / "Vantori-Desktop-UI-Redesign-Plan.md"
+MD_FILE = HERE / "Stockvio-Desktop-UI-Redesign-Plan.md"
 CSS_FILE = HERE / "style.css"
-OUT_FILE = HERE / "Vantori-Desktop-UI-Redesign-Plan.pdf"
+OUT_FILE = HERE / "Stockvio-Desktop-UI-Redesign-Plan.pdf"
 
 COVER = """
 <div class="cover">
   <div class="glyph">◆</div>
-  <h1>Vantori — Desktop UI/UX<br>Redesign Plan</h1>
+  <h1>Stockvio — Desktop UI/UX<br>Redesign Plan</h1>
   <div class="sub">An API‑driven, role‑aware redesign of the Qt desktop client, aligned with
-  the Vantori web app: navigation, page‑by‑page layout, component library, user flows,
+  the Stockvio web app: navigation, page‑by‑page layout, component library, user flows,
   and UX improvements.</div>
   <div class="pills">
     <span class="pill">Desktop · Qt / C++</span>

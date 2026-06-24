@@ -1,6 +1,6 @@
-# Vantori — Desktop (Qt) UI/UX Redesign Plan
+# Stockvio — Desktop (Qt) UI/UX Redesign Plan
 
-**Driven by the API surface, aligned with the Vantori web app.**
+**Driven by the API surface, aligned with the Stockvio web app.**
 This plan analyzes every backend route, maps it to roles, and specifies a screen‑by‑screen
 redesign for the Qt desktop client so it matches the web app's information architecture and
 polish. It is implementation‑ready: each screen lists the endpoints it calls, the data it
@@ -67,7 +67,7 @@ IA to match**, rather than adding new pages.
 Single left sidebar, grouped, filtered by permission. Mirrors the web exactly.
 
 ```
-Vantori  ◆
+Stockvio  ◆
 ─────────────────────────────
 OVERVIEW
   Dashboard            (all)

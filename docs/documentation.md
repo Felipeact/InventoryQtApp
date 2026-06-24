@@ -224,14 +224,14 @@ Then register at `/register` with the code (default `TEST-2026`).
 ### Option D — Demo / test company (`npm run seed:demo`)
 
 For demos and QA, a second idempotent seed provisions a **self-contained demonstration
-company** — *"Vantori Demo Co."* (PRO) — with three role logins (admin / warehouse /
+company** — *"Stockvio Demo Co."* (PRO) — with three role logins (admin / warehouse /
 technician), a realistic product catalogue with inventory (incl. low-stock items), sample
 assets, and trucks with a stock template. Because every record is scoped by `companyId`,
 it is fully isolated from real tenants, and re-running resets it to a known-good state.
 
 ```bash
 npm run seed:demo        # local (ts-node)
-# Admin demo@vantori.app · Warehouse warehouse@vantori.app · Technician tech@vantori.app
+# Admin demo@stockvio.app · Warehouse warehouse@stockvio.app · Technician tech@stockvio.app
 ```
 
 On production this runs automatically after migrations (`railway.json` /
@@ -756,7 +756,7 @@ full QA. They are documented here as the next steps toward a hardened release.
 
 | Area | Change |
 |------|--------|
-| Brand | Platform rebranded to **Vantori** across web (marketing, SEO, brand config), mobile, desktop, and the installer |
+| Brand | Platform rebranded to **Stockvio** across web (marketing, SEO, brand config), mobile, desktop, and the installer |
 | Web security | `next` **15.0.x → 15.5.19** (latest 15.x; clears the React Server Components & middleware advisories) and `postcss` pinned via `overrides` — `npm audit` now reports **0 vulnerabilities** |
 | Web cleanup | Removed unused `framer-motion` dependency and a dead `Permission` type export |
 | Role-aware UX | `/dashboard` now renders a **company** or **technician spending** view by permission; navigation is permission-filtered so no role sees a page it can't use (see §3.3) |
