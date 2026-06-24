@@ -78,7 +78,7 @@ Node.js / TypeScript / Express 5 REST API backed by PostgreSQL via Prisma.
 | Validation | Zod |
 | Security | helmet, cors, express-rate-limit, compression |
 | Logging | pino + pino-http (with secret redaction) |
-| Files | AWS S3 / Cloudflare R2 or local filesystem |
+| Files | Local filesystem, AWS S3 / Cloudflare R2, or Cloudinary |
 | Reporting | pdfkit, xlsx |
 | Tests | Jest + ts-jest + supertest |
 | Deploy | Docker (multi-stage), docker-compose, Railway |
@@ -118,10 +118,39 @@ required variable is missing or (in production) weak.
 | `PORT` | — | Default `3000` |
 | `NODE_ENV` | — | `development` \| `test` \| `production` |
 | `CORS_ORIGINS` | — | Comma-separated allowed origins. **Must include the web app's origin** |
-| `STORAGE_DRIVER` | — | `local` \| `s3` (S3 vars required when `s3`) |
+| `STORAGE_DRIVER` | — | `local` \| `s3` \| `cloudinary` (driver-specific vars required — see §2.4.1) |
 | `SMTP_*` | — | Optional; email flows become no-ops if unset (see §2.10) |
 | `ADMIN_NOTIFICATION_EMAIL` | — | Recipient for sign-up / lead / super-admin notifications |
 | `SEED_*` | — | Optional; values for the `npm run seed` bootstrap (see §2.9) |
+
+### 2.4.1 File storage drivers
+
+Receipt and image uploads are written through a pluggable storage layer selected by
+`STORAGE_DRIVER`. The default `local` driver needs no extra configuration; the `s3` and
+`cloudinary` drivers validate their own variables at boot and **refuse to start** if they
+are missing.
+
+**S3 / Cloudflare R2** — required when `STORAGE_DRIVER=s3`:
+
+| Variable | Notes |
+|----------|-------|
+| `S3_BUCKET` | Bucket name |
+| `S3_REGION` | AWS region; use `auto` for Cloudflare R2 |
+| `S3_ENDPOINT` | e.g. `https://<account>.r2.cloudflarestorage.com` (blank for AWS S3) |
+| `S3_ACCESS_KEY_ID` | Access key |
+| `S3_SECRET_ACCESS_KEY` | Secret key |
+| `S3_PUBLIC_BASE_URL` | Public/CDN base URL, e.g. `https://cdn.example.com` |
+
+**Cloudinary** — required when `STORAGE_DRIVER=cloudinary`. Set **either** the single
+connection string **or** all three discrete credentials:
+
+| Variable | Notes |
+|----------|-------|
+| `CLOUDINARY_URL` | Connection string `cloudinary://<api_key>:<api_secret>@<cloud_name>` (copy from the Cloudinary dashboard). Satisfies the requirement on its own. |
+| `CLOUDINARY_CLOUD_NAME` | Cloud name — required if `CLOUDINARY_URL` is not set |
+| `CLOUDINARY_API_KEY` | API key — required if `CLOUDINARY_URL` is not set |
+| `CLOUDINARY_API_SECRET` | API secret — required if `CLOUDINARY_URL` is not set |
+| `CLOUDINARY_FOLDER` | Optional folder prefix for uploads, e.g. `stockvio` (blank = no prefix) |
 
 ## 2.5 Install, build & run
 
