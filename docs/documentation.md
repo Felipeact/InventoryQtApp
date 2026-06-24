@@ -231,13 +231,22 @@ it is fully isolated from real tenants, and re-running resets it to a known-good
 
 ```bash
 npm run seed:demo        # local (ts-node)
-# Admin demo@stockvio.app · Warehouse warehouse@stockvio.app · Technician tech@stockvio.app
 ```
+
+It seeds these logins (all share the same password):
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | `demo@stockvio.app` | `StockvioDemo!2026` |
+| Warehouse | `warehouse@stockvio.app` | `StockvioDemo!2026` |
+| Technician | `tech@stockvio.app` | `StockvioDemo!2026` |
 
 On production this runs automatically after migrations (`railway.json` /
 `docker-compose.yml`, compiled `seed:demo:prod`), so the demo company is always present.
-It is **non-fatal** (never blocks boot) and the password is overridable via
-`SEED_DEMO_PASSWORD` to keep it private.
+It is **non-fatal** (never blocks boot). Override any value with `SEED_DEMO_COMPANY_NAME`,
+`SEED_DEMO_ADMIN_EMAIL`, `SEED_DEMO_WAREHOUSE_EMAIL`, `SEED_DEMO_TECHNICIAN_EMAIL`, and
+`SEED_DEMO_PASSWORD` — set the password in the platform dashboard to keep the live demo
+private.
 
 ### Option C — Raw API (curl)
 
