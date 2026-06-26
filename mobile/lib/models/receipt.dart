@@ -31,6 +31,17 @@ class Receipt {
     );
   }
 
+  /// A copy of this receipt with a new [status] (used after reconcile).
+  Receipt copyWithStatus(String newStatus) => Receipt(
+        id: id,
+        truckId: truckId,
+        fileUrl: fileUrl,
+        status: newStatus,
+        totalAmount: totalAmount,
+        createdAt: createdAt,
+        truckNumber: truckNumber,
+      );
+
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> map = <String, dynamic>{
       'truckId': truckId,

@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 import '../../config/theme.dart';
+import '../../models/extracted_receipt.dart';
 import '../../models/truck.dart';
 import '../../providers/truck_stock_provider.dart';
 import '../../services/api_client.dart';
@@ -32,6 +33,11 @@ class _UploadReceiptScreenState extends State<UploadReceiptScreen> {
   bool _loadingTrucks = true;
   bool _submitting = false;
   String? _trucksError;
+
+  // AI receipt reading (auto-fills total + line items from the photo).
+  List<ExtractedReceiptItem> _items = <ExtractedReceiptItem>[];
+  bool _reading = false;
+  String? _aiNote;
 
   @override
   void initState() {
@@ -71,11 +77,49 @@ class _UploadReceiptScreenState extends State<UploadReceiptScreen> {
       );
       if (picked != null) {
         setState(() => _file = picked);
+        await _readReceipt(picked);
       }
     } catch (e) {
       if (mounted) {
         showErrorSnack(context, 'Could not access the ${source.name}.');
       }
+    }
+  }
+
+  /// Try to auto-read the total + line items from the chosen photo. This is a
+  /// convenience — failures are non-fatal and the tech can still type a total.
+  Future<void> _readReceipt(XFile picked) async {
+    setState(() {
+      _reading = true;
+      _items = <ExtractedReceiptItem>[];
+      _aiNote = null;
+    });
+    final TruckStockProvider provider = context.read<TruckStockProvider>();
+    try {
+      final List<int> bytes = await File(picked.path).readAsBytes();
+      final ExtractedReceipt result = await provider.extractReceipt(
+        fileBase64: base64Encode(bytes),
+        fileName: picked.name.isNotEmpty ? picked.name : 'receipt.jpg',
+      );
+      if (!mounted) return;
+      setState(() {
+        _items = result.items;
+        if (result.total != null) {
+          _amount.text = result.total!.toStringAsFixed(2);
+        }
+        _aiNote = result.items.isNotEmpty
+            ? 'Read ${result.items.length} item${result.items.length == 1 ? '' : 's'}'
+                '${result.total != null ? ' · total \$${result.total!.toStringAsFixed(2)}' : ''}'
+            : 'No line items detected — enter the total manually.';
+      });
+    } on ApiException catch (e) {
+      if (mounted) setState(() => _aiNote = e.message);
+    } catch (_) {
+      if (mounted) {
+        setState(() => _aiNote = "Couldn't auto-read — enter the total manually.");
+      }
+    } finally {
+      if (mounted) setState(() => _reading = false);
     }
   }
 
@@ -146,6 +190,7 @@ class _UploadReceiptScreenState extends State<UploadReceiptScreen> {
         truckId: _selectedTruckId!,
         fileUrl: fileUrl,
         totalAmount: amount,
+        items: _items.isEmpty ? null : _items,
       );
 
       if (!mounted) return;
@@ -204,6 +249,30 @@ class _UploadReceiptScreenState extends State<UploadReceiptScreen> {
                 hintText: '0.00',
               ),
             ),
+            if (_reading || _aiNote != null) ...<Widget>[
+              const SizedBox(height: 8),
+              Row(
+                children: <Widget>[
+                  if (_reading)
+                    const SizedBox(
+                      height: 14,
+                      width: 14,
+                      child: CircularProgressIndicator(strokeWidth: 2),
+                    )
+                  else
+                    const Icon(Icons.auto_awesome,
+                        size: 15, color: AppTheme.brand),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      _reading ? 'Reading receipt with AI…' : _aiNote!,
+                      style: const TextStyle(
+                          color: AppTheme.slate500, fontSize: 12.5),
+                    ),
+                  ),
+                ],
+              ),
+            ],
             const SizedBox(height: 28),
             PrimaryButton(
               label: 'Upload receipt',

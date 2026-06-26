@@ -80,6 +80,30 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
     }
   }
 
+  /// Reconciles a receipt against its truck's template allowance and shows the
+  /// total-vs-allowance result.
+  Future<void> _reconcile(Receipt receipt) async {
+    try {
+      final Map<String, dynamic> r = await context
+          .read<TruckStockProvider>()
+          .reconcileReceipt(receipt.id);
+      if (!mounted) return;
+      await showDialog<void>(
+        context: context,
+        builder: (_) => _ReconcileDialog(result: r),
+      );
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.message)));
+    } catch (_) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not reconcile the receipt.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final TruckStockProvider provider = context.watch<TruckStockProvider>();
@@ -144,6 +168,7 @@ class _ReceiptsScreenState extends State<ReceiptsScreen> {
           receipt: provider.receipts[i],
           canApprove: auth.can(Permissions.approveReceipts),
           onStatusChange: _setStatus,
+          onReconcile: _reconcile,
         ),
       ),
     );
@@ -155,11 +180,13 @@ class _ReceiptCard extends StatelessWidget {
     required this.receipt,
     required this.canApprove,
     required this.onStatusChange,
+    required this.onReconcile,
   });
 
   final Receipt receipt;
   final bool canApprove;
   final Future<void> Function(Receipt receipt, String status) onStatusChange;
+  final Future<void> Function(Receipt receipt) onReconcile;
 
   @override
   Widget build(BuildContext context) {
@@ -231,6 +258,23 @@ class _ReceiptCard extends StatelessWidget {
                       color: AppTheme.slate500,
                     ),
                   ),
+                  if (canApprove) ...<Widget>[
+                    const SizedBox(height: 6),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: TextButton.icon(
+                        onPressed: () => onReconcile(receipt),
+                        icon: const Icon(Icons.rule, size: 16),
+                        label: const Text('Reconcile'),
+                        style: TextButton.styleFrom(
+                          foregroundColor: AppTheme.brand,
+                          padding: EdgeInsets.zero,
+                          minimumSize: const Size(0, 28),
+                          tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        ),
+                      ),
+                    ),
+                  ],
                   if (canApprove &&
                       (receipt.status ?? 'PENDING').toUpperCase() ==
                           'PENDING') ...<Widget>[
@@ -276,4 +320,89 @@ class _ReceiptCard extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Shows a receipt's reconciliation against its truck's template allowance.
+class _ReconcileDialog extends StatelessWidget {
+  const _ReconcileDialog({required this.result});
+
+  final Map<String, dynamic> result;
+
+  double? _num(dynamic v) =>
+      v is num ? v.toDouble() : double.tryParse('${v ?? ''}');
+
+  String _money(double? v) =>
+      v == null ? '—' : NumberFormat.currency(symbol: '\$').format(v);
+
+  @override
+  Widget build(BuildContext context) {
+    final String status = (result['status'] ?? '').toString();
+    final double? receiptTotal = _num(result['receiptTotal']);
+    final double? allowance = _num(result['expectedTotal']);
+    final double? difference = _num(result['difference']);
+    final bool hasExpected = result['hasExpected'] == true;
+    final bool overBudget = result['overBudget'] == true;
+    final Color tone = status == 'RECONCILED' ? AppTheme.success : AppTheme.warning;
+
+    return AlertDialog(
+      title: const Text('Reconciliation'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+            decoration: BoxDecoration(
+              color: tone.withValues(alpha: 0.12),
+              borderRadius: BorderRadius.circular(6),
+            ),
+            child: Text(
+              status.isEmpty ? '—' : status,
+              style: TextStyle(fontWeight: FontWeight.w800, color: tone),
+            ),
+          ),
+          const SizedBox(height: 14),
+          _row('Receipt total', _money(receiptTotal)),
+          _row('Allowance (template)', _money(allowance)),
+          _row(
+            overBudget ? 'Over budget by' : 'Under budget by',
+            difference == null ? '—' : _money(difference.abs()),
+            valueColor: overBudget ? AppTheme.warning : AppTheme.success,
+          ),
+          if (!hasExpected) ...<Widget>[
+            const SizedBox(height: 10),
+            const Text(
+              'This truck\'s template has no allowance set, so the total can\'t '
+              'be verified. Set an allowance on the template to enable '
+              'reconciliation.',
+              style: TextStyle(fontSize: 12, color: AppTheme.warning),
+            ),
+          ],
+        ],
+      ),
+      actions: <Widget>[
+        TextButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text('Done'),
+        ),
+      ],
+    );
+  }
+
+  Widget _row(String label, String value, {Color? valueColor}) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 4),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Text(label, style: const TextStyle(color: AppTheme.slate500)),
+            Text(
+              value,
+              style: TextStyle(
+                fontWeight: FontWeight.w700,
+                color: valueColor ?? AppTheme.slate900,
+              ),
+            ),
+          ],
+        ),
+      );
 }

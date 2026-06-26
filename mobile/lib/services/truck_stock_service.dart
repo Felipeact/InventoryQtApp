@@ -1,3 +1,4 @@
+import '../models/extracted_receipt.dart';
 import '../models/receipt.dart';
 import '../models/stock_movement.dart';
 import '../models/truck.dart';
@@ -147,18 +148,44 @@ class TruckStockService {
     throw const ApiException('Upload did not return a file URL.');
   }
 
+  /// AI-reads a receipt (PDF/image, base64) and returns its total + line items
+  /// without persisting. No-ops with a clear error if AI is not configured.
+  Future<ExtractedReceipt> extractReceipt({
+    required String fileBase64,
+    required String fileName,
+  }) async {
+    final dynamic data = await _client.post(
+      '/truck-stock/receipts/extract',
+      body: <String, dynamic>{'fileBase64': fileBase64, 'fileName': fileName},
+    );
+    return ExtractedReceipt.fromJson(_asMap(data));
+  }
+
   Future<Receipt> createReceipt({
     required String truckId,
     required String fileUrl,
     double? totalAmount,
+    List<ExtractedReceiptItem>? items,
   }) async {
     final Map<String, dynamic> body = <String, dynamic>{
       'truckId': truckId,
       'fileUrl': fileUrl,
     };
     if (totalAmount != null) body['totalAmount'] = totalAmount;
+    if (items != null && items.isNotEmpty) {
+      body['items'] = items.map((ExtractedReceiptItem e) => e.toJson()).toList();
+    }
     final dynamic data = await _client.post('/truck-stock/receipts', body: body);
     return Receipt.fromJson(_asMap(data));
+  }
+
+  /// Reconciles a receipt against the truck's template allowance. Returns the
+  /// raw result map (receiptTotal, expectedTotal, difference, hasExpected,
+  /// overBudget, status).
+  Future<Map<String, dynamic>> reconcileReceipt(String receiptId) async {
+    final dynamic data =
+        await _client.post('/truck-stock/receipts/$receiptId/reconcile');
+    return _asMap(data);
   }
 
   Future<List<Receipt>> fetchReceipts() async {

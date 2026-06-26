@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 
+import '../models/extracted_receipt.dart';
 import '../models/receipt.dart';
 import '../models/stock_movement.dart';
 import '../models/truck.dart';
@@ -167,19 +168,44 @@ class TruckStockProvider extends ChangeNotifier {
     );
   }
 
+  /// AI-reads an uploaded receipt and returns its total + line items.
+  Future<ExtractedReceipt> extractReceipt({
+    required String fileBase64,
+    required String fileName,
+  }) {
+    return _service.extractReceipt(fileBase64: fileBase64, fileName: fileName);
+  }
+
   Future<Receipt> createReceipt({
     required String truckId,
     required String fileUrl,
     double? totalAmount,
+    List<ExtractedReceiptItem>? items,
   }) async {
     final Receipt receipt = await _service.createReceipt(
       truckId: truckId,
       fileUrl: fileUrl,
       totalAmount: totalAmount,
+      items: items,
     );
     _receipts = <Receipt>[receipt, ..._receipts];
     notifyListeners();
     return receipt;
+  }
+
+  /// Reconciles a receipt against its truck's template allowance; returns the
+  /// raw result map and refreshes the receipt's status locally.
+  Future<Map<String, dynamic>> reconcileReceipt(String receiptId) async {
+    final Map<String, dynamic> result =
+        await _service.reconcileReceipt(receiptId);
+    final String? status = result['status']?.toString();
+    if (status != null) {
+      _receipts = _receipts
+          .map((Receipt r) => r.id == receiptId ? r.copyWithStatus(status) : r)
+          .toList(growable: false);
+      notifyListeners();
+    }
+    return result;
   }
 
   /// Approves, rejects, or flags a receipt for review and replaces it in the
