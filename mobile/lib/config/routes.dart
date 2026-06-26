@@ -6,6 +6,7 @@ import '../screens/change_password_screen.dart';
 import '../screens/dashboard_screen.dart';
 import '../screens/home_shell.dart';
 import '../screens/login_screen.dart';
+import '../screens/notifications_screen.dart';
 import '../screens/products/add_edit_product_screen.dart';
 import '../screens/products/products_screen.dart';
 import '../screens/receipts/receipts_screen.dart';
@@ -17,6 +18,7 @@ import '../screens/truck_stock/assignments_screen.dart';
 import '../screens/truck_stock/low_stock_screen.dart';
 import '../screens/truck_stock/my_truck_stock_screen.dart';
 import '../screens/truck_stock/templates_screen.dart';
+import '../screens/truck_stock/truck_costs_screen.dart';
 import '../screens/truck_stock/trucks_screen.dart';
 import '../screens/users/users_screen.dart';
 
@@ -29,6 +31,7 @@ class AppRoutes {
   static const String changePassword = '/change-password';
   static const String home = '/home';
   static const String aiAssistant = '/ai';
+  static const String notifications = '/notifications';
   static const String dashboard = '/dashboard';
   static const String products = '/products';
   static const String addProduct = '/products/add';
@@ -39,6 +42,7 @@ class AppRoutes {
   static const String templates = '/templates';
   static const String assignments = '/assignments';
   static const String receipts = '/receipts';
+  static const String truckCosts = '/truck-costs';
   static const String uploadReceipt = '/receipts/upload';
   static const String assets = '/assets';
   static const String users = '/users';
@@ -56,6 +60,8 @@ class AppRoutes {
         return _page(const HomeShell(), settings);
       case aiAssistant:
         return _page(const AiAssistantScreen(), settings);
+      case notifications:
+        return _page(const NotificationsScreen(), settings);
       case dashboard:
         return _page(const DashboardScreen(), settings);
       case products:
@@ -76,6 +82,8 @@ class AppRoutes {
         return _page(const AssignmentsScreen(), settings);
       case receipts:
         return _page(const ReceiptsScreen(), settings);
+      case truckCosts:
+        return _page(const TruckCostsScreen(), settings);
       case uploadReceipt:
         return _page(const UploadReceiptScreen(), settings);
       case assets:

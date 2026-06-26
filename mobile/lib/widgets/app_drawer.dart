@@ -51,6 +51,15 @@ class AppDrawer extends StatelessWidget {
                       route: AppRoutes.lowStock,
                     ),
                   if (auth.canAny(<String>[
+                    Permissions.viewLowStockAlerts,
+                    Permissions.approveReceipts,
+                  ]))
+                    const _DrawerItem(
+                      icon: Icons.notifications_none_rounded,
+                      label: 'Notifications',
+                      route: AppRoutes.notifications,
+                    ),
+                  if (auth.canAny(<String>[
                     Permissions.scanIn,
                     Permissions.scanOut,
                   ]))
@@ -64,6 +73,12 @@ class AppDrawer extends StatelessWidget {
                       icon: Icons.receipt_long_outlined,
                       label: 'Receipts',
                       route: AppRoutes.receipts,
+                    ),
+                  if (auth.can(Permissions.approveReceipts))
+                    const _DrawerItem(
+                      icon: Icons.payments_outlined,
+                      label: 'Truck Costs',
+                      route: AppRoutes.truckCosts,
                     ),
                   const _SectionLabel('Inventory'),
                   if (auth.can(Permissions.viewStock))
