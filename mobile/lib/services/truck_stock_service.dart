@@ -82,6 +82,21 @@ class TruckStockService {
     return _list(data, 'assignments', TruckStockAssignment.fromJson);
   }
 
+  Future<TruckStockAssignment> createAssignment({
+    required String truckId,
+    required String templateId,
+  }) async {
+    final dynamic data = await _client.post(
+      '/truck-stock/assignments',
+      body: <String, dynamic>{'truckId': truckId, 'templateId': templateId},
+    );
+    return TruckStockAssignment.fromJson(_asMap(data));
+  }
+
+  Future<void> deleteAssignment(String id) async {
+    await _client.delete('/truck-stock/assignments/$id');
+  }
+
   // ---- My stock / low stock ------------------------------------------------
 
   Future<List<TruckStockItem>> fetchMyStock() async {

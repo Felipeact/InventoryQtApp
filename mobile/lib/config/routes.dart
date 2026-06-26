@@ -13,6 +13,7 @@ import '../screens/receipts/upload_receipt_screen.dart';
 import '../screens/scan/scan_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/splash_screen.dart';
+import '../screens/truck_stock/assignments_screen.dart';
 import '../screens/truck_stock/low_stock_screen.dart';
 import '../screens/truck_stock/my_truck_stock_screen.dart';
 import '../screens/truck_stock/templates_screen.dart';
@@ -36,6 +37,7 @@ class AppRoutes {
   static const String lowStock = '/low-stock';
   static const String trucks = '/trucks';
   static const String templates = '/templates';
+  static const String assignments = '/assignments';
   static const String receipts = '/receipts';
   static const String uploadReceipt = '/receipts/upload';
   static const String assets = '/assets';
@@ -70,6 +72,8 @@ class AppRoutes {
         return _page(const TrucksScreen(), settings);
       case templates:
         return _page(const TemplatesScreen(), settings);
+      case assignments:
+        return _page(const AssignmentsScreen(), settings);
       case receipts:
         return _page(const ReceiptsScreen(), settings);
       case uploadReceipt:

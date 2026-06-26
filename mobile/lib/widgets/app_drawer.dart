@@ -93,6 +93,12 @@ class AppDrawer extends StatelessWidget {
                       label: 'Stock Templates',
                       route: AppRoutes.templates,
                     ),
+                  if (auth.can(Permissions.manageTruckStock))
+                    const _DrawerItem(
+                      icon: Icons.add_link,
+                      label: 'Assignments',
+                      route: AppRoutes.assignments,
+                    ),
                   if (auth.can(Permissions.manageUsers)) ...<Widget>[
                     const _SectionLabel('Team'),
                     const _DrawerItem(
