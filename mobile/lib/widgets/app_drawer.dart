@@ -38,6 +38,13 @@ class AppDrawer extends StatelessWidget {
                     label: 'AI Assistant',
                     route: AppRoutes.aiAssistant,
                   ),
+                  // Global search across products, assets and trucks. The
+                  // screen only surfaces records the API returns for this user.
+                  const _DrawerItem(
+                    icon: Icons.search,
+                    label: 'Search',
+                    route: AppRoutes.search,
+                  ),
                   if (auth.can(Permissions.viewAssignedTruckStock))
                     const _DrawerItem(
                       icon: Icons.local_shipping_outlined,

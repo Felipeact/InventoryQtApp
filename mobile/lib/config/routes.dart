@@ -12,6 +12,7 @@ import '../screens/products/products_screen.dart';
 import '../screens/receipts/receipts_screen.dart';
 import '../screens/receipts/upload_receipt_screen.dart';
 import '../screens/scan/scan_screen.dart';
+import '../screens/search_screen.dart';
 import '../screens/settings/settings_screen.dart';
 import '../screens/splash_screen.dart';
 import '../screens/truck_stock/assignments_screen.dart';
@@ -31,6 +32,7 @@ class AppRoutes {
   static const String changePassword = '/change-password';
   static const String home = '/home';
   static const String aiAssistant = '/ai';
+  static const String search = '/search';
   static const String notifications = '/notifications';
   static const String dashboard = '/dashboard';
   static const String products = '/products';
@@ -60,6 +62,8 @@ class AppRoutes {
         return _page(const HomeShell(), settings);
       case aiAssistant:
         return _page(const AiAssistantScreen(), settings);
+      case search:
+        return _page(const SearchScreen(), settings);
       case notifications:
         return _page(const NotificationsScreen(), settings);
       case dashboard:
