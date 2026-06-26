@@ -144,6 +144,11 @@ QString AddEditTemplateDialog::getTradeType() const
     return ui.tradeTypeInput->text().trimmed();
 }
 
+QString AddEditTemplateDialog::getAllowance() const
+{
+    return ui.allowanceInput->text().trimmed();
+}
+
 std::vector<CreateTemplateItemRequest> AddEditTemplateDialog::getItems() const
 {
     std::vector<CreateTemplateItemRequest> items;
@@ -461,6 +466,12 @@ void AddEditTemplateDialog::setTemplateData(
         QString::fromStdString(templateDetails.tradeType)
     );
 
+    ui.allowanceInput->setText(
+        templateDetails.hasAllowance
+            ? QString::number(templateDetails.allowance)
+            : QString()
+    );
+
     ui.templateItemsTable->setRowCount(0);
 
     for (const auto& item : templateDetails.items) {
@@ -469,6 +480,7 @@ void AddEditTemplateDialog::setTemplateData(
 
     ui.templateNameInput->setReadOnly(readOnly);
     ui.tradeTypeInput->setReadOnly(readOnly);
+    ui.allowanceInput->setReadOnly(readOnly);
     ui.descriptionInput->setReadOnly(readOnly);
 
     ui.addItemButton->setVisible(!readOnly);

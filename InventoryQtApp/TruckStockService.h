@@ -67,6 +67,7 @@ struct CreateTemplateRequest
 {
     std::string name;
     std::string tradeType;
+    std::string allowance;  // raw text; empty = no allowance, else parsed to a number
     std::vector<CreateTemplateItemRequest> items;
 };
 
@@ -105,6 +106,8 @@ struct TemplateDetailsDto
     std::string id;
     std::string name;
     std::string tradeType;
+    double allowance = 0.0;
+    bool hasAllowance = false;
     std::vector<CreateTemplateItemRequest> items;
 };
 

@@ -24,6 +24,7 @@ public:
     QString getTemplateName() const;
     QString getDescription() const;
     QString getTradeType() const;
+    QString getAllowance() const;
 
     std::vector<CreateTemplateItemRequest> getItems() const;
 

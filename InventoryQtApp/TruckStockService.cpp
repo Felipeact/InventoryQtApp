@@ -291,6 +291,19 @@ bool TruckStockService::createTemplate(
 
         body["name"] = request.name;
         body["tradeType"] = request.tradeType;
+
+        if (request.allowance.empty()) {
+            body["allowance"] = nullptr;
+        }
+        else {
+            try {
+                body["allowance"] = std::stod(request.allowance);
+            }
+            catch (const std::exception&) {
+                body["allowance"] = nullptr;
+            }
+        }
+
         body["items"] = json::array();
 
         for (const auto& item : request.items) {
@@ -460,6 +473,11 @@ TemplateDetailsDto TruckStockService::getTemplateById(
         templateDetails.tradeType =
             getStringValue(data, { "tradeType", "type" });
 
+        if (data.contains("allowance") && data["allowance"].is_number()) {
+            templateDetails.allowance = data["allowance"].get<double>();
+            templateDetails.hasAllowance = true;
+        }
+
         if (data.contains("items") && data["items"].is_array()) {
             for (const auto& itemJson : data["items"]) {
                 CreateTemplateItemRequest item;
@@ -567,6 +585,18 @@ bool TruckStockService::updateTemplate(
 
         body["name"] = request.name;
         body["tradeType"] = request.tradeType;
+
+        if (request.allowance.empty()) {
+            body["allowance"] = nullptr;
+        }
+        else {
+            try {
+                body["allowance"] = std::stod(request.allowance);
+            }
+            catch (const std::exception&) {
+                body["allowance"] = nullptr;
+            }
+        }
 
         if (!request.items.empty()) {
             body["items"] = json::array();

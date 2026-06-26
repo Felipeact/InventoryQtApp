@@ -161,6 +161,9 @@ void StockTemplatesPage::onNewTemplateClicked()
         request.tradeType =
             dialog.getTradeType().toStdString();
 
+        request.allowance =
+            dialog.getAllowance().toStdString();
+
         request.items =
             dialog.getItems();
 
@@ -390,6 +393,9 @@ void StockTemplatesPage::onEditTemplateClicked(
 
         request.tradeType =
             dialog.getTradeType().toStdString();
+
+        request.allowance =
+            dialog.getAllowance().toStdString();
 
         request.items =
             dialog.getItems();
