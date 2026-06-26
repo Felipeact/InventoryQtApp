@@ -93,6 +93,14 @@ class AppDrawer extends StatelessWidget {
                       label: 'Stock Templates',
                       route: AppRoutes.templates,
                     ),
+                  if (auth.can(Permissions.manageUsers)) ...<Widget>[
+                    const _SectionLabel('Team'),
+                    const _DrawerItem(
+                      icon: Icons.group_outlined,
+                      label: 'Team',
+                      route: AppRoutes.users,
+                    ),
+                  ],
                   const _SectionLabel('Account'),
                   const _DrawerItem(
                     icon: Icons.settings_outlined,

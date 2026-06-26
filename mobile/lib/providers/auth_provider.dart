@@ -26,6 +26,7 @@ class Permissions {
   static const String approveReceipts = 'APPROVE_RECEIPTS';
   static const String viewAllTrucks = 'VIEW_ALL_TRUCKS';
   static const String viewTruckStock = 'VIEW_TRUCK_STOCK';
+  static const String manageUsers = 'MANAGE_USERS';
 
   /// Permissions granted to admin/manager roles (everything).
   static const Set<String> all = <String>{
@@ -40,6 +41,7 @@ class Permissions {
     approveReceipts,
     viewAllTrucks,
     viewTruckStock,
+    manageUsers,
   };
 
   /// Field-technician subset.

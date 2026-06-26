@@ -17,6 +17,7 @@ import '../screens/truck_stock/low_stock_screen.dart';
 import '../screens/truck_stock/my_truck_stock_screen.dart';
 import '../screens/truck_stock/templates_screen.dart';
 import '../screens/truck_stock/trucks_screen.dart';
+import '../screens/users/users_screen.dart';
 
 /// Centralized route names and the [onGenerateRoute] table.
 class AppRoutes {
@@ -38,6 +39,7 @@ class AppRoutes {
   static const String receipts = '/receipts';
   static const String uploadReceipt = '/receipts/upload';
   static const String assets = '/assets';
+  static const String users = '/users';
   static const String settings = '/settings';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
@@ -74,6 +76,8 @@ class AppRoutes {
         return _page(const UploadReceiptScreen(), settings);
       case assets:
         return _page(const AssetsScreen(), settings);
+      case users:
+        return _page(const UsersScreen(), settings);
       case AppRoutes.settings:
         return _page(const SettingsScreen(), settings);
       default:
