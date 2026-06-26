@@ -89,12 +89,20 @@ class _AssetsScreenState extends State<AssetsScreen> {
     }
   }
 
-  Future<void> _addAsset() async {
+  Future<void> _addAsset() => _assetForm();
+
+  /// Add (when [existing] is null) or edit an asset.
+  Future<void> _assetForm({Asset? existing}) async {
+    final bool isEdit = existing != null;
     final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-    final TextEditingController name = TextEditingController();
-    final TextEditingController type = TextEditingController();
-    final TextEditingController serial = TextEditingController();
-    final TextEditingController description = TextEditingController();
+    final TextEditingController name =
+        TextEditingController(text: existing?.name ?? '');
+    final TextEditingController type =
+        TextEditingController(text: existing?.type ?? '');
+    final TextEditingController serial =
+        TextEditingController(text: existing?.serialCode ?? '');
+    final TextEditingController description =
+        TextEditingController(text: existing?.description ?? '');
     bool saving = false;
 
     await showModalBottomSheet<void>(
@@ -120,9 +128,9 @@ class _AssetsScreenState extends State<AssetsScreen> {
                   mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    const Text(
-                      'Add asset',
-                      style: TextStyle(
+                    Text(
+                      isEdit ? 'Edit asset' : 'Add asset',
+                      style: const TextStyle(
                           fontSize: 18, fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 16),
@@ -171,29 +179,40 @@ class _AssetsScreenState extends State<AssetsScreen> {
                     ),
                     const SizedBox(height: 20),
                     PrimaryButton(
-                      label: 'Create asset',
+                      label: isEdit ? 'Save changes' : 'Create asset',
                       icon: Icons.check,
                       loading: saving,
                       onPressed: () async {
                         if (!formKey.currentState!.validate()) return;
                         setSheet(() => saving = true);
                         try {
-                          final Asset created = await _service.create(
-                            Asset(
-                              id: '',
-                              name: name.text.trim(),
-                              type: type.text.trim(),
-                              serialCode: serial.text.trim(),
-                              description: description.text.trim().isEmpty
-                                  ? null
-                                  : description.text.trim(),
-                            ),
+                          final Asset payload = Asset(
+                            id: existing?.id ?? '',
+                            name: name.text.trim(),
+                            type: type.text.trim(),
+                            serialCode: serial.text.trim(),
+                            status: existing?.status,
+                            description: description.text.trim().isEmpty
+                                ? null
+                                : description.text.trim(),
                           );
+                          final Asset saved = isEdit
+                              ? await _service.update(existing!.id, payload)
+                              : await _service.create(payload);
                           if (ctx.mounted) Navigator.of(ctx).pop();
                           if (mounted) {
-                            setState(() =>
-                                _assets = <Asset>[created, ..._assets]);
-                            showSuccessSnack(context, 'Asset created.');
+                            setState(() {
+                              if (isEdit) {
+                                _assets = _assets
+                                    .map((Asset a) =>
+                                        a.id == saved.id ? saved : a)
+                                    .toList();
+                              } else {
+                                _assets = <Asset>[saved, ..._assets];
+                              }
+                            });
+                            showSuccessSnack(context,
+                                isEdit ? 'Asset updated.' : 'Asset created.');
                           }
                         } on ApiException catch (e) {
                           setSheet(() => saving = false);
@@ -277,6 +296,7 @@ class _AssetsScreenState extends State<AssetsScreen> {
           final Color statusColor = StatusStyle.colorFor(asset.status);
           return Card(
             child: ListTile(
+              onTap: canManage ? () => _assetForm(existing: asset) : null,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
               leading: Container(
