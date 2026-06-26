@@ -4,12 +4,14 @@ import 'package:provider/provider.dart';
 import '../../config/theme.dart';
 import '../../models/truck_stock_item.dart';
 import '../../models/truck_stock_template.dart';
+import '../../providers/auth_provider.dart';
 import '../../providers/truck_stock_provider.dart';
 import '../../services/api_client.dart';
 import '../../widgets/empty_state.dart';
 import '../../widgets/error_view.dart';
 import '../../widgets/loading_indicator.dart';
 import '../home_shell.dart';
+import 'template_editor_screen.dart';
 
 /// Lists truck-stock templates. Tapping one opens its item breakdown.
 class TemplatesScreen extends StatefulWidget {
@@ -47,9 +49,64 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
     }
   }
 
+  Future<void> _openEditor({TruckStockTemplate? template}) async {
+    TruckStockTemplate? full = template;
+    // Editing needs the full item list, which the list payload may omit.
+    if (template != null && template.items.isEmpty) {
+      try {
+        full = await context
+            .read<TruckStockProvider>()
+            .loadTemplate(template.id);
+      } on ApiException {
+        full = template;
+      }
+    }
+    if (!mounted) return;
+    final bool? saved = await Navigator.of(context).push<bool>(
+      MaterialPageRoute<bool>(
+        builder: (_) => TemplateEditorScreen(template: full),
+      ),
+    );
+    if (saved == true) _load();
+  }
+
+  Future<void> _delete(TruckStockTemplate t) async {
+    final bool? ok = await showDialog<bool>(
+      context: context,
+      builder: (BuildContext ctx) => AlertDialog(
+        title: const Text('Delete template?'),
+        content: Text('Delete "${t.name}"? This cannot be undone.'),
+        actions: <Widget>[
+          TextButton(
+            onPressed: () => Navigator.of(ctx).pop(false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: AppTheme.danger),
+            onPressed: () => Navigator.of(ctx).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    try {
+      await context.read<TruckStockProvider>().deleteTemplate(t.id);
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(const SnackBar(content: Text('Template deleted')));
+    } on ApiException catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.message)));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final TruckStockProvider provider = context.watch<TruckStockProvider>();
+    final bool canManage =
+        context.watch<AuthProvider>().can(Permissions.manageTruckStock);
 
     return Scaffold(
       appBar: buildAdaptiveAppBar(
@@ -57,11 +114,18 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
         embedded: widget.embedded,
         title: 'Stock Templates',
       ),
-      body: _body(provider),
+      floatingActionButton: canManage
+          ? FloatingActionButton.extended(
+              onPressed: () => _openEditor(),
+              icon: const Icon(Icons.add),
+              label: const Text('New template'),
+            )
+          : null,
+      body: _body(provider, canManage),
     );
   }
 
-  Widget _body(TruckStockProvider provider) {
+  Widget _body(TruckStockProvider provider, bool canManage) {
     if (_loading && provider.templates.isEmpty) {
       return const LoadingIndicator(message: 'Loading templates...');
     }
@@ -74,10 +138,15 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
         child: ListView(
           children: <Widget>[
             SizedBox(height: MediaQuery.of(context).size.height * 0.18),
-            const EmptyState(
+            EmptyState(
               icon: Icons.checklist_rtl_outlined,
               title: 'No templates',
-              message: 'Truck-stock templates will appear here once created.',
+              message: canManage
+                  ? 'Create a stock template that defines what each truck '
+                      'should carry.'
+                  : 'Truck-stock templates will appear here once created.',
+              actionLabel: canManage ? 'New template' : null,
+              onAction: canManage ? () => _openEditor() : null,
             ),
           ],
         ),
@@ -117,10 +186,25 @@ class _TemplatesScreenState extends State<TemplatesScreen> {
                   if (t.tradeType != null && t.tradeType!.isNotEmpty)
                     t.tradeType!,
                   '${t.itemCount} items',
+                  if (t.allowance != null)
+                    '\$${t.allowance!.toStringAsFixed(0)} allowance',
                 ].join(' • '),
                 style: const TextStyle(color: AppTheme.slate500),
               ),
-              trailing: const Icon(Icons.chevron_right),
+              trailing: canManage
+                  ? PopupMenuButton<String>(
+                      onSelected: (String v) {
+                        if (v == 'edit') _openEditor(template: t);
+                        if (v == 'delete') _delete(t);
+                      },
+                      itemBuilder: (_) => const <PopupMenuEntry<String>>[
+                        PopupMenuItem<String>(
+                            value: 'edit', child: Text('Edit')),
+                        PopupMenuItem<String>(
+                            value: 'delete', child: Text('Delete')),
+                      ],
+                    )
+                  : const Icon(Icons.chevron_right),
               onTap: () => _openTemplate(t),
             ),
           );
@@ -176,6 +260,11 @@ class _TemplateDetail extends StatelessWidget {
                         _stat('Items', '${template.itemCount}'),
                         const SizedBox(width: 16),
                         _stat('Total units', '${template.totalRequiredUnits}'),
+                        if (template.allowance != null) ...<Widget>[
+                          const SizedBox(width: 16),
+                          _stat('Allowance',
+                              '\$${template.allowance!.toStringAsFixed(0)}'),
+                        ],
                         if (template.tradeType != null) ...<Widget>[
                           const SizedBox(width: 16),
                           _stat('Trade', template.tradeType!),

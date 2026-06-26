@@ -49,6 +49,32 @@ class TruckStockService {
     return TruckStockTemplate.fromJson(_asMap(data));
   }
 
+  /// Creates (when [id] is null) or updates a template, including its allowance
+  /// and item list. [items] entries use the API shape (productName,
+  /// requiredQuantity, minimumQuantity, optional category/unit/expectedPrice).
+  Future<TruckStockTemplate> saveTemplate({
+    String? id,
+    required String name,
+    String? tradeType,
+    double? allowance,
+    required List<Map<String, dynamic>> items,
+  }) async {
+    final Map<String, dynamic> body = <String, dynamic>{
+      'name': name,
+      if (tradeType != null && tradeType.isNotEmpty) 'tradeType': tradeType,
+      'allowance': allowance,
+      'items': items,
+    };
+    final dynamic data = id == null
+        ? await _client.post('/truck-stock/templates', body: body)
+        : await _client.put('/truck-stock/templates/$id', body: body);
+    return TruckStockTemplate.fromJson(_asMap(data));
+  }
+
+  Future<void> deleteTemplate(String id) async {
+    await _client.delete('/truck-stock/templates/$id');
+  }
+
   // ---- Assignments ---------------------------------------------------------
 
   Future<List<TruckStockAssignment>> fetchAssignments() async {

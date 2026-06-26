@@ -111,6 +111,32 @@ class TruckStockProvider extends ChangeNotifier {
     return _service.fetchTemplate(id);
   }
 
+  /// Creates or updates a template, then refreshes the local list.
+  Future<TruckStockTemplate> saveTemplate({
+    String? id,
+    required String name,
+    String? tradeType,
+    double? allowance,
+    required List<Map<String, dynamic>> items,
+  }) async {
+    final TruckStockTemplate saved = await _service.saveTemplate(
+      id: id,
+      name: name,
+      tradeType: tradeType,
+      allowance: allowance,
+      items: items,
+    );
+    await loadTemplates();
+    return saved;
+  }
+
+  Future<void> deleteTemplate(String id) async {
+    await _service.deleteTemplate(id);
+    _templates =
+        _templates.where((TruckStockTemplate t) => t.id != id).toList();
+    notifyListeners();
+  }
+
   Future<void> updateItemQuantity({
     required String itemId,
     required int quantity,
