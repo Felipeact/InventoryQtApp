@@ -20,6 +20,7 @@
 #include <MyTruckStockPage.h>
 #include <LowStockAlertsPage.h>
 #include <ReceiptsPage.h>
+#include <TruckCostsPage.h>
 #include <ReportsPage.h>
 #include <TruckStockService.h>
 #include <SettingsPage.h>
@@ -102,6 +103,7 @@ private:
     MyTruckStockPage* myTruckStockPage = nullptr;
     LowStockAlertsPage* lowStockAlertsPage = nullptr;
     ReceiptsPage* receiptsPage = nullptr;
+    TruckCostsPage* truckCostsPage = nullptr;
     ReportsPage* reportsPage = nullptr;
     AiAssistantPage* aiAssistantPage = nullptr;
 
@@ -128,6 +130,7 @@ private:
     MyTruckStockPage* ensureMyTruckStockPage();
     LowStockAlertsPage* ensureLowStockAlertsPage();
     ReceiptsPage* ensureReceiptsPage();
+    TruckCostsPage* ensureTruckCostsPage();
     ReportsPage* ensureReportsPage();
     AiAssistantPage* ensureAiAssistantPage();
 

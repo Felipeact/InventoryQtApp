@@ -121,6 +121,7 @@
     <ClCompile Include="ProductService.cpp" />
     <ClCompile Include="ReceiptDetailsDialog.cpp" />
     <ClCompile Include="ReceiptsPage.cpp" />
+    <ClCompile Include="TruckCostsPage.cpp" />
     <ClCompile Include="ReportService.cpp" />
     <ClCompile Include="ReportsPage.cpp" />
     <ClCompile Include="AiService.cpp" />
@@ -206,6 +207,7 @@
     <QtMoc Include="UsersPage.h" />
     <QtMoc Include="LowStockAlertsPage.h" />
     <QtMoc Include="ReceiptsPage.h" />
+    <QtMoc Include="TruckCostsPage.h" />
     <QtMoc Include="UploadReceiptDialog.h" />
     <QtMoc Include="UseTruckItemDialog.h" />
     <QtMoc Include="AddProductDialog.h" />

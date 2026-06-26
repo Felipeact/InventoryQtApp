@@ -81,6 +81,7 @@ void DashboardWindow::applyThemeToLoadedPages()
     if (myTruckStockPage) myTruckStockPage->applyTheme(currentTheme);
     if (lowStockAlertsPage) lowStockAlertsPage->applyTheme(currentTheme);
     if (receiptsPage) receiptsPage->applyTheme(currentTheme);
+    if (truckCostsPage) truckCostsPage->applyTheme(currentTheme);
     if (reportsPage) reportsPage->applyTheme(currentTheme);
     if (aiAssistantPage) aiAssistantPage->applyTheme(currentTheme);
 }
@@ -359,6 +360,16 @@ ReceiptsPage* DashboardWindow::ensureReceiptsPage()
     return receiptsPage;
 }
 
+TruckCostsPage* DashboardWindow::ensureTruckCostsPage()
+{
+    if (!truckCostsPage) {
+        truckCostsPage = new TruckCostsPage(truckStockService, permissions, this);
+        ui.mainStack->addWidget(truckCostsPage);
+        truckCostsPage->applyTheme(currentTheme);
+    }
+    return truckCostsPage;
+}
+
 ReportsPage* DashboardWindow::ensureReportsPage()
 {
     if (!reportsPage) {
@@ -482,6 +493,16 @@ void DashboardWindow::setupSidebar()
 
         if (sidebar) {
             sidebar->activateReceipts();
+        }
+        });
+
+    connect(sidebar, &SidebarWidget::truckCostsClicked, this, [this]() {
+        TruckCostsPage* page = ensureTruckCostsPage();
+        page->refreshCosts();
+        ui.mainStack->setCurrentWidget(page);
+
+        if (sidebar) {
+            sidebar->activateTruckCosts();
         }
         });
 

@@ -147,6 +147,11 @@ SidebarWidget::SidebarWidget(
         emit receiptsClicked();
         });
 
+    connect(ui.truckCostsButton, &QPushButton::clicked, this, [this]() {
+        setActiveButton(ui.truckCostsButton);
+        emit truckCostsClicked();
+        });
+
     connect(ui.logoutButton, &QPushButton::clicked, this, [this]() {
         emit logoutClicked();
         });
@@ -210,6 +215,12 @@ void SidebarWidget::applyPermissions()
 
     ui.receiptsButton->setVisible(
         hasPermission("UPLOAD_RECEIPT") ||
+        hasPermission("APPROVE_RECEIPTS")
+    );
+
+    // Truck Costs analytics aggregate every truck's spend, so they are limited
+    // to approvers (same gate the web/mobile clients use).
+    ui.truckCostsButton->setVisible(
         hasPermission("APPROVE_RECEIPTS")
     );
 
@@ -337,6 +348,11 @@ void SidebarWidget::activateReceipts()
     setActiveButton(ui.receiptsButton);
 }
 
+void SidebarWidget::activateTruckCosts()
+{
+    setActiveButton(ui.truckCostsButton);
+}
+
 void SidebarWidget::applyTheme(Theme::AppTheme theme)
 {
     setStyleSheet(
@@ -378,6 +394,7 @@ void SidebarWidget::applyTheme(Theme::AppTheme theme)
     apply(ui.myTruckStockButton, kIconClipboard, QStringLiteral("My Truck Stock"), iconColor);
     apply(ui.lowStockAlertsButton, kIconAlert, QStringLiteral("Low Stock"), iconColor);
     apply(ui.receiptsButton, kIconReceipt, QStringLiteral("Receipts"), iconColor);
+    apply(ui.truckCostsButton, kIconBarChart, QStringLiteral("Truck Costs"), iconColor);
     apply(ui.logoutButton, kIconLogout, QStringLiteral("Logout"), logoutColor);
 }
 

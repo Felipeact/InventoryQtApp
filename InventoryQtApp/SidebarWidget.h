@@ -34,6 +34,7 @@ public:
     void activateMyTruckStock();
     void activateLowStockAlerts();
     void activateReceipts();
+    void activateTruckCosts();
 
 
 signals:
@@ -52,6 +53,7 @@ signals:
     void myTruckStockClicked();
     void lowStockAlertsClicked();
     void receiptsClicked();
+    void truckCostsClicked();
 
     void logoutClicked();
 
