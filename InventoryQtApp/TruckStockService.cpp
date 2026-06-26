@@ -1016,6 +1016,94 @@ std::vector<TruckStockMovementDto> TruckStockService::getMovements()
 }
 
 
+ExtractedReceiptDto TruckStockService::extractReceipt(
+    const std::string& filePath
+)
+{
+    ExtractedReceiptDto result;
+
+    try {
+        QFile file(QString::fromStdString(filePath));
+
+        if (!file.exists() || !file.open(QIODevice::ReadOnly)) {
+            std::cerr << "extractReceipt: cannot open file: "
+                << filePath
+                << std::endl;
+            return result;
+        }
+
+        QByteArray fileData = file.readAll();
+        file.close();
+
+        if (fileData.isEmpty()) {
+            return result;
+        }
+
+        QFileInfo fileInfo(QString::fromStdString(filePath));
+
+        json body;
+        body["fileBase64"] = fileData.toBase64().toStdString();
+        body["fileName"] = fileInfo.fileName().toStdString();
+
+        auto response = apiClient.post(
+            "/truck-stock/receipts/extract",
+            body.dump()
+        );
+
+        if (response.status_code != 200 && response.status_code != 201) {
+            std::cerr << "POST /truck-stock/receipts/extract failed. Status: "
+                << response.status_code
+                << " Body: "
+                << response.text
+                << std::endl;
+            return result;
+        }
+
+        json data = json::parse(response.text);
+
+        if (data.contains("total") && data["total"].is_number()) {
+            result.total = data["total"].get<double>();
+            result.hasTotal = true;
+        }
+
+        result.currency = getStringValue(data, { "currency" });
+        result.supplier = getStringValue(data, { "supplier" });
+
+        if (data.contains("items") && data["items"].is_array()) {
+            for (const auto& raw : data["items"]) {
+                ExtractedReceiptItemDto item;
+
+                item.itemName = getStringValue(raw, { "itemName", "name" });
+                item.quantity = getIntValue(raw, { "quantity" }, 0);
+
+                if (raw.contains("unitPrice") && raw["unitPrice"].is_number()) {
+                    item.unitPrice = raw["unitPrice"].get<double>();
+                    item.hasUnitPrice = true;
+                }
+
+                if (raw.contains("totalPrice") && raw["totalPrice"].is_number()) {
+                    item.totalPrice = raw["totalPrice"].get<double>();
+                    item.hasTotalPrice = true;
+                }
+
+                if (!item.itemName.empty()) {
+                    result.items.push_back(item);
+                }
+            }
+        }
+
+        result.ok = true;
+        return result;
+    }
+    catch (const std::exception& ex) {
+        std::cerr << "TruckStockService::extractReceipt error: "
+            << ex.what()
+            << std::endl;
+
+        return result;
+    }
+}
+
 std::string TruckStockService::uploadReceiptFile(
     const std::string& filePath
 )
@@ -1099,6 +1187,30 @@ bool TruckStockService::createReceipt(
         body["truckId"] = request.truckId;
         body["fileUrl"] = fileUrl;
         body["totalAmount"] = request.totalAmount;
+
+        // Forward any AI-extracted line items so reconciliation and
+        // stock-on-approval have data to work with (parity with mobile/web).
+        if (!request.items.empty()) {
+            json items = json::array();
+
+            for (const ExtractedReceiptItemDto& item : request.items) {
+                json entry;
+                entry["itemName"] = item.itemName;
+                entry["quantity"] = item.quantity;
+
+                if (item.hasUnitPrice) {
+                    entry["unitPrice"] = item.unitPrice;
+                }
+
+                if (item.hasTotalPrice) {
+                    entry["totalPrice"] = item.totalPrice;
+                }
+
+                items.push_back(entry);
+            }
+
+            body["items"] = items;
+        }
 
         auto response = apiClient.post(
             "/truck-stock/receipts",

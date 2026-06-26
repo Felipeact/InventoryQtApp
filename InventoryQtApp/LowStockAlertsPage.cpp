@@ -525,6 +525,8 @@ void LowStockAlertsPage::onCreateReceiptClicked(
     request.totalAmount =
         dialog.getTotalAmount().toDouble();
 
+    request.items = dialog.getExtractedItems();
+
     bool success =
         truckStockService->createReceipt(request);
 

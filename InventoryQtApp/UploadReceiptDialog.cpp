@@ -1,5 +1,6 @@
 #include "UploadReceiptDialog.h"
 
+#include <QApplication>
 #include <QComboBox>
 #include <QDoubleSpinBox>
 #include <QFileDialog>
@@ -117,7 +118,62 @@ void UploadReceiptDialog::onBrowseClicked()
     if (!fileName.isEmpty()) {
         updateFileDisplay(fileName);
         loadPreview(fileName);
+        runExtraction(fileName);
     }
+}
+
+void UploadReceiptDialog::runExtraction(
+    const QString& filePath
+)
+{
+    extractedItems.clear();
+    ui.summaryValue->setText("0");
+    ui.summaryValue2->setText("$0.00");
+
+    if (!truckStockService) {
+        return;
+    }
+
+    ui.errorLabel->setText("Reading receipt with AI...");
+    ui.browseButton->setEnabled(false);
+    QApplication::processEvents();
+
+    ExtractedReceiptDto result =
+        truckStockService->extractReceipt(filePath.toStdString());
+
+    ui.browseButton->setEnabled(true);
+
+    if (!result.ok) {
+        ui.errorLabel->setText(
+            "Could not auto-read this receipt. Enter the amount manually."
+        );
+        return;
+    }
+
+    extractedItems = result.items;
+
+    if (result.hasTotal && result.total > 0) {
+        ui.amountInput->setValue(result.total);
+        ui.summaryValue2->setText(
+            "$" + QString::number(result.total, 'f', 2)
+        );
+    }
+
+    ui.summaryValue->setText(
+        QString::number(static_cast<int>(result.items.size()))
+    );
+
+    QString message =
+        QString("AI read %1 item(s)")
+            .arg(static_cast<int>(result.items.size()));
+
+    if (!result.supplier.empty()) {
+        message += " from " + QString::fromStdString(result.supplier);
+    }
+
+    message += ". Review the amount before uploading.";
+
+    ui.errorLabel->setText(message);
 }
 
 void UploadReceiptDialog::updateFileDisplay(
@@ -171,6 +227,12 @@ QString UploadReceiptDialog::getTotalAmount() const
 QString UploadReceiptDialog::getFilePath() const
 {
     return selectedFilePath;
+}
+
+std::vector<ExtractedReceiptItemDto>
+UploadReceiptDialog::getExtractedItems() const
+{
+    return extractedItems;
 }
 
 void UploadReceiptDialog::onUploadClicked()

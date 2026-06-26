@@ -162,11 +162,32 @@ struct ReceiptDto
     std::string fileUrl;
 };
 
+struct ExtractedReceiptItemDto
+{
+    std::string itemName;
+    int quantity = 0;
+    double unitPrice = 0.0;
+    bool hasUnitPrice = false;
+    double totalPrice = 0.0;
+    bool hasTotalPrice = false;
+};
+
+struct ExtractedReceiptDto
+{
+    bool ok = false;
+    double total = 0.0;
+    bool hasTotal = false;
+    std::string currency;
+    std::string supplier;
+    std::vector<ExtractedReceiptItemDto> items;
+};
+
 struct CreateReceiptRequest
 {
     std::string truckId;
     std::string fileUrl;
     double totalAmount;
+    std::vector<ExtractedReceiptItemDto> items;
 };
 
 struct UpdateAssignmentRequest
@@ -227,6 +248,12 @@ public:
     std::vector<TruckStockMovementDto> getMovements();
 
     std::string uploadReceiptFile(
+        const std::string& filePath
+    );
+
+    // AI-reads a receipt file (image/PDF) without persisting it, returning the
+    // detected total and line items so the upload form can be pre-filled.
+    ExtractedReceiptDto extractReceipt(
         const std::string& filePath
     );
 

@@ -28,6 +28,7 @@ public:
     QString getSelectedTruckId() const;
     QString getTotalAmount() const;
     QString getFilePath() const;
+    std::vector<ExtractedReceiptItemDto> getExtractedItems() const;
 
 protected:
     void mousePressEvent(QMouseEvent* event) override;
@@ -46,9 +47,11 @@ private:
     QString selectedFilePath;
     TruckStockService* truckStockService = nullptr;
     QPoint dragPosition;
+    std::vector<ExtractedReceiptItemDto> extractedItems;
 
     void setupConnections();
     void loadTrucks();
     void updateFileDisplay(const QString& filePath);
     void loadPreview(const QString& filePath);
+    void runExtraction(const QString& filePath);
 };
